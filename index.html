@@ -307,6 +307,10 @@ table.summary {
   width: 100%;
 }
 
+table.summary td.description{
+  font-size: 12px;
+}
+
 table.summary tr {
   border-top: 1px solid #DDD;
   border-bottom: 1px solid #DDD;
@@ -317,11 +321,11 @@ table.summary tr:hover {
 }
 
 table.summary tr td{
-  padding-top: 3px;
-  padding-bottom: 3px;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 
-div.level-1 div.text {
+div.level-1 div.text, div.level-2 div.text {
   margin-left: 30px;
 }
 
@@ -428,9 +432,11 @@ var syntax = function(bypass) {
             if (state.inside_def) {
                 if (ch != '>') {
                     stream.eatWhile(/[_\w\d\.]/);
-                    return "variable"; 
+                    if (stream.peek() == '>')
+                        return "variable"; 
+                    else
+                        return "comment";
                 } else {
-                    stream.eatWhile(/[\*\?\+]/);
                     state.inside_def = false;
                     return "comment";
                 }
@@ -640,35 +646,35 @@ ready(function() {
                     <td class="level-0">
                         <a href="#chapter-intro">1. Introduction <span class="usage"></span></a>
                     </td>
-                    <td></td>
+                    <td class="description"></td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#intro-eventmodel">1.1. Event Model <span class="usage"></span></a>
+                        <a href="#intro-basic">1.1. Basic Concepts <span class="usage"></span></a>
                     </td>
-                    <td></td>
+                    <td class="description"></td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
                         <a href="#intro-typesystem">1.2. Type System <span class="usage"></span></a>
                     </td>
-                    <td></td>
+                    <td class="description"></td>
                 </tr>
 
                 <tr>
                     <td class="level-0">
                         <a href="#chapter-filters">2. Filters <span class="usage"></span></a>
                     </td>
-                    <td></td>
+                    <td class="description"></td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
                         <a href="#filter-all">2.1.  <span class="usage">*</span></a>
                     </td>
-                    <td>Special filter that allows all records through.
+                    <td class="description">Special filter that allows all records through.
 </td>
                 </tr>
 
@@ -676,7 +682,7 @@ ready(function() {
                     <td class="level-1">
                         <a href="#filter-term">2.2.  <span class="usage">&lt;term&gt;</span></a>
                     </td>
-                    <td>Selects records where one of the current fields matches &lt;term&gt; (case insensitive).
+                    <td class="description">Selects records where one of the current fields matches &lt;term&gt;.
 </td>
                 </tr>
 
@@ -684,7 +690,7 @@ ready(function() {
                     <td class="level-1">
                         <a href="#filter-fuzzy">2.3.  <span class="usage">&lt;term&gt;~&lt;number maxEdits&gt;</span></a>
                     </td>
-                    <td>Selects records where one of the current fields matches &lt;term&gt; with at most &lt;maxEdits&gt; edits.
+                    <td class="description">Selects records where one of the current fields matches &lt;term&gt; with at most &lt;maxEdits&gt; edits.
 </td>
                 </tr>
 
@@ -692,7 +698,7 @@ ready(function() {
                     <td class="level-1">
                         <a href="#filter-range">2.4.  <span class="usage">[&lt;term lower&gt; TO &lt;term upper&gt;]</span></a>
                     </td>
-                    <td>Selects records where one of the current fields is between &lt;lower&gt; and &lt;upper&gt; (case insensitive).
+                    <td class="description">Selects records where one of the current fields is between &lt;lower&gt; and &lt;upper&gt;.
 </td>
                 </tr>
 
@@ -700,7 +706,7 @@ ready(function() {
                     <td class="level-1">
                         <a href="#filter-field">2.5.  <span class="usage">&lt;field&gt;: &lt;filter&gt;</span></a>
                     </td>
-                    <td>Sets the current field to &lt;field&gt;. Usually followed by &lt;term&gt; (e.g. somefield:someterm).
+                    <td class="description">Sets the current field to &lt;field&gt;. Usually followed by &lt;term&gt; (e.g. somefield:someterm).
 </td>
                 </tr>
 
@@ -708,319 +714,886 @@ ready(function() {
                     <td class="level-1">
                         <a href="#filter-and">2.6.  <span class="usage">&lt;filter&gt; &amp;&amp; &lt;filter&gt;</span></a>
                     </td>
-                    <td>Selects the intersection of two other filters.</td>
+                    <td class="description">Selects the intersection of two other filters.</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
                         <a href="#filter-or">2.7.  <span class="usage">&lt;filter&gt; || &lt;filter&gt;</span></a>
                     </td>
-                    <td>Selects the union of two other filters.</td>
+                    <td class="description">Selects the union of two other filters.</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
                         <a href="#filter-not">2.8.  <span class="usage">-&lt;filter&gt;</span></a>
                     </td>
-                    <td>Selects the complement of another filter.</td>
+                    <td class="description">Selects the complement of another filter.</td>
                 </tr>
 
                 <tr>
                     <td class="level-0">
                         <a href="#chapter-pipes">3. Pipes <span class="usage"></span></a>
                     </td>
-                    <td></td>
+                    <td class="description"></td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#pipe-default">3.1.  <span class="usage">&lt;object&gt;* [by &lt;object&gt;*] [over &lt;window&gt;] [every &lt;period&gt; | total]</span></a>
+                        <a href="#pipe-default">3.1.  <span class="usage">&lt;object...&gt; [by &lt;object...&gt;] [over &lt;window&gt;] [every &lt;period&gt; | total]</span></a>
                     </td>
-                    <td>Transforms or aggregates records over configurable data window and output.</td>
+                    <td class="description">Transforms or aggregates records over configurable data window and output.</td>
                 </tr>
 
                 <tr>
                     <td class="level-2">
                         <a href="#pipe-default-outputs">3.1.1. Output Types <span class="usage"></span></a>
                     </td>
-                    <td></td>
+                    <td class="description"></td>
                 </tr>
 
                 <tr>
                     <td class="level-2">
                         <a href="#pipe-default-windows">3.1.2. Window Types <span class="usage"></span></a>
                     </td>
-                    <td></td>
+                    <td class="description"></td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
                         <a href="#pipe-union">3.2.  <span class="usage">&lt;pipe&gt; union &lt;pipe&gt;</span></a>
                     </td>
-                    <td>Concatenates the outputs from two pipes with compatible output rates.</td>
+                    <td class="description">Concatenates the outputs from two pipes with compatible output rates.</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
                         <a href="#pipe-product">3.3.  <span class="usage">&lt;pipe&gt; product &lt;pipe&gt;</span></a>
                     </td>
-                    <td>Computes the cartesian product of the outputs from two pipes with compatible output rates.</td>
+                    <td class="description">Computes the cartesian product of the outputs from two pipes with compatible output rates.</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
                         <a href="#pipe-filter">3.4.  <span class="usage">@filter &lt;boolean condition&gt;</span></a>
                     </td>
-                    <td>Filters results from previous pipe.</td>
+                    <td class="description">Filters the results from previous pipe.</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#pipe-sort">3.5.  <span class="usage">@sort &lt;comparable expr&gt;+</span></a>
+                        <a href="#pipe-sort">3.5.  <span class="usage">@sort &lt;comparable... expr&gt;</span></a>
                     </td>
-                    <td>Sorts results from previous pipe.</td>
+                    <td class="description">Sorts the results from previous pipe.</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#pipe-top">3.6.  <span class="usage">@top &lt;number k&gt;, &lt;comparable expr&gt;+ [by &lt;object&gt;*]</span></a>
+                        <a href="#pipe-top">3.6.  <span class="usage">@top &lt;number k&gt;, &lt;comparable... expr&gt; [by &lt;object...&gt;]</span></a>
                     </td>
-                    <td>Gets the first k rows (possibly grouped) from every output at the previous pipe.</td>
+                    <td class="description">Sorts the results and gets the first k rows (possibly grouped) from previous pipe.</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#pipe-compress">3.7.  <span class="usage">@compress &lt;number k&gt;, [&lt;number k2&gt;,] &lt;number y&gt;+ [by &lt;object&gt;*]</span></a>
+                        <a href="#pipe-compress">3.7.  <span class="usage">@compress &lt;number k&gt;, [&lt;number k2&gt;,] &lt;number... y&gt; [by &lt;object...&gt;]</span></a>
                     </td>
-                    <td>Compresses the result from the last pipe to at most k (or k2) most important rows, output at the end.</td>
+                    <td class="description">Compresses the result from the previous pipe to at most k (or k2) most important rows.</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
                         <a href="#pipe-yield">3.8.  <span class="usage">@yield [&lt;object expr&gt;]</span></a>
                     </td>
-                    <td>Extracts one field of the stream to be the new event.</td>
+                    <td class="description">Extracts one field of the stream to be the output event.</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
                         <a href="#pipe-latest">3.9.  <span class="usage">@latest</span></a>
                     </td>
-                    <td>Keeps the latest batch of input events and output it at the end.</td>
+                    <td class="description">Keeps the latest batch of input events and output it at the end.</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
                         <a href="#pipe-unsafe">3.10.  <span class="usage">@unsafe</span></a>
                     </td>
-                    <td>Marks that any pipe executed after this must run in a non-distributed environment.</td>
+                    <td class="description">Marks that any pipe executed after this must run in a non-distributed environment.</td>
                 </tr>
 
                 <tr>
                     <td class="level-0">
                         <a href="#chapter-operator">4. Operators <span class="usage"></span></a>
                     </td>
-                    <td></td>
+                    <td class="description"></td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#operator-add-number">4.1.  <span class="usage">&lt;number&gt; + &lt;number&gt; → &lt;number&gt;</span></a>
+                        <a href="#operator-number">4.1.  <span class="usage">&lt;object&gt;#</span></a>
                     </td>
-                    <td>Adds two numbers.</td>
+                    <td class="description">Coerces the expression to number. Shorthand to number(&lt;object&gt;).</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#operator-add-string">4.2.  <span class="usage">&lt;string&gt; + &lt;string&gt; → &lt;string&gt;</span></a>
+                        <a href="#operator-string">4.2.  <span class="usage">&lt;object&gt;$</span></a>
                     </td>
-                    <td>Concatenates two strings.</td>
+                    <td class="description">Coerces the expression to string. Shorthand to string(&lt;object&gt;).</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#operator-sub">4.3.  <span class="usage">&lt;number&gt; - &lt;number&gt; → &lt;number&gt;</span></a>
+                        <a href="#operator-add-number">4.3.  <span class="usage">&lt;number&gt; + &lt;number&gt; → &lt;number&gt;</span></a>
                     </td>
-                    <td>Subtracts one number from another.</td>
+                    <td class="description">Adds two numbers.</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#operator-mul">4.4.  <span class="usage">&lt;number&gt; * &lt;number&gt; → &lt;number&gt;</span></a>
+                        <a href="#operator-add-string">4.4.  <span class="usage">&lt;string&gt; + &lt;string&gt; → &lt;string&gt;</span></a>
                     </td>
-                    <td>Multiplies two numbers.</td>
+                    <td class="description">Concatenates two strings.</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#operator-div">4.5.  <span class="usage">&lt;number&gt; / &lt;number&gt; → &lt;number&gt;</span></a>
+                        <a href="#operator-sub">4.5.  <span class="usage">&lt;number&gt; - &lt;number&gt; → &lt;number&gt;</span></a>
                     </td>
-                    <td>Divides one number by another (float division).</td>
+                    <td class="description">Subtracts one number from another.</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#operator-intdiv">4.6.  <span class="usage">&lt;number&gt; // &lt;number&gt; → &lt;number&gt;</span></a>
+                        <a href="#operator-mul">4.6.  <span class="usage">&lt;number&gt; * &lt;number&gt; → &lt;number&gt;</span></a>
                     </td>
-                    <td>Divides one number by another (integer division).</td>
+                    <td class="description">Multiplies two numbers.</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#operator-pow">4.7.  <span class="usage">&lt;number&gt; ** &lt;number&gt; → &lt;number&gt;</span></a>
+                        <a href="#operator-div">4.7.  <span class="usage">&lt;number&gt; / &lt;number&gt; → &lt;number&gt;</span></a>
                     </td>
-                    <td>Raise one number to another's power.</td>
+                    <td class="description">Divides one number by another (float division).</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#operator-mod">4.8.  <span class="usage">&lt;number&gt; % &lt;number&gt; → &lt;number&gt;</span></a>
+                        <a href="#operator-intdiv">4.8.  <span class="usage">&lt;number&gt; // &lt;number&gt; → &lt;number&gt;</span></a>
                     </td>
-                    <td>Returns the rest of the division of one number by another.</td>
+                    <td class="description">Divides one number by another (integer division).</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#operator-neg">4.9.  <span class="usage">-&lt;number&gt; → &lt;number&gt;</span></a>
+                        <a href="#operator-pow">4.9.  <span class="usage">&lt;number&gt; ** &lt;number&gt; → &lt;number&gt;</span></a>
                     </td>
-                    <td>Negates one number.</td>
+                    <td class="description">Raises one number to another's power.</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#operator-and">4.10.  <span class="usage">&lt;boolean&gt; and &lt;boolean&gt; → &lt;boolean&gt;</span></a>
+                        <a href="#operator-mod">4.10.  <span class="usage">&lt;number&gt; % &lt;number&gt; → &lt;number&gt;</span></a>
                     </td>
-                    <td>Returns the logical AND of two booleans.</td>
+                    <td class="description">Returns the rest of the division of one number by another.</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#operator-or">4.11.  <span class="usage">&lt;boolean&gt; or &lt;boolean&gt; → &lt;boolean&gt;</span></a>
+                        <a href="#operator-neg">4.11.  <span class="usage">-&lt;number&gt; → &lt;number&gt;</span></a>
                     </td>
-                    <td>Returns the logical OR of two booleans.</td>
+                    <td class="description">Negates one number.</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#operator-xor">4.12.  <span class="usage">&lt;boolean&gt; xor &lt;boolean&gt; → &lt;boolean&gt;</span></a>
+                        <a href="#operator-and">4.12.  <span class="usage">&lt;boolean&gt; and &lt;boolean&gt; → &lt;boolean&gt;</span></a>
                     </td>
-                    <td>Returns the logical XOR of two booleans.</td>
+                    <td class="description">Returns the logical AND of two booleans.</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#operator-not">4.13.  <span class="usage">not &lt;boolean&gt; → &lt;boolean&gt;</span></a>
+                        <a href="#operator-or">4.13.  <span class="usage">&lt;boolean&gt; or &lt;boolean&gt; → &lt;boolean&gt;</span></a>
                     </td>
-                    <td>Returns the logical NOT of a boolean.</td>
+                    <td class="description">Returns the logical OR of two booleans.</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#operator-eq">4.14.  <span class="usage">&lt;object&gt; == &lt;object&gt; → &lt;boolean&gt;</span></a>
+                        <a href="#operator-xor">4.14.  <span class="usage">&lt;boolean&gt; xor &lt;boolean&gt; → &lt;boolean&gt;</span></a>
                     </td>
-                    <td>Checks whether two objects are equal.</td>
+                    <td class="description">Returns the logical XOR of two booleans.</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#operator-neq">4.15.  <span class="usage">&lt;object&gt; != &lt;object&gt; → &lt;boolean&gt;</span></a>
+                        <a href="#operator-not">4.15.  <span class="usage">not &lt;boolean&gt; → &lt;boolean&gt;</span></a>
                     </td>
-                    <td>Checks whether two objects are not equal.</td>
+                    <td class="description">Returns the logical NOT of a boolean.</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#operator-lt">4.16.  <span class="usage">&lt;comparable&gt; &lt; &lt;comparable&gt; → &lt;boolean&gt;</span></a>
+                        <a href="#operator-eq">4.16.  <span class="usage">&lt;object&gt; == &lt;object&gt; → &lt;boolean&gt;</span></a>
                     </td>
-                    <td>Checks whether the left operand compares lesser than the right one.</td>
+                    <td class="description">Checks whether two objects are equal.</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#operator-lt-eq">4.17.  <span class="usage">&lt;comparable&gt; &lt;= &lt;comparable&gt; → &lt;boolean&gt;</span></a>
+                        <a href="#operator-neq">4.17.  <span class="usage">&lt;object&gt; != &lt;object&gt; → &lt;boolean&gt;</span></a>
                     </td>
-                    <td>Checks whether the left operand compares lesser than or equal to the right one.</td>
+                    <td class="description">Checks whether two objects are not equal.</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#operator-gt">4.18.  <span class="usage">&lt;comparable&gt; &gt; &lt;comparable&gt; → &lt;boolean&gt;</span></a>
+                        <a href="#operator-lt">4.18.  <span class="usage">&lt;comparable&gt; &lt; &lt;comparable&gt; → &lt;boolean&gt;</span></a>
                     </td>
-                    <td>Checks whether the left operand compares greater than the right one.</td>
+                    <td class="description">Checks whether the left operand compares lesser than the right one.</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#operator-gt-eq">4.19.  <span class="usage">&lt;comparable&gt; &gt;= &lt;comparable&gt; → &lt;boolean&gt;</span></a>
+                        <a href="#operator-lt-eq">4.19.  <span class="usage">&lt;comparable&gt; &lt;= &lt;comparable&gt; → &lt;boolean&gt;</span></a>
                     </td>
-                    <td>Checks whether the left operand compares greater than or equal to the right one.</td>
+                    <td class="description">Checks whether the left operand compares lesser than or equal to the right one.</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#operator-coalesce">4.20.  <span class="usage">&lt;T&gt; ?? &lt;T&gt; → &lt;T&gt;</span></a>
+                        <a href="#operator-gt">4.20.  <span class="usage">&lt;comparable&gt; &gt; &lt;comparable&gt; → &lt;boolean&gt;</span></a>
                     </td>
-                    <td>Returns the first if it is not null; otherwise, returns the second.</td>
+                    <td class="description">Checks whether the left operand compares greater than the right one.</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#operator-iif">4.21.  <span class="usage">&lt;condition&gt; ? &lt;T&gt;, &lt;T&gt; → &lt;T&gt;</span></a>
+                        <a href="#operator-gt-eq">4.21.  <span class="usage">&lt;comparable&gt; &gt;= &lt;comparable&gt; → &lt;boolean&gt;</span></a>
                     </td>
-                    <td>If the condition is true, returns the first object; otherwise, returns the second.</td>
+                    <td class="description">Checks whether the left operand compares greater than or equal to the right one.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#operator-coalesce">4.22.  <span class="usage">&lt;object&gt; ?? &lt;object&gt; → &lt;object&gt;</span></a>
+                    </td>
+                    <td class="description">Returns the first if it is not null; otherwise, returns the second.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#operator-iif">4.23.  <span class="usage">&lt;condition&gt; ? &lt;object&gt;, &lt;object&gt; → &lt;object&gt;</span></a>
+                    </td>
+                    <td class="description">If the condition is true, returns the first object; otherwise, returns the second.</td>
                 </tr>
 
                 <tr>
                     <td class="level-0">
-                        <a href="#chapter-functions">5. Functions <span class="usage"></span></a>
+                        <a href="#chapter-scalars">5. Scalar Functions <span class="usage"></span></a>
                     </td>
-                    <td></td>
+                    <td class="description"></td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#function-log">5.1.  <span class="usage">log(&lt;number&gt;, [&lt;number base&gt;]) → &lt;number&gt;</span></a>
+                        <a href="#scalar-abs">5.1.  <span class="usage">&lt;number&gt;:abs() → &lt;number&gt;</span></a>
                     </td>
-                    <td>Calculates the logarithm of a number.</td>
+                    <td class="description">Calculates the absolute value of a number.</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#function-exp">5.2.  <span class="usage">exp(&lt;number&gt;) → &lt;number&gt;</span></a>
+                        <a href="#scalar-acos">5.2.  <span class="usage">&lt;number&gt;:acos() → &lt;number&gt;</span></a>
                     </td>
-                    <td>Calculates the exponential of a number.</td>
+                    <td class="description">Returns the arc cosine of the argument to an angle in radians.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-asin">5.3.  <span class="usage">&lt;number&gt;:asin() → &lt;number&gt;</span></a>
+                    </td>
+                    <td class="description">Returns the arc sine of the argument to an angle in radians.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-atan">5.4.  <span class="usage">&lt;number&gt;:atan() → &lt;number&gt;</span></a>
+                    </td>
+                    <td class="description">Returns the arc tangent of the argument to an angle in radians.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-bytes">5.5.  <span class="usage">&lt;number&gt;:bytes([&lt;number precision&gt;]) → &lt;string&gt;</span></a>
+                    </td>
+                    <td class="description">Formats a number as the best possible byte multiple.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-ceil">5.6.  <span class="usage">&lt;number&gt;:ceil([&lt;number precision&gt;]) → &lt;number&gt;</span></a>
+                    </td>
+                    <td class="description">Returns the smallest number that is greatest than or equal to the argument.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-cos">5.7.  <span class="usage">&lt;number&gt;:cos() → &lt;number&gt;</span></a>
+                    </td>
+                    <td class="description">Returns the cosine of an angle in radians.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-dateadd">5.8.  <span class="usage">&lt;number&gt;:dateadd(&lt;number amount&gt;, &lt;string unit&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span></a>
+                    </td>
+                    <td class="description">Adds &lt;amount&gt; &lt;unit&gt;s of date to timestamp argument.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-datefloor">5.9.  <span class="usage">&lt;number&gt;:datefloor(&lt;number amount&gt;, &lt;string unit&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span></a>
+                    </td>
+                    <td class="description">Rounds timestamp down to the nearest date that is divisible by &lt;amount&gt; &lt;unit&gt;s.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-dateformat">5.10.  <span class="usage">&lt;number&gt;:dateformat([&lt;string format&gt;], [&lt;string tz&gt;]) → &lt;string&gt;</span></a>
+                    </td>
+                    <td class="description">Formats timestamp using specified format</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-datesub">5.11.  <span class="usage">&lt;number&gt;:datesub(&lt;number amount&gt;, &lt;string unit&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span></a>
+                    </td>
+                    <td class="description">Sutracts &lt;amount&gt; &lt;unit&gt;s of date from timestamp argument.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-exp">5.12.  <span class="usage">&lt;number&gt;:exp() → &lt;number&gt;</span></a>
+                    </td>
+                    <td class="description">Calculates the exponential of a number.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-floor">5.13.  <span class="usage">&lt;number&gt;:floor([&lt;number precision&gt;]) → &lt;number&gt;</span></a>
+                    </td>
+                    <td class="description">Returns the largest number that is lesser than or equal to the argument.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-format">5.14.  <span class="usage">&lt;number&gt;:format([&lt;string format&gt;], [&lt;string locale&gt;]) → &lt;string&gt;</span></a>
+                    </td>
+                    <td class="description">Formats a number according to format string and locale.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-log">5.15.  <span class="usage">&lt;number&gt;:log([&lt;number base&gt;]) → &lt;number&gt;</span></a>
+                    </td>
+                    <td class="description">Calculates the logarithm of a number.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-pow">5.16.  <span class="usage">&lt;number&gt;:pow(&lt;number exp&gt;) → &lt;number&gt;</span></a>
+                    </td>
+                    <td class="description">Raises one number to another.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-round">5.17.  <span class="usage">&lt;number&gt;:round([&lt;number precision&gt;]) → &lt;number&gt;</span></a>
+                    </td>
+                    <td class="description">Rounds a number to &lt;precision&gt; decimal places.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-select">5.18.  <span class="usage">&lt;number&gt;:select(&lt;object... list&gt;) → &lt;object&gt;</span></a>
+                    </td>
+                    <td class="description">Selects the ith element from a list of arguments. Or null if it doesn't exist.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-sin">5.19.  <span class="usage">&lt;number&gt;:sin() → &lt;number&gt;</span></a>
+                    </td>
+                    <td class="description">Returns the sine of an angle in radians.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-tan">5.20.  <span class="usage">&lt;number&gt;:tan() → &lt;number&gt;</span></a>
+                    </td>
+                    <td class="description">Returns the tangent of an angle in radians.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-boolean">5.21.  <span class="usage">&lt;object&gt;:boolean() → &lt;boolean&gt;</span></a>
+                    </td>
+                    <td class="description">Converts object to boolean.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-decode">5.22.  <span class="usage">&lt;object&gt;:decode(&lt;object,object... pairs&gt;) → &lt;object&gt;</span></a>
+                    </td>
+                    <td class="description">Transforms the parameter using the translation rules defined in &lt;pairs&gt;.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-get">5.23.  <span class="usage">&lt;object&gt;:get(&lt;object... keys&gt;) → &lt;object&gt;</span></a>
+                    </td>
+                    <td class="description">Much like property[keys]. Works for strings, containers and arrays.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-indexin">5.24.  <span class="usage">&lt;object&gt;:indexin(&lt;T list&gt;*) → &lt;number&gt;</span></a>
+                    </td>
+                    <td class="description">Returns the first index of the value in &lt;list&gt;, or null if &lt;list&gt; does not contain it.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-isin">5.25.  <span class="usage">&lt;object&gt;:isin(&lt;object... list&gt;) → &lt;boolean&gt;</span></a>
+                    </td>
+                    <td class="description">Returns true if &lt;list&gt; contains the value, false otherwise.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-json">5.26.  <span class="usage">&lt;object&gt;:json() → &lt;string&gt;</span></a>
+                    </td>
+                    <td class="description">Converts the object to its JSON string representation.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#aggregation-keep">5.27.  <span class="usage">&lt;object&gt;:keep([&lt;number ttl&gt;]) → &lt;object&gt;</span></a>
+                    </td>
+                    <td class="description">When used in a default pipe, delays or disable (if ttl not supplied or &lt; 0) inactive group removal.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-len">5.28.  <span class="usage">&lt;object&gt;:len() → &lt;object&gt;</span></a>
+                    </td>
+                    <td class="description">Tries to get &lt;target&gt;'s size. Works for strings, containers and arrays.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-number">5.29.  <span class="usage">&lt;object&gt;:number() → &lt;number&gt;</span></a>
+                    </td>
+                    <td class="description">Converts object to number.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-object">5.30.  <span class="usage">&lt;object&gt;:object() → &lt;object&gt;</span></a>
+                    </td>
+                    <td class="description">Casts any object to its canonical object representation.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-string">5.31.  <span class="usage">&lt;object&gt;:string() → &lt;string&gt;</span></a>
+                    </td>
+                    <td class="description">Converts object to string.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-contains">5.32.  <span class="usage">&lt;string&gt;:contains(&lt;string&gt;) → &lt;boolean&gt;</span></a>
+                    </td>
+                    <td class="description">Returns whether the target string contains the argument.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-dateparse">5.33.  <span class="usage">&lt;string&gt;:dateparse([&lt;string format&gt;], [&lt;string tz&gt;]) → &lt;number&gt;</span></a>
+                    </td>
+                    <td class="description">Parses timestamp using specified format</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-stringformat">5.34.  <span class="usage">&lt;string&gt;:format(&lt;object... args&gt;) → &lt;string&gt;</span></a>
+                    </td>
+                    <td class="description">Uses the target string as format to arguments.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-hlleval">5.35.  <span class="usage">&lt;string&gt;:hlleval() → &lt;number&gt;</span></a>
+                    </td>
+                    <td class="description">Evaluates compressed base64 HyperLogLog data.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-indexof">5.36.  <span class="usage">&lt;string&gt;:indexof(&lt;string s&gt;, [&lt;number fromIndex&gt;]) → &lt;boolean&gt;</span></a>
+                    </td>
+                    <td class="description">Returns the index of position of &lt;s&gt; inside the target string. Returns null otherwise.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-lower">5.37.  <span class="usage">&lt;string&gt;:lower() → &lt;string&gt;</span></a>
+                    </td>
+                    <td class="description">Converts string to lowercase.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-parse">5.38.  <span class="usage">&lt;string&gt;:parse([&lt;string format&gt;], [&lt;string locale&gt;]) → &lt;number&gt;</span></a>
+                    </td>
+                    <td class="description">Parses a number according to format string and locale.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-replace">5.39.  <span class="usage">&lt;string&gt;:replace(&lt;string from&gt;, &lt;string to&gt;) → &lt;string&gt;</span></a>
+                    </td>
+                    <td class="description">Replaces all instances of &lt;from&gt; with the string &lt;to&gt;.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-substring">5.40.  <span class="usage">&lt;string&gt;:substring(&lt;number from&gt;, [&lt;number to&gt;]) → &lt;string&gt;</span></a>
+                    </td>
+                    <td class="description">Returns the substring between the indices &lt;from&gt; and &lt;to&gt;.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-upper">5.41.  <span class="usage">&lt;string&gt;:upper() → &lt;string&gt;</span></a>
+                    </td>
+                    <td class="description">Converts string to uppercase.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-compare">5.42.  <span class="usage">compare(&lt;comparable a&gt;, &lt;comparable b&gt;) → &lt;number&gt;</span></a>
+                    </td>
+                    <td class="description">Returns a number &lt; 0 if a &lt; b, &gt; 0 if a &gt; b or 0 if a = b.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-hllmerge">5.43.  <span class="usage">hllmerge(&lt;string... data&gt;) → &lt;string&gt;</span></a>
+                    </td>
+                    <td class="description">Merge many instances of compressed base64 HyperLogLog data.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-max">5.44.  <span class="usage">max(&lt;comparable&gt;, &lt;comparable&gt;, &lt;comparable...&gt;) → &lt;comparable&gt;</span></a>
+                    </td>
+                    <td class="description">Returns the greatest value of all supplied arguments.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-min">5.45.  <span class="usage">min(&lt;comparable&gt;, &lt;comparable&gt;, &lt;comparable...&gt;) → &lt;comparable&gt;</span></a>
+                    </td>
+                    <td class="description">Returns the least value of all supplied arguments.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-newlist">5.46.  <span class="usage">newlist(&lt;object...&gt;) → &lt;object&gt;</span></a>
+                    </td>
+                    <td class="description">Creates a instance of java.util.List with the supplied objects.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-newmap">5.47.  <span class="usage">newmap(&lt;object,object... pairs&gt;) → &lt;object&gt;</span></a>
+                    </td>
+                    <td class="description">Creates a instance of java.util.Map with the supplied keys and values.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-pi">5.48.  <span class="usage">pi() → &lt;number&gt;</span></a>
+                    </td>
+                    <td class="description">Returns the constant value of pi.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-random2">5.49.  <span class="usage">random(&lt;number min&gt;, &lt;number max&gt;) → &lt;number&gt;</span></a>
+                    </td>
+                    <td class="description">Returns a random value between &lt;min&gt; and &lt;max&gt;.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-random">5.50.  <span class="usage">random([&lt;number max&gt;]) → &lt;number&gt;</span></a>
+                    </td>
+                    <td class="description">Returns a random value of at most &lt;max&gt; (1 if not defined).</td>
                 </tr>
 
                 <tr>
                     <td class="level-0">
-                        <a href="#chapter-aggregations">6. Aggregations <span class="usage"></span></a>
+                        <a href="#chapter-aggregations">6. Aggregation Functions <span class="usage"></span></a>
                     </td>
-                    <td></td>
+                    <td class="description"></td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#aggregation-dcount">6.1.  <span class="usage">dcount(&lt;object&gt;*) → &lt;number&gt;</span></a>
+                        <a href="#aggregation-if">6.1.  <span class="usage">&lt;aggregation object expr&gt;:if(&lt;boolean condition&gt;) → &lt;object&gt;</span></a>
                     </td>
-                    <td>Estimates the field's cardinality (distinct count) using HyperLogLog.</td>
+                    <td class="description">Aggregates only events that evaluates true to &lt;condition&gt;.</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#aggregation-median">6.2.  <span class="usage">median(&lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span></a>
+                        <a href="#aggregation-overall">6.2.  <span class="usage">&lt;aggregation object expr&gt;:overall() → &lt;object&gt;</span></a>
                     </td>
-                    <td>Estimates the median value of the population using Count-Min Sketch.</td>
+                    <td class="description">Merges all the results from the target aggregation.</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#aggregation-quantile">6.3.  <span class="usage">quantile(&lt;number q&gt;, &lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span></a>
+                        <a href="#aggregation-overlast">6.3.  <span class="usage">&lt;aggregation object expr&gt;:overlast(&lt;number window&gt;) → &lt;object&gt;</span></a>
                     </td>
-                    <td>Estimates the q (0..1) quantile of the population using Count-Min Sketch.</td>
+                    <td class="description">Merges the results of the last &lt;window&gt; aggregations.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#aggregation-prev">6.4.  <span class="usage">&lt;aggregation object expr&gt;:prev([&lt;number prev&gt;]) → &lt;object&gt;</span></a>
+                    </td>
+                    <td class="description">Delays and returns the previous &lt;number&gt;th result from target aggregation.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#aggregation-all">6.5.  <span class="usage">all(&lt;boolean&gt;) → &lt;boolean&gt;</span></a>
+                    </td>
+                    <td class="description">Returns true if all ocurrences evaluate true.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#aggregation-any">6.6.  <span class="usage">any(&lt;boolean&gt;) → &lt;boolean&gt;</span></a>
+                    </td>
+                    <td class="description">Returns true if any ocurrence evaluates true.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#aggregation-avg">6.7.  <span class="usage">avg(&lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span></a>
+                    </td>
+                    <td class="description">Calculates the (possibly weighted) average of some expression.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#aggregation-dcount">6.8.  <span class="usage">dcount(&lt;object&gt;...) → &lt;number&gt;</span></a>
+                    </td>
+                    <td class="description">Estimates the field's cardinality (distinct count) using HyperLogLog.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#aggregation-describe">6.9.  <span class="usage">describe(&lt;aggregation object expr&gt;) → &lt;string&gt;</span></a>
+                    </td>
+                    <td class="description">Yields a string json explaining the target aggregation's inner state representation.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#aggregation-first">6.10.  <span class="usage">first(&lt;object&gt;) → &lt;object&gt;</span></a>
+                    </td>
+                    <td class="description">Yields the ocurrence with least timestamp.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#aggregation-hll">6.11.  <span class="usage">hll(&lt;number log2m&gt;, &lt;object&gt;...) → &lt;number&gt;</span></a>
+                    </td>
+                    <td class="description">Similar to dcount, but allows configuration of log2m parameter.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#aggregation-hllmerge">6.12.  <span class="usage">hllmerge(&lt;string&gt;...) → &lt;string&gt;</span></a>
+                    </td>
+                    <td class="description">Performs union of many HyperLogLog encoded data in a window.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#aggregation-hllset">6.13.  <span class="usage">hllset(&lt;number log2m&gt;, &lt;object&gt;...) → &lt;string&gt;</span></a>
+                    </td>
+                    <td class="description">Similar to hll, but it doesn't evaluate final cardinality, just return the sketch data.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#aggregation-join">6.14.  <span class="usage">join(&lt;string&gt;, [&lt;string separator&gt;], [&lt;string lastSeparator&gt;]) → &lt;string&gt;</span></a>
+                    </td>
+                    <td class="description">Join all the strings in a window.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#aggregation-last">6.15.  <span class="usage">last(&lt;object&gt;) → &lt;object&gt;</span></a>
+                    </td>
+                    <td class="description">Yields the ocurrence with greatest timestamp.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#aggregation-map">6.16.  <span class="usage">map(&lt;object key&gt;, &lt;object value&gt;) → &lt;object&gt;</span></a>
+                    </td>
+                    <td class="description">Creates a java.util.Map from all events in a window.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#aggregation-max">6.17.  <span class="usage">max(&lt;comparable&gt;) → &lt;comparable&gt;</span></a>
+                    </td>
+                    <td class="description">Yields the greatest ocurrence in the window.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#aggregation-median">6.18.  <span class="usage">median(&lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span></a>
+                    </td>
+                    <td class="description">Estimates the median value of the population using Count-Min Sketch.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#aggregation-min">6.19.  <span class="usage">min(&lt;comparable&gt;) → &lt;comparable&gt;</span></a>
+                    </td>
+                    <td class="description">Yields the least ocurrence in the window.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#aggregation-pcount">6.20.  <span class="usage">pcount(&lt;boolean&gt;) → &lt;number&gt;</span></a>
+                    </td>
+                    <td class="description">Aggregates the proportion of events that evaluate true to expression.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#aggregation-quantile">6.21.  <span class="usage">quantile(&lt;number q&gt;, &lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span></a>
+                    </td>
+                    <td class="description">Estimates the q (0..1) quantile of the population using Count-Min Sketch.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#aggregation-set">6.22.  <span class="usage">set(&lt;object&gt;) → &lt;object&gt;</span></a>
+                    </td>
+                    <td class="description">Creates a java.util.Set from all events in a window.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#aggregation-smooth">6.23.  <span class="usage">smooth(&lt;aggregation number expr&gt;, [&lt;number alpha&gt;], [&lt;number beta&gt;]) → &lt;number&gt;</span></a>
+                    </td>
+                    <td class="description">(Unsafe aggregation) Smoothes the curve of another aggregation.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#aggregation-stdev">6.24.  <span class="usage">stdev(&lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span></a>
+                    </td>
+                    <td class="description">Calculates the (possibly weighted) standard deviation of some expression.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#aggregation-sum">6.25.  <span class="usage">sum(&lt;number&gt;) → &lt;number&gt;</span></a>
+                    </td>
+                    <td class="description">Sums all evaluations of some expression.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#aggregation-variance">6.26.  <span class="usage">variance(&lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span></a>
+                    </td>
+                    <td class="description">Calculates the (possibly weighted) variance of some expression.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#aggregation-when">6.27.  <span class="usage">when(&lt;aggregation boolean expr&gt;) → &lt;number&gt;</span></a>
+                    </td>
+                    <td class="description">Yields the latest timestamp inside window when some condition was true.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#aggregation-window">6.28. Window Meta-aggregations <span class="usage"></span></a>
+                    </td>
+                    <td class="description"></td>
+                </tr>
+
+                <tr>
+                    <td class="level-2">
+                        <a href="#aggregation-wcount">6.28.1.  <span class="usage">WCOUNT()</span></a>
+                    </td>
+                    <td class="description">Yields how many outputs are merged in the current window.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-2">
+                        <a href="#aggregation-wstart">6.28.2.  <span class="usage">WSTART()</span></a>
+                    </td>
+                    <td class="description">Yields the minimum allowed timestamp or item for the current window.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-2">
+                        <a href="#aggregation-wend">6.28.3.  <span class="usage">WEND()</span></a>
+                    </td>
+                    <td class="description">Yields the maximum allowed timestamp or item for the current window.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-2">
+                        <a href="#aggregation-ostart">6.28.4.  <span class="usage">OSTART()</span></a>
+                    </td>
+                    <td class="description">Yields the minimum allowed timestamp or item for the current output.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-2">
+                        <a href="#aggregation-oend">6.28.5.  <span class="usage">OEND()</span></a>
+                    </td>
+                    <td class="description">Yields the maximum allowed timestamp or item for the current output.</td>
+                </tr>
+
+                <tr>
+                    <td class="level-2">
+                        <a href="#aggregation-otimestamp">6.28.6.  <span class="usage">OTIMESTAMP()</span></a>
+                    </td>
+                    <td class="description">Yields the timestamp when the output was merged (useful for item batch pipes).</td>
                 </tr>
 </table>
 <div id="chapter-intro" class="level-0">
-<h2>1. Introduction <small class="usage"></small></h2>
+<h2>1. Introduction <span class="usage"></span></h2>
 <div class="text"><p><strong></strong></p><p>
     Pipes is a language and an engine to perform distributed aggregations over real-time streams.
     It enables stream processing with low latency and minimum memory footprint (constant for most operations).
@@ -1053,10 +1626,10 @@ type:http
 </div>
 </div>
 </div><hr/>
-<div id="intro-eventmodel" class="level-1">
-<h3>1.1. Event Model <small class="usage"></small></h3>
+<div id="intro-basic" class="level-1">
+<h4>1.1. Basic Concepts <span class="usage"></span></h4>
 <div class="text"><p><strong></strong></p><p>
-    Pipes language operates over events. Events are (usually) immutable sets of key-value pairs. 
+    Pipes language operates over events. Events are (usually immutable) sets of key-value pairs. 
     The engine allows to configure how these properties will be fetched from the event, but the default 
     is to assume events are instances of java.util.Map. To access the value of a property, just use the 
     property name (e.g. <span class="pipes">someproperty</span>).
@@ -1098,10 +1671,14 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
     For most purposes, <strong>every constant is also an scalar</strong> (it just ignores the event) and <strong>every 
     scalar may act like an aggregation</strong>, if required to.
 </p>
+<div class="picture">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAYcAAADBCAQAAACOYbQwAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAJiS0dEAP%2BHj8y/AAAACW9GRnMAAAFpAAAAXwBuhaJzAAAACXBIWXMAAABIAAAASABGyWs%2BAAAACXZwQWcAAASAAAADYACYllg8AAAoLElEQVR42u2dfXxU5Zn3v%2BdkAkmcEAhBkoAhFkRAsOHBNlRowcZt3EIrtUVt0v0Ed/FRdBV3i%2B0K3RW3RdtCWyt1C5/agk8V2yK0VvE1WbVCxRqE1qCAoQIlEQoJCDEBkszv%2BeOcmUxeySQzc2Yy58vno5Mz5%2BU6Z%2B7fua/rfrluA5fokE1Kp0/D8Xba7yQf2p8aON7pk0tEMZw2YICQQjZZeBmF1/40Gi/ZDGVoWK9znAYO08ARTnKSwzRw1P7U4vQjGAi4cgiVFPIZQz7Z5AdEkH/%2Bw8wW/6MeZHpM61Magzvt18hZ%2B1Nza7OsTz7kOe8FWjhsC%2BMMhznMAQ5ywBVJaLhyOB/%2B4u//l93lXr4kX7KZbA4hhSxGMITxZDKJfMaG1ZjdHGEnJzhAHSc5ylkaONfSQmtSN7/kYQ4E/rnyOC%2BuHDqTz1jyyWdcl8Xfl%2BzzejLJYixpXMzFXEiR0xYDTfyRv1HLPho5xFFO8FFzi6fT72vJo5oDHGQPR5y2OtZw5WAxlMl8nMlcwYQO4a08vvSkTEZzCZdzJdOctjQktvE6VVRTwwkaWlo7ulwnqWIXVexgDw1O2xoLJLIcPEzgMgqYTAGj2zYntXg9wxjFOCbzKWY4bWVYqeANdrOfDzjBRy2%2BYHlU29LYzR6nrXSOxJNDNh9nMgVMZkKgwROjNcW4yBzP5/h8mL39WGY3T/EH9nLEd1ZKCmxuYA%2B7qOLPVCVaA2%2BiyMHDZGYxk5nBscCg1mFJ47iCL8SE9%2B8smynnTxzkZHNLctDmA2xlK9uoctq%2B6DDQ5ZDCdGYxnZn%2BiMBoHZKUy2SKmE%2Bm09bFJLVs4kX2UeNrbKszTvIK23mVyoHdNjVQ5TDUrguuwPaPk1vzkmbyT249EBKb%2BRVvUNMWhJ9hu11fDMjQe6DJIZ9ZTGc2E%2By/lapx5me5I4EigkiwgzVs46%2BtZ9sijF12fTGgGmsHihxSmMU85vpbiAzfUHMSn%2BdW1yEKK7U8zAvs9TWA3bNONb9jC1sHhhMV/3IYTTHzmG3FBmbriKQCbuQGUp22a0BTz%2BNsYjd1rXZ0cZLneYYX4r0lKp7lMJ05XMMV1h8X%2BArM2/mq0zYlHKt5lCrfWauuaGE7z/NU/LZDxaMcvBRzDXOtJlPDl21%2Bjru5zGmrEppt/JgK1ct2oQ7wDM/wKmectitU4ksO%2BcxhHjOt7jOP7xLzBr7hukUxQz0P8CSH/L3dDZTzDFviKdiOFzl4uYGvMRsApfNJ49/5vNM2uXTDeh7hrdYmK6po4Xke46n4qCliXw4eivka80gBw5drXs1/uo2mccEOvsfLHPdhAg38isd5xWmbzkdsy6GAMm4kG9Aw44v80G02jTv2cw/P%2Bj6yYorDrOdRqp22qXtiVQ6jKeVrTAYY7Jtp3jfARpYmGs/y3%2BxobbHcp%2B08xq9js0k29uTg5VoWcDWA2Xpp0jdY4LRFLmFiFQ9z0OqpaOEZ1vNCrEUUsSWHAm7nRryAL8e8iW%2B5rUYDjnq%2Bxa%2BpFwZwnMd4OJacp9iRwxzusuqEdF1jPEiu0/a4RJDdfJ1XfWdMrHriB2x12iKLWJBDCmXcxQQwfBPM1e6Y04ThCZZywGp5qmQVm5wf9%2BS0HLK5nVvJgiTf1ebDbhNqwrGD23mz1ZcEHOZBfs5JJ61xUg4FLOZGUiBNZcYP3DghYannVp5qPZcENPCIk9GEU3LwRwoaaSzjDqfu3iWGWMb/6KSBo9FE9OXgoZT/cCMFl65oF018h6eiff1oy2EO36EAknyzzbVupODSBTu4hbes3olX%2BM/o1hLRlMN0HmA2eHzXm4%2B4kYJLD9RTwktWgP077ole5qdoyWEcK5kHpu8fzA3uyCOXXrCfUv7kk0kLj3FPdIaJR0MO2XybBXgMfdJ43HWQXEJgByXsEwZneJDvRb4RNtJyGMrXWUIKGmv8Os7ym7rEBs%2BykA8ATvIdHo7sKKdIyiGFW1jOUBjJL9zJOi79YD136rQBHOZbPB653uvIyWEOPyEf0lnh9iu4hIH7eMBKUVDFzWyPzDUiI4csVrIABusOY2XEHo9L4lHKb3wtJi08yH2RyAMYCTl8mTVkGfqs8bTbnOoSZuqZzdvC4AA3hX%2Byqdn/U7Qji408SVY6Txrlrhhcwk4mf%2BEhY7CPfF5mdRcrr/aL8NYOZTzIUENzjKej%2BIBcEo8mruINYXCYW9kSvvOGr3YYzdOsZ2gGL7licIkwqWxnnZEiRvMM68K3WHG4aodb%2BC5DDX3VeNyZ5%2BOSgDTxBSp8mBzmLjaF44zhqB1G8zJrGJrJa64YosD9wQvZJTSplLPJTBOjeZKN4agj%2Bi%2BH2bzJbFMLqXOTv0SQVay3P%2B22%2BmhdALiO48ZcDB9f4U0rEVF/6K%2BzdAs/wZPO627K4AgznGtw697uqODzOmfQwNf6N0eiP7WDh5%2BxBs94jiaQGJq4i0vJZRyrAlu%2BQDYjmMp0plMB7OcKRpDLdKYzHajgGuB6hlupQqjgcjIZx9rAGUrJZbh9hvXAfq7nYnK5nAqgnqs5wYtM5xpgPdcEjrueXIYzk/32lrtYxXouZSiXstnpRxVFinjfGAlefse9zliQzevI8JUosShXsqapRGOFVkqS8pSsJVqqDJkqU7XqNEiZWq5F8ihNiyStECpQmgq1SNIWmRqpEk2UoaWSpLFK1mItVaYMlalS0lxlqFjz5VWS6lStQhnKUqGKJZXII0lqVLo8KtJceZWkStuWVCVrluYpQ4a9LXGYIXyIp8PdG3F%2BruADZPrWOP0EHCRVEyVVC62QJG0V2iBpqVCdJGmhTEmWHDLVaB83TCPtTxM1SFKj0GJJUpVQ%2BydaFRCdR/4Xj18OJYEC3yiv8iVJeTJUJUmqk6F5Tj%2BiqLNUhg/xbmBtwBDpm7NUxmtkp/En45ZoyzBG2E8FQ/gIOAJcDPZ/a4C/Y9gTnC7EFzhiud1HX88JPkMFFVRwKefYTy1wIQAfA%2BqCrrKDI8C5bmx4kQvtIfOpzOagvXWY7bhmkpqAIfcKnjSSxQRepzg6V/SwGqH8wNsusdikkTLkkUeG8iRJqcpRjepUqCTVSaqUoSI1qkqZdj2wQqjcPr5ctPtXLilNWapSnQplqkaStEheGfJoUKDu6Vw7pKsgYNVyIUnKs22yvi90%2BmE5Qo0yhWhmWeiFO9TawctL/Cuaz/sJOSKplvmk8jbNNAcc1Cc5Sh4jOcDvyQSmcQ8VDKGALN7qdIahwPIgPRQBf6CeyxnJfjaSCyzjp3yRj2jmbI/WnA58Our0g4khcqmjEDx8hyf8q4r3ltDk4OU5ZptaYfzG6Xt2iPX4eMR2R/zTsn7ICFpo5khgitMa5tJMM3u7yDQ7jSQ6DmJZRiatNHOM6wB4gRQeJxWo6MGWsfwt8PmVhHw5dc92FmGIG0MVRChy8PIcM002GkudvlvHKADWAvVMD0zJquUUpZSygCfsLY3spJRSbuuyOP8jb3EzTcBm7gbgEA2UUkqp3fSaw1kqgB18KdAxlMyrHc6zimamUw/czR5KnX40Mcb/8H3DEF8JvYboHV5eQ6Y2Oe0aOsw0IVOG8jVLeZIaNUOG0pQuj9AoSVXKkal0pSlJaJ7axw6SVCTD9pUmSmrULJn2GQyNlFSjYUJJMrRIXjt2WCJDppLVFjtIDylZhgwZKra3uLFDMCutdqaN4ReEK4YA1SpXdeCvKcqwm1WllUJb5dWUwLdFSuryHI0qV7l9XKG8gTOsE1onSaoMfO%2Bnpt11/WxVeYI2avSGUAXRu908/JaZJhtt3zaxGdsuOc4BJgXyRmUBKTRwY%2BDb9G5GwaQGJeN8h0sDZ7gIGALQRdaR3C7XvHDHifXEEjC%2BIX2FBm7qzf5JvdjHwxPMNbXRcMXQmd/wZ06TxC6%2BxwpG8gN%2BwDa8NPAHlvA8XwwSR9e8wBscJYVdfI978PKo07c0oLiSC4xyMZWhvBCO83nYiAyf6yZ1TaOKlS6PkpWlMjVKqtYUpcqjFI3S8l6dYa4y5FGyMjXPdXwiwEorUvvR%2BQv7%2BUa0eniCrxj6vrHEaZm7uPSZ2/ipMHiQf%2Bt5v/M5Sz/gn10xuMQ7c/i7USk%2BxUne6Gk/4zxneQaWOzVm1sUljJSyAVr4BLu636cnOYxmJ1mFkUp45uISZcZwCKqZ2n3Csu57pT08QVYGLzt9Dy4uYeJ1BsE4ftb9Ht3HDisoMdlKntP34OISJtIZx2YxhSPs6HqP7uRQzBq4l686fQcuLmFkCvuMt%2BFqtnS9fErXsYMbNbgMWHqKILqKHTz80o0aXAYqPUUQXdUOy/iOyZ/ctXrCTBN/BKA6MAH0MB%2B22%2BMyIJeLwF1eOKI8Qalk8LXOmXo6y2Ec7%2BJx%2Bxr6zjbeop591HGS45zhFM200IpCPI9BEpAKDCYNyAGGMhy/bD7trrPXZ65nI5zk4o6rzXWWwzoWZHHMaXvjiB38kb/wHoepp4HmXh7lAZLxYJLRbntjYEJosz3BqPuVn0xSuJCxTOYz/KM7Hy4kUjkDy7mv/daOchjHu3i2uCu59Ug9G/kDOznKaVo6vfVNBgeKeQZpeBgD5DKMQUwFJnY5ULvn6%2B2kmjp2c4pjnOAMJ2jhbFCeDoBkMshhAp/mswmUBq6v3M%2ByLuqHjnL4LfPyAklKXILZxu94kz2c6JTqxSCZYeQwiel8PoouTC2v8hZ7OMjfOdVOHgapZHExBRQyz603umQIp%2Bk4qK%2B9HArYafCSG8gFUcGv%2BAO1fNShFjC5gAsZxxSuipm6dD%2BvsYsq3qGunWSTSWcUn%2BWf3OaRIFZzJ5zh4uAeiPZyeI5rJvKO03bGBJv5JW9yNMhz99cBH%2BdTXB3zYWw9v%2BcldlLL6aBaI5lRXMk/uy88AEZwHNawqG1LsBxm87LBmwn9BmniEZ7iz9QF6gKTTKbFVB0QOjv4FW/yNieC7mokl3MjC5w2zVHWcxO0MJFq/5ZgObzM7MTtid7Gj6kIKjAecinkxgE2O3w9m9jB0UB9YZDN57g7YUPvMRyyVeF/Hn6Ked7gvZh3AsLPWtbxF5rsv1IYxVUsGOBT8p/lcbbyQaBZ2Ms07hxg0u/dc5gDLUylyvq7TQ7PcU0R5U7bF0Vq%2BRFP8jda7QeRiO/J9nWih0u4gTsCeT0SgUvZFxQ/%2BOXg5TiDtw7wd6Kfer7FxkB8YBWCbyRwc2Q9D7R7MeRSxrcS5Hms4m44zEXY925xA7/yBqXAHbis5se8b/vOieoidEew25jEJO5JiAH%2BHlrhE1RC24jWufBxp%2B2KMNuYSTJ3sh8facylitO84oohiFvYTiNbmcUgWnmbElK5ht1OmxVhLgK41vpsycHDF2DgJiKup5QhzGQbLSRRwCY%2B4ukEixJ6zwxe4SxrGI/JGV5gMsO5LdDUMPBYADDP%2Bmw5S0WUe3o9%2BCy%2B2MFC/oywfOKb3ZG6IdDEPTxux1gmn%2BbnA7LdsZ4sBJdQ7a8dBqirtJ7RXMEuhJcSDnPYFUNIpPIgx3ibuaTg41Uu4VKeddqosJNpDamcA345zOe8mUTjjbsZyk3UADms4zSPhzyO1MXiMp6miRVkIvYxhxGBJYQHClcDfAUsZ6mAnUk9jKqPN%2Br5F7bQDBhM4GcJ0ngcDTbzdQ4iIJVSHhowTbG1jEYt5HDcBK7F3%2Bwa9zRRykh%2BRzMeinmPd1wxhJHreJ83KcSkiUcYyl1OGxQmchkCHuZYzlI%2BXOm0RWFhGZlsoIUUFnKK5wdk4Oc009jOMebh4Rw/ZgirnTYoLEwAyA/IYbzT9vSbtQzhfs7goYQmfjZgKvJYJJPfcopiTE5zJyMGQHidBwE55Ma7HJ4ll1s5jUExRzunR3CJAKk8zz4KMTjOHMZ1l9YuThgDkG3JIQc%2B6bQ9faaWSczhAwwKeI/nE2r4mdOMZTtvkg/s5xPMjOOuusvAloOXdCNuvez7GcO7QB6vsTNu7yKemcb7bCELsY1M1jttTh%2BZAnARGIzjvfjska7lKvYBKTzILU4bk/Dcx3doAQp5OS7jNgMg2WQ0cWn%2B/YxhH1BIvSuGGOBeDjIeeCNO6wgPwGiTUf6lW%2BOH/YxhGS2ksI7tcSnmgUgue1mBhzPcxOXUO21OiKQAjDbJJs7Cz7VcyiEMCqlP8KnvscdSu454m5w4a369AGCkiRfSnLYlBBawiFZSedKtF2KSXPbyEB7OMbdjxseYJhVgqMkZAllBY50mLudRRB6H3Wk7Mcwd7GEYYrk1OC4uOAvQYHKEOPHz9jOKt4G5HIwz9673rI7z7iw/Y6lhGlDBmDgpXQ0AR00OwgmnbekFTzCBE5gs52mnTYkg/84PnTYhTKRSSRkGhxjNNqeN6QVNAAdMjhAHvYmrKKWFFF50J/DEEev5BR6a%2BAybnTblvLQAHDE5gp1QJHZZxTcQWex3c4vGGQvYjhcf82NcELsBTnHG5CRNotZpe3rAEsNIDsXhfLbbGM4QMrnCzkexm6kMYQgXswPYwUyGM4TsTvPLdjCTTIaQy1p7yxh2czNDGeH0LYXINPbGgSD%2BAnDIGsL3d2I4M6tfDO/HYbPqzazlSv6DWRwhB9hNAfso4hqSuBh4hmqKuIPBfIOKdkf%2Bkr/yRe4AFtlCOsRcHucqf8qHOCI3DgRRBfgT27%2BCVig2eUiG0Eg1Om1In8hTTru/p8ijmi72a5ShMkmSRyXtvqmToUWSJDSoy2Pjgxp5hUxtcdqQbigRYp1VO/yNGE0ttZm74rZmAPgSHzA1qF3lvS4WwtpNBT/C6GIQ5W4qWIMRWF30c3HoLPrx1xDzYrQheT/AYWvk0mHY6bQ9XZp4A744FgM8yAWsZiaZ/ISvAi0d%2Bv8X8Dg%2B0jA6rS9Xym/wcQEEfRNvI8vak8teLqWBT1MXg7%2BnXw4msAXec9qeLphOCym8E4MPr/es4BSbGEwpTwDtVwFdxaNcTyunOUVSu6OWsYG7aOUUp7pc%2BDs%2ByWU7STTF4HI69dZK31ssOWzlw5aYG5R7Dccx2DQA%2Bp%2Bvo5Zk1gIj2Ru0/XlMeyLr7g5pfSrwsBKAbR1WB41vLuO7wLsxl4HjvxG85a8dYCM84rRN7VjPi8C/xPECVAA3cz%2B1NHEfzcwAvkkDV/AsFSxjP1PxcRewmRkd6oAptHAf8AT/OIBqB4AlzAJWx1g/9VNAcLPXHJTidHAfRI08QvlOm9Fv5skUQqZm2VuWKFkIeVQlabwMoSSVabzdfuTVIkmNGiuEkrRY%2BfY3Hvv/8U%2BGkDeG2gobrV9pMvhTFqdQT2rsLHYymhoG8X4ct6S0UUtThznctRB0Z7u7ySTexF8HaI7xHXwSH9OsBRVigFXcDe/zMfA7S2coh287bZfNamowWD8gxAC5nRIa5La7s%2B6KfOoAFQNM47%2BAtzp0PDrHL8D2l9pW/ynlsQxOOm0ZYK0G765uPbAZwXHyOOi0GQAk0wJX8Qq0rf7zAq0fxkRn3P2cxmCj02a4RJS1wKGYmD66nhY4wVbrL78cjvNHYmIy3wPAJweso%2BBicR15wP912gzgJwBP%2BVu6zcD2tbDJ8ZlLd9EQaI13Gcj8FIMax3u7dvAWwM/9fwc1axvvaGIxzztqXipncNoGl%2BgwiXfJ4pjjNvBU2zDhttoB3QMvWaM3HGI9ZzDZ4KAFLtHjl8BxR%2BPVZ9kDsLxtS5AceIodPkodNO8RIG8ADMtw6Q3TyAB7MIozLELwK3a1bTHbfb8E/uSgXt8isMCvSwIwHRx0jDdzCFr5z%2BBtHYfEvMZMp9r8tzETg%2BNu7ZAwOPuLj%2BA4rOem4G1mh33%2BDfY4NEVjFTDcFUMCMYMUxA8cufZ6jsO59nVDZzlU8rQcynD3Mvbivi4JwzRwqOnkToD/4XD7rZ3HDxewE9Y5kAzYRFQlQAdcPTv5G7XA4cDET4vLgFwuAq6M60lPvWcttzLIgaSod7MKzjHGny7AT1fD6R/mNg8HozyErpZRGANqsovFNl6nimpqOEETvhDW7zZIAgaRwkgupYC5MTiPrL/s4ArMqOf52sZn8MGSzn5aV3JIMXZoUk6Ucy89yxzicxWizmzjd%2BzkHU5wpps9rKKejAeTjHbfNHIWaKalC%2BEYDGYYuUzlCq4eIEt/GUBjVOvCJi6kAV6kuGtrOjOZN0mZx2%2BjaOT9LCOdU1G8Yrip5WEq2MOpDokAkhjCCMZzOdlMAqb2urnAcqve4x0OcJQPOdOu9jTJZDo3xXku82RaKI9qdsWp7IJjXN7RUQJ7DaBOVHEr659ifRQjiH3Ea66IWr7Pi7wfVBMYpJDJOCbxSb7Yj7ayzE7FpJanqaCKw3yEj%2BM8wzOY5DCLf47ThJ0pNLAzirYvYxe08tWuxNATj9JNkqzIUCQ0xel5giGyRXOVIUPY/5I1XotVFaWrb9ViTVRq0NXHaqGqnX4oITJSRHHa61ZrImgf8l57jb10yCIXSQqFCqN2tf6yRYX2rGdrLnSeSrTVIVtqtFyFSgtYk6q5cSSKfKH5UbpWo7xCVHTjE9G536GNBn2ZMx/wpShVYinExypEu/kC6czhDZoxyGIum2jlII87NtM8l3vZzkdUUcJIDJp4hksYw2qnH1WvOAsdGhMix5U0wDFKu2/eM3s4uop/haeiNCZ9FLG/CtFqspnMMzRgkMMKPuIYT8dMKHsZj3OEj1jKKOAQdzKYLzg6Qrk3NAAXR%2BVKfY0agvkNMrUpChXZCqH0KFWafalmFwa89GQVRS0%2B6Cs1KlGGEDKUp5VOm9MDHqHyKFxnpRXjPdA/SXmNN6IjiE1Cnig8ltBpVLGS7KKVE7O5zrtiiybagX5yzGZpQqgu4lexxfBk91FDSIJIUmWEDa4WMiL%2BWEKlUSXyxE2d0BXVKrbvIEMbnDamE1VR%2BdU3hU0MAUEkR1wQhoixFQyWKsXOmbfQaVP6RZuoJ8ZYm9MGoUERvsYmq3E1TGIA8FIVeUF4RQwVuyrl2A5SYRQq88hTp2KZQqbmx1BCyFlCoyJ6BVsML/ZODGZvdqKBq6lu5lMRnQlRCDwXwfOHwgIu5wNgJC%2BxfUDMwcjkefYxBR8bGd5pLTqn2AF8MYLn38x8fPA614UwdrJXZBv7I1tDbBEyYuDNVa1MITRIy502JQKssx3AsTHwpCuFjAg6yHbN8Ee8kZBaxAUxSDheBDfII2SoOAaKS2RoVJEMoUzHI7X5QpkRO3tfxNA7Z8niiGYYf23mUxFbAXIKOJyI6jZKaSGJJ3l%2BwE7ASaWcn5JEPZc6vFLbixCxwXur/W7S52iI3B1kG/uRoaUR0fNDQkkOvpWLbScp0m1osUClMoSSHVzLs1qGiNCzLrG6TCPkJgXj5TmEZkTkNjxC8yL5G/SAJYZ0x12IaNGo8UKm1jl0/QKhjIjdF%2BJn4Wta7Zl7ERoZgYKzSMh0pGHTEsOoARsxdM1EIcOReK1ShtCaCJw3XYgW/iU6UrCYQxMaFIHRJikRq3l6YrEQKoj6dZ1noohIsTwf%2BUJZYT/rOms4zTGmR1MMAJONg8gM%2B5tliZAR5b7TchmOiDA2yBfyRPmJbxEi7G5amTUY4y1G97VQ92dhyqHGkyqCIsrDqrMhnLay20SJJobTxLCYH14eKeoZxZko59LO5YMwr/7TRCFvA/w/buk2Y8N5CaWhtSMndQ3fhwpGhzXrxn8Af47iyjBX0UQSr0XterFGJpswOB7FZNWr%2BAD4aRjPuJ8c3oZW7qKs72IIB6U0oWQ9FMZKb6RQSpQCaiuki6dh25GgRCgpSk%2B8Sklhnhe/xIoYTvS/EyMcq3gXGJv0MRjPy2FKVbafCbQwluqwnK1nJvFuAjtKfpoYyrkoLTSTyQlSqQtTN%2BduijgKUMl8DvT3bP1xlvzs0mV8F98%2BxnB/WG5xLD8B9keh%2Bt7GHuCHEb9OrJPKIuClKLwWpnMCg6fDJIbbuJyj0MQSPtV/MYSTAmM3QvlhaqMoFjIiPmFlbkSa%2B%2BKTFKElEb7GciG0OCzn2qosq7vtD%2BQ7Xfi7wsO9tKCkMD3ULKFBEe4jzhAqiegV4odCofyIXqFSptDEsJyrxGpUbeR2p4t9T0wwdiCUF4aJlNXyCHkjKIgaIWJqyuciFYe0f10YhzmsEzIjeG%2BVShZKDUO/f7k9BJ8tfe9hiBYevs45ZIZhsro1RDdyglghlBahc/eNUSGmXlse1nQLZgSzWlhiCMf0gLlWvXCaMqeLem%2BZYGxFKLPf/Y6RFUSZwplncJEGCSGvGiXVaIoMIVMz7PfhImXas68N5dl3tMbKCyePZkjKFDLksYt4sZ3KJt3OY9L5%2BHkyhDzyhClPRpqIUBKacIlhhf28eDL264X23E6D5Tb1730TSUGEMy/sIqFZ2qJ19nzvLCVrpcq1VKbGS7K83RStVLlWyLSva2qKKlWppVouqVxpmqhy%2B4nN12JVaovS7Rqs8/FVKlKSylUepqcTqXyp4RHDBn/ofIwvO124%2B0I2P6YFGZrSr9amyAkinHlhU5UX9Ne6oGFxS4W2yurq8ndWTrGLeMcOwPQu7FkipG6OLwmrsxSZfKnhEEOl8iwpNHIvQ50u2H1nHBusfBSz%2BtHn6RdEuKeKzArjKNb279V5QdmD6uzvSuxiLUmFdjEeL0MFQUnd2sthnRaqRBOD5NDx%2BPDKIScCuUy29FsM1SqwooUWVpMd2eIajm64nqimhKm8Il5lBKU09ekk17ERkwYKw5yGdxSEceBasDP7AUmBz5nQYQ24NvZyJwf5MiOo6PDNZgZzMy%2Byn4/Ces89cZpw50u9m7k0k8zrfVzIq56ruYRdCH7NBO7oT37V3hBpOQDs4iquYrePDWRwV59OcR1/Io1W7uT6MBp2Gd0X1NDZF/R5Aq0B6dcCI7o96kHq2cIZPt9h%2B0JSOcVBtof1jnumCSu9T7iYzipEJgf6JIYmSrmQCgRbmcqNURmzE0VuMA5aLS99GzDXqHxZ/d7hmrFWFcbEJt52OSG2BjlPJTJUpa6dHT9L7e/SA86bR9PsT%2BN7dJbC11MQ3sQ%2BNXbfQF9js8V2Ox1VcbqsUS/wcDt1CKVpUZ8e/HxZR4crighf5r8VQvlaooV2O9I0mZqnFSqSoVmSui7OOSrTCi1Rmi2m8TK1WEsl5cujRVpur%2B/T3fEPCc3QirD0FoQzI94mJQsZfRqfUKf5fikciOKoc4fwci%2Bnrbb24j68mR%2ByUyuGpxCHswg8pJHyKEVj7b/LlCGPMgKWLg1K2F9i93cUKE0epWqK/SRqlC%2BPvJJqNFbJStE01djHdXW8VKKUMCVIC9erodHuKEvuQ973Ks2wsiOJ4yyO1tR/p0nhdstxMjQl5EWk7MnhygzD8lPWJEXnkqvEDivC5DhuspflCj2xxCaN9a%2BzV0VpokihjWuNbdYCIjkhT123%2BmMNze33z5cX8aS58YE3DH0wjSqUIZQUcmfecv8oJPF7ZjtdMJ2jgA20WgH24pCiia32A0zv51IskZnEHm8sDkPChofs7K95IZ2nTiX2cZxlNeOcLpDOk80DfYsmFsnsdxeflVol0gPJYxtr4HVoY2nbU60p9tirUFoN20UK34zn3uZwExRN5IUQGFbZnfcelfS5ibBGHtFuiEVi0aiMwMDDvuBfOYJAg0BvrrlYIxM6UugN1xqvWh5kUruhCz3jX6Mnuc%2BzrNbJSOBpQIVCZh%2BbJRpVYq%2Bbl97r5BFrNN5fJ7QkdqTQG/JZZhzyLxhe3MvJOf7FntL62MU3T0RoNGesM02IPqagXmwvNZ/Sy/6FrZrRtjh9FYsjPQJp4DCTtXxoPbgsLepFbNAYqLKH9SkwnpGAgmi0Xc2%2BRA0r7AZVT69q1baFfZFxlJUUOF3A4o8UruVpzlkRxdheTEypsxv60LA%2B9IdaSdBjZ3W6SFNjF9BQxdCohbYUTM09b8TRqOUa5Y8SmniMIjdO6A9Z3G7Nv0YeTTuvKKrtWWgoWXNDbHFaIkOoICGyeFfaEVdoYqjWLDtWMDXjPE%2B3Ucs10d4b8TJlkV9tIVEYx7eNWuwfIk%2BLemzDqFaRHUsYKggpSLSGgGTEVDqBSLDJXvKrLKRjxtsvmkGa16MUqlSmHH%2BNIGMv34y3qZzxwWxW%2BsNsQxkq7mF4RaMW%2BefVKieElJlWQQmt/TzemC9TyBNCjLU00Guc2WPYvUEzAk8dGbv5Nlc4XWgGOuP4uvGq1ZeNklWgld26N2s0Sn5Ha0YvxyZV2lP2Q%2BtdjRcesv3%2B3taA61RgOzyGxnfb%2BF2n5Rpv18iIszzHLW6NEE283MAGTvrrilEq66b4VmpawIP1al4vioF/TGa4xs3GCv4Zx0avFhzbqiL/8Al5VNTt052vrDbH6Cg/Yw4pTheOxGUm3zb2%2BavnNE3R4i5/uOXKs380o1dNt1Ua26%2BejFjDv3xub0YCBzeLmhrfpatZqYWaGJALMnawzG0%2BjRVGc4tRYTXKWi7UWJV1mhRTp4X%2B5CQylKeF5xlUsM72g/vWkxFLLLW7v86XkalKJYEg2NAoLenkhm7SfOW1uUWikc2UkeV0AXDpjJfZ3GtU0OT/sZKUo7kdCnOV5gaFe%2Bma1eNwkDLb0cp0fAH4vlGnkkAvQU9Lx69Rob2fFVmUtHtVNOohFSvLP7hCiNM8zTeZ7jpGsY%2BHAhbzW2siqvWmG6ZZWhnkIm1RkTICPq9HY7W0GweqRtMCDYzzHVnVtK9sCDSNGirs9u4WKS9QzA1lal6QM1Wj5SpUeuA5IaOWx7iFyU7/xC59YRxlPGq83yaLVOWrWMvtgLpGi5UfCLQt0azoouBUa57d3mRqogPrbIZKW52APF12R9ZoqQrteYXWXuO13N6vUktUpFFBkQEy3uWn3OC2Fg0MsrmWHxlv09L2A5vK1BSVaZ0ata59e7kdkndsg1oTmL6YrBlhmJoaGdrqBJTRabDK1o4hsDJUpC2q0xrN10RlBDtE4pzxBg8wJ1HmIoRjMax4wstkPs5ko1CTuKBtcwrDmEQeDVRxICg5WjI5FPIlvhrYUsvtvGDvkcokyrjD6Xuy2c93eZmDtADgYRr/FcjeVM/v2cQOjtnfgsEFjONjZPIu1ZzgXPCpPjR2aSe72E2VswsPRptEk0Mwo/k4k5lmTNXFbUnzDLwMJYkmTtOEAlsHM5wJTOVGpgFrWclf7W9NRvM5FjDDoduo5WGeZU%2Bg3JqM41%2B5g2d5mbd5n2OcojWwt0ka6Qymhfqg%2BwOajf3aThVV7OC4Q7fiOIkshzZSmMBlFBj/R1cwpP1XVppCX9AWAy85TOLTHOd/eYcGu1B5GMknuD6oJoksTTzCr/lL4PowiJEMBT7gQ5o77N35PgCMv%2BstdlHJXvYEKo4ExpVDR7KYzFjyudi4THlkdvzagKB3qkEyaZg00xTkhqSSw0Rm8SXGhtm43fwv23mHw5yiOajuMjFoDX7X29vV6QzGMQ5oNwc4wF72cNKpxxybuHLomRTyGUM%2B%2BVxsXNqVPDrSvgiapJFBNh/jMj5BQR8WGt7GId5gF%2B9znDMd3u5dFfdO9hzjgPZygAMc4CAH3DqgJ1w5hEabPLKN8aSRraFtHVEdi2dXxTUJkxTSGAxkkNbuuw%2BARs5iJQ/2dXJtzkujcZq/8ZHe57Bb/PuCK4dwkE8K2QzHy2hyGEcuaYwgOXjx5PZOVih0ElUTZznJSY6yn8PUcpIPOcwZDjv9GOIfVw6RZWigxT47UItcyQVcwAhgNF7MDm36p6kHztDCcfZzGqjnOO/Y3x6nwelbGsj8fwceVfHgUG7iAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDE0LTA0LTAzVDE4OjE5OjI1LTAzOjAwyB7X5wAAACV0RVh0ZGF0ZTptb2RpZnkAMjAxNC0wNC0wM1QxODoxOTowOS0wMzowMDzGAlIAAAAASUVORK5CYII%3D" />
+    <p class="legend">Level set diagram</p>
+</div>
 </div>
 </div><hr/>
 <div id="intro-typesystem" class="level-1">
-<h3>1.2. Type System <small class="usage"></small></h3>
+<h4>1.2. Type System <span class="usage"></span></h4>
 <div class="text"><p><strong></strong></p><p>
     The Pipes language is statically typed, but has a very simple type system. There are four main types: 
     <strong>number</strong>, <strong>string</strong>, <strong>boolean</strong> and <strong>object</strong>. 
@@ -1121,8 +1698,8 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 <p>
     Pipes does not require events to be strongly typed (although it allows them to be). Because of this,
     the type of a property access may be not known at compile time. Still, the language is statically typed,
-    so some type must be assigned to the expression. The chosen type depends on the configuration, but by default
-    it is a <strong>string</strong>. This means that even if the value of the field in the event contains a
+    so some type must be assigned to the expression. The chosen type depends on the configuration, but the default
+    is to be a <strong>string</strong>. This means that even if the value of the field in the event contains a
     numeric type, <strong>it will be cast as string</strong> before being used by the engine.
 </p>
 <p>
@@ -1130,8 +1707,8 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
     string (like <span class="pipes">avg(someproperty)</span>) results in error:
 </p>
 <pre>
-PipeException: Error in call avg(someproperty) with types <PropertyAccess[string]>, cause(s):
-AvgAggregation: The parameter #1 <someproperty> must be 'number' instead of 'string'.
+PipeException: Error in call avg(someproperty) with types &lt;PropertyAccess[string]&gt;, cause(s):
+AvgAggregation: The parameter #1 &lt;someproperty&gt; must be 'number' instead of 'string'.
 </pre>
 <p>
     It is possible to tell the engine what type an expression must have, using the type's name as a function. E.g.
@@ -1149,7 +1726,7 @@ AvgAggregation: The parameter #1 <someproperty> must be 'number' instead of 'str
 </div>
 </div><hr/>
 <div id="chapter-filters" class="level-0">
-<h2>2. Filters <small class="usage"></small></h2>
+<h2>2. Filters <span class="usage"></span></h2>
 <div class="text"><p><strong></strong></p><p>
     Every query in Pipes is required to start with a filter. The filter runtime is optimized to
     allow many queries running over the same stream, sharing as much processing as possible.
@@ -1167,7 +1744,7 @@ AvgAggregation: The parameter #1 <someproperty> must be 'number' instead of 'str
 </div>
 </div><hr/>
 <div id="filter-all" class="level-1">
-<h3><small>2.1.</small> <small class="usage">*</small></h3>
+<h4>2.1.  <span class="usage">*</span></h4>
 <div class="text"><p><strong>Special filter that allows all records through.
 </strong></p><p>
     When used in conjunction with <a href="#filter-field">field-syntax</a>, selects all records that contain that field.
@@ -1185,9 +1762,11 @@ AvgAggregation: The parameter #1 <someproperty> must be 'number' instead of 'str
 </div>
 </div><hr/>
 <div id="filter-term" class="level-1">
-<h3><small>2.2.</small> <small class="usage">&lt;term&gt;</small></h3>
-<div class="text"><p><strong>Selects records where one of the current fields matches &lt;term&gt; (case insensitive).
+<h4>2.2.  <span class="usage">&lt;term&gt;</span></h4>
+<div class="text"><p><strong>Selects records where one of the current fields matches &lt;term&gt;.
 </strong></p><p>
+    The match is <strong>case insensitive</strong>.
+</p> <p>
     The use of wildcards (* and ?) is allowed.
 </p> <p>
     Use the <a href="#filter-field">field-syntax</a> to change the default field.
@@ -1209,9 +1788,11 @@ AvgAggregation: The parameter #1 <someproperty> must be 'number' instead of 'str
 </div>
 </div><hr/>
 <div id="filter-fuzzy" class="level-1">
-<h3><small>2.3.</small> <small class="usage">&lt;term&gt;~&lt;number maxEdits&gt;</small></h3>
+<h4>2.3.  <span class="usage">&lt;term&gt;~&lt;number maxEdits&gt;</span></h4>
 <div class="text"><p><strong>Selects records where one of the current fields matches &lt;term&gt; with at most &lt;maxEdits&gt; edits.
 </strong></p><p>
+    The match is <strong>case insensitive</strong>.
+</p> <p>
     Wildcards are <strong>not</strong> allowed in this filter.
 </p> <p>
     <strong>Examples:</strong>
@@ -1223,30 +1804,37 @@ AvgAggregation: The parameter #1 <someproperty> must be 'number' instead of 'str
 </div>
 </div><hr/>
 <div id="filter-range" class="level-1">
-<h3><small>2.4.</small> <small class="usage">[&lt;term lower&gt; TO &lt;term upper&gt;]</small></h3>
-<div class="text"><p><strong>Selects records where one of the current fields is between &lt;lower&gt; and &lt;upper&gt; (case insensitive).
+<h4>2.4.  <span class="usage">[&lt;term lower&gt; TO &lt;term upper&gt;]</span></h4>
+<div class="text"><p><strong>Selects records where one of the current fields is between &lt;lower&gt; and &lt;upper&gt;.
 </strong></p><p>
+    The match is <strong>case insensitive</strong>.
+</p> <p>
     The range filter is inclusive in both ends. To make it exclusive, change "[" to "(" and/or "]" to ")".
 </p> <p>
     The <span class="pipes">TO</span> keyword must be written in uppercase. It can also be replaced by a single 
     comma with no change in meaning.
 </p> <p>
-    Wildcards are <strong>not</strong> allowed in this filter.
+    Wildcards are <strong>not</strong> allowed in this filter. Except for the single <span class="pipes">*</span>.
+    In this filter it means an open interval.
 </p> <p>
     <strong>Examples:</strong>
     <pre class="pipes">
         status:[200 TO 299]
     </pre>
-    <p class="legend">Selects records where the default field is between 200 and 299</p>
+    <p class="legend">Selects records where status is between 200 and 299</p>
     <pre class="pipes">
         status:[200, 300)
     </pre>
-    <p class="legend">Selects records where the default field is between 200 and 299 (300 exclusive)</p>
+    <p class="legend">Selects records where status is between 200 and 299 (300 exclusive)</p>
+    <pre class="pipes">
+        status:[200, *]
+    </pre>
+    <p class="legend">Selects records where status is greater than or equal to 200.</p>
 </p>
 </div>
 </div><hr/>
 <div id="filter-field" class="level-1">
-<h3><small>2.5.</small> <small class="usage">&lt;field&gt;: &lt;filter&gt;</small></h3>
+<h4>2.5.  <span class="usage">&lt;field&gt;: &lt;filter&gt;</span></h4>
 <div class="text"><p><strong>Sets the current field to &lt;field&gt;. Usually followed by &lt;term&gt; (e.g. somefield:someterm).
 </strong></p><p>
     Any filter expression can be used inside a filter field. Even other filter fields.
@@ -1264,7 +1852,7 @@ AvgAggregation: The parameter #1 <someproperty> must be 'number' instead of 'str
 </div>
 </div><hr/>
 <div id="filter-and" class="level-1">
-<h3><small>2.6.</small> <small class="usage">&lt;filter&gt; &amp;&amp; &lt;filter&gt;</small></h3>
+<h4>2.6.  <span class="usage">&lt;filter&gt; &amp;&amp; &lt;filter&gt;</span></h4>
 <div class="text"><p><strong>Selects the intersection of two other filters.</strong></p><p>It's the default filter conjunction, so it can safely be omitted.</p> <p>The operator <span class="pipes">&&</span> is equivalent to <span class="pipes">&</span> and <span class="pipes">AND</span> (must be uppercase).</p> <p>
     <strong>Examples:</strong>
     <pre class="pipes">
@@ -1283,7 +1871,7 @@ AvgAggregation: The parameter #1 <someproperty> must be 'number' instead of 'str
 </div>
 </div><hr/>
 <div id="filter-or" class="level-1">
-<h3><small>2.7.</small> <small class="usage">&lt;filter&gt; || &lt;filter&gt;</small></h3>
+<h4>2.7.  <span class="usage">&lt;filter&gt; || &lt;filter&gt;</span></h4>
 <div class="text"><p><strong>Selects the union of two other filters.</strong></p><p>The operator <span class="pipes">||</span> is equivalent to <span class="pipes">|</span> and <span class="pipes">OR</span> (must be uppercase).</p> <p>
     <strong>Examples:</strong>
     <pre class="pipes">
@@ -1298,7 +1886,7 @@ AvgAggregation: The parameter #1 <someproperty> must be 'number' instead of 'str
 </div>
 </div><hr/>
 <div id="filter-not" class="level-1">
-<h3><small>2.8.</small> <small class="usage">-&lt;filter&gt;</small></h3>
+<h4>2.8.  <span class="usage">-&lt;filter&gt;</span></h4>
 <div class="text"><p><strong>Selects the complement of another filter.</strong></p><p>The operator <span class="pipes">-</span> is equivalent to <span class="pipes">!</span> and <span class="pipes">NOT</span> (must be uppercase).</p> <p>
     <strong>Examples:</strong>
     <pre class="pipes">
@@ -1312,7 +1900,7 @@ AvgAggregation: The parameter #1 <someproperty> must be 'number' instead of 'str
 </p></div>
 </div><hr/>
 <div id="chapter-pipes" class="level-0">
-<h2>3. Pipes <small class="usage"></small></h2>
+<h2>3. Pipes <span class="usage"></span></h2>
 <div class="text"><p><strong></strong></p><p>
     Pipes are the main building blocks in this language. No surprise the language is named after them.
     Pipes represent one single processing element that consumes events from the input and produces other
@@ -1341,7 +1929,7 @@ type:http
 </div>
 </div><hr/>
 <div id="pipe-default" class="level-1">
-<h3><small>3.1.</small> <small class="usage">&lt;object&gt;* [by &lt;object&gt;*] [over &lt;window&gt;] [every &lt;period&gt; | total]</small></h3>
+<h4>3.1.  <span class="usage">&lt;object...&gt; [by &lt;object...&gt;] [over &lt;window&gt;] [every &lt;period&gt; | total]</span></h4>
 <div class="text"><p><strong>Transforms or aggregates records over configurable data window and output.</strong></p><p>
     This is the default type of pipe. The decision of when the query will output its result and
     over what dataset each aggregation will run depends on all configured parameters. For example, 
@@ -1361,7 +1949,7 @@ type:http
 </div>
 </div><hr/>
 <div id="pipe-default-outputs" class="level-2">
-<h4>3.1.1. Output Types <small class="usage"></small></h4>
+<h5>3.1.1. Output Types <span class="usage"></span></h5>
 <div class="text"><p><strong></strong></p><p>
     It is possible to configure on which rate the query will output the aggregation result. There are
     three types of output rates: by <strong>time period</strong>, by <strong>item batch</strong> and 
@@ -1438,160 +2026,484 @@ http => avg(response_time#) total
 </div>
 </div><hr/>
 <div id="pipe-default-windows" class="level-2">
-<h4>3.1.2. Window Types <small class="usage"></small></h4>
+<h5>3.1.2. Window Types <span class="usage"></span></h5>
 <div class="text"><p><strong></strong></p>aaa</div>
 </div><hr/>
 <div id="pipe-union" class="level-1">
-<h3><small>3.2.</small> <small class="usage">&lt;pipe&gt; union &lt;pipe&gt;</small></h3>
+<h4>3.2.  <span class="usage">&lt;pipe&gt; union &lt;pipe&gt;</span></h4>
 <div class="text"><p><strong>Concatenates the outputs from two pipes with compatible output rates.</strong></p></div>
 </div><hr/>
 <div id="pipe-product" class="level-1">
-<h3><small>3.3.</small> <small class="usage">&lt;pipe&gt; product &lt;pipe&gt;</small></h3>
+<h4>3.3.  <span class="usage">&lt;pipe&gt; product &lt;pipe&gt;</span></h4>
 <div class="text"><p><strong>Computes the cartesian product of the outputs from two pipes with compatible output rates.</strong></p></div>
 </div><hr/>
 <div id="pipe-filter" class="level-1">
-<h3><small>3.4.</small> <small class="usage">@filter &lt;boolean condition&gt;</small></h3>
-<div class="text"><p><strong>Filters results from previous pipe.</strong></p></div>
+<h4>3.4.  <span class="usage">@filter &lt;boolean condition&gt;</span></h4>
+<div class="text"><p><strong>Filters the results from previous pipe.</strong></p></div>
 </div><hr/>
 <div id="pipe-sort" class="level-1">
-<h3><small>3.5.</small> <small class="usage">@sort &lt;comparable expr&gt;+</small></h3>
-<div class="text"><p><strong>Sorts results from previous pipe.</strong></p></div>
+<h4>3.5.  <span class="usage">@sort &lt;comparable... expr&gt;</span></h4>
+<div class="text"><p><strong>Sorts the results from previous pipe.</strong></p></div>
 </div><hr/>
 <div id="pipe-top" class="level-1">
-<h3><small>3.6.</small> <small class="usage">@top &lt;number k&gt;, &lt;comparable expr&gt;+ [by &lt;object&gt;*]</small></h3>
-<div class="text"><p><strong>Gets the first k rows (possibly grouped) from every output at the previous pipe.</strong></p></div>
+<h4>3.6.  <span class="usage">@top &lt;number k&gt;, &lt;comparable... expr&gt; [by &lt;object...&gt;]</span></h4>
+<div class="text"><p><strong>Sorts the results and gets the first k rows (possibly grouped) from previous pipe.</strong></p></div>
 </div><hr/>
 <div id="pipe-compress" class="level-1">
-<h3><small>3.7.</small> <small class="usage">@compress &lt;number k&gt;, [&lt;number k2&gt;,] &lt;number y&gt;+ [by &lt;object&gt;*]</small></h3>
-<div class="text"><p><strong>Compresses the result from the last pipe to at most k (or k2) most important rows, output at the end.</strong></p></div>
+<h4>3.7.  <span class="usage">@compress &lt;number k&gt;, [&lt;number k2&gt;,] &lt;number... y&gt; [by &lt;object...&gt;]</span></h4>
+<div class="text"><p><strong>Compresses the result from the previous pipe to at most k (or k2) most important rows.</strong></p></div>
 </div><hr/>
 <div id="pipe-yield" class="level-1">
-<h3><small>3.8.</small> <small class="usage">@yield [&lt;object expr&gt;]</small></h3>
-<div class="text"><p><strong>Extracts one field of the stream to be the new event.</strong></p></div>
+<h4>3.8.  <span class="usage">@yield [&lt;object expr&gt;]</span></h4>
+<div class="text"><p><strong>Extracts one field of the stream to be the output event.</strong></p></div>
 </div><hr/>
 <div id="pipe-latest" class="level-1">
-<h3><small>3.9.</small> <small class="usage">@latest</small></h3>
+<h4>3.9.  <span class="usage">@latest</span></h4>
 <div class="text"><p><strong>Keeps the latest batch of input events and output it at the end.</strong></p></div>
 </div><hr/>
 <div id="pipe-unsafe" class="level-1">
-<h3><small>3.10.</small> <small class="usage">@unsafe</small></h3>
+<h4>3.10.  <span class="usage">@unsafe</span></h4>
 <div class="text"><p><strong>Marks that any pipe executed after this must run in a non-distributed environment.</strong></p></div>
 </div><hr/>
 <div id="chapter-operator" class="level-0">
-<h2>4. Operators <small class="usage"></small></h2>
+<h2>4. Operators <span class="usage"></span></h2>
 <div class="text"><p><strong></strong></p></div>
 </div><hr/>
+<div id="operator-number" class="level-1">
+<h4>4.1.  <span class="usage">&lt;object&gt;#</span></h4>
+<div class="text"><p><strong>Coerces the expression to number. Shorthand to number(&lt;object&gt;).</strong></p></div>
+</div><hr/>
+<div id="operator-string" class="level-1">
+<h4>4.2.  <span class="usage">&lt;object&gt;$</span></h4>
+<div class="text"><p><strong>Coerces the expression to string. Shorthand to string(&lt;object&gt;).</strong></p></div>
+</div><hr/>
 <div id="operator-add-number" class="level-1">
-<h3><small>4.1.</small> <small class="usage">&lt;number&gt; + &lt;number&gt; → &lt;number&gt;</small></h3>
+<h4>4.3.  <span class="usage">&lt;number&gt; + &lt;number&gt; → &lt;number&gt;</span></h4>
 <div class="text"><p><strong>Adds two numbers.</strong></p></div>
 </div><hr/>
 <div id="operator-add-string" class="level-1">
-<h3><small>4.2.</small> <small class="usage">&lt;string&gt; + &lt;string&gt; → &lt;string&gt;</small></h3>
+<h4>4.4.  <span class="usage">&lt;string&gt; + &lt;string&gt; → &lt;string&gt;</span></h4>
 <div class="text"><p><strong>Concatenates two strings.</strong></p></div>
 </div><hr/>
 <div id="operator-sub" class="level-1">
-<h3><small>4.3.</small> <small class="usage">&lt;number&gt; - &lt;number&gt; → &lt;number&gt;</small></h3>
+<h4>4.5.  <span class="usage">&lt;number&gt; - &lt;number&gt; → &lt;number&gt;</span></h4>
 <div class="text"><p><strong>Subtracts one number from another.</strong></p></div>
 </div><hr/>
 <div id="operator-mul" class="level-1">
-<h3><small>4.4.</small> <small class="usage">&lt;number&gt; * &lt;number&gt; → &lt;number&gt;</small></h3>
+<h4>4.6.  <span class="usage">&lt;number&gt; * &lt;number&gt; → &lt;number&gt;</span></h4>
 <div class="text"><p><strong>Multiplies two numbers.</strong></p></div>
 </div><hr/>
 <div id="operator-div" class="level-1">
-<h3><small>4.5.</small> <small class="usage">&lt;number&gt; / &lt;number&gt; → &lt;number&gt;</small></h3>
+<h4>4.7.  <span class="usage">&lt;number&gt; / &lt;number&gt; → &lt;number&gt;</span></h4>
 <div class="text"><p><strong>Divides one number by another (float division).</strong></p></div>
 </div><hr/>
 <div id="operator-intdiv" class="level-1">
-<h3><small>4.6.</small> <small class="usage">&lt;number&gt; // &lt;number&gt; → &lt;number&gt;</small></h3>
+<h4>4.8.  <span class="usage">&lt;number&gt; // &lt;number&gt; → &lt;number&gt;</span></h4>
 <div class="text"><p><strong>Divides one number by another (integer division).</strong></p></div>
 </div><hr/>
 <div id="operator-pow" class="level-1">
-<h3><small>4.7.</small> <small class="usage">&lt;number&gt; ** &lt;number&gt; → &lt;number&gt;</small></h3>
-<div class="text"><p><strong>Raise one number to another's power.</strong></p></div>
+<h4>4.9.  <span class="usage">&lt;number&gt; ** &lt;number&gt; → &lt;number&gt;</span></h4>
+<div class="text"><p><strong>Raises one number to another's power.</strong></p></div>
 </div><hr/>
 <div id="operator-mod" class="level-1">
-<h3><small>4.8.</small> <small class="usage">&lt;number&gt; % &lt;number&gt; → &lt;number&gt;</small></h3>
+<h4>4.10.  <span class="usage">&lt;number&gt; % &lt;number&gt; → &lt;number&gt;</span></h4>
 <div class="text"><p><strong>Returns the rest of the division of one number by another.</strong></p></div>
 </div><hr/>
 <div id="operator-neg" class="level-1">
-<h3><small>4.9.</small> <small class="usage">-&lt;number&gt; → &lt;number&gt;</small></h3>
+<h4>4.11.  <span class="usage">-&lt;number&gt; → &lt;number&gt;</span></h4>
 <div class="text"><p><strong>Negates one number.</strong></p></div>
 </div><hr/>
 <div id="operator-and" class="level-1">
-<h3><small>4.10.</small> <small class="usage">&lt;boolean&gt; and &lt;boolean&gt; → &lt;boolean&gt;</small></h3>
+<h4>4.12.  <span class="usage">&lt;boolean&gt; and &lt;boolean&gt; → &lt;boolean&gt;</span></h4>
 <div class="text"><p><strong>Returns the logical AND of two booleans.</strong></p></div>
 </div><hr/>
 <div id="operator-or" class="level-1">
-<h3><small>4.11.</small> <small class="usage">&lt;boolean&gt; or &lt;boolean&gt; → &lt;boolean&gt;</small></h3>
+<h4>4.13.  <span class="usage">&lt;boolean&gt; or &lt;boolean&gt; → &lt;boolean&gt;</span></h4>
 <div class="text"><p><strong>Returns the logical OR of two booleans.</strong></p></div>
 </div><hr/>
 <div id="operator-xor" class="level-1">
-<h3><small>4.12.</small> <small class="usage">&lt;boolean&gt; xor &lt;boolean&gt; → &lt;boolean&gt;</small></h3>
+<h4>4.14.  <span class="usage">&lt;boolean&gt; xor &lt;boolean&gt; → &lt;boolean&gt;</span></h4>
 <div class="text"><p><strong>Returns the logical XOR of two booleans.</strong></p></div>
 </div><hr/>
 <div id="operator-not" class="level-1">
-<h3><small>4.13.</small> <small class="usage">not &lt;boolean&gt; → &lt;boolean&gt;</small></h3>
+<h4>4.15.  <span class="usage">not &lt;boolean&gt; → &lt;boolean&gt;</span></h4>
 <div class="text"><p><strong>Returns the logical NOT of a boolean.</strong></p></div>
 </div><hr/>
 <div id="operator-eq" class="level-1">
-<h3><small>4.14.</small> <small class="usage">&lt;object&gt; == &lt;object&gt; → &lt;boolean&gt;</small></h3>
+<h4>4.16.  <span class="usage">&lt;object&gt; == &lt;object&gt; → &lt;boolean&gt;</span></h4>
 <div class="text"><p><strong>Checks whether two objects are equal.</strong></p></div>
 </div><hr/>
 <div id="operator-neq" class="level-1">
-<h3><small>4.15.</small> <small class="usage">&lt;object&gt; != &lt;object&gt; → &lt;boolean&gt;</small></h3>
+<h4>4.17.  <span class="usage">&lt;object&gt; != &lt;object&gt; → &lt;boolean&gt;</span></h4>
 <div class="text"><p><strong>Checks whether two objects are not equal.</strong></p></div>
 </div><hr/>
 <div id="operator-lt" class="level-1">
-<h3><small>4.16.</small> <small class="usage">&lt;comparable&gt; &lt; &lt;comparable&gt; → &lt;boolean&gt;</small></h3>
+<h4>4.18.  <span class="usage">&lt;comparable&gt; &lt; &lt;comparable&gt; → &lt;boolean&gt;</span></h4>
 <div class="text"><p><strong>Checks whether the left operand compares lesser than the right one.</strong></p></div>
 </div><hr/>
 <div id="operator-lt-eq" class="level-1">
-<h3><small>4.17.</small> <small class="usage">&lt;comparable&gt; &lt;= &lt;comparable&gt; → &lt;boolean&gt;</small></h3>
+<h4>4.19.  <span class="usage">&lt;comparable&gt; &lt;= &lt;comparable&gt; → &lt;boolean&gt;</span></h4>
 <div class="text"><p><strong>Checks whether the left operand compares lesser than or equal to the right one.</strong></p></div>
 </div><hr/>
 <div id="operator-gt" class="level-1">
-<h3><small>4.18.</small> <small class="usage">&lt;comparable&gt; &gt; &lt;comparable&gt; → &lt;boolean&gt;</small></h3>
+<h4>4.20.  <span class="usage">&lt;comparable&gt; &gt; &lt;comparable&gt; → &lt;boolean&gt;</span></h4>
 <div class="text"><p><strong>Checks whether the left operand compares greater than the right one.</strong></p></div>
 </div><hr/>
 <div id="operator-gt-eq" class="level-1">
-<h3><small>4.19.</small> <small class="usage">&lt;comparable&gt; &gt;= &lt;comparable&gt; → &lt;boolean&gt;</small></h3>
+<h4>4.21.  <span class="usage">&lt;comparable&gt; &gt;= &lt;comparable&gt; → &lt;boolean&gt;</span></h4>
 <div class="text"><p><strong>Checks whether the left operand compares greater than or equal to the right one.</strong></p></div>
 </div><hr/>
 <div id="operator-coalesce" class="level-1">
-<h3><small>4.20.</small> <small class="usage">&lt;T&gt; ?? &lt;T&gt; → &lt;T&gt;</small></h3>
+<h4>4.22.  <span class="usage">&lt;object&gt; ?? &lt;object&gt; → &lt;object&gt;</span></h4>
 <div class="text"><p><strong>Returns the first if it is not null; otherwise, returns the second.</strong></p></div>
 </div><hr/>
 <div id="operator-iif" class="level-1">
-<h3><small>4.21.</small> <small class="usage">&lt;condition&gt; ? &lt;T&gt;, &lt;T&gt; → &lt;T&gt;</small></h3>
+<h4>4.23.  <span class="usage">&lt;condition&gt; ? &lt;object&gt;, &lt;object&gt; → &lt;object&gt;</span></h4>
 <div class="text"><p><strong>If the condition is true, returns the first object; otherwise, returns the second.</strong></p></div>
 </div><hr/>
-<div id="chapter-functions" class="level-0">
-<h2>5. Functions <small class="usage"></small></h2>
+<div id="chapter-scalars" class="level-0">
+<h2>5. Scalar Functions <span class="usage"></span></h2>
 <div class="text"><p><strong></strong></p></div>
 </div><hr/>
-<div id="function-log" class="level-1">
-<h3><small>5.1.</small> <small class="usage">log(&lt;number&gt;, [&lt;number base&gt;]) → &lt;number&gt;</small></h3>
-<div class="text"><p><strong>Calculates the logarithm of a number.</strong></p></div>
+<div id="scalar-abs" class="level-1">
+<h4>5.1.  <span class="usage">&lt;number&gt;:abs() → &lt;number&gt;</span></h4>
+<div class="text"><p><strong>Calculates the absolute value of a number.</strong></p></div>
 </div><hr/>
-<div id="function-exp" class="level-1">
-<h3><small>5.2.</small> <small class="usage">exp(&lt;number&gt;) → &lt;number&gt;</small></h3>
+<div id="scalar-acos" class="level-1">
+<h4>5.2.  <span class="usage">&lt;number&gt;:acos() → &lt;number&gt;</span></h4>
+<div class="text"><p><strong>Returns the arc cosine of the argument to an angle in radians.</strong></p></div>
+</div><hr/>
+<div id="scalar-asin" class="level-1">
+<h4>5.3.  <span class="usage">&lt;number&gt;:asin() → &lt;number&gt;</span></h4>
+<div class="text"><p><strong>Returns the arc sine of the argument to an angle in radians.</strong></p></div>
+</div><hr/>
+<div id="scalar-atan" class="level-1">
+<h4>5.4.  <span class="usage">&lt;number&gt;:atan() → &lt;number&gt;</span></h4>
+<div class="text"><p><strong>Returns the arc tangent of the argument to an angle in radians.</strong></p></div>
+</div><hr/>
+<div id="scalar-bytes" class="level-1">
+<h4>5.5.  <span class="usage">&lt;number&gt;:bytes([&lt;number precision&gt;]) → &lt;string&gt;</span></h4>
+<div class="text"><p><strong>Formats a number as the best possible byte multiple.</strong></p></div>
+</div><hr/>
+<div id="scalar-ceil" class="level-1">
+<h4>5.6.  <span class="usage">&lt;number&gt;:ceil([&lt;number precision&gt;]) → &lt;number&gt;</span></h4>
+<div class="text"><p><strong>Returns the smallest number that is greatest than or equal to the argument.</strong></p></div>
+</div><hr/>
+<div id="scalar-cos" class="level-1">
+<h4>5.7.  <span class="usage">&lt;number&gt;:cos() → &lt;number&gt;</span></h4>
+<div class="text"><p><strong>Returns the cosine of an angle in radians.</strong></p></div>
+</div><hr/>
+<div id="scalar-dateadd" class="level-1">
+<h4>5.8.  <span class="usage">&lt;number&gt;:dateadd(&lt;number amount&gt;, &lt;string unit&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span></h4>
+<div class="text"><p><strong>Adds &lt;amount&gt; &lt;unit&gt;s of date to timestamp argument.</strong></p></div>
+</div><hr/>
+<div id="scalar-datefloor" class="level-1">
+<h4>5.9.  <span class="usage">&lt;number&gt;:datefloor(&lt;number amount&gt;, &lt;string unit&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span></h4>
+<div class="text"><p><strong>Rounds timestamp down to the nearest date that is divisible by &lt;amount&gt; &lt;unit&gt;s.</strong></p></div>
+</div><hr/>
+<div id="scalar-dateformat" class="level-1">
+<h4>5.10.  <span class="usage">&lt;number&gt;:dateformat([&lt;string format&gt;], [&lt;string tz&gt;]) → &lt;string&gt;</span></h4>
+<div class="text"><p><strong>Formats timestamp using specified format</strong></p></div>
+</div><hr/>
+<div id="scalar-datesub" class="level-1">
+<h4>5.11.  <span class="usage">&lt;number&gt;:datesub(&lt;number amount&gt;, &lt;string unit&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span></h4>
+<div class="text"><p><strong>Sutracts &lt;amount&gt; &lt;unit&gt;s of date from timestamp argument.</strong></p></div>
+</div><hr/>
+<div id="scalar-exp" class="level-1">
+<h4>5.12.  <span class="usage">&lt;number&gt;:exp() → &lt;number&gt;</span></h4>
 <div class="text"><p><strong>Calculates the exponential of a number.</strong></p></div>
 </div><hr/>
+<div id="scalar-floor" class="level-1">
+<h4>5.13.  <span class="usage">&lt;number&gt;:floor([&lt;number precision&gt;]) → &lt;number&gt;</span></h4>
+<div class="text"><p><strong>Returns the largest number that is lesser than or equal to the argument.</strong></p></div>
+</div><hr/>
+<div id="scalar-format" class="level-1">
+<h4>5.14.  <span class="usage">&lt;number&gt;:format([&lt;string format&gt;], [&lt;string locale&gt;]) → &lt;string&gt;</span></h4>
+<div class="text"><p><strong>Formats a number according to format string and locale.</strong></p></div>
+</div><hr/>
+<div id="scalar-log" class="level-1">
+<h4>5.15.  <span class="usage">&lt;number&gt;:log([&lt;number base&gt;]) → &lt;number&gt;</span></h4>
+<div class="text"><p><strong>Calculates the logarithm of a number.</strong></p></div>
+</div><hr/>
+<div id="scalar-pow" class="level-1">
+<h4>5.16.  <span class="usage">&lt;number&gt;:pow(&lt;number exp&gt;) → &lt;number&gt;</span></h4>
+<div class="text"><p><strong>Raises one number to another.</strong></p></div>
+</div><hr/>
+<div id="scalar-round" class="level-1">
+<h4>5.17.  <span class="usage">&lt;number&gt;:round([&lt;number precision&gt;]) → &lt;number&gt;</span></h4>
+<div class="text"><p><strong>Rounds a number to &lt;precision&gt; decimal places.</strong></p></div>
+</div><hr/>
+<div id="scalar-select" class="level-1">
+<h4>5.18.  <span class="usage">&lt;number&gt;:select(&lt;object... list&gt;) → &lt;object&gt;</span></h4>
+<div class="text"><p><strong>Selects the ith element from a list of arguments. Or null if it doesn't exist.</strong></p></div>
+</div><hr/>
+<div id="scalar-sin" class="level-1">
+<h4>5.19.  <span class="usage">&lt;number&gt;:sin() → &lt;number&gt;</span></h4>
+<div class="text"><p><strong>Returns the sine of an angle in radians.</strong></p></div>
+</div><hr/>
+<div id="scalar-tan" class="level-1">
+<h4>5.20.  <span class="usage">&lt;number&gt;:tan() → &lt;number&gt;</span></h4>
+<div class="text"><p><strong>Returns the tangent of an angle in radians.</strong></p></div>
+</div><hr/>
+<div id="scalar-boolean" class="level-1">
+<h4>5.21.  <span class="usage">&lt;object&gt;:boolean() → &lt;boolean&gt;</span></h4>
+<div class="text"><p><strong>Converts object to boolean.</strong></p></div>
+</div><hr/>
+<div id="scalar-decode" class="level-1">
+<h4>5.22.  <span class="usage">&lt;object&gt;:decode(&lt;object,object... pairs&gt;) → &lt;object&gt;</span></h4>
+<div class="text"><p><strong>Transforms the parameter using the translation rules defined in &lt;pairs&gt;.</strong></p></div>
+</div><hr/>
+<div id="scalar-get" class="level-1">
+<h4>5.23.  <span class="usage">&lt;object&gt;:get(&lt;object... keys&gt;) → &lt;object&gt;</span></h4>
+<div class="text"><p><strong>Much like property[keys]. Works for strings, containers and arrays.</strong></p></div>
+</div><hr/>
+<div id="scalar-indexin" class="level-1">
+<h4>5.24.  <span class="usage">&lt;object&gt;:indexin(&lt;T list&gt;*) → &lt;number&gt;</span></h4>
+<div class="text"><p><strong>Returns the first index of the value in &lt;list&gt;, or null if &lt;list&gt; does not contain it.</strong></p></div>
+</div><hr/>
+<div id="scalar-isin" class="level-1">
+<h4>5.25.  <span class="usage">&lt;object&gt;:isin(&lt;object... list&gt;) → &lt;boolean&gt;</span></h4>
+<div class="text"><p><strong>Returns true if &lt;list&gt; contains the value, false otherwise.</strong></p></div>
+</div><hr/>
+<div id="scalar-json" class="level-1">
+<h4>5.26.  <span class="usage">&lt;object&gt;:json() → &lt;string&gt;</span></h4>
+<div class="text"><p><strong>Converts the object to its JSON string representation.</strong></p></div>
+</div><hr/>
+<div id="aggregation-keep" class="level-1">
+<h4>5.27.  <span class="usage">&lt;object&gt;:keep([&lt;number ttl&gt;]) → &lt;object&gt;</span></h4>
+<div class="text"><p><strong>When used in a default pipe, delays or disable (if ttl not supplied or &lt; 0) inactive group removal.</strong></p></div>
+</div><hr/>
+<div id="scalar-len" class="level-1">
+<h4>5.28.  <span class="usage">&lt;object&gt;:len() → &lt;object&gt;</span></h4>
+<div class="text"><p><strong>Tries to get &lt;target&gt;'s size. Works for strings, containers and arrays.</strong></p></div>
+</div><hr/>
+<div id="scalar-number" class="level-1">
+<h4>5.29.  <span class="usage">&lt;object&gt;:number() → &lt;number&gt;</span></h4>
+<div class="text"><p><strong>Converts object to number.</strong></p></div>
+</div><hr/>
+<div id="scalar-object" class="level-1">
+<h4>5.30.  <span class="usage">&lt;object&gt;:object() → &lt;object&gt;</span></h4>
+<div class="text"><p><strong>Casts any object to its canonical object representation.</strong></p></div>
+</div><hr/>
+<div id="scalar-string" class="level-1">
+<h4>5.31.  <span class="usage">&lt;object&gt;:string() → &lt;string&gt;</span></h4>
+<div class="text"><p><strong>Converts object to string.</strong></p></div>
+</div><hr/>
+<div id="scalar-contains" class="level-1">
+<h4>5.32.  <span class="usage">&lt;string&gt;:contains(&lt;string&gt;) → &lt;boolean&gt;</span></h4>
+<div class="text"><p><strong>Returns whether the target string contains the argument.</strong></p></div>
+</div><hr/>
+<div id="scalar-dateparse" class="level-1">
+<h4>5.33.  <span class="usage">&lt;string&gt;:dateparse([&lt;string format&gt;], [&lt;string tz&gt;]) → &lt;number&gt;</span></h4>
+<div class="text"><p><strong>Parses timestamp using specified format</strong></p></div>
+</div><hr/>
+<div id="scalar-stringformat" class="level-1">
+<h4>5.34.  <span class="usage">&lt;string&gt;:format(&lt;object... args&gt;) → &lt;string&gt;</span></h4>
+<div class="text"><p><strong>Uses the target string as format to arguments.</strong></p></div>
+</div><hr/>
+<div id="scalar-hlleval" class="level-1">
+<h4>5.35.  <span class="usage">&lt;string&gt;:hlleval() → &lt;number&gt;</span></h4>
+<div class="text"><p><strong>Evaluates compressed base64 HyperLogLog data.</strong></p></div>
+</div><hr/>
+<div id="scalar-indexof" class="level-1">
+<h4>5.36.  <span class="usage">&lt;string&gt;:indexof(&lt;string s&gt;, [&lt;number fromIndex&gt;]) → &lt;boolean&gt;</span></h4>
+<div class="text"><p><strong>Returns the index of position of &lt;s&gt; inside the target string. Returns null otherwise.</strong></p></div>
+</div><hr/>
+<div id="scalar-lower" class="level-1">
+<h4>5.37.  <span class="usage">&lt;string&gt;:lower() → &lt;string&gt;</span></h4>
+<div class="text"><p><strong>Converts string to lowercase.</strong></p></div>
+</div><hr/>
+<div id="scalar-parse" class="level-1">
+<h4>5.38.  <span class="usage">&lt;string&gt;:parse([&lt;string format&gt;], [&lt;string locale&gt;]) → &lt;number&gt;</span></h4>
+<div class="text"><p><strong>Parses a number according to format string and locale.</strong></p></div>
+</div><hr/>
+<div id="scalar-replace" class="level-1">
+<h4>5.39.  <span class="usage">&lt;string&gt;:replace(&lt;string from&gt;, &lt;string to&gt;) → &lt;string&gt;</span></h4>
+<div class="text"><p><strong>Replaces all instances of &lt;from&gt; with the string &lt;to&gt;.</strong></p></div>
+</div><hr/>
+<div id="scalar-substring" class="level-1">
+<h4>5.40.  <span class="usage">&lt;string&gt;:substring(&lt;number from&gt;, [&lt;number to&gt;]) → &lt;string&gt;</span></h4>
+<div class="text"><p><strong>Returns the substring between the indices &lt;from&gt; and &lt;to&gt;.</strong></p></div>
+</div><hr/>
+<div id="scalar-upper" class="level-1">
+<h4>5.41.  <span class="usage">&lt;string&gt;:upper() → &lt;string&gt;</span></h4>
+<div class="text"><p><strong>Converts string to uppercase.</strong></p></div>
+</div><hr/>
+<div id="scalar-compare" class="level-1">
+<h4>5.42.  <span class="usage">compare(&lt;comparable a&gt;, &lt;comparable b&gt;) → &lt;number&gt;</span></h4>
+<div class="text"><p><strong>Returns a number &lt; 0 if a &lt; b, &gt; 0 if a &gt; b or 0 if a = b.</strong></p></div>
+</div><hr/>
+<div id="scalar-hllmerge" class="level-1">
+<h4>5.43.  <span class="usage">hllmerge(&lt;string... data&gt;) → &lt;string&gt;</span></h4>
+<div class="text"><p><strong>Merge many instances of compressed base64 HyperLogLog data.</strong></p></div>
+</div><hr/>
+<div id="scalar-max" class="level-1">
+<h4>5.44.  <span class="usage">max(&lt;comparable&gt;, &lt;comparable&gt;, &lt;comparable...&gt;) → &lt;comparable&gt;</span></h4>
+<div class="text"><p><strong>Returns the greatest value of all supplied arguments.</strong></p></div>
+</div><hr/>
+<div id="scalar-min" class="level-1">
+<h4>5.45.  <span class="usage">min(&lt;comparable&gt;, &lt;comparable&gt;, &lt;comparable...&gt;) → &lt;comparable&gt;</span></h4>
+<div class="text"><p><strong>Returns the least value of all supplied arguments.</strong></p></div>
+</div><hr/>
+<div id="scalar-newlist" class="level-1">
+<h4>5.46.  <span class="usage">newlist(&lt;object...&gt;) → &lt;object&gt;</span></h4>
+<div class="text"><p><strong>Creates a instance of java.util.List with the supplied objects.</strong></p></div>
+</div><hr/>
+<div id="scalar-newmap" class="level-1">
+<h4>5.47.  <span class="usage">newmap(&lt;object,object... pairs&gt;) → &lt;object&gt;</span></h4>
+<div class="text"><p><strong>Creates a instance of java.util.Map with the supplied keys and values.</strong></p></div>
+</div><hr/>
+<div id="scalar-pi" class="level-1">
+<h4>5.48.  <span class="usage">pi() → &lt;number&gt;</span></h4>
+<div class="text"><p><strong>Returns the constant value of pi.</strong></p></div>
+</div><hr/>
+<div id="scalar-random2" class="level-1">
+<h4>5.49.  <span class="usage">random(&lt;number min&gt;, &lt;number max&gt;) → &lt;number&gt;</span></h4>
+<div class="text"><p><strong>Returns a random value between &lt;min&gt; and &lt;max&gt;.</strong></p></div>
+</div><hr/>
+<div id="scalar-random" class="level-1">
+<h4>5.50.  <span class="usage">random([&lt;number max&gt;]) → &lt;number&gt;</span></h4>
+<div class="text"><p><strong>Returns a random value of at most &lt;max&gt; (1 if not defined).</strong></p></div>
+</div><hr/>
 <div id="chapter-aggregations" class="level-0">
-<h2>6. Aggregations <small class="usage"></small></h2>
+<h2>6. Aggregation Functions <span class="usage"></span></h2>
 <div class="text"><p><strong></strong></p></div>
 </div><hr/>
+<div id="aggregation-if" class="level-1">
+<h4>6.1.  <span class="usage">&lt;aggregation object expr&gt;:if(&lt;boolean condition&gt;) → &lt;object&gt;</span></h4>
+<div class="text"><p><strong>Aggregates only events that evaluates true to &lt;condition&gt;.</strong></p></div>
+</div><hr/>
+<div id="aggregation-overall" class="level-1">
+<h4>6.2.  <span class="usage">&lt;aggregation object expr&gt;:overall() → &lt;object&gt;</span></h4>
+<div class="text"><p><strong>Merges all the results from the target aggregation.</strong></p></div>
+</div><hr/>
+<div id="aggregation-overlast" class="level-1">
+<h4>6.3.  <span class="usage">&lt;aggregation object expr&gt;:overlast(&lt;number window&gt;) → &lt;object&gt;</span></h4>
+<div class="text"><p><strong>Merges the results of the last &lt;window&gt; aggregations.</strong></p></div>
+</div><hr/>
+<div id="aggregation-prev" class="level-1">
+<h4>6.4.  <span class="usage">&lt;aggregation object expr&gt;:prev([&lt;number prev&gt;]) → &lt;object&gt;</span></h4>
+<div class="text"><p><strong>Delays and returns the previous &lt;number&gt;th result from target aggregation.</strong></p></div>
+</div><hr/>
+<div id="aggregation-all" class="level-1">
+<h4>6.5.  <span class="usage">all(&lt;boolean&gt;) → &lt;boolean&gt;</span></h4>
+<div class="text"><p><strong>Returns true if all ocurrences evaluate true.</strong></p></div>
+</div><hr/>
+<div id="aggregation-any" class="level-1">
+<h4>6.6.  <span class="usage">any(&lt;boolean&gt;) → &lt;boolean&gt;</span></h4>
+<div class="text"><p><strong>Returns true if any ocurrence evaluates true.</strong></p></div>
+</div><hr/>
+<div id="aggregation-avg" class="level-1">
+<h4>6.7.  <span class="usage">avg(&lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span></h4>
+<div class="text"><p><strong>Calculates the (possibly weighted) average of some expression.</strong></p></div>
+</div><hr/>
 <div id="aggregation-dcount" class="level-1">
-<h3><small>6.1.</small> <small class="usage">dcount(&lt;object&gt;*) → &lt;number&gt;</small></h3>
+<h4>6.8.  <span class="usage">dcount(&lt;object&gt;...) → &lt;number&gt;</span></h4>
 <div class="text"><p><strong>Estimates the field's cardinality (distinct count) using HyperLogLog.</strong></p></div>
 </div><hr/>
+<div id="aggregation-describe" class="level-1">
+<h4>6.9.  <span class="usage">describe(&lt;aggregation object expr&gt;) → &lt;string&gt;</span></h4>
+<div class="text"><p><strong>Yields a string json explaining the target aggregation's inner state representation.</strong></p></div>
+</div><hr/>
+<div id="aggregation-first" class="level-1">
+<h4>6.10.  <span class="usage">first(&lt;object&gt;) → &lt;object&gt;</span></h4>
+<div class="text"><p><strong>Yields the ocurrence with least timestamp.</strong></p></div>
+</div><hr/>
+<div id="aggregation-hll" class="level-1">
+<h4>6.11.  <span class="usage">hll(&lt;number log2m&gt;, &lt;object&gt;...) → &lt;number&gt;</span></h4>
+<div class="text"><p><strong>Similar to dcount, but allows configuration of log2m parameter.</strong></p></div>
+</div><hr/>
+<div id="aggregation-hllmerge" class="level-1">
+<h4>6.12.  <span class="usage">hllmerge(&lt;string&gt;...) → &lt;string&gt;</span></h4>
+<div class="text"><p><strong>Performs union of many HyperLogLog encoded data in a window.</strong></p></div>
+</div><hr/>
+<div id="aggregation-hllset" class="level-1">
+<h4>6.13.  <span class="usage">hllset(&lt;number log2m&gt;, &lt;object&gt;...) → &lt;string&gt;</span></h4>
+<div class="text"><p><strong>Similar to hll, but it doesn't evaluate final cardinality, just return the sketch data.</strong></p></div>
+</div><hr/>
+<div id="aggregation-join" class="level-1">
+<h4>6.14.  <span class="usage">join(&lt;string&gt;, [&lt;string separator&gt;], [&lt;string lastSeparator&gt;]) → &lt;string&gt;</span></h4>
+<div class="text"><p><strong>Join all the strings in a window.</strong></p></div>
+</div><hr/>
+<div id="aggregation-last" class="level-1">
+<h4>6.15.  <span class="usage">last(&lt;object&gt;) → &lt;object&gt;</span></h4>
+<div class="text"><p><strong>Yields the ocurrence with greatest timestamp.</strong></p></div>
+</div><hr/>
+<div id="aggregation-map" class="level-1">
+<h4>6.16.  <span class="usage">map(&lt;object key&gt;, &lt;object value&gt;) → &lt;object&gt;</span></h4>
+<div class="text"><p><strong>Creates a java.util.Map from all events in a window.</strong></p></div>
+</div><hr/>
+<div id="aggregation-max" class="level-1">
+<h4>6.17.  <span class="usage">max(&lt;comparable&gt;) → &lt;comparable&gt;</span></h4>
+<div class="text"><p><strong>Yields the greatest ocurrence in the window.</strong></p></div>
+</div><hr/>
 <div id="aggregation-median" class="level-1">
-<h3><small>6.2.</small> <small class="usage">median(&lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</small></h3>
+<h4>6.18.  <span class="usage">median(&lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span></h4>
 <div class="text"><p><strong>Estimates the median value of the population using Count-Min Sketch.</strong></p></div>
 </div><hr/>
+<div id="aggregation-min" class="level-1">
+<h4>6.19.  <span class="usage">min(&lt;comparable&gt;) → &lt;comparable&gt;</span></h4>
+<div class="text"><p><strong>Yields the least ocurrence in the window.</strong></p></div>
+</div><hr/>
+<div id="aggregation-pcount" class="level-1">
+<h4>6.20.  <span class="usage">pcount(&lt;boolean&gt;) → &lt;number&gt;</span></h4>
+<div class="text"><p><strong>Aggregates the proportion of events that evaluate true to expression.</strong></p></div>
+</div><hr/>
 <div id="aggregation-quantile" class="level-1">
-<h3><small>6.3.</small> <small class="usage">quantile(&lt;number q&gt;, &lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</small></h3>
+<h4>6.21.  <span class="usage">quantile(&lt;number q&gt;, &lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span></h4>
 <div class="text"><p><strong>Estimates the q (0..1) quantile of the population using Count-Min Sketch.</strong></p></div>
 </div><hr/>
-<p>Page generated at 2014-04-03 17:48:24.908616. Copyright 2014 Intelie.
+<div id="aggregation-set" class="level-1">
+<h4>6.22.  <span class="usage">set(&lt;object&gt;) → &lt;object&gt;</span></h4>
+<div class="text"><p><strong>Creates a java.util.Set from all events in a window.</strong></p></div>
+</div><hr/>
+<div id="aggregation-smooth" class="level-1">
+<h4>6.23.  <span class="usage">smooth(&lt;aggregation number expr&gt;, [&lt;number alpha&gt;], [&lt;number beta&gt;]) → &lt;number&gt;</span></h4>
+<div class="text"><p><strong>(Unsafe aggregation) Smoothes the curve of another aggregation.</strong></p></div>
+</div><hr/>
+<div id="aggregation-stdev" class="level-1">
+<h4>6.24.  <span class="usage">stdev(&lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span></h4>
+<div class="text"><p><strong>Calculates the (possibly weighted) standard deviation of some expression.</strong></p></div>
+</div><hr/>
+<div id="aggregation-sum" class="level-1">
+<h4>6.25.  <span class="usage">sum(&lt;number&gt;) → &lt;number&gt;</span></h4>
+<div class="text"><p><strong>Sums all evaluations of some expression.</strong></p></div>
+</div><hr/>
+<div id="aggregation-variance" class="level-1">
+<h4>6.26.  <span class="usage">variance(&lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span></h4>
+<div class="text"><p><strong>Calculates the (possibly weighted) variance of some expression.</strong></p></div>
+</div><hr/>
+<div id="aggregation-when" class="level-1">
+<h4>6.27.  <span class="usage">when(&lt;aggregation boolean expr&gt;) → &lt;number&gt;</span></h4>
+<div class="text"><p><strong>Yields the latest timestamp inside window when some condition was true.</strong></p></div>
+</div><hr/>
+<div id="aggregation-window" class="level-1">
+<h4>6.28. Window Meta-aggregations <span class="usage"></span></h4>
+<div class="text"><p><strong></strong></p></div>
+</div><hr/>
+<div id="aggregation-wcount" class="level-2">
+<h5>6.28.1.  <span class="usage">WCOUNT()</span></h5>
+<div class="text"><p><strong>Yields how many outputs are merged in the current window.</strong></p></div>
+</div><hr/>
+<div id="aggregation-wstart" class="level-2">
+<h5>6.28.2.  <span class="usage">WSTART()</span></h5>
+<div class="text"><p><strong>Yields the minimum allowed timestamp or item for the current window.</strong></p></div>
+</div><hr/>
+<div id="aggregation-wend" class="level-2">
+<h5>6.28.3.  <span class="usage">WEND()</span></h5>
+<div class="text"><p><strong>Yields the maximum allowed timestamp or item for the current window.</strong></p></div>
+</div><hr/>
+<div id="aggregation-ostart" class="level-2">
+<h5>6.28.4.  <span class="usage">OSTART()</span></h5>
+<div class="text"><p><strong>Yields the minimum allowed timestamp or item for the current output.</strong></p></div>
+</div><hr/>
+<div id="aggregation-oend" class="level-2">
+<h5>6.28.5.  <span class="usage">OEND()</span></h5>
+<div class="text"><p><strong>Yields the maximum allowed timestamp or item for the current output.</strong></p></div>
+</div><hr/>
+<div id="aggregation-otimestamp" class="level-2">
+<h5>6.28.6.  <span class="usage">OTIMESTAMP()</span></h5>
+<div class="text"><p><strong>Yields the timestamp when the output was merged (useful for item batch pipes).</strong></p></div>
+</div><hr/>
+<p>Page generated at 2014-04-07 15:21:27.421780. Copyright 2014 Intelie.
 </div></body></html>
