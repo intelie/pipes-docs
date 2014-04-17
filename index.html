@@ -485,10 +485,7 @@ var syntax = function(bypass) {
                 } else {
                     return "keyword";
                 }
-
-            } else if (!state.post_filter && (ch == '*' || ch== '?')) {
-                return bypass ? "keyword" : "string-2";
-            } else if (ch.match(/[|&^!+\/%<>=]/)) {
+            } else if (ch.match(/[|&^!+\/%<>=*?~]/)) {
                 return "keyword";
             }else {
                 stream.eatWhile(/[_\w\d\.]/);
@@ -3710,5 +3707,5 @@ this year.
 <p class="legend">Current week + ~33.6h (20% of 7 days).</p>
 </div>
 </div><hr/>
-<p>Page generated at 17-Apr-2014 18:46:30</p>
+<p>Page generated at 17-Apr-2014 18:55:51</p>
 </div></body></html>
