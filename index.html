@@ -296,11 +296,20 @@ div.CodeMirror-cursors {
 }
 .header span.permalink {
   display: none;
-  font-size: 14px;
 }
 
 .header:hover span.permalink {
   display: inline;
+}
+
+.header:hover span.permalink a {
+  color: red;
+}
+
+.header:hover span.permalink a:hover {
+  background-color: red;
+  color: white;
+  text-decoration: none;
 }
 
 table.summary td.level-0 {
@@ -943,35 +952,49 @@ ready(function() {
 
                 <tr>
                     <td class="level-2">
-                        <a href="#intro-expressions-level">1.4.2. Scalars and aggregations</a>
+                        <a href="#intro-expression-rowmeta">1.4.2. Row type metadata</a>
                     </td>
                     <td class="description"></td>
                 </tr>
 
                 <tr>
                     <td class="level-2">
-                        <a href="#intro-expressions-aggregations">1.4.3. Aggregations state representation</a>
+                        <a href="#intro-expressions-level">1.4.3. Scalars and aggregations</a>
                     </td>
                     <td class="description"></td>
                 </tr>
 
                 <tr>
                     <td class="level-2">
-                        <a href="#intro-expressions-property">1.4.4. Property access</a>
+                        <a href="#intro-expressions-aggregations">1.4.4. Aggregations state representation</a>
                     </td>
                     <td class="description"></td>
                 </tr>
 
                 <tr>
                     <td class="level-2">
-                        <a href="#intro-expression-special">1.4.5. Special expressions</a>
+                        <a href="#intro-expression-ttl">1.4.5. Aggregation TTL</a>
                     </td>
                     <td class="description"></td>
                 </tr>
 
                 <tr>
                     <td class="level-2">
-                        <a href="#intro-expressions-function">1.4.6. Function call</a>
+                        <a href="#intro-expressions-property">1.4.6. Property access</a>
+                    </td>
+                    <td class="description"></td>
+                </tr>
+
+                <tr>
+                    <td class="level-2">
+                        <a href="#intro-expression-special">1.4.7. Special expressions</a>
+                    </td>
+                    <td class="description"></td>
+                </tr>
+
+                <tr>
+                    <td class="level-2">
+                        <a href="#intro-expressions-function">1.4.8. Function call</a>
                     </td>
                     <td class="description"></td>
                 </tr>
@@ -1097,7 +1120,7 @@ ready(function() {
                     <td class="level-1">
                         <a href="#pipe-compress">3.7.  <span class="pipes2">@compress &lt;number k&gt;, [&lt;number k2&gt;,] &lt;number... y&gt; [by &lt;object...&gt;]</span></a>
                     </td>
-                    <td class="description">Compresses the result from the previous pipe to at most k (or k2) most important rows.</td>
+                    <td class="description">Compresses the result from the previous pipe to at most k most important rows.</td>
                 </tr>
 
                 <tr>
@@ -2110,13 +2133,20 @@ ready(function() {
 
                 <tr>
                     <td class="level-2">
-                        <a href="#timespan-extend">7.2.16.  <span class="span2">&lt;span&gt; extend left|right [by] &lt;number&gt;%</span></a>
+                        <a href="#timespan-extend">7.2.16.  <span class="span2">&lt;span&gt; extend [left|right] [by] &lt;number&gt;%</span></a>
                     </td>
                     <td class="description">(&lt;both&gt;, &lt;both&gt;) Extends either the start or the end of a span by a percentual value.</td>
                 </tr>
+
+                <tr>
+                    <td class="level-2">
+                        <a href="#timespan-align">7.2.17.  <span class="span2">&lt;span&gt; align [left|right] to &lt;span ref&gt;</span></a>
+                    </td>
+                    <td class="description">(&lt;both&gt;, &lt;both&gt;) Aligns the span's total milliseconds at the left or right side of &lt;ref&gt;</td>
+                </tr>
 </table>
 <div id="chapter-intro" class="level-0">
-<h2 class="header">1. Introduction <span class="pipes2"></span> <span class="permalink">(<a href="#chapter-intro">link</a>)</span></h2>
+<h2 class="header">1. Introduction <span class="pipes2"></span> <span class="permalink"><a href="#chapter-intro">¶</a></span></h2>
 <div class="text"><p><strong></strong></p><p>
     Pipes is a language and an engine to perform distributed aggregations over real-time streams.
     It enables stream processing with low latency and minimum memory footprint (constant for most operations).
@@ -2131,7 +2161,7 @@ ready(function() {
 </div>
 </div><hr/>
 <div id="intro-events" class="level-1">
-<h4 class="header">1.1. Events and filters <span class="pipes2"></span> <span class="permalink">(<a href="#intro-events">link</a>)</span></h4>
+<h4 class="header">1.1. Events and filters <span class="pipes2"></span> <span class="permalink"><a href="#intro-events">¶</a></span></h4>
 <div class="text"><p><strong></strong></p><p>
     Pipes language operates over events. Events are (usually immutable) sets of (key, value) tuples and may have
     some time information assigned to it. In the Pipes event model, events have no intrinsic type. They're all 
@@ -2169,7 +2199,7 @@ ready(function() {
 </div>
 </div><hr/>
 <div id="intro-pipes-chaining" class="level-1">
-<h4 class="header">1.2. Chained computation model <span class="pipes2"></span> <span class="permalink">(<a href="#intro-pipes-chaining">link</a>)</span></h4>
+<h4 class="header">1.2. Chained computation model <span class="pipes2"></span> <span class="permalink"><a href="#intro-pipes-chaining">¶</a></span></h4>
 <div class="text"><p><strong></strong></p><p>
     After filtering the public stream, you can chain the result through one or more pipes (see <a href="#chapter-pipes">Chapter 3: Pipes</a>).
     Each pipe may transform, filter or aggregate the results from the previous one. In the language, this chaining
@@ -2219,7 +2249,7 @@ ready(function() {
 </div>
 </div><hr/>
 <div id="intro-outputs" class="level-1">
-<h4 class="header">1.3. Output rates and aggregation windows <span class="pipes2"></span> <span class="permalink">(<a href="#intro-outputs">link</a>)</span></h4>
+<h4 class="header">1.3. Output rates and aggregation windows <span class="pipes2"></span> <span class="permalink"><a href="#intro-outputs">¶</a></span></h4>
 <div class="text"><p><strong></strong></p><p>
     Every pipe in the chain will have one or more output rates. In this section, we will focus on how to declare them in <a href="#pipe-default">default pipe</a>,
     but the concept itself can be applied to any pipe type. 
@@ -2270,7 +2300,7 @@ ready(function() {
 <p>
     In traditional stream processing libraries, every event is stored inside a data window and the aggregation runs over them. This
     allows a fine grained configuration of outputs vs windows. In Pipes, the goal is to use the least resources possible. So, instead
-    of storing events inside the window, we only store the aggregation outputs (in a mergeable format, see <a href="#intro-expressions-aggregations">Section 1.4.3: Aggregations state representation</a>).
+    of storing events inside the window, we only store the aggregation outputs (in a mergeable format, see <a href="#intro-expressions-aggregations">Section 1.4.4: Aggregations state representation</a>).
     The picture below exemplifies:
 </p>
 
@@ -2307,7 +2337,7 @@ ready(function() {
 </div>
 </div><hr/>
 <div id="intro-expressions" class="level-1">
-<h4 class="header">1.4. Expressions <span class="pipes2"></span> <span class="permalink">(<a href="#intro-expressions">link</a>)</span></h4>
+<h4 class="header">1.4. Expressions <span class="pipes2"></span> <span class="permalink"><a href="#intro-expressions">¶</a></span></h4>
 <div class="text"><p><strong></strong></p><p>
     Expressions access and transform data from events. We will introduce them here, explaing Pipes' type system
     and how aggregations work. For detailed information on expressions, please refer <a href="#chapter-operators">Chapter 4: Operators</a>, 
@@ -2316,7 +2346,7 @@ ready(function() {
 </div>
 </div><hr/>
 <div id="intro-expressions-types" class="level-2">
-<h5 class="header">1.4.1. Type system <span class="pipes2"></span> <span class="permalink">(<a href="#intro-expressions-types">link</a>)</span></h5>
+<h5 class="header">1.4.1. Type system <span class="pipes2"></span> <span class="permalink"><a href="#intro-expressions-types">¶</a></span></h5>
 <div class="text"><p><strong></strong></p><p>
     The Pipes language is statically typed, but has a very simple type system. There are four main types: 
     <strong>number</strong>, <strong>string</strong>, <strong>boolean</strong> and <strong>object</strong>. 
@@ -2361,8 +2391,43 @@ AvgAggregation: The parameter #1 &lt;someproperty&gt;; must be 'number' instead 
 </ul>
 </div>
 </div><hr/>
+<div id="intro-expression-rowmeta" class="level-2">
+<h5 class="header">1.4.2. Row type metadata <span class="pipes2"></span> <span class="permalink"><a href="#intro-expression-rowmeta">¶</a></span></h5>
+<div class="text"><p><strong></strong></p><p>
+    The type <code class="pipes">row</code> may have some metadata associated to it. This is particularly true when using
+    the expression <code class="pipes">*</code> after a non-raw pipe (see <a href="#intro-expression-special">Section 1.4.7: Special expressions</a>), but there are 
+    other expressions that may return an instance of <code class="pipes">row</code> with metadata (e.g. <a href="#scalar-regex"><code class="pipes2">&lt;string&gt;:regex(&lt;string regex&gt;) → &lt;row&gt;</code></a>).
+</p>
+<p>
+    An instance of <code class="pipes">row</code> with metadata has two main uses:
+</p>
+<ul>
+    <li>Be expanded with the <code class="pipes">expand</code> keyword in a select or <code class="pipes">by</code> clause. (see <a href="#pipe-default">default pipe</a>)</li>
+    <li>Be yielded at the pipe <a href="#pipe-yield"><code class="pipes2">@yield [&lt;object expr&gt;]</code></a></li>
+</ul>
+<p><strong>Examples</strong></p>
+<pre class="pipes">*
+=&gt; id, name, value#
+=&gt; last(*) every minute
+=&gt; @yield</pre>
+<p class="legend">
+    Selects fields and outputs the last every minute.
+    Please note that <code class="pipes">last(*)</code> outputs a single field of type <code class="pipes">row</code> with 3 fields in its metadata and 
+    the pipe <code class="expr">@yield</code> expands them into an event.
+</p>
+<pre class="pipes">*
+=&gt; id, name, value#
+=&gt; expand last(*) every minute</pre>
+<p class="legend">
+    Equivalent to above. But the pipe <code class="expr">@yield</code> accepts any scalar, while the <code class="pipes">expand</code> keyword only works with
+    <code class="pipes">row</code> values <strong>with metadata</strong>.
+</p>
+<pre class="pipes">* =&gt; expand name:regex(r'^(?&lt;first&gt;\w+)( \w+)* (?&lt;last&gt;\w+)$') as extracted_*_name</pre>
+<p class="legend">Yields an event with the fields <code class="pipes">extracted_first_name</code> and <code class="pipes">extracted_last_name</code>.</p>
+</div>
+</div><hr/>
 <div id="intro-expressions-level" class="level-2">
-<h5 class="header">1.4.2. Scalars and aggregations <span class="pipes2"></span> <span class="permalink">(<a href="#intro-expressions-level">link</a>)</span></h5>
+<h5 class="header">1.4.3. Scalars and aggregations <span class="pipes2"></span> <span class="permalink"><a href="#intro-expressions-level">¶</a></span></h5>
 <div class="text"><p><strong></strong></p><p>
     Every Pipes expression can be either a <strong>scalar</strong> or an <strong>aggregation</strong>. We call it a <strong>level</strong>.
 </p>
@@ -2408,7 +2473,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="intro-expressions-aggregations" class="level-2">
-<h5 class="header">1.4.3. Aggregations state representation <span class="pipes2"></span> <span class="permalink">(<a href="#intro-expressions-aggregations">link</a>)</span></h5>
+<h5 class="header">1.4.4. Aggregations state representation <span class="pipes2"></span> <span class="permalink"><a href="#intro-expressions-aggregations">¶</a></span></h5>
 <div class="text"><p><strong></strong></p><p>
     One of the main features in Pipes is the ability to run aggregations distributedly. To make this possible, most aggregations
     are written using parallel versions of the algorithms. Most of the solutions presented in this section only affect how
@@ -2456,8 +2521,28 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 <pre class="json">{"sumw":262.0,"mean":416.628854962}</pre>
 </div>
 </div><hr/>
+<div id="intro-expression-ttl" class="level-2">
+<h5 class="header">1.4.5. Aggregation TTL <span class="pipes2"></span> <span class="permalink"><a href="#intro-expression-ttl">¶</a></span></h5>
+<div class="text"><p><strong></strong></p><p>
+    When using <a href="#pipe-default">default pipe</a> with a non-empty group, the query tries to reduce memory consumption
+    by removing any group that has not received any event in the last output period. Most aggregations do not hold
+    any state other than the required in the last period, so this is fine. But some aggregations need additional
+    state (e.g. <a href="#aggregation-overlast">overlast</a>, <a href="#aggregation-prev">prev</a>) and may prevent this memory reclaim.
+    There are even aggregations that need to be kept in memory forever to work properly (e.g. <a href="#aggregation-overall">overall</a>).
+</p>
+<p>
+    To solve this problem, every aggregation has a property called TTL (time to live). Which defines how long 
+    it should prevent row state from being deleted from a query if no events are received in that group. If there
+    is no grouping, the property is ignored.
+</p>
+<p>
+    Most aggregations have TTL=1, but some aggregations with persistent state may have longer TTLs (even infinite). 
+    There is also the function <a href="#scalar-keep"><code class="pipes2">&lt;object&gt;:keep([&lt;number ttl&gt;]) → &lt;object&gt;</code></a> that allows to change the TTL of any expression to any desired value.
+</p>
+</div>
+</div><hr/>
 <div id="intro-expressions-property" class="level-2">
-<h5 class="header">1.4.4. Property access <span class="pipes2"></span> <span class="permalink">(<a href="#intro-expressions-property">link</a>)</span></h5>
+<h5 class="header">1.4.6. Property access <span class="pipes2"></span> <span class="permalink"><a href="#intro-expressions-property">¶</a></span></h5>
 <div class="text"><p><strong></strong></p><p>
     Property expressions are the way to access event's properties. In a glance, every identifier denotes a property
     access. Properties are scalar properties, but they can also be used in <a href="#pipe-default">aggregation pipes</a>,
@@ -2501,7 +2586,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="intro-expression-special" class="level-2">
-<h5 class="header">1.4.5. Special expressions <span class="pipes2"></span> <span class="permalink">(<a href="#intro-expression-special">link</a>)</span></h5>
+<h5 class="header">1.4.7. Special expressions <span class="pipes2"></span> <span class="permalink"><a href="#intro-expression-special">¶</a></span></h5>
 <div class="text"><p><strong></strong></p><p>
     There are also two special expressions that act like properties, but have special semantics: <code class="pipes">_</code> and <code class="pipes">*</code>.
 </p>
@@ -2536,7 +2621,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="intro-expressions-function" class="level-2">
-<h5 class="header">1.4.6. Function call <span class="pipes2"></span> <span class="permalink">(<a href="#intro-expressions-function">link</a>)</span></h5>
+<h5 class="header">1.4.8. Function call <span class="pipes2"></span> <span class="permalink"><a href="#intro-expressions-function">¶</a></span></h5>
 <div class="text"><p><strong></strong></p><p>
     Pipes language allows previously-configured functions to be called inside queries. The default syntax
     has nothing new. You can call a function by using parentheses after the function name. E.g. 
@@ -2606,7 +2691,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="chapter-filters" class="level-0">
-<h2 class="header">2. Filters <span class="pipes2"></span> <span class="permalink">(<a href="#chapter-filters">link</a>)</span></h2>
+<h2 class="header">2. Filters <span class="pipes2"></span> <span class="permalink"><a href="#chapter-filters">¶</a></span></h2>
 <div class="text"><p><strong></strong></p><p>
     Every query in Pipes is required to start with a filter. The filter runtime is optimized to
     allow many queries running over the same stream, sharing as much processing as possible.
@@ -2620,7 +2705,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="filter-all" class="level-1">
-<h4 class="header">2.1.  <span class="pipes2">*</span> <span class="permalink">(<a href="#filter-all">link</a>)</span></h4>
+<h4 class="header">2.1.  <span class="pipes2">*</span> <span class="permalink"><a href="#filter-all">¶</a></span></h4>
 <div class="text"><p><strong>Special filter that allows all records through.
 </strong></p><p>
     When used in conjunction with <a href="#filter-field">field syntax</a>, selects all records that contain that field.
@@ -2630,7 +2715,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="filter-term" class="level-1">
-<h4 class="header">2.2.  <span class="pipes2">&lt;term&gt;</span> <span class="permalink">(<a href="#filter-term">link</a>)</span></h4>
+<h4 class="header">2.2.  <span class="pipes2">&lt;term&gt;</span> <span class="permalink"><a href="#filter-term">¶</a></span></h4>
 <div class="text"><p><strong>Selects records where one of the current fields matches &lt;term&gt;.
 </strong></p><p>
     The match is <strong>case insensitive</strong>.
@@ -2644,7 +2729,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="filter-fuzzy" class="level-1">
-<h4 class="header">2.3.  <span class="pipes2">&lt;term&gt;~&lt;number maxEdits&gt;</span> <span class="permalink">(<a href="#filter-fuzzy">link</a>)</span></h4>
+<h4 class="header">2.3.  <span class="pipes2">&lt;term&gt;~&lt;number maxEdits&gt;</span> <span class="permalink"><a href="#filter-fuzzy">¶</a></span></h4>
 <div class="text"><p><strong>Selects records where one of the current fields matches &lt;term&gt; with at most &lt;maxEdits&gt; edits.
 </strong></p><p>
     The match is <strong>case insensitive</strong>.
@@ -2656,7 +2741,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="filter-range" class="level-1">
-<h4 class="header">2.4.  <span class="pipes2">[&lt;term lower&gt; TO &lt;term upper&gt;]</span> <span class="permalink">(<a href="#filter-range">link</a>)</span></h4>
+<h4 class="header">2.4.  <span class="pipes2">[&lt;term lower&gt; TO &lt;term upper&gt;]</span> <span class="permalink"><a href="#filter-range">¶</a></span></h4>
 <div class="text"><p><strong>Selects records where one of the current fields is between &lt;lower&gt; and &lt;upper&gt;.
 </strong></p><p>
     The match is <strong>case insensitive</strong>.
@@ -2681,7 +2766,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="filter-field" class="level-1">
-<h4 class="header">2.5.  <span class="pipes2">&lt;field&gt;: &lt;filter&gt;</span> <span class="permalink">(<a href="#filter-field">link</a>)</span></h4>
+<h4 class="header">2.5.  <span class="pipes2">&lt;field&gt;: &lt;filter&gt;</span> <span class="permalink"><a href="#filter-field">¶</a></span></h4>
 <div class="text"><p><strong>Sets the current field to &lt;field&gt;. Usually followed by &lt;term&gt; (e.g. somefield:someterm).
 </strong></p><p>
     Any filter expression can be used inside a filter field. Even other filter fields.
@@ -2691,28 +2776,28 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="filter-and" class="level-1">
-<h4 class="header">2.6.  <span class="pipes2">&lt;filter&gt; &amp;&amp; &lt;filter&gt;</span> <span class="permalink">(<a href="#filter-and">link</a>)</span></h4>
+<h4 class="header">2.6.  <span class="pipes2">&lt;filter&gt; &amp;&amp; &lt;filter&gt;</span> <span class="permalink"><a href="#filter-and">¶</a></span></h4>
 <div class="text"><p><strong>Selects the intersection of two other filters.</strong></p><p>It's the default filter conjunction, so it can safely be omitted.</p> <p>The operator <code class="pipes">&amp;&amp;</code> is equivalent to <code class="pipes">&amp;</code> and <code class="pipes">AND</code> (must be uppercase).</p> <p>
     <strong>Examples:</strong>
 </p> <pre class="pipes">http verb:get status:404</pre> <p class="legend">Selects records with the default field equal to "http", "verb" equal to "get" <strong>and</strong> "status" equal to "404"</p> <pre class="pipes">http &amp;&amp; verb:get &amp;&amp; status:404</pre> <p class="legend">Same as above, but with explicit &&</p> <pre class="pipes">tag:(important &amp;&amp; resolved)</pre> <p class="legend">Selects records with the field "tag" containing both "important" <strong>and</strong> "resolved" values</p>
 </div>
 </div><hr/>
 <div id="filter-or" class="level-1">
-<h4 class="header">2.7.  <span class="pipes2">&lt;filter&gt; || &lt;filter&gt;</span> <span class="permalink">(<a href="#filter-or">link</a>)</span></h4>
+<h4 class="header">2.7.  <span class="pipes2">&lt;filter&gt; || &lt;filter&gt;</span> <span class="permalink"><a href="#filter-or">¶</a></span></h4>
 <div class="text"><p><strong>Selects the union of two other filters.</strong></p><p>The operator <code class="pipes">||</code> is equivalent to <code class="pipes">|</code> and <code class="pipes">OR</code> (must be uppercase).</p> <p>
     <strong>Examples:</strong>
 </p> <pre class="pipes">http || verb:get || status:404</pre> <p class="legend">Selects records with the default field equal to "http", "verb" equal to "get" <strong>or</strong> "status" equal to "404"</p> <pre class="pipes">tag:(important || resolved)</pre> <p class="legend">Selects records with the field "tag" containing either "important" <strong>or</strong> "resolved" values</p>
 </div>
 </div><hr/>
 <div id="filter-not" class="level-1">
-<h4 class="header">2.8.  <span class="pipes2">-&lt;filter&gt;</span> <span class="permalink">(<a href="#filter-not">link</a>)</span></h4>
+<h4 class="header">2.8.  <span class="pipes2">-&lt;filter&gt;</span> <span class="permalink"><a href="#filter-not">¶</a></span></h4>
 <div class="text"><p><strong>Selects the complement of another filter.</strong></p><p>The operator <code class="pipes">-</code> is equivalent to <code class="pipes">!</code> and <code class="pipes">NOT</code> (must be uppercase).</p> <p>
     <strong>Examples:</strong>
 </p> <pre class="pipes">-verb:get</pre> <p class="legend">Selects records with the field "verb" different of "get"</p> <pre class="pipes">tag:(a* -abnormal)</pre> <p class="legend">Selects records with the field "tag" starting with "a", but not equal to "abnormal"</p>
 </div>
 </div><hr/>
 <div id="chapter-pipes" class="level-0">
-<h2 class="header">3. Pipes <span class="pipes2"></span> <span class="permalink">(<a href="#chapter-pipes">link</a>)</span></h2>
+<h2 class="header">3. Pipes <span class="pipes2"></span> <span class="permalink"><a href="#chapter-pipes">¶</a></span></h2>
 <div class="text"><p><strong></strong></p><p>
     Pipes are the main building blocks in this language. No surprise the language is named after them.
     Pipes represent one single processing element that consumes events from the input and produces other
@@ -2738,51 +2823,281 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="pipe-default" class="level-1">
-<h4 class="header">3.1.  <span class="pipes2">&lt;named...&gt; [by &lt;named...&gt;] [over &lt;window&gt;] [every &lt;period&gt; | at the end]</span> <span class="permalink">(<a href="#pipe-default">link</a>)</span></h4>
+<h4 class="header">3.1.  <span class="pipes2">&lt;named...&gt; [by &lt;named...&gt;] [over &lt;window&gt;] [every &lt;period&gt; | at the end]</span> <span class="permalink"><a href="#pipe-default">¶</a></span></h4>
 <div class="text"><p><strong>Transforms or aggregates records over configurable data window and output.</strong></p><p>
-    This is the default type of pipe. The decision of when the query will output and over which data
-    it will aggregate depends on what is configured on <code class="pipes">over</code> and <code class="pipes">every</code> clauses.
+    This is the default type of pipe. It receives events, aggregates them and output
+    the result based on what is configured on the <code class="pipes">every</code> clause. By default, the aggregation
+    resets its state on every output, but the event retention can be configured on the <code class="pipes">over</code> 
+    clause. The acceptable values for both clauses are discussed at <a href="#intro-outputs">Section 1.3: Output rates and aggregation windows</a>.
 </p>
+<p>
+    The first part of the pipe defines which aggregations will be made. It accepts all kinds
+    of expressions and treats them all as aggregations. 
+    <a href="#intro-expressions-level">All expressions can act as aggregations.</a>
+    The expression can receive an automatic name based on its contents or you can defined 
+    custom one using the keyword <code class="pipes">as</code>. Example:
+</p>
+<pre class="pipes">* =&gt; sum(x#)/count()**2 as value</pre>
+<p class="legend">Outputs the sum of the variable <code class="pipes">x</code> divided by the event count squared every second.</p>
+<p>
+    If the expression is of type <code class="pipes">row</code> and has metadata associated to it, you can also use the keyword 
+    <code class="pipes">expand</code> to expand its values. Fore more info, see <a href="#intro-expression-rowmeta">Section 1.4.2: Row type metadata</a>. It's worth
+    noting that <code class="pipes">expad</code> keyword skips any timestamp fields the row might have.
+</p>
+<p>
+    The <code class="pipes">by</code> clause allows one to group the results by one or more <strong>scalar</strong> values.
+    Aggregations are not allowed in the <code class="pipes">by</code> clause, only scalar values. When grouping,
+    the group only outputs if at least one of its aggregations has still TTL, this usually means
+    that it only outputs if the group received some event in the last period, but there
+    are exceptions. For more info, see <a href="#intro-expression-ttl">Section 1.4.5: Aggregation TTL</a>.
+</p>
+<p>
+    All clauses are optional, so the simplest possible pipe is an empty string, which
+    is equivalent to <code class="pipes">count() every 1 second</code>. Examples:
+</p>
+<pre class="pipes">* =&gt;</pre>
+<p class="legend">Outputs how many events match the query <code class="pipes">type:http</code> every second.</p>
+<pre class="pipes">* =&gt; by host</pre>
+<p class="legend">
+    Outputs how many events match the query <code class="pipes">type:http</code> every second, aggregating by host.
+</p>
+<p>
+    This pipe can be classified as <strong>safe</strong>, <strong>semi-safe</strong> or
+    <strong>unsafe</strong>, depending on which expressions, period and output are chosen.
+    For more information on pipes safety, see <a href="#intro-pipes-chaining">Section 1.2: Chained computation model</a>.
+</p>
+<p>
+    The default pipe is <strong>safe</strong> if and only if all the expressions are
+    at least scalars, it has no <code class="pipes">by</code> nor <code class="pipes">over</code> clauses and the <code class="pipes">every</code> clause
+    is ommitted or exactly <code class="pipes">every item</code>. This means in practice the pipe is safe if
+    it is only a stateless transformation item-by-item of the input stream. Example:
+</p>
+<pre class="pipes">* =&gt; id, name, value# * 3.14</pre>
+<p>
+    The default pipe is <strong>unsafe</strong> if and only if the output type is
+    <code class="pipes2">every &lt;n&gt; items</code> or it has some aggregation that forces the pipe to be unsafe
+    (e.g. <a href="#aggregation-smooth">smooth</a>). This means in practice the pipe is unsafe if it depends 
+    on some total order in the input, achieved running in a single node. This is true for 
+    item batch outputs and some aggregations. Please notice that unsafe pipes with no
+    safe or semi-safe pipes before must be preceeded with <a href="#pipe-unsafe"><code class="pipes2">@unsafe</code></a>. Example:
+</p>
+<pre class="pipes">* =&gt; @unsafe =&gt; avg(value#) every 10 items</pre>
+<pre class="pipes">* =&gt; @unsafe =&gt; smooth(value#) every 10 seconds</pre>
+<p>
+    The default pipe is <strong>semi-safe</strong> in all other cases, i.e., when the output
+    is by time period and it has no aggregation that makes it unsafe.
+</p>
+<pre class="pipes">* =&gt; avg(value#) every 10 seconds</pre>
 </div>
 </div><hr/>
 <div id="pipe-union" class="level-1">
-<h4 class="header">3.2.  <span class="pipes2">&lt;pipe&gt; union &lt;pipe&gt;</span> <span class="permalink">(<a href="#pipe-union">link</a>)</span></h4>
-<div class="text"><p><strong>Concatenates the outputs from two pipes with compatible output rates.</strong></p></div>
+<h4 class="header">3.2.  <span class="pipes2">&lt;pipe&gt; union &lt;pipe&gt;</span> <span class="permalink"><a href="#pipe-union">¶</a></span></h4>
+<div class="text"><p><strong>Concatenates the outputs from two pipes with compatible output rates.</strong></p><p>
+    The outputs from two pipes are compatible if they are same type. For example <code class="pipes">every 5 seconds</code>
+    is compatible with <code class="pipes">every 7 seconds</code>, but not with <code class="pipes">every 5 items</code>. In this case, the
+    resulting pipe would assume both outputs as its own output definition.
+</p>
+<p>
+    If both pipes' type definitions are also compatible, the resulting pipe will assume the first
+    pipe's types and field names. The field names must not be equal between the pipes, only their
+    types and order.
+</p>
+<p><strong>Example:</strong></p>
+<pre class="pipes">* =&gt; [
+    sum(value#) by host
+    union
+    'Total', sum(value#)
+]</pre>
+<p class="legend">
+    Computes the union of the sum grouped by host with the total sum. Note that the fields in the <code class="pipes">by</code> 
+    clause come first in the final order, that's why <code class="pipes">'Total'</code> comes first in the second pipe.
+</p>
+<p>
+    The example above would generate events like:
+</p>
+<pre class="json">{"timestamp":1399927869000, "host":"host1","sum_value":42.0}
+{"timestamp":1399927869000, "host":"host2","sum_value":43.0}
+{"timestamp":1399927869000, "host":"host3","sum_value":44.0}
+{"timestamp":1399927869000, "host":"Total","sum_value":129.0}</pre>
+</div>
 </div><hr/>
 <div id="pipe-product" class="level-1">
-<h4 class="header">3.3.  <span class="pipes2">&lt;pipe&gt; product &lt;pipe&gt;</span> <span class="permalink">(<a href="#pipe-product">link</a>)</span></h4>
-<div class="text"><p><strong>Computes the cartesian product of the outputs from two pipes with compatible output rates.</strong></p></div>
+<h4 class="header">3.3.  <span class="pipes2">&lt;pipe&gt; product &lt;pipe&gt;</span> <span class="permalink"><a href="#pipe-product">¶</a></span></h4>
+<div class="text"><p><strong>Computes the cartesian product of the outputs from two pipes with compatible output rates.</strong></p><p>
+    The outputs from two pipes are compatible if they are same type. For example <code class="pipes">every 5 seconds</code>
+    is compatible with <code class="pipes">every 7 seconds</code>, but not with <code class="pipes">every 5 items</code>. In this case, the
+    resulting pipe would assume both outputs as its own output definition.
+</p>
+<p>
+    The resulting pipe will have all the fields from both queries (some fields may be renamed to avoid
+    collision).
+</p>
+<p><strong>Examples:</strong></p>
+<pre class="pipes">* =&gt; [
+    sum(value#) by host
+    product
+    sum(value#) as total
+]</pre>
+<p class="legend">
+    Computes the sum grouped by host with a field containing the total sum in each group.
+</p>
+<p>
+    The example above would generate events like:
+</p>
+<pre class="json">{"timestamp":1399927869000, "host":"host1","sum_value":42.0, "total_sum":129.0}
+{"timestamp":1399927869000, "host":"host2","sum_value":43.0, "total_sum":129.0}
+{"timestamp":1399927869000, "host":"host3","sum_value":44.0, "total_sum":129.0}</pre>
+<p>
+    A more practical example:
+</p>
+<pre class="pipes">* 
+=&gt; count() by host
+=&gt; [ @yield * product avg(count) ]
+=&gt; @filter count &gt; avg_count</pre>
+<p class="legend">
+    Outputs all hosts that have an event count greater than the average of all hosts.
+</p>
+</div>
 </div><hr/>
 <div id="pipe-filter" class="level-1">
-<h4 class="header">3.4.  <span class="pipes2">@filter &lt;boolean condition&gt;</span> <span class="permalink">(<a href="#pipe-filter">link</a>)</span></h4>
-<div class="text"><p><strong>Filters the results from previous pipe.</strong></p></div>
+<h4 class="header">3.4.  <span class="pipes2">@filter &lt;boolean condition&gt;</span> <span class="permalink"><a href="#pipe-filter">¶</a></span></h4>
+<div class="text"><p><strong>Filters the results from previous pipe.</strong></p><p>
+    Filter pipe does not change any pipe metadata, it just repeats previous pipe info.
+</p>
+<p><strong>Examples:</strong></p>
+<pre class="pipes">* 
+=&gt; count() by host
+=&gt; @filter _ &gt; 10</pre>
+<p class="legend">
+    Filter only hosts that have event count greater than 10.
+</p>
+</div>
 </div><hr/>
 <div id="pipe-sort" class="level-1">
-<h4 class="header">3.5.  <span class="pipes2">@sort &lt;sortfield... expr&gt;</span> <span class="permalink">(<a href="#pipe-sort">link</a>)</span></h4>
-<div class="text"><p><strong>Sorts the results from previous pipe.</strong></p></div>
+<h4 class="header">3.5.  <span class="pipes2">@sort &lt;sortfield... expr&gt;</span> <span class="permalink"><a href="#pipe-sort">¶</a></span></h4>
+<div class="text"><p><strong>Sorts the results from previous pipe.</strong></p><p>
+    Sort pipe does not change any pipe metadata, it just repeats previous pipe info.
+    It also doesn't make any aggregation, it just outputs as soon as it finishes processing
+    input.
+</p>
+<p>
+    The expressions can be any <code class="pipes">comparable</code>, optionally followed by <code class="pipes">asc</code> or <code class="pipes">desc</code>
+    to make the sort order explicit.
+</p>
+<p><strong>Examples:</strong></p>
+<pre class="pipes">* 
+=&gt; count() by host
+=&gt; @sort _ desc, host</pre>
+<p class="legend">
+    Sorts the hosts by event count descending, and then by host (when the counts are equal).
+</p>
+</div>
 </div><hr/>
 <div id="pipe-top" class="level-1">
-<h4 class="header">3.6.  <span class="pipes2">@top &lt;number k&gt;, &lt;sortfield... expr&gt; [by &lt;object...&gt;]</span> <span class="permalink">(<a href="#pipe-top">link</a>)</span></h4>
-<div class="text"><p><strong>Sorts the results and gets the first k rows (possibly grouped) from previous pipe.</strong></p></div>
+<h4 class="header">3.6.  <span class="pipes2">@top &lt;number k&gt;, &lt;sortfield... expr&gt; [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-top">¶</a></span></h4>
+<div class="text"><p><strong>Sorts the results and gets the first k rows (possibly grouped) from previous pipe.</strong></p><p>
+    Top pipe does not change any pipe metadata, it just repeats previous pipe info.
+    It also doesn't make any aggregation, it just outputs as soon as it finishes processing
+    input.
+</p>
+<p>
+    The expressions can be any <code class="pipes">comparable</code>, optionally followed by <code class="pipes">asc</code> or <code class="pipes">desc</code>
+    to make the sort order explicit.
+</p>
+<p><strong>Examples:</strong></p>
+<pre class="pipes">* 
+=&gt; count() by host
+=&gt; @top 10, _ desc</pre>
+<p class="legend">
+    Outputs the 10 hosts with the most events.
+</p>
+<pre class="pipes">* 
+=&gt; count() by url, host
+=&gt; @top 10, _ desc by host</pre>
+<p class="legend">
+    Outputs, for every host, the 10 urls with the most events.
+</p>
+</div>
 </div><hr/>
 <div id="pipe-compress" class="level-1">
-<h4 class="header">3.7.  <span class="pipes2">@compress &lt;number k&gt;, [&lt;number k2&gt;,] &lt;number... y&gt; [by &lt;object...&gt;]</span> <span class="permalink">(<a href="#pipe-compress">link</a>)</span></h4>
-<div class="text"><p><strong>Compresses the result from the previous pipe to at most k (or k2) most important rows.</strong></p></div>
+<h4 class="header">3.7.  <span class="pipes2">@compress &lt;number k&gt;, [&lt;number k2&gt;,] &lt;number... y&gt; [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-compress">¶</a></span></h4>
+<div class="text"><p><strong>Compresses the result from the previous pipe to at most k most important rows.</strong></p><p>
+    Compress pipe keeps most of the previous pipe metadata, except for the output. It
+    outputs only <code class="pipes">at the end</code>. It is also an <strong>unsafe</strong> pipe (see 
+    <a href="#intro-pipes-chaining">Section 1.2: Chained computation model</a>).
+</p>
+<p>
+    The pipe can optionally be grouped. In this case, it may be useful to define a global
+    maximum to avoid that a group explosion causes the number of points to grow too much.
+</p>
+<p><strong>Examples:</strong></p>
+<pre class="pipes">* 
+=&gt; count() every minute
+=&gt; @compress 300, _</pre>
+<p class="legend">
+    Computes the event count every minute, but compress it to the 300 most important points at
+    end of the query.
+</p>
+<pre class="pipes">* 
+=&gt; count() by host every minute
+=&gt; @compress 300, 1000, _ by host</pre>
+<p class="legend">
+    Computes the event count by host every minute, but compress it to each host's 300 most important 
+    points at end of the query. Also limits to output at most 1000 points globally (even if there are 
+    4 hosts or more).
+</p>
+</div>
 </div><hr/>
 <div id="pipe-yield" class="level-1">
-<h4 class="header">3.8.  <span class="pipes2">@yield [&lt;object expr&gt;]</span> <span class="permalink">(<a href="#pipe-yield">link</a>)</span></h4>
-<div class="text"><p><strong>Extracts one field of the stream to be the output event.</strong></p></div>
+<h4 class="header">3.8.  <span class="pipes2">@yield [&lt;object expr&gt;]</span> <span class="permalink"><a href="#pipe-yield">¶</a></span></h4>
+<div class="text"><p><strong>Extracts one field of the stream to be the output event.</strong></p><p>
+    If the expression is not defined, it is assumed to be <code class="pipes">_</code>.
+</p>
+<p>
+    If the expression type is <code class="pipes">row</code> and it has metadata, the pipe assumes the type's metadata.
+    See <code class="pipes">intro-expression-rowmeta</code> for more information.
+</p>
+<p><strong>Examples:</strong></p>
+<pre class="pipes">* 
+=&gt; name:regex(r'^(?&lt;first&gt;\w+)( \w+)* (?&lt;last&gt;\w+)$') as name
+=&gt; @yield name</pre>
+<p class="legend">Yields an event with the fields <code class="pipes">first</code> and <code class="pipes">last</code>.</p>
+</div>
 </div><hr/>
 <div id="pipe-latest" class="level-1">
-<h4 class="header">3.9.  <span class="pipes2">@latest</span> <span class="permalink">(<a href="#pipe-latest">link</a>)</span></h4>
-<div class="text"><p><strong>Keeps the latest batch of input events and output it at the end.</strong></p></div>
+<h4 class="header">3.9.  <span class="pipes2">@latest</span> <span class="permalink"><a href="#pipe-latest">¶</a></span></h4>
+<div class="text"><p><strong>Keeps the latest batch of input events and output it at the end.</strong></p><p>
+    This pipe is a convenience to output only the latest batch of events with the output 
+    <code class="pipes">at the end</code>. This concept of item batch doesn't exist in the syntax, so it would
+    be harder to write queries that are only interested in the latest value for each group,
+    for example. They are especially useful when replaying events in the past for a graph
+    that only shows the latest value.
+</p>
+<p><strong>Examples:</strong></p>
+<pre class="pipes">* 
+=&gt; count() by host
+=&gt; @latest</pre>
+<p class="legend">Outputs only the latest batch of counts by host at the end of the execution.</p>
+</div>
 </div><hr/>
 <div id="pipe-unsafe" class="level-1">
-<h4 class="header">3.10.  <span class="pipes2">@unsafe</span> <span class="permalink">(<a href="#pipe-unsafe">link</a>)</span></h4>
-<div class="text"><p><strong>Marks that any pipe executed after this must run in a non-distributed environment.</strong></p></div>
+<h4 class="header">3.10.  <span class="pipes2">@unsafe</span> <span class="permalink"><a href="#pipe-unsafe">¶</a></span></h4>
+<div class="text"><p><strong>Marks that any pipe executed after this must run in a non-distributed environment.</strong></p><p>
+    The engine forces that each <strong>unsafe</strong> pipe must be preceeded with a <strong>safe</strong> 
+    or <strong>semi-safe</strong> pipe. It is recommended to avoid excessive communication between
+    nodes. When you really must write a query that breaks this rule, the unsafe pipe must be preceeded
+    with this pipe, that is in fact an empty pipe that forces the pipe split, making everything
+    after it to run in the reduce node. For more information, see <a href="#intro-pipes-chaining">Section 1.2: Chained computation model</a>.
+</p>
+<p><strong>Examples:</strong></p>
+<pre class="pipes">* 
+=&gt; @unsafe
+=&gt; count() over all every item</pre>
+<p class="legend">Outputs the total count of events since the beginning of the query every time an item arrives.</p>
+</div>
 </div><hr/>
 <div id="chapter-operators" class="level-0">
-<h2 class="header">4. Operators <span class="pipes2"></span> <span class="permalink">(<a href="#chapter-operators">link</a>)</span></h2>
+<h2 class="header">4. Operators <span class="pipes2"></span> <span class="permalink"><a href="#chapter-operators">¶</a></span></h2>
 <div class="text"><p><strong></strong></p><p>
     Operators are elements of syntax that allows simple manipulation of scalar and aggregation values.
 </p>
@@ -2908,7 +3223,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="operator-number" class="level-1">
-<h4 class="header">4.1.  <span class="pipes2">&lt;object&gt;# → &lt;number&gt;</span> <span class="permalink">(<a href="#operator-number">link</a>)</span></h4>
+<h4 class="header">4.1.  <span class="pipes2">&lt;object&gt;# → &lt;number&gt;</span> <span class="permalink"><a href="#operator-number">¶</a></span></h4>
 <div class="text"><p><strong>Coerces the expression to number. Shorthand to <a href="#scalar-number"><code class="pipes2">&lt;object&gt;:number() → &lt;number&gt;</code></a>.</strong></p><p>The expression <code class="pipes">a#</code> is equivalent to <code class="pipes">number(a)</code>.</p>
 <p>
     <strong>Example:</strong>
@@ -2918,7 +3233,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="operator-string" class="level-1">
-<h4 class="header">4.2.  <span class="pipes2">&lt;object&gt;$ → &lt;string&gt;</span> <span class="permalink">(<a href="#operator-string">link</a>)</span></h4>
+<h4 class="header">4.2.  <span class="pipes2">&lt;object&gt;$ → &lt;string&gt;</span> <span class="permalink"><a href="#operator-string">¶</a></span></h4>
 <div class="text"><p><strong>Coerces the expression to string. Shorthand to <a href="#scalar-string"><code class="pipes2">&lt;object&gt;:string() → &lt;string&gt;</code></a>.</strong></p><p>The expression <code class="pipes">a$</code> is equivalent to <code class="pipes">string(a)</code>.</p>
 <p>
     <strong>Example:</strong>
@@ -2928,102 +3243,102 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="operator-add-number" class="level-1">
-<h4 class="header">4.3.  <span class="pipes2">&lt;number&gt; + &lt;number&gt; → &lt;number&gt;</span> <span class="permalink">(<a href="#operator-add-number">link</a>)</span></h4>
+<h4 class="header">4.3.  <span class="pipes2">&lt;number&gt; + &lt;number&gt; → &lt;number&gt;</span> <span class="permalink"><a href="#operator-add-number">¶</a></span></h4>
 <div class="text"><p><strong>Adds two numbers.</strong></p><p>The expression <code class="pipes">a+b</code> is equivalent to <code class="pipes">.add(a, b)</code>.</p>
 </div>
 </div><hr/>
 <div id="operator-add-string" class="level-1">
-<h4 class="header">4.4.  <span class="pipes2">&lt;string&gt; + &lt;string&gt; → &lt;string&gt;</span> <span class="permalink">(<a href="#operator-add-string">link</a>)</span></h4>
+<h4 class="header">4.4.  <span class="pipes2">&lt;string&gt; + &lt;string&gt; → &lt;string&gt;</span> <span class="permalink"><a href="#operator-add-string">¶</a></span></h4>
 <div class="text"><p><strong>Concatenates two strings.</strong></p><p>The expression <code class="pipes">a+b</code> is equivalent to <code class="pipes">.add(a, b)</code>.</p>
 </div>
 </div><hr/>
 <div id="operator-sub" class="level-1">
-<h4 class="header">4.5.  <span class="pipes2">&lt;number&gt; - &lt;number&gt; → &lt;number&gt;</span> <span class="permalink">(<a href="#operator-sub">link</a>)</span></h4>
+<h4 class="header">4.5.  <span class="pipes2">&lt;number&gt; - &lt;number&gt; → &lt;number&gt;</span> <span class="permalink"><a href="#operator-sub">¶</a></span></h4>
 <div class="text"><p><strong>Subtracts one number from another.</strong></p><p>The expression <code class="pipes">a-b</code> is equivalent to <code class="pipes">.sub(a, b)</code>.</p>
 </div>
 </div><hr/>
 <div id="operator-mul" class="level-1">
-<h4 class="header">4.6.  <span class="pipes2">&lt;number&gt; * &lt;number&gt; → &lt;number&gt;</span> <span class="permalink">(<a href="#operator-mul">link</a>)</span></h4>
+<h4 class="header">4.6.  <span class="pipes2">&lt;number&gt; * &lt;number&gt; → &lt;number&gt;</span> <span class="permalink"><a href="#operator-mul">¶</a></span></h4>
 <div class="text"><p><strong>Multiplies two numbers.</strong></p><p>The expression <code class="pipes">a*b</code> is equivalent to <code class="pipes">.mul(a, b)</code>.</p>
 </div>
 </div><hr/>
 <div id="operator-div" class="level-1">
-<h4 class="header">4.7.  <span class="pipes2">&lt;number&gt; / &lt;number&gt; → &lt;number&gt;</span> <span class="permalink">(<a href="#operator-div">link</a>)</span></h4>
+<h4 class="header">4.7.  <span class="pipes2">&lt;number&gt; / &lt;number&gt; → &lt;number&gt;</span> <span class="permalink"><a href="#operator-div">¶</a></span></h4>
 <div class="text"><p><strong>Divides one number by another (float division).</strong></p><p>The expression <code class="pipes">a/b</code> is equivalent to <code class="pipes">.div(a, b)</code>.</p>
 </div>
 </div><hr/>
 <div id="operator-intdiv" class="level-1">
-<h4 class="header">4.8.  <span class="pipes2">&lt;number&gt; // &lt;number&gt; → &lt;number&gt;</span> <span class="permalink">(<a href="#operator-intdiv">link</a>)</span></h4>
+<h4 class="header">4.8.  <span class="pipes2">&lt;number&gt; // &lt;number&gt; → &lt;number&gt;</span> <span class="permalink"><a href="#operator-intdiv">¶</a></span></h4>
 <div class="text"><p><strong>Divides one number by another (integer division).</strong></p><p>The expression <code class="pipes">a//b</code> is equivalent to <code class="pipes">.intdiv(a, b)</code>.</p>
 </div>
 </div><hr/>
 <div id="operator-pow" class="level-1">
-<h4 class="header">4.9.  <span class="pipes2">&lt;number&gt; ** &lt;number&gt; → &lt;number&gt;</span> <span class="permalink">(<a href="#operator-pow">link</a>)</span></h4>
+<h4 class="header">4.9.  <span class="pipes2">&lt;number&gt; ** &lt;number&gt; → &lt;number&gt;</span> <span class="permalink"><a href="#operator-pow">¶</a></span></h4>
 <div class="text"><p><strong>Raises one number to another's power.</strong></p><p>The expression <code class="pipes">a**b</code> is equivalent to <code class="pipes">.pow(a, b)</code> or even <code class="pipes">pow(a, b)</code> .</p>
 </div>
 </div><hr/>
 <div id="operator-mod" class="level-1">
-<h4 class="header">4.10.  <span class="pipes2">&lt;number&gt; % &lt;number&gt; → &lt;number&gt;</span> <span class="permalink">(<a href="#operator-mod">link</a>)</span></h4>
+<h4 class="header">4.10.  <span class="pipes2">&lt;number&gt; % &lt;number&gt; → &lt;number&gt;</span> <span class="permalink"><a href="#operator-mod">¶</a></span></h4>
 <div class="text"><p><strong>Returns the rest of the division of one number by another.</strong></p><p>The expression <code class="pipes">a%b</code> is equivalent to <code class="pipes">.mod(a, b)</code>.</p>
 </div>
 </div><hr/>
 <div id="operator-neg" class="level-1">
-<h4 class="header">4.11.  <span class="pipes2">-&lt;number&gt; → &lt;number&gt;</span> <span class="permalink">(<a href="#operator-neg">link</a>)</span></h4>
+<h4 class="header">4.11.  <span class="pipes2">-&lt;number&gt; → &lt;number&gt;</span> <span class="permalink"><a href="#operator-neg">¶</a></span></h4>
 <div class="text"><p><strong>Negates one number.</strong></p><p>The expression <code class="pipes">-a</code> is equivalent to <code class="pipes">.neg(a)</code>.</p>
 </div>
 </div><hr/>
 <div id="operator-and" class="level-1">
-<h4 class="header">4.12.  <span class="pipes2">&lt;boolean&gt; and &lt;boolean&gt; → &lt;boolean&gt;</span> <span class="permalink">(<a href="#operator-and">link</a>)</span></h4>
+<h4 class="header">4.12.  <span class="pipes2">&lt;boolean&gt; and &lt;boolean&gt; → &lt;boolean&gt;</span> <span class="permalink"><a href="#operator-and">¶</a></span></h4>
 <div class="text"><p><strong>Returns the logical AND of two booleans.</strong></p><p>The expression <code class="pipes">a and b</code> is equivalent to <code class="pipes">a&amp;b</code>, <code class="pipes">a&amp;&amp;b</code> and <code class="pipes">.and(a, b)</code>.</p>
 </div>
 </div><hr/>
 <div id="operator-or" class="level-1">
-<h4 class="header">4.13.  <span class="pipes2">&lt;boolean&gt; or &lt;boolean&gt; → &lt;boolean&gt;</span> <span class="permalink">(<a href="#operator-or">link</a>)</span></h4>
+<h4 class="header">4.13.  <span class="pipes2">&lt;boolean&gt; or &lt;boolean&gt; → &lt;boolean&gt;</span> <span class="permalink"><a href="#operator-or">¶</a></span></h4>
 <div class="text"><p><strong>Returns the logical OR of two booleans.</strong></p><p>The expression <code class="pipes">a or b</code> is equivalent to <code class="pipes">a|b</code>, <code class="pipes">a||b</code> and <code class="pipes">.or(a, b)</code>.</p>
 </div>
 </div><hr/>
 <div id="operator-xor" class="level-1">
-<h4 class="header">4.14.  <span class="pipes2">&lt;boolean&gt; xor &lt;boolean&gt; → &lt;boolean&gt;</span> <span class="permalink">(<a href="#operator-xor">link</a>)</span></h4>
+<h4 class="header">4.14.  <span class="pipes2">&lt;boolean&gt; xor &lt;boolean&gt; → &lt;boolean&gt;</span> <span class="permalink"><a href="#operator-xor">¶</a></span></h4>
 <div class="text"><p><strong>Returns the logical XOR of two booleans.</strong></p><p>The expression <code class="pipes">a xor b</code> is equivalent to <code class="pipes">a^b</code> and <code class="pipes">.xor(a, b)</code>.</p>
 </div>
 </div><hr/>
 <div id="operator-not" class="level-1">
-<h4 class="header">4.15.  <span class="pipes2">not &lt;boolean&gt; → &lt;boolean&gt;</span> <span class="permalink">(<a href="#operator-not">link</a>)</span></h4>
+<h4 class="header">4.15.  <span class="pipes2">not &lt;boolean&gt; → &lt;boolean&gt;</span> <span class="permalink"><a href="#operator-not">¶</a></span></h4>
 <div class="text"><p><strong>Returns the logical NOT of a boolean.</strong></p><p>The expression <code class="pipes">not a</code> is equivalent to <code class="pipes">!a</code> and <code class="pipes">.not(a)</code>.</p>
 </div>
 </div><hr/>
 <div id="operator-eq" class="level-1">
-<h4 class="header">4.16.  <span class="pipes2">&lt;object&gt; == &lt;object&gt; → &lt;boolean&gt;</span> <span class="permalink">(<a href="#operator-eq">link</a>)</span></h4>
+<h4 class="header">4.16.  <span class="pipes2">&lt;object&gt; == &lt;object&gt; → &lt;boolean&gt;</span> <span class="permalink"><a href="#operator-eq">¶</a></span></h4>
 <div class="text"><p><strong>Checks whether two objects are equal.</strong></p><p>The expression <code class="pipes">a==b</code> is equivalent to <code class="pipes">.eq(a, b)</code>.</p>
 </div>
 </div><hr/>
 <div id="operator-neq" class="level-1">
-<h4 class="header">4.17.  <span class="pipes2">&lt;object&gt; != &lt;object&gt; → &lt;boolean&gt;</span> <span class="permalink">(<a href="#operator-neq">link</a>)</span></h4>
+<h4 class="header">4.17.  <span class="pipes2">&lt;object&gt; != &lt;object&gt; → &lt;boolean&gt;</span> <span class="permalink"><a href="#operator-neq">¶</a></span></h4>
 <div class="text"><p><strong>Checks whether two objects are not equal.</strong></p><p>The expression <code class="pipes">a!=b</code> is equivalent to <code class="pipes">.neq(a, b)</code>.</p>
 </div>
 </div><hr/>
 <div id="operator-lt" class="level-1">
-<h4 class="header">4.18.  <span class="pipes2">&lt;comparable&gt; &lt; &lt;comparable&gt; → &lt;boolean&gt;</span> <span class="permalink">(<a href="#operator-lt">link</a>)</span></h4>
+<h4 class="header">4.18.  <span class="pipes2">&lt;comparable&gt; &lt; &lt;comparable&gt; → &lt;boolean&gt;</span> <span class="permalink"><a href="#operator-lt">¶</a></span></h4>
 <div class="text"><p><strong>Checks whether the left operand compares lesser than the right one.</strong></p><p>The expression <code class="pipes">a&lt;b</code> is equivalent to <code class="pipes">.lt(a, b)</code>.</p>
 </div>
 </div><hr/>
 <div id="operator-lt-eq" class="level-1">
-<h4 class="header">4.19.  <span class="pipes2">&lt;comparable&gt; &lt;= &lt;comparable&gt; → &lt;boolean&gt;</span> <span class="permalink">(<a href="#operator-lt-eq">link</a>)</span></h4>
+<h4 class="header">4.19.  <span class="pipes2">&lt;comparable&gt; &lt;= &lt;comparable&gt; → &lt;boolean&gt;</span> <span class="permalink"><a href="#operator-lt-eq">¶</a></span></h4>
 <div class="text"><p><strong>Checks whether the left operand compares lesser than or equal to the right one.</strong></p><p>The expression <code class="pipes">a&lt;=b</code> is equivalent to <code class="pipes">.lteq(a, b)</code>.</p>
 </div>
 </div><hr/>
 <div id="operator-gt" class="level-1">
-<h4 class="header">4.20.  <span class="pipes2">&lt;comparable&gt; &gt; &lt;comparable&gt; → &lt;boolean&gt;</span> <span class="permalink">(<a href="#operator-gt">link</a>)</span></h4>
+<h4 class="header">4.20.  <span class="pipes2">&lt;comparable&gt; &gt; &lt;comparable&gt; → &lt;boolean&gt;</span> <span class="permalink"><a href="#operator-gt">¶</a></span></h4>
 <div class="text"><p><strong>Checks whether the left operand compares greater than the right one.</strong></p><p>The expression <code class="pipes">a&gt;b</code> is equivalent to <code class="pipes">.gt(a, b)</code>.</p>
 </div>
 </div><hr/>
 <div id="operator-gt-eq" class="level-1">
-<h4 class="header">4.21.  <span class="pipes2">&lt;comparable&gt; &gt;= &lt;comparable&gt; → &lt;boolean&gt;</span> <span class="permalink">(<a href="#operator-gt-eq">link</a>)</span></h4>
+<h4 class="header">4.21.  <span class="pipes2">&lt;comparable&gt; &gt;= &lt;comparable&gt; → &lt;boolean&gt;</span> <span class="permalink"><a href="#operator-gt-eq">¶</a></span></h4>
 <div class="text"><p><strong>Checks whether the left operand compares greater than or equal to the right one.</strong></p><p>The expression <code class="pipes">a&gt;=b</code> is equivalent to <code class="pipes">.gteq(a, b)</code>.</p>
 </div>
 </div><hr/>
 <div id="operator-peek" class="level-1">
-<h4 class="header">4.22.  <span class="pipes2">&lt;row&gt; -&gt; &lt;identifier&gt; → &lt;object&gt;</span> <span class="permalink">(<a href="#operator-peek">link</a>)</span></h4>
+<h4 class="header">4.22.  <span class="pipes2">&lt;row&gt; -&gt; &lt;identifier&gt; → &lt;object&gt;</span> <span class="permalink"><a href="#operator-peek">¶</a></span></h4>
 <div class="text"><p><strong>Extracts a field information from a strongly-typed row value.</strong></p><p>
     The expression <code class="pipes">a-&gt;identifier</code> cannot be represented as method because the method <code class="pipes">.peek()</code> requires a
     direct instance of java.lang.String.
@@ -3038,7 +3353,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="operator-coalesce" class="level-1">
-<h4 class="header">4.23.  <span class="pipes2">&lt;object&gt; ?? &lt;object&gt; → &lt;object&gt;</span> <span class="permalink">(<a href="#operator-coalesce">link</a>)</span></h4>
+<h4 class="header">4.23.  <span class="pipes2">&lt;object&gt; ?? &lt;object&gt; → &lt;object&gt;</span> <span class="permalink"><a href="#operator-coalesce">¶</a></span></h4>
 <div class="text"><p><strong>Returns the first if it is not null; otherwise, returns the second.</strong></p><p>The expression <code class="pipes">a??b</code> is equivalent to <code class="pipes">.coalesce(a, b)</code>.</p>
 <p>
     <strong>Example:</strong>
@@ -3048,7 +3363,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="operator-iif" class="level-1">
-<h4 class="header">4.24.  <span class="pipes2">&lt;boolean&gt; ? &lt;object&gt;, &lt;object&gt; → &lt;object&gt;</span> <span class="permalink">(<a href="#operator-iif">link</a>)</span></h4>
+<h4 class="header">4.24.  <span class="pipes2">&lt;boolean&gt; ? &lt;object&gt;, &lt;object&gt; → &lt;object&gt;</span> <span class="permalink"><a href="#operator-iif">¶</a></span></h4>
 <div class="text"><p><strong>If the condition is true, returns the first object; otherwise, returns the second.</strong></p><p>The expression <code class="pipes">a?b,c</code> is equivalent to <code class="pipes">.iif(a, b, c)</code>.</p>
 <p>
     Please note this is the only right-associative operator. It is so to allow constructions like:
@@ -3066,131 +3381,131 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="chapter-scalars" class="level-0">
-<h2 class="header">5. Scalar Functions <span class="pipes2"></span> <span class="permalink">(<a href="#chapter-scalars">link</a>)</span></h2>
+<h2 class="header">5. Scalar Functions <span class="pipes2"></span> <span class="permalink"><a href="#chapter-scalars">¶</a></span></h2>
 <div class="text"><p><strong></strong></p></div>
 </div><hr/>
 <div id="scalar-abs" class="level-1">
-<h4 class="header">5.1.  <span class="pipes2">&lt;number&gt;:abs() → &lt;number&gt;</span> <span class="permalink">(<a href="#scalar-abs">link</a>)</span></h4>
+<h4 class="header">5.1.  <span class="pipes2">&lt;number&gt;:abs() → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-abs">¶</a></span></h4>
 <div class="text"><p><strong>Calculates the absolute value of a number.</strong></p></div>
 </div><hr/>
 <div id="scalar-acos" class="level-1">
-<h4 class="header">5.2.  <span class="pipes2">&lt;number&gt;:acos() → &lt;number&gt;</span> <span class="permalink">(<a href="#scalar-acos">link</a>)</span></h4>
+<h4 class="header">5.2.  <span class="pipes2">&lt;number&gt;:acos() → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-acos">¶</a></span></h4>
 <div class="text"><p><strong>Returns the arc cosine of the argument to an angle in radians.</strong></p></div>
 </div><hr/>
 <div id="scalar-asin" class="level-1">
-<h4 class="header">5.3.  <span class="pipes2">&lt;number&gt;:asin() → &lt;number&gt;</span> <span class="permalink">(<a href="#scalar-asin">link</a>)</span></h4>
+<h4 class="header">5.3.  <span class="pipes2">&lt;number&gt;:asin() → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-asin">¶</a></span></h4>
 <div class="text"><p><strong>Returns the arc sine of the argument to an angle in radians.</strong></p></div>
 </div><hr/>
 <div id="scalar-atan" class="level-1">
-<h4 class="header">5.4.  <span class="pipes2">&lt;number&gt;:atan() → &lt;number&gt;</span> <span class="permalink">(<a href="#scalar-atan">link</a>)</span></h4>
+<h4 class="header">5.4.  <span class="pipes2">&lt;number&gt;:atan() → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-atan">¶</a></span></h4>
 <div class="text"><p><strong>Returns the arc tangent of the argument to an angle in radians.</strong></p></div>
 </div><hr/>
 <div id="scalar-bytes" class="level-1">
-<h4 class="header">5.5.  <span class="pipes2">&lt;number&gt;:bytes([&lt;number precision&gt;]) → &lt;string&gt;</span> <span class="permalink">(<a href="#scalar-bytes">link</a>)</span></h4>
+<h4 class="header">5.5.  <span class="pipes2">&lt;number&gt;:bytes([&lt;number precision&gt;]) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-bytes">¶</a></span></h4>
 <div class="text"><p><strong>Formats a number as the best possible byte multiple.</strong></p></div>
 </div><hr/>
 <div id="scalar-ceil" class="level-1">
-<h4 class="header">5.6.  <span class="pipes2">&lt;number&gt;:ceil([&lt;number precision&gt;]) → &lt;number&gt;</span> <span class="permalink">(<a href="#scalar-ceil">link</a>)</span></h4>
+<h4 class="header">5.6.  <span class="pipes2">&lt;number&gt;:ceil([&lt;number precision&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-ceil">¶</a></span></h4>
 <div class="text"><p><strong>Returns the smallest number that is greatest than or equal to the argument.</strong></p></div>
 </div><hr/>
 <div id="scalar-cos" class="level-1">
-<h4 class="header">5.7.  <span class="pipes2">&lt;number&gt;:cos() → &lt;number&gt;</span> <span class="permalink">(<a href="#scalar-cos">link</a>)</span></h4>
+<h4 class="header">5.7.  <span class="pipes2">&lt;number&gt;:cos() → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-cos">¶</a></span></h4>
 <div class="text"><p><strong>Returns the cosine of an angle in radians.</strong></p></div>
 </div><hr/>
 <div id="scalar-dateadd" class="level-1">
-<h4 class="header">5.8.  <span class="pipes2">&lt;number&gt;:dateadd(&lt;number amount&gt;, &lt;string unit&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span> <span class="permalink">(<a href="#scalar-dateadd">link</a>)</span></h4>
+<h4 class="header">5.8.  <span class="pipes2">&lt;number&gt;:dateadd(&lt;number amount&gt;, &lt;string unit&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-dateadd">¶</a></span></h4>
 <div class="text"><p><strong>Adds &lt;amount&gt; &lt;unit&gt;s of date to timestamp argument.</strong></p></div>
 </div><hr/>
 <div id="scalar-datefloor" class="level-1">
-<h4 class="header">5.9.  <span class="pipes2">&lt;number&gt;:datefloor(&lt;number amount&gt;, &lt;string unit&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span> <span class="permalink">(<a href="#scalar-datefloor">link</a>)</span></h4>
+<h4 class="header">5.9.  <span class="pipes2">&lt;number&gt;:datefloor(&lt;number amount&gt;, &lt;string unit&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-datefloor">¶</a></span></h4>
 <div class="text"><p><strong>Rounds timestamp down to the nearest date that is divisible by &lt;amount&gt; &lt;unit&gt;s.</strong></p></div>
 </div><hr/>
 <div id="scalar-dateformat" class="level-1">
-<h4 class="header">5.10.  <span class="pipes2">&lt;number&gt;:dateformat([&lt;string format&gt;], [&lt;string tz&gt;]) → &lt;string&gt;</span> <span class="permalink">(<a href="#scalar-dateformat">link</a>)</span></h4>
+<h4 class="header">5.10.  <span class="pipes2">&lt;number&gt;:dateformat([&lt;string format&gt;], [&lt;string tz&gt;]) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-dateformat">¶</a></span></h4>
 <div class="text"><p><strong>Formats timestamp using specified format</strong></p></div>
 </div><hr/>
 <div id="scalar-datesub" class="level-1">
-<h4 class="header">5.11.  <span class="pipes2">&lt;number&gt;:datesub(&lt;number amount&gt;, &lt;string unit&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span> <span class="permalink">(<a href="#scalar-datesub">link</a>)</span></h4>
+<h4 class="header">5.11.  <span class="pipes2">&lt;number&gt;:datesub(&lt;number amount&gt;, &lt;string unit&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-datesub">¶</a></span></h4>
 <div class="text"><p><strong>Sutracts &lt;amount&gt; &lt;unit&gt;s of date from timestamp argument.</strong></p></div>
 </div><hr/>
 <div id="scalar-exp" class="level-1">
-<h4 class="header">5.12.  <span class="pipes2">&lt;number&gt;:exp() → &lt;number&gt;</span> <span class="permalink">(<a href="#scalar-exp">link</a>)</span></h4>
+<h4 class="header">5.12.  <span class="pipes2">&lt;number&gt;:exp() → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-exp">¶</a></span></h4>
 <div class="text"><p><strong>Calculates the exponential of a number.</strong></p></div>
 </div><hr/>
 <div id="scalar-floor" class="level-1">
-<h4 class="header">5.13.  <span class="pipes2">&lt;number&gt;:floor([&lt;number precision&gt;]) → &lt;number&gt;</span> <span class="permalink">(<a href="#scalar-floor">link</a>)</span></h4>
+<h4 class="header">5.13.  <span class="pipes2">&lt;number&gt;:floor([&lt;number precision&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-floor">¶</a></span></h4>
 <div class="text"><p><strong>Returns the largest number that is lesser than or equal to the argument.</strong></p></div>
 </div><hr/>
 <div id="scalar-format" class="level-1">
-<h4 class="header">5.14.  <span class="pipes2">&lt;number&gt;:format([&lt;string format&gt;], [&lt;string locale&gt;]) → &lt;string&gt;</span> <span class="permalink">(<a href="#scalar-format">link</a>)</span></h4>
+<h4 class="header">5.14.  <span class="pipes2">&lt;number&gt;:format([&lt;string format&gt;], [&lt;string locale&gt;]) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-format">¶</a></span></h4>
 <div class="text"><p><strong>Formats a number according to format string and locale.</strong></p></div>
 </div><hr/>
 <div id="scalar-log" class="level-1">
-<h4 class="header">5.15.  <span class="pipes2">&lt;number&gt;:log([&lt;number base&gt;]) → &lt;number&gt;</span> <span class="permalink">(<a href="#scalar-log">link</a>)</span></h4>
+<h4 class="header">5.15.  <span class="pipes2">&lt;number&gt;:log([&lt;number base&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-log">¶</a></span></h4>
 <div class="text"><p><strong>Calculates the logarithm of a number.</strong></p></div>
 </div><hr/>
 <div id="scalar-pow" class="level-1">
-<h4 class="header">5.16.  <span class="pipes2">&lt;number&gt;:pow(&lt;number exp&gt;) → &lt;number&gt;</span> <span class="permalink">(<a href="#scalar-pow">link</a>)</span></h4>
+<h4 class="header">5.16.  <span class="pipes2">&lt;number&gt;:pow(&lt;number exp&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-pow">¶</a></span></h4>
 <div class="text"><p><strong>Raises one number to another.</strong></p></div>
 </div><hr/>
 <div id="scalar-round" class="level-1">
-<h4 class="header">5.17.  <span class="pipes2">&lt;number&gt;:round([&lt;number precision&gt;]) → &lt;number&gt;</span> <span class="permalink">(<a href="#scalar-round">link</a>)</span></h4>
+<h4 class="header">5.17.  <span class="pipes2">&lt;number&gt;:round([&lt;number precision&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-round">¶</a></span></h4>
 <div class="text"><p><strong>Rounds a number to &lt;precision&gt; decimal places.</strong></p></div>
 </div><hr/>
 <div id="scalar-select" class="level-1">
-<h4 class="header">5.18.  <span class="pipes2">&lt;number&gt;:select(&lt;object... list&gt;) → &lt;object&gt;</span> <span class="permalink">(<a href="#scalar-select">link</a>)</span></h4>
+<h4 class="header">5.18.  <span class="pipes2">&lt;number&gt;:select(&lt;object... list&gt;) → &lt;object&gt;</span> <span class="permalink"><a href="#scalar-select">¶</a></span></h4>
 <div class="text"><p><strong>Selects the ith element from a list of arguments. Or null if it doesn't exist.</strong></p></div>
 </div><hr/>
 <div id="scalar-sin" class="level-1">
-<h4 class="header">5.19.  <span class="pipes2">&lt;number&gt;:sin() → &lt;number&gt;</span> <span class="permalink">(<a href="#scalar-sin">link</a>)</span></h4>
+<h4 class="header">5.19.  <span class="pipes2">&lt;number&gt;:sin() → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-sin">¶</a></span></h4>
 <div class="text"><p><strong>Returns the sine of an angle in radians.</strong></p></div>
 </div><hr/>
 <div id="scalar-spanend" class="level-1">
-<h4 class="header">5.20.  <span class="pipes2">&lt;number&gt;:spanend(&lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span> <span class="permalink">(<a href="#scalar-spanend">link</a>)</span></h4>
+<h4 class="header">5.20.  <span class="pipes2">&lt;number&gt;:spanend(&lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-spanend">¶</a></span></h4>
 <div class="text"><p><strong>Calculates end timestamp of span based on target.</strong></p></div>
 </div><hr/>
 <div id="scalar-spanstart" class="level-1">
-<h4 class="header">5.21.  <span class="pipes2">&lt;number&gt;:spanstart(&lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span> <span class="permalink">(<a href="#scalar-spanstart">link</a>)</span></h4>
+<h4 class="header">5.21.  <span class="pipes2">&lt;number&gt;:spanstart(&lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-spanstart">¶</a></span></h4>
 <div class="text"><p><strong>Calculates start timestamp of span based on target.</strong></p></div>
 </div><hr/>
 <div id="scalar-tan" class="level-1">
-<h4 class="header">5.22.  <span class="pipes2">&lt;number&gt;:tan() → &lt;number&gt;</span> <span class="permalink">(<a href="#scalar-tan">link</a>)</span></h4>
+<h4 class="header">5.22.  <span class="pipes2">&lt;number&gt;:tan() → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-tan">¶</a></span></h4>
 <div class="text"><p><strong>Returns the tangent of an angle in radians.</strong></p></div>
 </div><hr/>
 <div id="scalar-boolean" class="level-1">
-<h4 class="header">5.23.  <span class="pipes2">&lt;object&gt;:boolean() → &lt;boolean&gt;</span> <span class="permalink">(<a href="#scalar-boolean">link</a>)</span></h4>
+<h4 class="header">5.23.  <span class="pipes2">&lt;object&gt;:boolean() → &lt;boolean&gt;</span> <span class="permalink"><a href="#scalar-boolean">¶</a></span></h4>
 <div class="text"><p><strong>Converts object to boolean.</strong></p></div>
 </div><hr/>
 <div id="scalar-decode" class="level-1">
-<h4 class="header">5.24.  <span class="pipes2">&lt;object&gt;:decode(&lt;object,object... pairs&gt;) → &lt;object&gt;</span> <span class="permalink">(<a href="#scalar-decode">link</a>)</span></h4>
+<h4 class="header">5.24.  <span class="pipes2">&lt;object&gt;:decode(&lt;object,object... pairs&gt;) → &lt;object&gt;</span> <span class="permalink"><a href="#scalar-decode">¶</a></span></h4>
 <div class="text"><p><strong>Transforms the parameter using the translation rules defined in &lt;pairs&gt;.</strong></p></div>
 </div><hr/>
 <div id="scalar-get" class="level-1">
-<h4 class="header">5.25.  <span class="pipes2">&lt;object&gt;:get(&lt;object... keys&gt;) → &lt;object&gt;</span> <span class="permalink">(<a href="#scalar-get">link</a>)</span></h4>
+<h4 class="header">5.25.  <span class="pipes2">&lt;object&gt;:get(&lt;object... keys&gt;) → &lt;object&gt;</span> <span class="permalink"><a href="#scalar-get">¶</a></span></h4>
 <div class="text"><p><strong>Much like property[keys]. Works for strings, containers and arrays.</strong></p></div>
 </div><hr/>
 <div id="scalar-indexin" class="level-1">
-<h4 class="header">5.26.  <span class="pipes2">&lt;object&gt;:indexin(&lt;object... list&gt;) → &lt;number&gt;</span> <span class="permalink">(<a href="#scalar-indexin">link</a>)</span></h4>
+<h4 class="header">5.26.  <span class="pipes2">&lt;object&gt;:indexin(&lt;object... list&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-indexin">¶</a></span></h4>
 <div class="text"><p><strong>Returns the first index of the value in &lt;list&gt;, or null if &lt;list&gt; does not contain it.</strong></p></div>
 </div><hr/>
 <div id="scalar-isin" class="level-1">
-<h4 class="header">5.27.  <span class="pipes2">&lt;object&gt;:isin(&lt;object... list&gt;) → &lt;boolean&gt;</span> <span class="permalink">(<a href="#scalar-isin">link</a>)</span></h4>
+<h4 class="header">5.27.  <span class="pipes2">&lt;object&gt;:isin(&lt;object... list&gt;) → &lt;boolean&gt;</span> <span class="permalink"><a href="#scalar-isin">¶</a></span></h4>
 <div class="text"><p><strong>Returns true if &lt;list&gt; contains the value, false otherwise.</strong></p></div>
 </div><hr/>
 <div id="scalar-json" class="level-1">
-<h4 class="header">5.28.  <span class="pipes2">&lt;object&gt;:json() → &lt;string&gt;</span> <span class="permalink">(<a href="#scalar-json">link</a>)</span></h4>
+<h4 class="header">5.28.  <span class="pipes2">&lt;object&gt;:json() → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-json">¶</a></span></h4>
 <div class="text"><p><strong>Converts the object to its JSON string representation.</strong></p></div>
 </div><hr/>
 <div id="scalar-keep" class="level-1">
-<h4 class="header">5.29.  <span class="pipes2">&lt;object&gt;:keep([&lt;number ttl&gt;]) → &lt;object&gt;</span> <span class="permalink">(<a href="#scalar-keep">link</a>)</span></h4>
+<h4 class="header">5.29.  <span class="pipes2">&lt;object&gt;:keep([&lt;number ttl&gt;]) → &lt;object&gt;</span> <span class="permalink"><a href="#scalar-keep">¶</a></span></h4>
 <div class="text"><p><strong>When used in a default pipe, delays or disable (if ttl not supplied or &lt; 0) inactive group removal.</strong></p></div>
 </div><hr/>
 <div id="scalar-len" class="level-1">
-<h4 class="header">5.30.  <span class="pipes2">&lt;object&gt;:len() → &lt;object&gt;</span> <span class="permalink">(<a href="#scalar-len">link</a>)</span></h4>
+<h4 class="header">5.30.  <span class="pipes2">&lt;object&gt;:len() → &lt;object&gt;</span> <span class="permalink"><a href="#scalar-len">¶</a></span></h4>
 <div class="text"><p><strong>Tries to get &lt;target&gt;'s size. Works for strings, containers and arrays.</strong></p></div>
 </div><hr/>
 <div id="scalar-number" class="level-1">
-<h4 class="header">5.31.  <span class="pipes2">&lt;object&gt;:number() → &lt;number&gt;</span> <span class="permalink">(<a href="#scalar-number">link</a>)</span></h4>
+<h4 class="header">5.31.  <span class="pipes2">&lt;object&gt;:number() → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-number">¶</a></span></h4>
 <div class="text"><p><strong>Converts object to number.</strong></p><p>
     <strong>Example:</strong>
 </p>
@@ -3199,11 +3514,11 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="scalar-object" class="level-1">
-<h4 class="header">5.32.  <span class="pipes2">&lt;object&gt;:object() → &lt;object&gt;</span> <span class="permalink">(<a href="#scalar-object">link</a>)</span></h4>
+<h4 class="header">5.32.  <span class="pipes2">&lt;object&gt;:object() → &lt;object&gt;</span> <span class="permalink"><a href="#scalar-object">¶</a></span></h4>
 <div class="text"><p><strong>Casts any object to its canonical object representation.</strong></p></div>
 </div><hr/>
 <div id="scalar-string" class="level-1">
-<h4 class="header">5.33.  <span class="pipes2">&lt;object&gt;:string() → &lt;string&gt;</span> <span class="permalink">(<a href="#scalar-string">link</a>)</span></h4>
+<h4 class="header">5.33.  <span class="pipes2">&lt;object&gt;:string() → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-string">¶</a></span></h4>
 <div class="text"><p><strong>Converts object to string.</strong></p><p>
     <strong>Example:</strong>
 </p>
@@ -3212,39 +3527,39 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="scalar-contains" class="level-1">
-<h4 class="header">5.34.  <span class="pipes2">&lt;string&gt;:contains(&lt;string&gt;) → &lt;boolean&gt;</span> <span class="permalink">(<a href="#scalar-contains">link</a>)</span></h4>
+<h4 class="header">5.34.  <span class="pipes2">&lt;string&gt;:contains(&lt;string&gt;) → &lt;boolean&gt;</span> <span class="permalink"><a href="#scalar-contains">¶</a></span></h4>
 <div class="text"><p><strong>Returns whether the target string contains the argument.</strong></p></div>
 </div><hr/>
 <div id="scalar-dateparse" class="level-1">
-<h4 class="header">5.35.  <span class="pipes2">&lt;string&gt;:dateparse([&lt;string format&gt;], [&lt;string tz&gt;]) → &lt;number&gt;</span> <span class="permalink">(<a href="#scalar-dateparse">link</a>)</span></h4>
+<h4 class="header">5.35.  <span class="pipes2">&lt;string&gt;:dateparse([&lt;string format&gt;], [&lt;string tz&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-dateparse">¶</a></span></h4>
 <div class="text"><p><strong>Parses timestamp using specified format</strong></p></div>
 </div><hr/>
 <div id="scalar-endswith" class="level-1">
-<h4 class="header">5.36.  <span class="pipes2">&lt;string&gt;:endswith(&lt;string&gt;) → &lt;boolean&gt;</span> <span class="permalink">(<a href="#scalar-endswith">link</a>)</span></h4>
+<h4 class="header">5.36.  <span class="pipes2">&lt;string&gt;:endswith(&lt;string&gt;) → &lt;boolean&gt;</span> <span class="permalink"><a href="#scalar-endswith">¶</a></span></h4>
 <div class="text"><p><strong>Returns whether the target string ends with the argument.</strong></p></div>
 </div><hr/>
 <div id="scalar-stringformat" class="level-1">
-<h4 class="header">5.37.  <span class="pipes2">&lt;string&gt;:format(&lt;object... args&gt;) → &lt;string&gt;</span> <span class="permalink">(<a href="#scalar-stringformat">link</a>)</span></h4>
+<h4 class="header">5.37.  <span class="pipes2">&lt;string&gt;:format(&lt;object... args&gt;) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-stringformat">¶</a></span></h4>
 <div class="text"><p><strong>Uses the target string as format to arguments.</strong></p></div>
 </div><hr/>
 <div id="scalar-hlleval" class="level-1">
-<h4 class="header">5.38.  <span class="pipes2">&lt;string&gt;:hlleval() → &lt;number&gt;</span> <span class="permalink">(<a href="#scalar-hlleval">link</a>)</span></h4>
+<h4 class="header">5.38.  <span class="pipes2">&lt;string&gt;:hlleval() → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-hlleval">¶</a></span></h4>
 <div class="text"><p><strong>Evaluates compressed base64 HyperLogLog data.</strong></p></div>
 </div><hr/>
 <div id="scalar-indexof" class="level-1">
-<h4 class="header">5.39.  <span class="pipes2">&lt;string&gt;:indexof(&lt;string s&gt;, [&lt;number fromIndex&gt;]) → &lt;boolean&gt;</span> <span class="permalink">(<a href="#scalar-indexof">link</a>)</span></h4>
+<h4 class="header">5.39.  <span class="pipes2">&lt;string&gt;:indexof(&lt;string s&gt;, [&lt;number fromIndex&gt;]) → &lt;boolean&gt;</span> <span class="permalink"><a href="#scalar-indexof">¶</a></span></h4>
 <div class="text"><p><strong>Returns the index of position of &lt;s&gt; inside the target string. Returns null otherwise.</strong></p></div>
 </div><hr/>
 <div id="scalar-lower" class="level-1">
-<h4 class="header">5.40.  <span class="pipes2">&lt;string&gt;:lower() → &lt;string&gt;</span> <span class="permalink">(<a href="#scalar-lower">link</a>)</span></h4>
+<h4 class="header">5.40.  <span class="pipes2">&lt;string&gt;:lower() → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-lower">¶</a></span></h4>
 <div class="text"><p><strong>Converts string to lowercase.</strong></p></div>
 </div><hr/>
 <div id="scalar-parse" class="level-1">
-<h4 class="header">5.41.  <span class="pipes2">&lt;string&gt;:parse([&lt;string format&gt;], [&lt;string locale&gt;]) → &lt;number&gt;</span> <span class="permalink">(<a href="#scalar-parse">link</a>)</span></h4>
+<h4 class="header">5.41.  <span class="pipes2">&lt;string&gt;:parse([&lt;string format&gt;], [&lt;string locale&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-parse">¶</a></span></h4>
 <div class="text"><p><strong>Parses a number according to format string and locale.</strong></p></div>
 </div><hr/>
 <div id="scalar-regex" class="level-1">
-<h4 class="header">5.42.  <span class="pipes2">&lt;string&gt;:regex(&lt;string regex&gt;) → &lt;row&gt;</span> <span class="permalink">(<a href="#scalar-regex">link</a>)</span></h4>
+<h4 class="header">5.42.  <span class="pipes2">&lt;string&gt;:regex(&lt;string regex&gt;) → &lt;row&gt;</span> <span class="permalink"><a href="#scalar-regex">¶</a></span></h4>
 <div class="text"><p><strong>Returns a strongly typed row composed by all named groups in &lt;regex&gt;.</strong></p><p>
   The result is a row value with a timestamp and as many fields as there are
   named groups in the specified regex.
@@ -3262,227 +3577,227 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="scalar-regexfind" class="level-1">
-<h4 class="header">5.43.  <span class="pipes2">&lt;string&gt;:regexfind(&lt;string regex&gt;, [&lt;number|string group&gt;]) → &lt;string&gt;</span> <span class="permalink">(<a href="#scalar-regexfind">link</a>)</span></h4>
+<h4 class="header">5.43.  <span class="pipes2">&lt;string&gt;:regexfind(&lt;string regex&gt;, [&lt;number|string group&gt;]) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-regexfind">¶</a></span></h4>
 <div class="text"><p><strong>Returns the matched string by &lt;regex&gt; in target (or one specific group).</strong></p></div>
 </div><hr/>
 <div id="scalar-regexmatch" class="level-1">
-<h4 class="header">5.44.  <span class="pipes2">&lt;string&gt;:regexmatch(&lt;string regex&gt;) → &lt;boolean&gt;</span> <span class="permalink">(<a href="#scalar-regexmatch">link</a>)</span></h4>
+<h4 class="header">5.44.  <span class="pipes2">&lt;string&gt;:regexmatch(&lt;string regex&gt;) → &lt;boolean&gt;</span> <span class="permalink"><a href="#scalar-regexmatch">¶</a></span></h4>
 <div class="text"><p><strong>Returns true if the target matches &lt;regex&gt;. False otherwise.</strong></p></div>
 </div><hr/>
 <div id="scalar-regexsub" class="level-1">
-<h4 class="header">5.45.  <span class="pipes2">&lt;string&gt;:regexsub(&lt;string regex&gt;, &lt;string replacement&gt;) → &lt;string&gt;</span> <span class="permalink">(<a href="#scalar-regexsub">link</a>)</span></h4>
+<h4 class="header">5.45.  <span class="pipes2">&lt;string&gt;:regexsub(&lt;string regex&gt;, &lt;string replacement&gt;) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-regexsub">¶</a></span></h4>
 <div class="text"><p><strong>Replaces all matches of &lt;regex&gt; in target by &lt;replacement&gt;.</strong></p></div>
 </div><hr/>
 <div id="scalar-replace" class="level-1">
-<h4 class="header">5.46.  <span class="pipes2">&lt;string&gt;:replace(&lt;string from&gt;, &lt;string to&gt;) → &lt;string&gt;</span> <span class="permalink">(<a href="#scalar-replace">link</a>)</span></h4>
+<h4 class="header">5.46.  <span class="pipes2">&lt;string&gt;:replace(&lt;string from&gt;, &lt;string to&gt;) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-replace">¶</a></span></h4>
 <div class="text"><p><strong>Replaces all instances of &lt;from&gt; with the string &lt;to&gt;.</strong></p></div>
 </div><hr/>
 <div id="scalar-startswith" class="level-1">
-<h4 class="header">5.47.  <span class="pipes2">&lt;string&gt;:startswith(&lt;string&gt;) → &lt;boolean&gt;</span> <span class="permalink">(<a href="#scalar-startswith">link</a>)</span></h4>
+<h4 class="header">5.47.  <span class="pipes2">&lt;string&gt;:startswith(&lt;string&gt;) → &lt;boolean&gt;</span> <span class="permalink"><a href="#scalar-startswith">¶</a></span></h4>
 <div class="text"><p><strong>Returns whether the target string starts with the argument.</strong></p></div>
 </div><hr/>
 <div id="scalar-substring" class="level-1">
-<h4 class="header">5.48.  <span class="pipes2">&lt;string&gt;:substring(&lt;number from&gt;, [&lt;number to&gt;]) → &lt;string&gt;</span> <span class="permalink">(<a href="#scalar-substring">link</a>)</span></h4>
+<h4 class="header">5.48.  <span class="pipes2">&lt;string&gt;:substring(&lt;number from&gt;, [&lt;number to&gt;]) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-substring">¶</a></span></h4>
 <div class="text"><p><strong>Returns the substring between the indices &lt;from&gt; and &lt;to&gt;.</strong></p></div>
 </div><hr/>
 <div id="scalar-upper" class="level-1">
-<h4 class="header">5.49.  <span class="pipes2">&lt;string&gt;:upper() → &lt;string&gt;</span> <span class="permalink">(<a href="#scalar-upper">link</a>)</span></h4>
+<h4 class="header">5.49.  <span class="pipes2">&lt;string&gt;:upper() → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-upper">¶</a></span></h4>
 <div class="text"><p><strong>Converts string to uppercase.</strong></p></div>
 </div><hr/>
 <div id="scalar-compare" class="level-1">
-<h4 class="header">5.50.  <span class="pipes2">compare(&lt;comparable a&gt;, &lt;comparable b&gt;) → &lt;number&gt;</span> <span class="permalink">(<a href="#scalar-compare">link</a>)</span></h4>
+<h4 class="header">5.50.  <span class="pipes2">compare(&lt;comparable a&gt;, &lt;comparable b&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-compare">¶</a></span></h4>
 <div class="text"><p><strong>Returns a number &lt; 0 if a &lt; b, &gt; 0 if a &gt; b or 0 if a = b.</strong></p></div>
 </div><hr/>
 <div id="scalar-hllmerge" class="level-1">
-<h4 class="header">5.51.  <span class="pipes2">hllmerge(&lt;string... data&gt;) → &lt;string&gt;</span> <span class="permalink">(<a href="#scalar-hllmerge">link</a>)</span></h4>
+<h4 class="header">5.51.  <span class="pipes2">hllmerge(&lt;string... data&gt;) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-hllmerge">¶</a></span></h4>
 <div class="text"><p><strong>Merge many instances of compressed base64 HyperLogLog data.</strong></p></div>
 </div><hr/>
 <div id="scalar-max" class="level-1">
-<h4 class="header">5.52.  <span class="pipes2">max(&lt;comparable&gt;, &lt;comparable&gt;, &lt;comparable...&gt;) → &lt;comparable&gt;</span> <span class="permalink">(<a href="#scalar-max">link</a>)</span></h4>
+<h4 class="header">5.52.  <span class="pipes2">max(&lt;comparable&gt;, &lt;comparable&gt;, &lt;comparable...&gt;) → &lt;comparable&gt;</span> <span class="permalink"><a href="#scalar-max">¶</a></span></h4>
 <div class="text"><p><strong>Returns the greatest value of all supplied arguments.</strong></p></div>
 </div><hr/>
 <div id="scalar-min" class="level-1">
-<h4 class="header">5.53.  <span class="pipes2">min(&lt;comparable&gt;, &lt;comparable&gt;, &lt;comparable...&gt;) → &lt;comparable&gt;</span> <span class="permalink">(<a href="#scalar-min">link</a>)</span></h4>
+<h4 class="header">5.53.  <span class="pipes2">min(&lt;comparable&gt;, &lt;comparable&gt;, &lt;comparable...&gt;) → &lt;comparable&gt;</span> <span class="permalink"><a href="#scalar-min">¶</a></span></h4>
 <div class="text"><p><strong>Returns the least value of all supplied arguments.</strong></p></div>
 </div><hr/>
 <div id="scalar-newlist" class="level-1">
-<h4 class="header">5.54.  <span class="pipes2">newlist(&lt;object...&gt;) → &lt;object&gt;</span> <span class="permalink">(<a href="#scalar-newlist">link</a>)</span></h4>
+<h4 class="header">5.54.  <span class="pipes2">newlist(&lt;object...&gt;) → &lt;object&gt;</span> <span class="permalink"><a href="#scalar-newlist">¶</a></span></h4>
 <div class="text"><p><strong>Creates a instance of java.util.List with the supplied objects.</strong></p></div>
 </div><hr/>
 <div id="scalar-newmap" class="level-1">
-<h4 class="header">5.55.  <span class="pipes2">newmap(&lt;object,object... pairs&gt;) → &lt;object&gt;</span> <span class="permalink">(<a href="#scalar-newmap">link</a>)</span></h4>
+<h4 class="header">5.55.  <span class="pipes2">newmap(&lt;object,object... pairs&gt;) → &lt;object&gt;</span> <span class="permalink"><a href="#scalar-newmap">¶</a></span></h4>
 <div class="text"><p><strong>Creates a instance of java.util.Map with the supplied keys and values.</strong></p></div>
 </div><hr/>
 <div id="scalar-pi" class="level-1">
-<h4 class="header">5.56.  <span class="pipes2">pi() → &lt;number&gt;</span> <span class="permalink">(<a href="#scalar-pi">link</a>)</span></h4>
+<h4 class="header">5.56.  <span class="pipes2">pi() → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-pi">¶</a></span></h4>
 <div class="text"><p><strong>Returns the constant value of pi.</strong></p></div>
 </div><hr/>
 <div id="scalar-random2" class="level-1">
-<h4 class="header">5.57.  <span class="pipes2">random(&lt;number min&gt;, &lt;number max&gt;) → &lt;number&gt;</span> <span class="permalink">(<a href="#scalar-random2">link</a>)</span></h4>
+<h4 class="header">5.57.  <span class="pipes2">random(&lt;number min&gt;, &lt;number max&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-random2">¶</a></span></h4>
 <div class="text"><p><strong>Returns a random value between &lt;min&gt; and &lt;max&gt;.</strong></p></div>
 </div><hr/>
 <div id="scalar-random" class="level-1">
-<h4 class="header">5.58.  <span class="pipes2">random([&lt;number max&gt;]) → &lt;number&gt;</span> <span class="permalink">(<a href="#scalar-random">link</a>)</span></h4>
+<h4 class="header">5.58.  <span class="pipes2">random([&lt;number max&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-random">¶</a></span></h4>
 <div class="text"><p><strong>Returns a random value of at most &lt;max&gt; (1 if not defined).</strong></p></div>
 </div><hr/>
 <div id="scalar-timestamp" class="level-1">
-<h4 class="header">5.59.  <span class="pipes2">timestamp() → &lt;number&gt;</span> <span class="permalink">(<a href="#scalar-timestamp">link</a>)</span></h4>
+<h4 class="header">5.59.  <span class="pipes2">timestamp() → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-timestamp">¶</a></span></h4>
 <div class="text"><p><strong>Returns the most appropriate timestamp, whether in scalar or aggregation contexts.</strong></p></div>
 </div><hr/>
 <div id="chapter-aggregations" class="level-0">
-<h2 class="header">6. Aggregation Functions <span class="pipes2"></span> <span class="permalink">(<a href="#chapter-aggregations">link</a>)</span></h2>
+<h2 class="header">6. Aggregation Functions <span class="pipes2"></span> <span class="permalink"><a href="#chapter-aggregations">¶</a></span></h2>
 <div class="text"><p><strong></strong></p></div>
 </div><hr/>
 <div id="aggregation-if" class="level-1">
-<h4 class="header">6.1.  <span class="pipes2">&lt;aggregation object expr&gt;:if(&lt;boolean condition&gt;) → &lt;object&gt;</span> <span class="permalink">(<a href="#aggregation-if">link</a>)</span></h4>
+<h4 class="header">6.1.  <span class="pipes2">&lt;aggregation object expr&gt;:if(&lt;boolean condition&gt;) → &lt;object&gt;</span> <span class="permalink"><a href="#aggregation-if">¶</a></span></h4>
 <div class="text"><p><strong>Aggregates only events that evaluates true to &lt;condition&gt;.</strong></p></div>
 </div><hr/>
 <div id="aggregation-overall" class="level-1">
-<h4 class="header">6.2.  <span class="pipes2">&lt;aggregation object expr&gt;:overall() → &lt;object&gt;</span> <span class="permalink">(<a href="#aggregation-overall">link</a>)</span></h4>
+<h4 class="header">6.2.  <span class="pipes2">&lt;aggregation object expr&gt;:overall() → &lt;object&gt;</span> <span class="permalink"><a href="#aggregation-overall">¶</a></span></h4>
 <div class="text"><p><strong>Merges all the results from the target aggregation.</strong></p></div>
 </div><hr/>
 <div id="aggregation-overlast" class="level-1">
-<h4 class="header">6.3.  <span class="pipes2">&lt;aggregation object expr&gt;:overlast(&lt;number window&gt;) → &lt;object&gt;</span> <span class="permalink">(<a href="#aggregation-overlast">link</a>)</span></h4>
+<h4 class="header">6.3.  <span class="pipes2">&lt;aggregation object expr&gt;:overlast(&lt;number window&gt;) → &lt;object&gt;</span> <span class="permalink"><a href="#aggregation-overlast">¶</a></span></h4>
 <div class="text"><p><strong>Merges the results of the last &lt;window&gt; aggregations.</strong></p></div>
 </div><hr/>
 <div id="aggregation-prev" class="level-1">
-<h4 class="header">6.4.  <span class="pipes2">&lt;aggregation object expr&gt;:prev([&lt;number prev&gt;]) → &lt;object&gt;</span> <span class="permalink">(<a href="#aggregation-prev">link</a>)</span></h4>
+<h4 class="header">6.4.  <span class="pipes2">&lt;aggregation object expr&gt;:prev([&lt;number prev&gt;]) → &lt;object&gt;</span> <span class="permalink"><a href="#aggregation-prev">¶</a></span></h4>
 <div class="text"><p><strong>Delays and returns the previous &lt;number&gt;th result from target aggregation.</strong></p></div>
 </div><hr/>
 <div id="aggregation-all" class="level-1">
-<h4 class="header">6.5.  <span class="pipes2">all(&lt;boolean&gt;) → &lt;boolean&gt;</span> <span class="permalink">(<a href="#aggregation-all">link</a>)</span></h4>
+<h4 class="header">6.5.  <span class="pipes2">all(&lt;boolean&gt;) → &lt;boolean&gt;</span> <span class="permalink"><a href="#aggregation-all">¶</a></span></h4>
 <div class="text"><p><strong>Returns true if all ocurrences evaluate true.</strong></p></div>
 </div><hr/>
 <div id="aggregation-any" class="level-1">
-<h4 class="header">6.6.  <span class="pipes2">any(&lt;boolean&gt;) → &lt;boolean&gt;</span> <span class="permalink">(<a href="#aggregation-any">link</a>)</span></h4>
+<h4 class="header">6.6.  <span class="pipes2">any(&lt;boolean&gt;) → &lt;boolean&gt;</span> <span class="permalink"><a href="#aggregation-any">¶</a></span></h4>
 <div class="text"><p><strong>Returns true if any ocurrence evaluates true.</strong></p></div>
 </div><hr/>
 <div id="aggregation-avg" class="level-1">
-<h4 class="header">6.7.  <span class="pipes2">avg(&lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span> <span class="permalink">(<a href="#aggregation-avg">link</a>)</span></h4>
+<h4 class="header">6.7.  <span class="pipes2">avg(&lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-avg">¶</a></span></h4>
 <div class="text"><p><strong>Calculates the (possibly weighted) average of some expression.</strong></p></div>
 </div><hr/>
 <div id="aggregation-dcount" class="level-1">
-<h4 class="header">6.8.  <span class="pipes2">dcount(&lt;object&gt;...) → &lt;number&gt;</span> <span class="permalink">(<a href="#aggregation-dcount">link</a>)</span></h4>
+<h4 class="header">6.8.  <span class="pipes2">dcount(&lt;object&gt;...) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-dcount">¶</a></span></h4>
 <div class="text"><p><strong>Estimates the field's cardinality (distinct count) using HyperLogLog.</strong></p></div>
 </div><hr/>
 <div id="aggregation-describe" class="level-1">
-<h4 class="header">6.9.  <span class="pipes2">describe(&lt;aggregation object expr&gt;) → &lt;string&gt;</span> <span class="permalink">(<a href="#aggregation-describe">link</a>)</span></h4>
+<h4 class="header">6.9.  <span class="pipes2">describe(&lt;aggregation object expr&gt;) → &lt;string&gt;</span> <span class="permalink"><a href="#aggregation-describe">¶</a></span></h4>
 <div class="text"><p><strong>Yields a string json explaining the target aggregation's inner state representation.</strong></p></div>
 </div><hr/>
 <div id="aggregation-first" class="level-1">
-<h4 class="header">6.10.  <span class="pipes2">first(&lt;object&gt;) → &lt;object&gt;</span> <span class="permalink">(<a href="#aggregation-first">link</a>)</span></h4>
+<h4 class="header">6.10.  <span class="pipes2">first(&lt;object&gt;) → &lt;object&gt;</span> <span class="permalink"><a href="#aggregation-first">¶</a></span></h4>
 <div class="text"><p><strong>Yields the ocurrence with least timestamp.</strong></p></div>
 </div><hr/>
 <div id="aggregation-greatest" class="level-1">
-<h4 class="header">6.11.  <span class="pipes2">greatest(&lt;object&gt;, &lt;comparable&gt;) → &lt;object&gt;</span> <span class="permalink">(<a href="#aggregation-greatest">link</a>)</span></h4>
+<h4 class="header">6.11.  <span class="pipes2">greatest(&lt;object&gt;, &lt;comparable&gt;) → &lt;object&gt;</span> <span class="permalink"><a href="#aggregation-greatest">¶</a></span></h4>
 <div class="text"><p><strong>Yields the greatest ocurrence in the window based on some comparable.</strong></p></div>
 </div><hr/>
 <div id="aggregation-hll" class="level-1">
-<h4 class="header">6.12.  <span class="pipes2">hll(&lt;number log2m&gt;, &lt;object&gt;...) → &lt;number&gt;</span> <span class="permalink">(<a href="#aggregation-hll">link</a>)</span></h4>
+<h4 class="header">6.12.  <span class="pipes2">hll(&lt;number log2m&gt;, &lt;object&gt;...) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-hll">¶</a></span></h4>
 <div class="text"><p><strong>Similar to dcount, but allows configuration of log2m parameter.</strong></p></div>
 </div><hr/>
 <div id="aggregation-hllmerge" class="level-1">
-<h4 class="header">6.13.  <span class="pipes2">hllmerge(&lt;string&gt;...) → &lt;string&gt;</span> <span class="permalink">(<a href="#aggregation-hllmerge">link</a>)</span></h4>
+<h4 class="header">6.13.  <span class="pipes2">hllmerge(&lt;string&gt;...) → &lt;string&gt;</span> <span class="permalink"><a href="#aggregation-hllmerge">¶</a></span></h4>
 <div class="text"><p><strong>Performs union of many HyperLogLog encoded data in a window.</strong></p></div>
 </div><hr/>
 <div id="aggregation-hllset" class="level-1">
-<h4 class="header">6.14.  <span class="pipes2">hllset(&lt;number log2m&gt;, &lt;object&gt;...) → &lt;string&gt;</span> <span class="permalink">(<a href="#aggregation-hllset">link</a>)</span></h4>
+<h4 class="header">6.14.  <span class="pipes2">hllset(&lt;number log2m&gt;, &lt;object&gt;...) → &lt;string&gt;</span> <span class="permalink"><a href="#aggregation-hllset">¶</a></span></h4>
 <div class="text"><p><strong>Similar to hll, but it doesn't evaluate final cardinality, just return the sketch data.</strong></p></div>
 </div><hr/>
 <div id="aggregation-join" class="level-1">
-<h4 class="header">6.15.  <span class="pipes2">join(&lt;string&gt;, [&lt;string separator&gt;], [&lt;string lastSeparator&gt;]) → &lt;string&gt;</span> <span class="permalink">(<a href="#aggregation-join">link</a>)</span></h4>
+<h4 class="header">6.15.  <span class="pipes2">join(&lt;string&gt;, [&lt;string separator&gt;], [&lt;string lastSeparator&gt;]) → &lt;string&gt;</span> <span class="permalink"><a href="#aggregation-join">¶</a></span></h4>
 <div class="text"><p><strong>Join all the strings in a window.</strong></p></div>
 </div><hr/>
 <div id="aggregation-last" class="level-1">
-<h4 class="header">6.16.  <span class="pipes2">last(&lt;object&gt;) → &lt;object&gt;</span> <span class="permalink">(<a href="#aggregation-last">link</a>)</span></h4>
+<h4 class="header">6.16.  <span class="pipes2">last(&lt;object&gt;) → &lt;object&gt;</span> <span class="permalink"><a href="#aggregation-last">¶</a></span></h4>
 <div class="text"><p><strong>Yields the ocurrence with greatest timestamp.</strong></p></div>
 </div><hr/>
 <div id="aggregation-least" class="level-1">
-<h4 class="header">6.17.  <span class="pipes2">least(&lt;object&gt;, &lt;comparable&gt;) → &lt;object&gt;</span> <span class="permalink">(<a href="#aggregation-least">link</a>)</span></h4>
+<h4 class="header">6.17.  <span class="pipes2">least(&lt;object&gt;, &lt;comparable&gt;) → &lt;object&gt;</span> <span class="permalink"><a href="#aggregation-least">¶</a></span></h4>
 <div class="text"><p><strong>Yields the least ocurrence in the window based on some comparable.</strong></p></div>
 </div><hr/>
 <div id="aggregation-map" class="level-1">
-<h4 class="header">6.18.  <span class="pipes2">map(&lt;object key&gt;, &lt;object value&gt;) → &lt;object&gt;</span> <span class="permalink">(<a href="#aggregation-map">link</a>)</span></h4>
+<h4 class="header">6.18.  <span class="pipes2">map(&lt;object key&gt;, &lt;object value&gt;) → &lt;object&gt;</span> <span class="permalink"><a href="#aggregation-map">¶</a></span></h4>
 <div class="text"><p><strong>Creates a java.util.Map from all events in a window.</strong></p></div>
 </div><hr/>
 <div id="aggregation-max" class="level-1">
-<h4 class="header">6.19.  <span class="pipes2">max(&lt;comparable&gt;) → &lt;comparable&gt;</span> <span class="permalink">(<a href="#aggregation-max">link</a>)</span></h4>
+<h4 class="header">6.19.  <span class="pipes2">max(&lt;comparable&gt;) → &lt;comparable&gt;</span> <span class="permalink"><a href="#aggregation-max">¶</a></span></h4>
 <div class="text"><p><strong>Yields the greatest ocurrence in the window.</strong></p></div>
 </div><hr/>
 <div id="aggregation-median" class="level-1">
-<h4 class="header">6.20.  <span class="pipes2">median(&lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span> <span class="permalink">(<a href="#aggregation-median">link</a>)</span></h4>
+<h4 class="header">6.20.  <span class="pipes2">median(&lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-median">¶</a></span></h4>
 <div class="text"><p><strong>Estimates the median value of the population using Count-Min Sketch.</strong></p></div>
 </div><hr/>
 <div id="aggregation-min" class="level-1">
-<h4 class="header">6.21.  <span class="pipes2">min(&lt;comparable&gt;) → &lt;comparable&gt;</span> <span class="permalink">(<a href="#aggregation-min">link</a>)</span></h4>
+<h4 class="header">6.21.  <span class="pipes2">min(&lt;comparable&gt;) → &lt;comparable&gt;</span> <span class="permalink"><a href="#aggregation-min">¶</a></span></h4>
 <div class="text"><p><strong>Yields the least ocurrence in the window.</strong></p></div>
 </div><hr/>
 <div id="aggregation-pcount" class="level-1">
-<h4 class="header">6.22.  <span class="pipes2">pcount(&lt;boolean&gt;) → &lt;number&gt;</span> <span class="permalink">(<a href="#aggregation-pcount">link</a>)</span></h4>
+<h4 class="header">6.22.  <span class="pipes2">pcount(&lt;boolean&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-pcount">¶</a></span></h4>
 <div class="text"><p><strong>Aggregates the proportion of events that evaluate true to expression.</strong></p></div>
 </div><hr/>
 <div id="aggregation-quantile" class="level-1">
-<h4 class="header">6.23.  <span class="pipes2">quantile(&lt;number q&gt;, &lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span> <span class="permalink">(<a href="#aggregation-quantile">link</a>)</span></h4>
+<h4 class="header">6.23.  <span class="pipes2">quantile(&lt;number q&gt;, &lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-quantile">¶</a></span></h4>
 <div class="text"><p><strong>Estimates the q (0..1) quantile of the population using Count-Min Sketch.</strong></p></div>
 </div><hr/>
 <div id="aggregation-set" class="level-1">
-<h4 class="header">6.24.  <span class="pipes2">set(&lt;object&gt;) → &lt;object&gt;</span> <span class="permalink">(<a href="#aggregation-set">link</a>)</span></h4>
+<h4 class="header">6.24.  <span class="pipes2">set(&lt;object&gt;) → &lt;object&gt;</span> <span class="permalink"><a href="#aggregation-set">¶</a></span></h4>
 <div class="text"><p><strong>Creates a java.util.Set from all events in a window.</strong></p></div>
 </div><hr/>
 <div id="aggregation-smooth" class="level-1">
-<h4 class="header">6.25.  <span class="pipes2">smooth(&lt;aggregation number expr&gt;, [&lt;number alpha&gt;], [&lt;number beta&gt;]) → &lt;number&gt;</span> <span class="permalink">(<a href="#aggregation-smooth">link</a>)</span></h4>
+<h4 class="header">6.25.  <span class="pipes2">smooth(&lt;aggregation number expr&gt;, [&lt;number alpha&gt;], [&lt;number beta&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-smooth">¶</a></span></h4>
 <div class="text"><p><strong>Smoothes the curve of another aggregation.</strong></p></div>
 </div><hr/>
 <div id="aggregation-stdev" class="level-1">
-<h4 class="header">6.26.  <span class="pipes2">stdev(&lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span> <span class="permalink">(<a href="#aggregation-stdev">link</a>)</span></h4>
+<h4 class="header">6.26.  <span class="pipes2">stdev(&lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-stdev">¶</a></span></h4>
 <div class="text"><p><strong>Calculates the (possibly weighted) standard deviation of some expression.</strong></p></div>
 </div><hr/>
 <div id="aggregation-sum" class="level-1">
-<h4 class="header">6.27.  <span class="pipes2">sum(&lt;number&gt;) → &lt;number&gt;</span> <span class="permalink">(<a href="#aggregation-sum">link</a>)</span></h4>
+<h4 class="header">6.27.  <span class="pipes2">sum(&lt;number&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-sum">¶</a></span></h4>
 <div class="text"><p><strong>Sums all evaluations of some expression.</strong></p></div>
 </div><hr/>
 <div id="aggregation-variance" class="level-1">
-<h4 class="header">6.28.  <span class="pipes2">variance(&lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span> <span class="permalink">(<a href="#aggregation-variance">link</a>)</span></h4>
+<h4 class="header">6.28.  <span class="pipes2">variance(&lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-variance">¶</a></span></h4>
 <div class="text"><p><strong>Calculates the (possibly weighted) variance of some expression.</strong></p></div>
 </div><hr/>
 <div id="aggregation-when" class="level-1">
-<h4 class="header">6.29.  <span class="pipes2">when(&lt;boolean expr&gt;) → &lt;number&gt;</span> <span class="permalink">(<a href="#aggregation-when">link</a>)</span></h4>
+<h4 class="header">6.29.  <span class="pipes2">when(&lt;boolean expr&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-when">¶</a></span></h4>
 <div class="text"><p><strong>Yields the latest timestamp inside window when some condition was true.</strong></p></div>
 </div><hr/>
 <div id="aggregation-whenfirst" class="level-1">
-<h4 class="header">6.30.  <span class="pipes2">whenfirst(&lt;boolean expr&gt;) → &lt;number&gt;</span> <span class="permalink">(<a href="#aggregation-whenfirst">link</a>)</span></h4>
+<h4 class="header">6.30.  <span class="pipes2">whenfirst(&lt;boolean expr&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-whenfirst">¶</a></span></h4>
 <div class="text"><p><strong>Yields the first timestamp inside window when some condition was true.</strong></p></div>
 </div><hr/>
 <div id="aggregation-window" class="level-1">
-<h4 class="header">6.31. Window Meta-aggregations <span class="pipes2"></span> <span class="permalink">(<a href="#aggregation-window">link</a>)</span></h4>
+<h4 class="header">6.31. Window Meta-aggregations <span class="pipes2"></span> <span class="permalink"><a href="#aggregation-window">¶</a></span></h4>
 <div class="text"><p><strong></strong></p></div>
 </div><hr/>
 <div id="aggregation-wcount" class="level-2">
-<h5 class="header">6.31.1.  <span class="pipes2">WCOUNT()</span> <span class="permalink">(<a href="#aggregation-wcount">link</a>)</span></h5>
+<h5 class="header">6.31.1.  <span class="pipes2">WCOUNT()</span> <span class="permalink"><a href="#aggregation-wcount">¶</a></span></h5>
 <div class="text"><p><strong>Yields how many outputs are merged in the current window.</strong></p></div>
 </div><hr/>
 <div id="aggregation-wstart" class="level-2">
-<h5 class="header">6.31.2.  <span class="pipes2">WSTART()</span> <span class="permalink">(<a href="#aggregation-wstart">link</a>)</span></h5>
+<h5 class="header">6.31.2.  <span class="pipes2">WSTART()</span> <span class="permalink"><a href="#aggregation-wstart">¶</a></span></h5>
 <div class="text"><p><strong>Yields the minimum allowed timestamp or item for the current window.</strong></p></div>
 </div><hr/>
 <div id="aggregation-wend" class="level-2">
-<h5 class="header">6.31.3.  <span class="pipes2">WEND()</span> <span class="permalink">(<a href="#aggregation-wend">link</a>)</span></h5>
+<h5 class="header">6.31.3.  <span class="pipes2">WEND()</span> <span class="permalink"><a href="#aggregation-wend">¶</a></span></h5>
 <div class="text"><p><strong>Yields the maximum allowed timestamp or item for the current window.</strong></p></div>
 </div><hr/>
 <div id="aggregation-ostart" class="level-2">
-<h5 class="header">6.31.4.  <span class="pipes2">OSTART()</span> <span class="permalink">(<a href="#aggregation-ostart">link</a>)</span></h5>
+<h5 class="header">6.31.4.  <span class="pipes2">OSTART()</span> <span class="permalink"><a href="#aggregation-ostart">¶</a></span></h5>
 <div class="text"><p><strong>Yields the minimum allowed timestamp or item for the current output.</strong></p></div>
 </div><hr/>
 <div id="aggregation-oend" class="level-2">
-<h5 class="header">6.31.5.  <span class="pipes2">OEND()</span> <span class="permalink">(<a href="#aggregation-oend">link</a>)</span></h5>
+<h5 class="header">6.31.5.  <span class="pipes2">OEND()</span> <span class="permalink"><a href="#aggregation-oend">¶</a></span></h5>
 <div class="text"><p><strong>Yields the maximum allowed timestamp or item for the current output.</strong></p></div>
 </div><hr/>
 <div id="aggregation-otimestamp" class="level-2">
-<h5 class="header">6.31.6.  <span class="pipes2">OTIMESTAMP()</span> <span class="permalink">(<a href="#aggregation-otimestamp">link</a>)</span></h5>
+<h5 class="header">6.31.6.  <span class="pipes2">OTIMESTAMP()</span> <span class="permalink"><a href="#aggregation-otimestamp">¶</a></span></h5>
 <div class="text"><p><strong>Yields the timestamp when the output was merged (useful for item batch pipes).</strong></p></div>
 </div><hr/>
 <div id="chapter-timespan" class="level-0">
-<h2 class="header">7. Timespan Language <span class="pipes2"></span> <span class="permalink">(<a href="#chapter-timespan">link</a>)</span></h2>
+<h2 class="header">7. Timespan Language <span class="pipes2"></span> <span class="permalink"><a href="#chapter-timespan">¶</a></span></h2>
 <div class="text"><p><strong></strong></p><p>
     Pipes comes bundled with a timespan definition language, that helps defining relative
     dates with an almost natural language syntax. A timespan is an expression that when provided 
@@ -3517,7 +3832,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="timespan-period" class="level-1">
-<h4 class="header">7.1. Period definitions <span class="pipes2"></span> <span class="permalink">(<a href="#timespan-period">link</a>)</span></h4>
+<h4 class="header">7.1. Period definitions <span class="pipes2"></span> <span class="permalink"><a href="#timespan-period">¶</a></span></h4>
 <div class="text"><p><strong></strong></p><p>
     The periods are the units of time that powers span definitions.
 </p>
@@ -3562,7 +3877,7 @@ a day, an hour and 5 minutes</pre>
 </div>
 </div><hr/>
 <div id="timespan-span" class="level-1">
-<h4 class="header">7.2. Span definitions <span class="pipes2"></span> <span class="permalink">(<a href="#timespan-span">link</a>)</span></h4>
+<h4 class="header">7.2. Span definitions <span class="pipes2"></span> <span class="permalink"><a href="#timespan-span">¶</a></span></h4>
 <div class="text"><p><strong></strong></p><p>
     Spans are the final product of this language. A span can compute the start and end of an interval, given a reference
     timestamp (usually now). They're always right-open. This means that a span <code class="span">current month</code> will return the first
@@ -3585,15 +3900,15 @@ a day, an hour and 5 minutes</pre>
 </div>
 </div><hr/>
 <div id="timespan-now" class="level-2">
-<h5 class="header">7.2.1.  <span class="span2">now|none</span> <span class="permalink">(<a href="#timespan-now">link</a>)</span></h5>
+<h5 class="header">7.2.1.  <span class="span2">now|none</span> <span class="permalink"><a href="#timespan-now">¶</a></span></h5>
 <div class="text"><p><strong>(point, relative) Returns the reference timestamp.</strong></p></div>
 </div><hr/>
 <div id="timespan-today" class="level-2">
-<h5 class="header">7.2.2.  <span class="span2">today</span> <span class="permalink">(<a href="#timespan-today">link</a>)</span></h5>
+<h5 class="header">7.2.2.  <span class="span2">today</span> <span class="permalink"><a href="#timespan-today">¶</a></span></h5>
 <div class="text"><p><strong>(interval, relative) Equivalent to <a href="#timespan-current"><code class="span">current day</code></a></strong></p></div>
 </div><hr/>
 <div id="timespan-date" class="level-2">
-<h5 class="header">7.2.3.  <span class="span2">&lt;year&gt;-&lt;month&gt;[-&lt;day&gt; [&lt;hour&gt;:[&lt;minute&gt;:[&lt;second&gt;]]]]</span> <span class="permalink">(<a href="#timespan-date">link</a>)</span></h5>
+<h5 class="header">7.2.3.  <span class="span2">&lt;year&gt;-&lt;month&gt;[-&lt;day&gt; [&lt;hour&gt;:[&lt;minute&gt;:[&lt;second&gt;]]]]</span> <span class="permalink"><a href="#timespan-date">¶</a></span></h5>
 <div class="text"><p><strong>(interval, fixed) Returns the interval relative to the selected date.</strong></p>The length of the interval will depend on the precision defined.
 <p>
     <strong>Examples:</strong>
@@ -3607,7 +3922,7 @@ a day, an hour and 5 minutes</pre>
 </div>
 </div><hr/>
 <div id="timespan-timestamp" class="level-2">
-<h5 class="header">7.2.4.  <span class="span2">timestamp|ts &lt;number&gt;</span> <span class="permalink">(<a href="#timespan-timestamp">link</a>)</span></h5>
+<h5 class="header">7.2.4.  <span class="span2">timestamp|ts &lt;number&gt;</span> <span class="permalink"><a href="#timespan-timestamp">¶</a></span></h5>
 <div class="text"><p><strong>(point, fixed) Returns the point with the speficied timestamp.</strong></p>The resulting interval is a point, <strong>not</strong> an interval with 1 millisecond.
 <p>
     <strong>Examples:</strong>
@@ -3617,7 +3932,7 @@ a day, an hour and 5 minutes</pre>
 </div>
 </div><hr/>
 <div id="timespan-range" class="level-2">
-<h5 class="header">7.2.5.  <span class="span2">from|since &lt;span&gt; to|until &lt;span&gt;</span> <span class="permalink">(<a href="#timespan-range">link</a>)</span></h5>
+<h5 class="header">7.2.5.  <span class="span2">from|since &lt;span&gt; to|until &lt;span&gt;</span> <span class="permalink"><a href="#timespan-range">¶</a></span></h5>
 <div class="text"><p><strong>(&lt;both&gt;, &lt;both&gt;) Returns a span from the beginning of the first span to the end of the second.</strong></p>The result span can be anything. It depends on the parameters.
 <p>
     <strong>Examples:</strong>
@@ -3629,7 +3944,7 @@ a day, an hour and 5 minutes</pre>
 </div>
 </div><hr/>
 <div id="timespan-last" class="level-2">
-<h5 class="header">7.2.6.  <span class="span2">last &lt;period...&gt;</span> <span class="permalink">(<a href="#timespan-last">link</a>)</span></h5>
+<h5 class="header">7.2.6.  <span class="span2">last &lt;period...&gt;</span> <span class="permalink"><a href="#timespan-last">¶</a></span></h5>
 <div class="text"><p><strong>(interval, relative) Equivalent to <a href="#timespan-before"><code class="span2">&lt;period...&gt; before now</code></a>.</strong></p>Please notice that spans like <code class="span">last year</code> are not equivalent to <code class="span">previous year</code>. The former
 means the period of 1 year ending now. The latter means the 1 year period ending in the beginning of 
 this year.
@@ -3643,7 +3958,7 @@ this year.
 </div>
 </div><hr/>
 <div id="timespan-current" class="level-2">
-<h5 class="header">7.2.7.  <span class="span2">current|this &lt;period&gt;</span> <span class="permalink">(<a href="#timespan-current">link</a>)</span></h5>
+<h5 class="header">7.2.7.  <span class="span2">current|this &lt;period&gt;</span> <span class="permalink"><a href="#timespan-current">¶</a></span></h5>
 <div class="text"><p><strong>(interval, relative) Returns the full period enclosing the reference timestamp.</strong></p><p>
     <strong>Examples:</strong>
 </p>
@@ -3654,7 +3969,7 @@ this year.
 </div>
 </div><hr/>
 <div id="timespan-previous" class="level-2">
-<h5 class="header">7.2.8.  <span class="span2">previous|yester &lt;period&gt;</span> <span class="permalink">(<a href="#timespan-previous">link</a>)</span></h5>
+<h5 class="header">7.2.8.  <span class="span2">previous|yester &lt;period&gt;</span> <span class="permalink"><a href="#timespan-previous">¶</a></span></h5>
 <div class="text"><p><strong>(interval, relative) Returns the period before the <a href="#timespan-current"><code class="span2">current &lt;period&gt;</code></a></strong></p><p>
     <strong>Examples:</strong>
 </p>
@@ -3665,7 +3980,7 @@ this year.
 </div>
 </div><hr/>
 <div id="timespan-before" class="level-2">
-<h5 class="header">7.2.9.  <span class="span2">[&lt;period...&gt;] before &lt;span&gt;</span> <span class="permalink">(<a href="#timespan-before">link</a>)</span></h5>
+<h5 class="header">7.2.9.  <span class="span2">[&lt;period...&gt;] before &lt;span&gt;</span> <span class="permalink"><a href="#timespan-before">¶</a></span></h5>
 <div class="text"><p><strong>(&lt;both&gt;, &lt;both&gt;) The full selected period ending in the beginning of the referenced span.</strong></p><p>
     If the period is defined, it is an <strong>interval</strong>.
 </p>
@@ -3684,7 +3999,7 @@ this year.
 </div>
 </div><hr/>
 <div id="timespan-after" class="level-2">
-<h5 class="header">7.2.10.  <span class="span2">[&lt;period...&gt;] after &lt;span&gt;</span> <span class="permalink">(<a href="#timespan-after">link</a>)</span></h5>
+<h5 class="header">7.2.10.  <span class="span2">[&lt;period...&gt;] after &lt;span&gt;</span> <span class="permalink"><a href="#timespan-after">¶</a></span></h5>
 <div class="text"><p><strong>(&lt;both&gt;, &lt;both&gt;) The full selected period starting at the end of the referenced span.</strong></p><p>
     If the period is defined, it is an <strong>interval</strong>.
 </p>
@@ -3701,7 +4016,7 @@ this year.
 </div>
 </div><hr/>
 <div id="timespan-ordinal" class="level-2">
-<h5 class="header">7.2.11.  <span class="span2">&lt;ordinal&gt; &lt;period&gt; [of] &lt;span&gt;</span> <span class="permalink">(<a href="#timespan-ordinal">link</a>)</span></h5>
+<h5 class="header">7.2.11.  <span class="span2">&lt;ordinal&gt; &lt;period&gt; [of] &lt;span&gt;</span> <span class="permalink"><a href="#timespan-ordinal">¶</a></span></h5>
 <div class="text"><p><strong>(interval, &lt;both&gt;) Selects the nth period inside some span.</strong></p><p>
     It will be relative or fixed <strong>depending on which span is used</strong>.
 </p>
@@ -3715,7 +4030,7 @@ this year.
 </div>
 </div><hr/>
 <div id="timespan-ago" class="level-2">
-<h5 class="header">7.2.12.  <span class="span2">&lt;period...&gt; ago</span> <span class="permalink">(<a href="#timespan-ago">link</a>)</span></h5>
+<h5 class="header">7.2.12.  <span class="span2">&lt;period...&gt; ago</span> <span class="permalink"><a href="#timespan-ago">¶</a></span></h5>
 <div class="text"><p><strong>(point, relative) Select the exact timestamp of the defined period in the past.</strong></p><p>
     <strong>Examples:</strong>
 </p>
@@ -3724,7 +4039,7 @@ this year.
 </div>
 </div><hr/>
 <div id="timespan-of" class="level-2">
-<h5 class="header">7.2.13.  <span class="span2">&lt;period&gt; of &lt;span&gt;</span> <span class="permalink">(<a href="#timespan-of">link</a>)</span></h5>
+<h5 class="header">7.2.13.  <span class="span2">&lt;period&gt; of &lt;span&gt;</span> <span class="permalink"><a href="#timespan-of">¶</a></span></h5>
 <div class="text"><p><strong>(interval, &lt;both&gt;) Selects the full period enclosing the referenced span</strong></p><p>
     It will be relative or fixed <strong>depending on which span is used</strong>.
 </p>
@@ -3738,7 +4053,7 @@ this year.
 </div>
 </div><hr/>
 <div id="timespan-shifted-by" class="level-2">
-<h5 class="header">7.2.14.  <span class="span2">&lt;span&gt; shifted by &lt;period...&gt;</span> <span class="permalink">(<a href="#timespan-shifted-by">link</a>)</span></h5>
+<h5 class="header">7.2.14.  <span class="span2">&lt;span&gt; shifted by &lt;period...&gt;</span> <span class="permalink"><a href="#timespan-shifted-by">¶</a></span></h5>
 <div class="text"><p><strong>(&lt;both&gt;, &lt;both&gt;) Shifts the selected span by &lt;period&gt; in the past.</strong></p><p>
     <strong>Examples:</strong>
 </p>
@@ -3749,7 +4064,7 @@ this year.
 </div>
 </div><hr/>
 <div id="timespan-shifted-to" class="level-2">
-<h5 class="header">7.2.15.  <span class="span2">&lt;span&gt; shifted to &lt;span&gt;</span> <span class="permalink">(<a href="#timespan-shifted-to">link</a>)</span></h5>
+<h5 class="header">7.2.15.  <span class="span2">&lt;span&gt; shifted to &lt;span&gt;</span> <span class="permalink"><a href="#timespan-shifted-to">¶</a></span></h5>
 <div class="text"><p><strong>(&lt;both&gt;, &lt;both&gt;) Calculates the span changing the reference using another span.</strong></p><p>
     <strong>Examples:</strong>
 </p>
@@ -3760,7 +4075,7 @@ this year.
 </div>
 </div><hr/>
 <div id="timespan-extend" class="level-2">
-<h5 class="header">7.2.16.  <span class="span2">&lt;span&gt; extend left|right [by] &lt;number&gt;%</span> <span class="permalink">(<a href="#timespan-extend">link</a>)</span></h5>
+<h5 class="header">7.2.16.  <span class="span2">&lt;span&gt; extend [left|right] [by] &lt;number&gt;%</span> <span class="permalink"><a href="#timespan-extend">¶</a></span></h5>
 <div class="text"><p><strong>(&lt;both&gt;, &lt;both&gt;) Extends either the start or the end of a span by a percentual value.</strong></p><p>
     <strong>Examples:</strong>
 </p>
@@ -3768,5 +4083,16 @@ this year.
 <p class="legend">Current week + ~33.6h (20% of 7 days).</p>
 </div>
 </div><hr/>
-<p>Page generated at 26-Apr-2014 17:51:49</p>
+<div id="timespan-align" class="level-2">
+<h5 class="header">7.2.17.  <span class="span2">&lt;span&gt; align [left|right] to &lt;span ref&gt;</span> <span class="permalink"><a href="#timespan-align">¶</a></span></h5>
+<div class="text"><p><strong>(&lt;both&gt;, &lt;both&gt;) Aligns the span's total milliseconds at the left or right side of &lt;ref&gt;</strong></p><p>
+    <strong>Examples:</strong>
+</p>
+<pre class="span">last week align to a month ago</pre>
+<p class="legend">Aligns a 1-week period to start exactly 1 month before now.</p>
+<pre class="span">last week align right to a month ago</pre>
+<p class="legend">Aligns a 1-week period to end exactly 1 month before now.</p>
+</div>
+</div><hr/>
+<p>Page generated at 14-May-2014 17:54:12</p>
 </div></body></html>
