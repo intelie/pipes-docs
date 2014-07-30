@@ -2368,7 +2368,6 @@ but only if it didn't already happen in the last 30 minutes.</p>
 ]</pre>
 <p class="legend">Outputs the average cpu and memory every minute, in the same event.</p>
 <hr/>
-
 <p>
     Another example: imagine you need to create a ranking with the top 10 hosts by
     event count in the minute, but with the 11th row being the total count in all hosts,
@@ -2388,6 +2387,22 @@ but only if it didn't already happen in the last 30 minutes.</p>
     <li>... the <code class="expr">product</code> pipe, please see <a href="#pipe-product"><code class="pipes2">&lt;pipe&gt; product &lt;pipe&gt;</code></a>.</li>
     <li>... the <code class="expr">union</code> pipe, please see <a href="#pipe-union"><code class="pipes2">&lt;pipe&gt; union &lt;pipe&gt;</code></a>.</li>
 </ul>
+
+</hr>
+
+<p>
+    One last example: if you need to filter hosts with average CPU in the last minute greater than
+    the global average, you can write:
+</p>
+<pre class="pipes">Metrics metric_name:CPU
+=&gt; [
+    avg(value#) as cpu by host every minute
+    product
+    avg(value#) as global_avg every minute
+]
+=&gt; @filter cpu &gt; global_avg</pre>
+<p class="legend">Outputs every minute only hosts with average CPU greater than the global average.</p>
+<hr/>
 </div>
 </div><hr/>
 <div id="chapter-concepts" class="level-0">
@@ -4699,7 +4714,7 @@ a day, an hour and 5 minutes</pre>
 </table>
 </div>
 </div><hr/>
-<p>Page generated at 30-Jul-2014 19:15:37</p>
+<p>Page generated at 30-Jul-2014 19:23:20</p>
 </div></body>
 
 <script>
