@@ -2238,15 +2238,8 @@ ready(function() {
 <p>
     You can write an entire sub-filter inside some field declaration:
 </p>
-<pre class="pipes">SomeType value:(42 | (43 othervalue:X))</pre>
-<p class="legend">Select events from SomeType if value is 42 or 43 (but the latter only if othervalue is equal to X).</p>
-<hr/>
-
-<p>
-    You can write an entire sub-filter inside some field declaration:
-</p>
-<pre class="pipes">SomeType value:(42 | (43 othervalue:X))</pre>
-<p class="legend">Select events from SomeType if value is 42 or 43 (but the latter only if othervalue is equal to X).</p>
+<pre class="pipes">SomeType value:(42 | (43 -othervalue:X))</pre>
+<p class="legend">Select events from SomeType if value is 42 or 43 (but the latter only if othervalue isn't equal to X).</p>
 <hr/>
 
 <p><strong>To know more about...</strong></p>
@@ -4691,7 +4684,7 @@ a day, an hour and 5 minutes</pre>
 </table>
 </div>
 </div><hr/>
-<p>Page generated at 30-Jul-2014 17:55:32</p>
+<p>Page generated at 30-Jul-2014 17:57:56</p>
 </div></body>
 
 <script>
