@@ -1135,7 +1135,7 @@ ready(function() {
 
                 <tr>
                     <td class="level-1">
-                        <a href="#filter-and">3.6.  <span class="pipes2">&lt;filter&gt;  &lt;filter&gt;</span></a>
+                        <a href="#filter-and">3.6.  <span class="pipes2">&lt;filter&gt; &amp; &lt;filter&gt;</span></a>
                     </td>
                     <td class="description">Selects the intersection of two other filters.</td>
                 </tr>
@@ -3048,7 +3048,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="filter-and" class="level-1">
-<h4 class="header">3.6.  <span class="pipes2">&lt;filter&gt;  &lt;filter&gt;</span> <span class="permalink"><a href="#filter-and">¶</a></span></h4>
+<h4 class="header">3.6.  <span class="pipes2">&lt;filter&gt; &amp; &lt;filter&gt;</span> <span class="permalink"><a href="#filter-and">¶</a></span></h4>
 <div class="text"><p><strong>Selects the intersection of two other filters.</strong></p><p>It's the default filter conjunction, so it can safely be omitted.</p> <p>The operator <code class="pipes">&amp;</code> is equivalent to <code class="pipes">&amp;&amp;</code> and <code class="pipes">AND</code> (must be uppercase).</p> <p>
     <strong>Examples:</strong>
 </p> <pre class="pipes">http verb:get status:404</pre> <p class="legend">Selects records with the default field equal to "http", "verb" equal to "get" <strong>and</strong> "status" equal to "404"</p> <pre class="pipes">http &amp; verb:get &amp; status:404</pre> <p class="legend">Same as above, but with explicit &</p> <pre class="pipes">tag:(important &amp; resolved)</pre> <p class="legend">Selects records with the field "tag" containing both "important" <strong>and</strong> "resolved" values</p>
@@ -4733,7 +4733,7 @@ a day, an hour and 5 minutes</pre>
 </table>
 </div>
 </div><hr/>
-<p>Page generated at 18-Aug-2014 13:06:50</p>
+<p>Page generated at 22-Aug-2014 17:10:41</p>
 </div>
 
 <script>
