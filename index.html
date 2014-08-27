@@ -1,13 +1,144 @@
-<!DOCTYPE HTML>
- 
-<meta charset="UTF-8">
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
 
-<title>Pipes Landing Page - Temporary</title>
- 
-<p>Temporary page</p>
-<p>Resources:</p>
+<head>
+	<title>Intelie Pipes</title>
 
-<ul>
-    <li><a href='docs/index.html'>Documentation</a></li>
-    <li><a href='tutorial/index.html'>Tutorial</a></li>
-</ul>
+	<meta charset="UTF-8">
+
+	<meta name="Description" content="Intelie Pipes, query language especially suited for real time big data and stream analytics.">
+	<link rel="icon" href="images/favicon.ico" type="image/x-icon">
+	<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+
+	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+	<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+	<script src="js/jquery.animate-colors-min.js"></script>
+	<link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,400italic' rel='stylesheet' type='text/css'>
+	<link type="text/css" rel="stylesheet" href="style/landingpipes.css">
+
+	<script type="text/javascript">
+
+	$(document).ready(function() {
+		$( ".destination" ).mouseenter(function() {
+			$( this ).find( ".imageiten" )
+				.animate({ 
+					height: 150,
+					opacity: 0.6,
+				}, 140 )
+				// .animate({ opacity: 0.4 }, 300 )
+				// .animate({ height: 150 }, 200 )
+
+			$( this ).find( ".infoiten" )
+				.animate({ 
+					height: 104,
+					backgroundColor: '#fff',
+				}, 140 )
+			
+		});
+
+		$( ".destination" ).mouseleave(function() {
+			$( this ).find( ".imageiten" )
+				.animate({ 
+					height: 200,
+					opacity: 1,
+				}, 80 )
+
+			$( this ).find( ".infoiten" )
+				.animate({ 
+					height: 74,
+					backgroundColor: '#eee',
+				}, 80 )
+
+		});
+
+		$( ".inputmail" ).focus(function() {
+			$( "#success" )
+				.animate({ 
+					opacity: 1,
+				}, 160 )
+		});
+
+		$( ".inputmail" ).blur(function() {
+			$( "#success" )
+				.animate({ 
+					opacity: 0,
+				}, 160 )
+		});
+
+	});
+
+	</script>
+</head>
+
+<body>
+
+<div id="ilustrapage"></div>
+<div id="header">
+	<h1><span>Intelie Pipes : Intelie Live's query language</span></h1>
+</div>
+<div id="infocontainer">
+	<div id="info">
+		<h2>Here you’ll find everything you need to know about Intelie Pipes, Intelie Live’s exclusive query language, especially suited for real time big data and stream analytics</h2>
+	</div>
+</div>
+<div id="contentcontainer">
+	<div id="content">
+		<div class="destination">
+			<a href="http://www.intelie.com/en/product/" target="_blank">
+				<div class="imageiten live"></div>
+				<div class="infoiten">
+					<h3>Intelie Live</h3>
+					<p>Real time big data analysis and monitoring</p>
+				</div>
+				<div class="calltoaction"><p>link will open in a new tab</p></div>
+			</a>
+		</div>
+		<div class="destination">
+			<a href="https://pipes-tutorial.intelie.com/" target="_blank">
+				<div class="imageiten tutorial"></div>
+				<div class="infoiten">
+					<h3>Pipes Tuturial</h3>
+					<p>Learn the basics and much more</p>
+				</div>
+				<div class="calltoaction"><p>link will open in a new tab</p></div>
+			</a>
+		</div>
+		<div class="destination">
+			<a href="http://pipes.intelie.com/docs" target="_blank">
+				<div class="imageiten docs"></div>
+				<div class="infoiten">
+					<h3>Language reference</h3>
+					<p>Detailed language documentation</p>
+				</div>
+				<div class="calltoaction"><p>link will open in a new tab</p></div>
+			</a>
+		</div>
+	</div>
+<div id="subscriptioncontainer">
+	<div id="infosubscription">
+		<h2>Join our email discussion group</h2>
+		<p>(give us your suggestions, collaborate with other Pipes' users, receive informations about updates and training)</p>
+	</div>
+	<form id="subscription">
+		<input type="email" name="email-pipes" placeholder="Enter your email address here" class="inputmail">
+		<input type="submit" value="Subscribe" class="buttonmail">
+		<div id="success"><p>After click on subscribe you will be redirected to google groups' page.</div>
+	</form>
+</div>
+<div id="footercontainer">
+	<div id="footer">
+		<div id="logointelie">
+			<a href="http://www.intelie.com.br" target="_blank"><img src="images/logo_intelie.png" /></a>
+		</div>
+		<div id="social">
+			<a href="http://www.linkedin.com/company/intelie" target="_blank"><img src="images/ico_linkedin.gif" /></a>
+			<a href="https://twitter.com/intelie" target="_blank"><img src="images/ico_tweet.gif" /></a>
+			<a href="https://www.facebook.com/intelie" target="_blank"><img src="images/ico_facebook.gif" /></a>
+			<a href="http://www.youtube.com/user/IntelieChannel" target="_blank"><img src="images/ico_youtube.gif" /></a>
+		</div>
+	</div>
+</div>
+</div>
+
+</body>
+</html>
