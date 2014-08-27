@@ -1,0 +1,282 @@
+/* Estilos da landing page Pipes */
+
+*{
+	margin:0;
+	padding:0;
+	border:none;
+	text-decoration: none;
+}
+
+body{
+	margin:0px;
+	padding:0px;
+	background: #eee;
+}
+
+#ilustrapage{
+	background:#fff url(../images/ilustra_page.jpg) no-repeat top center;
+	width: 100%;
+	height: 350px;
+	position: fixed;
+	z-index: 0;
+}
+
+#header{
+	width: 979px;
+	height: 306px;
+	z-index: 999;
+	position: relative;
+	margin: auto;
+}
+
+#header h1{
+	background: url(../images/logo_pipes.png) no-repeat center 62px;
+	width: 979px;
+	height: 306px;
+}
+
+#header h1 span{
+	display: none;
+}
+
+#infocontainer{
+	background: url(../images/bg_faixa_topo.gif) repeat-x center bottom;
+	width: 100%;
+	height: 120px;
+	position: relative;
+}
+
+#info{
+	background: #4AA59E;
+	margin: auto;
+	width: 979px;
+	height: 120px;
+}
+
+#info h2{
+	font-family: "Lato", Arial, Helvetica, sans-serif;
+	font-weight: 300;
+	font-size: 24px;
+	color: #fff;
+	text-align: center;
+	padding: 25px 46px;
+}
+
+#contentcontainer{
+	background: #eee;
+	width: 100%;
+	height: 275px;
+	position: relative;
+}
+
+#content{
+	margin: auto;
+	width: 978px;
+	height: 275px;
+	border-left: 1px solid #ccc;
+	background-color: #fff;
+}
+
+.destination{
+	width: 325px;
+	height: 275px;
+	border-right: 1px solid #ccc;
+	float: left;
+}
+
+.imageiten{
+	width: 325px;
+	height: 200px;
+	border-bottom: 1px solid #ccc;
+	background-color: #fff;
+}
+
+.infoiten{
+	width: 325px;
+	height: 74px;
+	background-color: #eee;
+}
+
+.infoiten h3{
+	font-family: "Lato",Arial,Helvetica,sans-serif;
+	font-weight: normal;
+	font-size: 20px;
+	color: #39444C;
+	padding: 15px 0px 0px 20px;
+	text-decoration: none;
+}
+
+.infoiten p{
+	font-family: "Lato",Arial,Helvetica,sans-serif;
+	font-weight: normal;
+	font-size: 13px;
+	color: #4AA59E;
+	padding: 1px 0px 0px 20px;
+	text-decoration: none;
+}
+
+.calltoaction{
+	width: 305px;
+	height: 18px;
+	background-color: #FF9326;
+	font-family: "Lato-Bold",Arial,Helvetica,sans-serif;
+	font-size: 9px;
+	text-transform: uppercase;
+	color: #fff;
+	padding: 4px 0 0 20px;
+}
+
+.live{
+	background: #fff url(../images/ilustra_live.jpg);
+}
+
+.tutorial{
+	background: #fff url(../images/ilustra_tutorial.jpg);
+}
+
+.docs{
+	background: #fff url(../images/ilustra_docs.jpg);
+}
+
+.destination a{
+	text-decoration: none;
+}
+
+#subscriptioncontainer{
+	background: #4AA59E;
+	width: 100%;
+	height: 355px;
+	position: relative;
+	border-top: 1px solid #347572;
+}
+
+#infosubscription{
+	margin: auto;
+	text-align: center;
+	width: 979px;
+	margin-top: 70px;
+	margin-bottom: 24px;
+}
+
+#infosubscription h2{
+	font-family: "Lato",Arial,Helvetica,sans-serif;
+	font-weight: normal;
+	font-size: 28px;
+	color: #fff;
+}
+#infosubscription p{
+	font-family: "Lato",Arial,Helvetica,sans-serif;
+	font-weight: normal;
+	font-size: 14px;
+	color: #39444C;
+}
+
+#subscription{
+	position: relative;
+	margin: auto;
+	text-align: center;
+	width: 979px;
+}
+
+.inputmail{
+	width: 810px;
+	height:50px;
+	border-radius: 30px;
+	border: 1px solid #285A58;
+	font-family: "Lato",Arial,Helvetica,sans-serif;
+	font-weight: normal;
+	font-size: 17px;
+	color: #98A4B2;
+	padding: 5px 30px;
+	box-shadow: 0px -1px 5px rgba(50, 50, 50, 0.4) inset;
+}
+
+.inputmail:focus{
+	border-radius: 30px;
+	border: 1px solid #ff8000;
+	outline: none;
+	color: #39444C;
+}
+
+.buttonmail{
+	width: 121px;
+	height:44px;
+	border-radius: 50px;
+	border: 1px solid #D96D00;
+	background: #FF9326;
+	font-family: "Lato",Arial,Helvetica,sans-serif;
+	font-weight: 700;
+	font-size: 15px;
+	color: #fff;
+	position: absolute;
+	left: 794px;
+	top: 8px;
+	cursor: pointer;
+	box-shadow: 0px 1px 5px rgba(50, 50, 50, 0.4);
+}
+
+.buttonmail:hover{
+	background: #E98623;
+	border: 1px solid #D93600;
+}
+
+#success{
+	opacity: 0;
+	background: #54C2BE;
+	width: 815px;
+	height: 30px;
+	border: 1px solid #357572;
+	margin: auto;
+	margin-top: 20px;
+	text-align: center;
+	padding-top: 10px;
+	font-family: "Lato",Arial,Helvetica,sans-serif;
+	font-weight: 400;
+	font-size: 14px;
+	color: #39444C;
+}
+
+#success a{
+	color: #fff;
+}
+
+#success a:hover{
+	color: #39444C;
+}
+
+
+#footercontainer{
+	background: #3B444D;
+	width: 100%;
+	height: 86px;
+	position: relative;
+	border-top: 1px solid #000;
+}
+
+#footer{
+	margin: auto;
+	width: 979px;
+	height: 86px;
+}
+
+#logointelie{
+	float: left;
+	margin-top: 35px;
+}
+
+#social{
+	float: right;
+	margin-top: 30px;
+}
+
+#social a{
+	margin-left: 6px; 
+}
+
+
+
+
+
+
+
+
