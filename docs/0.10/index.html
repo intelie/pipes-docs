@@ -1572,9 +1572,9 @@ ready(function() {
 
                 <tr>
                     <td class="level-1">
-                        <a href="#scalar-spantest">6.22.  <span class="pipes2">&lt;number&gt;:spantest(&lt;number test&gt;, &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span></a>
+                        <a href="#scalar-spantest">6.22.  <span class="pipes2">&lt;number&gt;:spantest(&lt;number ts&gt;, &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span></a>
                     </td>
-                    <td class="description">Returns -1 if the tested number is before the span, 0 if it is inside and 1 if it is after.</td>
+                    <td class="description">Returns -1 if the tested timestamp is before the span, 0 if it is inside and 1 if it is after.</td>
                 </tr>
 
                 <tr>
@@ -1796,77 +1796,91 @@ ready(function() {
 
                 <tr>
                     <td class="level-1">
-                        <a href="#scalar-hllmerge">6.54.  <span class="pipes2">hllmerge(&lt;string... data&gt;) → &lt;string&gt;</span></a>
+                        <a href="#scalar-cron">6.54.  <span class="pipes2">cron(&lt;string&gt;, [&lt;string tz&gt;]) → &lt;period&gt;</span></a>
+                    </td>
+                    <td class="description">Constructs a period instance from a constant cron string</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-hllmerge">6.55.  <span class="pipes2">hllmerge(&lt;string... data&gt;) → &lt;string&gt;</span></a>
                     </td>
                     <td class="description">Merge many instances of compressed base64 HyperLogLog data.</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#scalar-max">6.55.  <span class="pipes2">max(&lt;comparable&gt;, &lt;comparable&gt;, &lt;comparable...&gt;) → &lt;comparable&gt;</span></a>
+                        <a href="#scalar-max">6.56.  <span class="pipes2">max(&lt;comparable&gt;, &lt;comparable&gt;, &lt;comparable...&gt;) → &lt;comparable&gt;</span></a>
                     </td>
                     <td class="description">Returns the greatest value of all supplied arguments.</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#scalar-min">6.56.  <span class="pipes2">min(&lt;comparable&gt;, &lt;comparable&gt;, &lt;comparable...&gt;) → &lt;comparable&gt;</span></a>
+                        <a href="#scalar-min">6.57.  <span class="pipes2">min(&lt;comparable&gt;, &lt;comparable&gt;, &lt;comparable...&gt;) → &lt;comparable&gt;</span></a>
                     </td>
                     <td class="description">Returns the least value of all supplied arguments.</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#scalar-newlist">6.57.  <span class="pipes2">newlist(&lt;object...&gt;) → &lt;object&gt;</span></a>
+                        <a href="#scalar-newlist">6.58.  <span class="pipes2">newlist(&lt;object...&gt;) → &lt;object&gt;</span></a>
                     </td>
                     <td class="description">Creates a instance of java.util.List with the supplied objects.</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#scalar-newmap">6.58.  <span class="pipes2">newmap(&lt;object,object... pairs&gt;) → &lt;object&gt;</span></a>
+                        <a href="#scalar-newmap">6.59.  <span class="pipes2">newmap(&lt;object,object... pairs&gt;) → &lt;object&gt;</span></a>
                     </td>
                     <td class="description">Creates a instance of java.util.Map with the supplied keys and values.</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#scalar-pi">6.59.  <span class="pipes2">pi() → &lt;number&gt;</span></a>
+                        <a href="#scalar-period">6.60.  <span class="pipes2">period(&lt;number&gt;, &lt;string unit&gt;, [&lt;string tz&gt;]) → &lt;period&gt;</span></a>
+                    </td>
+                    <td class="description">Constructs a period instance from constant parameters</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#scalar-pi">6.61.  <span class="pipes2">pi() → &lt;number&gt;</span></a>
                     </td>
                     <td class="description">Returns the constant value of pi.</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#scalar-random2">6.60.  <span class="pipes2">random(&lt;number min&gt;, &lt;number max&gt;) → &lt;number&gt;</span></a>
+                        <a href="#scalar-random2">6.62.  <span class="pipes2">random(&lt;number min&gt;, &lt;number max&gt;) → &lt;number&gt;</span></a>
                     </td>
                     <td class="description">Returns a random value between &lt;min&gt; and &lt;max&gt;.</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#scalar-random">6.61.  <span class="pipes2">random([&lt;number max&gt;]) → &lt;number&gt;</span></a>
+                        <a href="#scalar-random">6.63.  <span class="pipes2">random([&lt;number max&gt;]) → &lt;number&gt;</span></a>
                     </td>
                     <td class="description">Returns a random value of at most &lt;max&gt; (1 if not defined).</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#scalar-row">6.62.  <span class="pipes2">row(&lt;named... args&gt;) → &lt;row&gt;</span></a>
+                        <a href="#scalar-row">6.64.  <span class="pipes2">row(&lt;named... args&gt;) → &lt;row&gt;</span></a>
                     </td>
                     <td class="description">Returns a strongly typed row composed by the named expressions passed.</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#scalar-timestamp">6.63.  <span class="pipes2">timestamp() → &lt;number&gt;</span></a>
+                        <a href="#scalar-timestamp">6.65.  <span class="pipes2">timestamp() → &lt;number&gt;</span></a>
                     </td>
                     <td class="description">Returns the most appropriate timestamp, whether in scalar or aggregation contexts.</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#scalar-uuid">6.64.  <span class="pipes2">uuid() → &lt;string&gt;</span></a>
+                        <a href="#scalar-uuid">6.66.  <span class="pipes2">uuid() → &lt;string&gt;</span></a>
                     </td>
                     <td class="description">Returns a random UUID string.</td>
                 </tr>
@@ -3967,8 +3981,8 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 <div class="text"><p><strong>Calculates start timestamp of span based on target.</strong></p></div>
 </div><hr/>
 <div id="scalar-spantest" class="level-1">
-<h4 class="header">6.22.  <span class="pipes2">&lt;number&gt;:spantest(&lt;number test&gt;, &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-spantest">¶</a></span></h4>
-<div class="text"><p><strong>Returns -1 if the tested number is before the span, 0 if it is inside and 1 if it is after.</strong></p></div>
+<h4 class="header">6.22.  <span class="pipes2">&lt;number&gt;:spantest(&lt;number ts&gt;, &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-spantest">¶</a></span></h4>
+<div class="text"><p><strong>Returns -1 if the tested timestamp is before the span, 0 if it is inside and 1 if it is after.</strong></p></div>
 </div><hr/>
 <div id="scalar-tan" class="level-1">
 <h4 class="header">6.23.  <span class="pipes2">&lt;number&gt;:tan() → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-tan">¶</a></span></h4>
@@ -4086,11 +4100,11 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 <p>
     <strong>Examples:</strong>
 </p>
-<pre class="pipes">* 
+<pre class="pipes">*
 =&gt; expand name:regex(r'^(?&lt;first&gt;\w+)( \w+)* (?&lt;last&gt;\w+)$')</pre>
 <p class="legend">Extract the first and the last names from a single field.</p>
-<pre class="pipes">* 
-=&gt; name:regex(r'^(?&lt;first&gt;\w+)( \w+)* (?&lt;last&gt;\w+)$') as match 
+<pre class="pipes">*
+=&gt; name:regex(r'^(?&lt;first&gt;\w+)( \w+)* (?&lt;last&gt;\w+)$') as match
 =&gt; '%s, %s':format(match-&gt;last, match-&gt;first) as converted</pre>
 <p class="legend">Converts the name field to the format "Last, First".</p>
 </div>
@@ -4141,43 +4155,64 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 <h4 class="header">6.53.  <span class="pipes2">compare(&lt;comparable a&gt;, &lt;comparable b&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-compare">¶</a></span></h4>
 <div class="text"><p><strong>Returns a number &lt; 0 if a &lt; b, &gt; 0 if a &gt; b or 0 if a = b.</strong></p></div>
 </div><hr/>
+<div id="scalar-cron" class="level-1">
+<h4 class="header">6.54.  <span class="pipes2">cron(&lt;string&gt;, [&lt;string tz&gt;]) → &lt;period&gt;</span> <span class="permalink"><a href="#scalar-cron">¶</a></span></h4>
+<div class="text"><p><strong>Constructs a period instance from a constant cron string</strong></p><p>
+    <strong>Example:</strong>
+</p>
+<pre class="pipes">* =&gt; count() every cron('*/3 * * * * *')</pre>
+<p class="legend">Yields the event count every three seconds.</p>
+
+<pre class="pipes">* =&gt; timestamp():dateadd(cron('0 0 * * * *')) every second</pre>
+<p class="legend">Outputs every second the timestamp of the next hour.</p>
+</div>
+</div><hr/>
 <div id="scalar-hllmerge" class="level-1">
-<h4 class="header">6.54.  <span class="pipes2">hllmerge(&lt;string... data&gt;) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-hllmerge">¶</a></span></h4>
+<h4 class="header">6.55.  <span class="pipes2">hllmerge(&lt;string... data&gt;) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-hllmerge">¶</a></span></h4>
 <div class="text"><p><strong>Merge many instances of compressed base64 HyperLogLog data.</strong></p><p>
   Useful to merge results from <a href="#aggregation-hllset"><code class="pipes2">hllset(&lt;number log2m&gt;, &lt;object...&gt;) → &lt;string&gt;</code></a> aggregations.
 </p>
 </div>
 </div><hr/>
 <div id="scalar-max" class="level-1">
-<h4 class="header">6.55.  <span class="pipes2">max(&lt;comparable&gt;, &lt;comparable&gt;, &lt;comparable...&gt;) → &lt;comparable&gt;</span> <span class="permalink"><a href="#scalar-max">¶</a></span></h4>
+<h4 class="header">6.56.  <span class="pipes2">max(&lt;comparable&gt;, &lt;comparable&gt;, &lt;comparable...&gt;) → &lt;comparable&gt;</span> <span class="permalink"><a href="#scalar-max">¶</a></span></h4>
 <div class="text"><p><strong>Returns the greatest value of all supplied arguments.</strong></p></div>
 </div><hr/>
 <div id="scalar-min" class="level-1">
-<h4 class="header">6.56.  <span class="pipes2">min(&lt;comparable&gt;, &lt;comparable&gt;, &lt;comparable...&gt;) → &lt;comparable&gt;</span> <span class="permalink"><a href="#scalar-min">¶</a></span></h4>
+<h4 class="header">6.57.  <span class="pipes2">min(&lt;comparable&gt;, &lt;comparable&gt;, &lt;comparable...&gt;) → &lt;comparable&gt;</span> <span class="permalink"><a href="#scalar-min">¶</a></span></h4>
 <div class="text"><p><strong>Returns the least value of all supplied arguments.</strong></p></div>
 </div><hr/>
 <div id="scalar-newlist" class="level-1">
-<h4 class="header">6.57.  <span class="pipes2">newlist(&lt;object...&gt;) → &lt;object&gt;</span> <span class="permalink"><a href="#scalar-newlist">¶</a></span></h4>
+<h4 class="header">6.58.  <span class="pipes2">newlist(&lt;object...&gt;) → &lt;object&gt;</span> <span class="permalink"><a href="#scalar-newlist">¶</a></span></h4>
 <div class="text"><p><strong>Creates a instance of java.util.List with the supplied objects.</strong></p></div>
 </div><hr/>
 <div id="scalar-newmap" class="level-1">
-<h4 class="header">6.58.  <span class="pipes2">newmap(&lt;object,object... pairs&gt;) → &lt;object&gt;</span> <span class="permalink"><a href="#scalar-newmap">¶</a></span></h4>
+<h4 class="header">6.59.  <span class="pipes2">newmap(&lt;object,object... pairs&gt;) → &lt;object&gt;</span> <span class="permalink"><a href="#scalar-newmap">¶</a></span></h4>
 <div class="text"><p><strong>Creates a instance of java.util.Map with the supplied keys and values.</strong></p></div>
 </div><hr/>
+<div id="scalar-period" class="level-1">
+<h4 class="header">6.60.  <span class="pipes2">period(&lt;number&gt;, &lt;string unit&gt;, [&lt;string tz&gt;]) → &lt;period&gt;</span> <span class="permalink"><a href="#scalar-period">¶</a></span></h4>
+<div class="text"><p><strong>Constructs a period instance from constant parameters</strong></p><p>
+    <strong>Example:</strong>
+</p>
+<pre class="pipes">* =&gt; count() every period(3, 'seconds')</pre>
+<p class="legend">Yields the event count every three seconds same as the literal <code class="pipes">3 seconds</code>.</p>
+</div>
+</div><hr/>
 <div id="scalar-pi" class="level-1">
-<h4 class="header">6.59.  <span class="pipes2">pi() → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-pi">¶</a></span></h4>
+<h4 class="header">6.61.  <span class="pipes2">pi() → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-pi">¶</a></span></h4>
 <div class="text"><p><strong>Returns the constant value of pi.</strong></p></div>
 </div><hr/>
 <div id="scalar-random2" class="level-1">
-<h4 class="header">6.60.  <span class="pipes2">random(&lt;number min&gt;, &lt;number max&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-random2">¶</a></span></h4>
+<h4 class="header">6.62.  <span class="pipes2">random(&lt;number min&gt;, &lt;number max&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-random2">¶</a></span></h4>
 <div class="text"><p><strong>Returns a random value between &lt;min&gt; and &lt;max&gt;.</strong></p></div>
 </div><hr/>
 <div id="scalar-random" class="level-1">
-<h4 class="header">6.61.  <span class="pipes2">random([&lt;number max&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-random">¶</a></span></h4>
+<h4 class="header">6.63.  <span class="pipes2">random([&lt;number max&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-random">¶</a></span></h4>
 <div class="text"><p><strong>Returns a random value of at most &lt;max&gt; (1 if not defined).</strong></p></div>
 </div><hr/>
 <div id="scalar-row" class="level-1">
-<h4 class="header">6.62.  <span class="pipes2">row(&lt;named... args&gt;) → &lt;row&gt;</span> <span class="permalink"><a href="#scalar-row">¶</a></span></h4>
+<h4 class="header">6.64.  <span class="pipes2">row(&lt;named... args&gt;) → &lt;row&gt;</span> <span class="permalink"><a href="#scalar-row">¶</a></span></h4>
 <div class="text"><p><strong>Returns a strongly typed row composed by the named expressions passed.</strong></p><p>
   The result is a row value with a timestamp and as many fields as there are
   in the specified argument list.
@@ -4191,11 +4226,11 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="scalar-timestamp" class="level-1">
-<h4 class="header">6.63.  <span class="pipes2">timestamp() → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-timestamp">¶</a></span></h4>
+<h4 class="header">6.65.  <span class="pipes2">timestamp() → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-timestamp">¶</a></span></h4>
 <div class="text"><p><strong>Returns the most appropriate timestamp, whether in scalar or aggregation contexts.</strong></p></div>
 </div><hr/>
 <div id="scalar-uuid" class="level-1">
-<h4 class="header">6.64.  <span class="pipes2">uuid() → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-uuid">¶</a></span></h4>
+<h4 class="header">6.66.  <span class="pipes2">uuid() → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-uuid">¶</a></span></h4>
 <div class="text"><p><strong>Returns a random UUID string.</strong></p></div>
 </div><hr/>
 <div id="chapter-aggregations" class="level-0">
@@ -4798,7 +4833,7 @@ a day, an hour and 5 minutes</pre>
 </table>
 </div>
 </div><hr/>
-<p>Page generated at 07-Oct-2014 18:29:44</p>
+<p>Page generated at 08-Oct-2014 10:45:03</p>
 </div>
 
 <script>
