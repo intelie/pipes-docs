@@ -1180,56 +1180,63 @@ ready(function() {
 
                 <tr>
                     <td class="level-1">
-                        <a href="#pipe-skip">4.8.  <span class="pipes2">@skip &lt;number&gt;, [&lt;number take&gt;] [by &lt;object...&gt;]</span></a>
+                        <a href="#pipe-set">4.8.  <span class="pipes2">@set &lt;named...&gt;</span></a>
+                    </td>
+                    <td class="description">Sets fields in the original event (both typed and raw)</td>
+                </tr>
+
+                <tr>
+                    <td class="level-1">
+                        <a href="#pipe-skip">4.9.  <span class="pipes2">@skip &lt;number&gt;, [&lt;number take&gt;] [by &lt;object...&gt;]</span></a>
                     </td>
                     <td class="description">Skips (and optionally limits) some results from previous pipe.</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#pipe-sort">4.9.  <span class="pipes2">@sort &lt;sortfield... expr&gt;</span></a>
+                        <a href="#pipe-sort">4.10.  <span class="pipes2">@sort &lt;sortfield... expr&gt;</span></a>
                     </td>
                     <td class="description">Sorts the results from previous pipe.</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#pipe-take">4.10.  <span class="pipes2">@take &lt;number&gt; [by &lt;object...&gt;]</span></a>
+                        <a href="#pipe-take">4.11.  <span class="pipes2">@take &lt;number&gt; [by &lt;object...&gt;]</span></a>
                     </td>
                     <td class="description">Limits the results from previous pipe.</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#pipe-throttle">4.11.  <span class="pipes2">@throttle [&lt;number k&gt;, ] &lt;period&gt; [by &lt;object...&gt;]</span></a>
+                        <a href="#pipe-throttle">4.12.  <span class="pipes2">@throttle [&lt;number k&gt;, ] &lt;period&gt; [by &lt;object...&gt;]</span></a>
                     </td>
                     <td class="description">Limits the output of the previous pipe to at most &lt;k&gt; rows per &lt;period&gt;.</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#pipe-top">4.12.  <span class="pipes2">@top &lt;number k&gt;, &lt;sortfield... expr&gt; [by &lt;object...&gt;]</span></a>
+                        <a href="#pipe-top">4.13.  <span class="pipes2">@top &lt;number k&gt;, &lt;sortfield... expr&gt; [by &lt;object...&gt;]</span></a>
                     </td>
                     <td class="description">Sorts the results and gets the first k rows (possibly grouped) from previous pipe.</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#pipe-unsafe">4.13.  <span class="pipes2">@unsafe</span></a>
+                        <a href="#pipe-unsafe">4.14.  <span class="pipes2">@unsafe</span></a>
                     </td>
                     <td class="description">Marks that any pipe executed after this must run in a non-distributed environment.</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#pipe-yield">4.14.  <span class="pipes2">@yield [&lt;object expr&gt;]</span></a>
+                        <a href="#pipe-yield">4.15.  <span class="pipes2">@yield [&lt;object expr&gt;]</span></a>
                     </td>
                     <td class="description">Extracts one field of the stream to be the output event.</td>
                 </tr>
 
                 <tr>
                     <td class="level-1">
-                        <a href="#pipe-atomic">4.15.  <span class="pipes2">atomic &lt;pipe&gt;</span></a>
+                        <a href="#pipe-atomic">4.16.  <span class="pipes2">atomic &lt;pipe&gt;</span></a>
                     </td>
                     <td class="description">Modify a pipe to run entirely in the same node, ignoring any distribution invariants.</td>
                 </tr>
@@ -3409,8 +3416,28 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 <p class="legend">Outputs only the latest batch of counts by host at the end of the execution.</p>
 </div>
 </div><hr/>
+<div id="pipe-set" class="level-1">
+<h4 class="header">4.8.  <span class="pipes2">@set &lt;named...&gt;</span> <span class="permalink"><a href="#pipe-set">¶</a></span></h4>
+<div class="text"><p><strong>Sets fields in the original event (both typed and raw)</strong></p><p><strong>Examples:</strong></p>
+<pre class="pipes">*
+=&gt; @set (date+time):dateparse('yyyyMMddHHmmss') as timestamp</pre>
+<p class="legend">
+    Adds a new field to the original event that is the timestamp parsed using
+    both <code class="pipes">date</code> and <code class="pipes">time</code> fields from the event.
+</p>
+
+<pre class="pipes">*
+=&gt; date, time, text
+=&gt; @set (date+time):dateparse('yyyyMMddHHmmss') as timestamp</pre>
+<p class="legend">
+    Adds a new field to the original event that is the timestamp parsed using
+    both <code class="pipes">date</code> and <code class="pipes">time</code> fields from the event. Equivalent to <code class="expr">expand *, (date+time):dateparse('yyyyMMddHHmmss') as timestamp</code>
+    as the previous pipe is typed.
+</p>
+</div>
+</div><hr/>
 <div id="pipe-skip" class="level-1">
-<h4 class="header">4.8.  <span class="pipes2">@skip &lt;number&gt;, [&lt;number take&gt;] [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-skip">¶</a></span></h4>
+<h4 class="header">4.9.  <span class="pipes2">@skip &lt;number&gt;, [&lt;number take&gt;] [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-skip">¶</a></span></h4>
 <div class="text"><p><strong>Skips (and optionally limits) some results from previous pipe.</strong></p><p>
     Skip pipe does not change any pipe metadata, it just repeats previous pipe info.
     It also doesn't make any aggregation, it just outputs as soon as it finishes processing
@@ -3427,7 +3454,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="pipe-sort" class="level-1">
-<h4 class="header">4.9.  <span class="pipes2">@sort &lt;sortfield... expr&gt;</span> <span class="permalink"><a href="#pipe-sort">¶</a></span></h4>
+<h4 class="header">4.10.  <span class="pipes2">@sort &lt;sortfield... expr&gt;</span> <span class="permalink"><a href="#pipe-sort">¶</a></span></h4>
 <div class="text"><p><strong>Sorts the results from previous pipe.</strong></p><p>
     Sort pipe does not change any pipe metadata, it just repeats previous pipe info.
     It also doesn't make any aggregation, it just outputs as soon as it finishes processing
@@ -3447,7 +3474,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="pipe-take" class="level-1">
-<h4 class="header">4.10.  <span class="pipes2">@take &lt;number&gt; [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-take">¶</a></span></h4>
+<h4 class="header">4.11.  <span class="pipes2">@take &lt;number&gt; [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-take">¶</a></span></h4>
 <div class="text"><p><strong>Limits the results from previous pipe.</strong></p><p>
     Take pipe does not change any pipe metadata, it just repeats previous pipe info.
     It also doesn't make any aggregation, it just outputs as soon as it finishes processing
@@ -3465,7 +3492,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="pipe-throttle" class="level-1">
-<h4 class="header">4.11.  <span class="pipes2">@throttle [&lt;number k&gt;, ] &lt;period&gt; [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-throttle">¶</a></span></h4>
+<h4 class="header">4.12.  <span class="pipes2">@throttle [&lt;number k&gt;, ] &lt;period&gt; [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-throttle">¶</a></span></h4>
 <div class="text"><p><strong>Limits the output of the previous pipe to at most &lt;k&gt; rows per &lt;period&gt;.</strong></p><p>
     The exceeding rows are discarded. This is an <strong>unsafe</strong> pipe (see 
     <a href="#concepts-pipes-chaining">Section 2.2: Chained computation model</a>).
@@ -3495,7 +3522,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="pipe-top" class="level-1">
-<h4 class="header">4.12.  <span class="pipes2">@top &lt;number k&gt;, &lt;sortfield... expr&gt; [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-top">¶</a></span></h4>
+<h4 class="header">4.13.  <span class="pipes2">@top &lt;number k&gt;, &lt;sortfield... expr&gt; [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-top">¶</a></span></h4>
 <div class="text"><p><strong>Sorts the results and gets the first k rows (possibly grouped) from previous pipe.</strong></p><p>
     Top pipe does not change any pipe metadata, it just repeats previous pipe info.
     It also doesn't make any aggregation, it just outputs as soon as it finishes processing
@@ -3521,7 +3548,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="pipe-unsafe" class="level-1">
-<h4 class="header">4.13.  <span class="pipes2">@unsafe</span> <span class="permalink"><a href="#pipe-unsafe">¶</a></span></h4>
+<h4 class="header">4.14.  <span class="pipes2">@unsafe</span> <span class="permalink"><a href="#pipe-unsafe">¶</a></span></h4>
 <div class="text"><p><strong>Marks that any pipe executed after this must run in a non-distributed environment.</strong></p><p>
     The engine forces that each <strong>unsafe</strong> pipe must be preceeded with a <strong>safe</strong> 
     or <strong>semi-safe</strong> pipe. It is recommended to avoid excessive communication between
@@ -3537,7 +3564,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="pipe-yield" class="level-1">
-<h4 class="header">4.14.  <span class="pipes2">@yield [&lt;object expr&gt;]</span> <span class="permalink"><a href="#pipe-yield">¶</a></span></h4>
+<h4 class="header">4.15.  <span class="pipes2">@yield [&lt;object expr&gt;]</span> <span class="permalink"><a href="#pipe-yield">¶</a></span></h4>
 <div class="text"><p><strong>Extracts one field of the stream to be the output event.</strong></p><p>
     If the expression is not defined, it is assumed to be <code class="pipes">_</code>.
 </p>
@@ -3553,7 +3580,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="pipe-atomic" class="level-1">
-<h4 class="header">4.15.  <span class="pipes2">atomic &lt;pipe&gt;</span> <span class="permalink"><a href="#pipe-atomic">¶</a></span></h4>
+<h4 class="header">4.16.  <span class="pipes2">atomic &lt;pipe&gt;</span> <span class="permalink"><a href="#pipe-atomic">¶</a></span></h4>
 <div class="text"><p><strong>Modify a pipe to run entirely in the same node, ignoring any distribution invariants.</strong></p><p>
     This modifier is useful when the data is known to be already partitioned. For example, if you are sure
     that each host will be consistently sent to the same node, you can avoid distribution costs by writing
@@ -4918,7 +4945,7 @@ a day, an hour and 5 minutes</pre>
 </table>
 </div>
 </div><hr/>
-<p>Page generated at 02-Dec-2014 22:28:46</p>
+<p>Page generated at 30-Dec-2014 18:04:54</p>
 </div>
 
 <script>
