@@ -292,7 +292,6 @@ div.CodeMirror-cursors {
  </style>
 <style> p {
   margin: 0 0 1em;
-
 }
 .header span.permalink {
   display: none;
@@ -397,6 +396,11 @@ code {
   padding: 1px 3px;
   font-family: 'Lucida Console', monospace;
   font-size: 85%;
+}
+.bg-warning {
+  padding: 1em;
+  border: 1px solid #CCBB66;
+  border-radius: 4px;
 }
  </style>
 <script type="text/javascript"> !function(a){if("object"==typeof exports&&"object"==typeof module)module.exports=a();else{if("function"==typeof define&&define.amd)return define([],a);this.CodeMirror=a()}}(function(){"use strict";function z(a,c){if(!(this instanceof z))return new z(a,c);this.options=c=c||{},Fg($d,c,!1),N(c);var d=c.value;"string"==typeof d&&(d=new zf(d,c.mode)),this.doc=d;var e=this.display=new A(a,d);e.wrapper.CodeMirror=this,J(this),H(this),c.lineWrapping&&(this.display.wrapper.className+=" CodeMirror-wrap"),c.autofocus&&!r&&Rc(this),this.state={keyMaps:[],overlays:[],modeGen:0,overwrite:!1,focused:!1,suppressEdits:!1,pasteIncoming:!1,cutIncoming:!1,draggingText:!1,highlight:new vg},b&&setTimeout(Gg(Qc,this,!0),20),Uc(this);var f=this;Ac(this,function(){f.curOp.forceUpdate=!0,Df(f,d),c.autofocus&&!r||Rg()==e.input?setTimeout(Gg(vd,f),20):wd(f);for(var a in _d)_d.hasOwnProperty(a)&&_d[a](f,c[a],be);for(var b=0;b<fe.length;++b)fe[b](f)})}function A(a,b){var d=this,e=d.input=Mg("textarea",null,null,"position: absolute; padding: 0; width: 1px; height: 1em; outline: none");h?e.style.width="1000px":e.setAttribute("wrap","off"),q&&(e.style.border="1px solid black"),e.setAttribute("autocorrect","off"),e.setAttribute("autocapitalize","off"),e.setAttribute("spellcheck","false"),d.inputDiv=Mg("div",[e],null,"overflow: hidden; position: relative; width: 3px; height: 0px;"),d.scrollbarH=Mg("div",[Mg("div",null,null,"height: 100%; min-height: 1px")],"CodeMirror-hscrollbar"),d.scrollbarV=Mg("div",[Mg("div",null,null,"min-width: 1px")],"CodeMirror-vscrollbar"),d.scrollbarFiller=Mg("div",null,"CodeMirror-scrollbar-filler"),d.gutterFiller=Mg("div",null,"CodeMirror-gutter-filler"),d.lineDiv=Mg("div",null,"CodeMirror-code"),d.selectionDiv=Mg("div",null,null,"position: relative; z-index: 1"),d.cursorDiv=Mg("div",null,"CodeMirror-cursors"),d.measure=Mg("div",null,"CodeMirror-measure"),d.lineMeasure=Mg("div",null,"CodeMirror-measure"),d.lineSpace=Mg("div",[d.measure,d.lineMeasure,d.selectionDiv,d.cursorDiv,d.lineDiv],null,"position: relative; outline: none"),d.mover=Mg("div",[Mg("div",[d.lineSpace],"CodeMirror-lines")],null,"position: relative"),d.sizer=Mg("div",[d.mover],"CodeMirror-sizer"),d.heightForcer=Mg("div",null,null,"position: absolute; height: "+qg+"px; width: 1px;"),d.gutters=Mg("div",null,"CodeMirror-gutters"),d.lineGutter=null,d.scroller=Mg("div",[d.sizer,d.heightForcer,d.gutters],"CodeMirror-scroll"),d.scroller.setAttribute("tabIndex","-1"),d.wrapper=Mg("div",[d.inputDiv,d.scrollbarH,d.scrollbarV,d.scrollbarFiller,d.gutterFiller,d.scroller],"CodeMirror"),c&&(d.gutters.style.zIndex=-1,d.scroller.style.paddingRight=0),q&&(e.style.width="0px"),h||(d.scroller.draggable=!0),m&&(d.inputDiv.style.height="1px",d.inputDiv.style.position="absolute"),c&&(d.scrollbarH.style.minHeight=d.scrollbarV.style.minWidth="18px"),a.appendChild?a.appendChild(d.wrapper):a(d.wrapper),d.viewFrom=d.viewTo=b.first,d.view=[],d.externalMeasured=null,d.viewOffset=0,d.lastSizeC=0,d.updateLineNumbers=null,d.lineNumWidth=d.lineNumInnerWidth=d.lineNumChars=null,d.prevInput="",d.alignWidgets=!1,d.pollingFast=!1,d.poll=new vg,d.cachedCharWidth=d.cachedTextHeight=d.cachedPaddingH=null,d.inaccurateSelection=!1,d.maxLine=null,d.maxLineLength=0,d.maxLineChanged=!1,d.wheelDX=d.wheelDY=d.wheelStartX=d.wheelStartY=null,d.shift=!1}function B(a){a.doc.mode=z.getMode(a.options,a.doc.modeOption),C(a)}function C(a){a.doc.iter(function(a){a.stateAfter&&(a.stateAfter=null),a.styles&&(a.styles=null)}),a.doc.frontier=a.doc.first,Tb(a,100),a.state.modeGen++,a.curOp&&Gc(a)}function D(a){a.options.lineWrapping?(Ug(a.display.wrapper,"CodeMirror-wrap"),a.display.sizer.style.minWidth=""):(Tg(a.display.wrapper,"CodeMirror-wrap"),M(a)),F(a),Gc(a),jc(a),setTimeout(function(){P(a)},100)}function E(a){var b=vc(a.display),c=a.options.lineWrapping,d=c&&Math.max(5,a.display.scroller.clientWidth/wc(a.display)-3);return function(e){if(Ve(a.doc,e))return 0;var f=0;if(e.widgets)for(var g=0;g<e.widgets.length;g++)e.widgets[g].height&&(f+=e.widgets[g].height);return c?f+(Math.ceil(e.text.length/d)||1)*b:f+b}}function F(a){var b=a.doc,c=E(a);b.iter(function(a){var b=c(a);b!=a.height&&Hf(a,b)})}function G(a){var b=ke[a.options.keyMap],c=b.style;a.display.wrapper.className=a.display.wrapper.className.replace(/\s*cm-keymap-\S+/g,"")+(c?" cm-keymap-"+c:"")}function H(a){a.display.wrapper.className=a.display.wrapper.className.replace(/\s*cm-s-\S+/g,"")+a.options.theme.replace(/(^|\s)\s*/g," cm-s-"),jc(a)}function I(a){J(a),Gc(a),setTimeout(function(){R(a)},20)}function J(a){var b=a.display.gutters,c=a.options.gutters;Og(b);for(var d=0;d<c.length;++d){var e=c[d],f=b.appendChild(Mg("div",null,"CodeMirror-gutter "+e));"CodeMirror-linenumbers"==e&&(a.display.lineGutter=f,f.style.width=(a.display.lineNumWidth||1)+"px")}b.style.display=d?"":"none",K(a)}function K(a){var b=a.display.gutters.offsetWidth;a.display.sizer.style.marginLeft=b+"px",a.display.scrollbarH.style.left=a.options.fixedGutter?b+"px":0}function L(a){if(0==a.height)return 0;for(var c,b=a.text.length,d=a;c=Oe(d);){var e=c.find(0,!0);d=e.from.line,b+=e.from.ch-e.to.ch}for(d=a;c=Pe(d);){var e=c.find(0,!0);b-=d.text.length-e.from.ch,d=e.to.line,b+=d.text.length-e.to.ch}return b}function M(a){var b=a.display,c=a.doc;b.maxLine=Ef(c,c.first),b.maxLineLength=L(b.maxLine),b.maxLineChanged=!0,c.iter(function(a){var c=L(a);c>b.maxLineLength&&(b.maxLineLength=c,b.maxLine=a)})}function N(a){var b=Cg(a.gutters,"CodeMirror-linenumbers");-1==b&&a.lineNumbers?a.gutters=a.gutters.concat(["CodeMirror-linenumbers"]):b>-1&&!a.lineNumbers&&(a.gutters=a.gutters.slice(0),a.gutters.splice(b,1))}function O(a){var b=a.display.scroller;return{clientHeight:b.clientHeight,barHeight:a.display.scrollbarV.clientHeight,scrollWidth:b.scrollWidth,clientWidth:b.clientWidth,barWidth:a.display.scrollbarH.clientWidth,docHeight:Math.round(a.doc.height+Yb(a.display))}}function P(a,b){b||(b=O(a));var c=a.display,d=b.docHeight+qg,e=b.scrollWidth>b.clientWidth,f=d>b.clientHeight;if(f?(c.scrollbarV.style.display="block",c.scrollbarV.style.bottom=e?Yg(c.measure)+"px":"0",c.scrollbarV.firstChild.style.height=Math.max(0,d-b.clientHeight+(b.barHeight||c.scrollbarV.clientHeight))+"px"):(c.scrollbarV.style.display="",c.scrollbarV.firstChild.style.height="0"),e?(c.scrollbarH.style.display="block",c.scrollbarH.style.right=f?Yg(c.measure)+"px":"0",c.scrollbarH.firstChild.style.width=b.scrollWidth-b.clientWidth+(b.barWidth||c.scrollbarH.clientWidth)+"px"):(c.scrollbarH.style.display="",c.scrollbarH.firstChild.style.width="0"),e&&f?(c.scrollbarFiller.style.display="block",c.scrollbarFiller.style.height=c.scrollbarFiller.style.width=Yg(c.measure)+"px"):c.scrollbarFiller.style.display="",e&&a.options.coverGutterNextToScrollbar&&a.options.fixedGutter?(c.gutterFiller.style.display="block",c.gutterFiller.style.height=Yg(c.measure)+"px",c.gutterFiller.style.width=c.gutters.offsetWidth+"px"):c.gutterFiller.style.display="",n&&0===Yg(c.measure)){c.scrollbarV.style.minWidth=c.scrollbarH.style.minHeight=o?"18px":"12px";var g=function(b){dg(b)!=c.scrollbarV&&dg(b)!=c.scrollbarH&&Bc(a,Xc)(b)};fg(c.scrollbarV,"mousedown",g),fg(c.scrollbarH,"mousedown",g)}}function Q(a,b,c){var d=c&&null!=c.top?c.top:a.scroller.scrollTop;d=Math.floor(d-Xb(a));var e=c&&null!=c.bottom?c.bottom:d+a.wrapper.clientHeight,f=Jf(b,d),g=Jf(b,e);if(c&&c.ensure){var h=c.ensure.from.line,i=c.ensure.to.line;if(f>h)return{from:h,to:Jf(b,Kf(Ef(b,h))+a.wrapper.clientHeight)};if(Math.min(i,b.lastLine())>=g)return{from:Jf(b,Kf(Ef(b,i))-a.wrapper.clientHeight),to:i}}return{from:f,to:g}}function R(a){var b=a.display,c=b.view;if(b.alignWidgets||b.gutters.firstChild&&a.options.fixedGutter){for(var d=U(b)-b.scroller.scrollLeft+a.doc.scrollLeft,e=b.gutters.offsetWidth,f=d+"px",g=0;g<c.length;g++)if(!c[g].hidden){a.options.fixedGutter&&c[g].gutter&&(c[g].gutter.style.left=f);var h=c[g].alignable;if(h)for(var i=0;i<h.length;i++)h[i].style.left=f}a.options.fixedGutter&&(b.gutters.style.left=d+e+"px")}}function S(a){if(!a.options.lineNumbers)return!1;var b=a.doc,c=T(a.options,b.first+b.size-1),d=a.display;if(c.length!=d.lineNumChars){var e=d.measure.appendChild(Mg("div",[Mg("div",c)],"CodeMirror-linenumber CodeMirror-gutter-elt")),f=e.firstChild.offsetWidth,g=e.offsetWidth-f;return d.lineGutter.style.width="",d.lineNumInnerWidth=Math.max(f,d.lineGutter.offsetWidth-g),d.lineNumWidth=d.lineNumInnerWidth+g,d.lineNumChars=d.lineNumInnerWidth?c.length:-1,d.lineGutter.style.width=d.lineNumWidth+"px",K(a),!0}return!1}function T(a,b){return String(a.lineNumberFormatter(b+a.firstLineNumber))}function U(a){return a.scroller.getBoundingClientRect().left-a.sizer.getBoundingClientRect().left}function V(a,b,c){for(var f,d=a.display.viewFrom,e=a.display.viewTo,g=Q(a.display,a.doc,b),i=!0;;i=!1){var j=a.display.scroller.clientWidth;if(!W(a,g,c))break;f=!0,a.display.maxLineChanged&&!a.options.lineWrapping&&X(a);var k=O(a);if(Pb(a),Y(a,k),P(a,k),h&&a.options.lineWrapping&&Z(a,k),i&&a.options.lineWrapping&&j!=a.display.scroller.clientWidth)c=!0;else if(c=!1,b&&null!=b.top&&(b={top:Math.min(k.docHeight-qg-k.clientHeight,b.top)}),g=Q(a.display,a.doc,b),g.from>=a.display.viewFrom&&g.to<=a.display.viewTo)break}return a.display.updateLineNumbers=null,f&&(kg(a,"update",a),(a.display.viewFrom!=d||a.display.viewTo!=e)&&kg(a,"viewportChange",a,a.display.viewFrom,a.display.viewTo)),f}function W(a,b,c){var d=a.display,e=a.doc;if(!d.wrapper.offsetWidth)return Ic(a),void 0;if(!(!c&&b.from>=d.viewFrom&&b.to<=d.viewTo&&0==Mc(a))){S(a)&&Ic(a);var f=ab(a),g=e.first+e.size,h=Math.max(b.from-a.options.viewportMargin,e.first),i=Math.min(g,b.to+a.options.viewportMargin);d.viewFrom<h&&h-d.viewFrom<20&&(h=Math.max(e.first,d.viewFrom)),d.viewTo>i&&d.viewTo-i<20&&(i=Math.min(g,d.viewTo)),y&&(h=Te(a.doc,h),i=Ue(a.doc,i));var j=h!=d.viewFrom||i!=d.viewTo||d.lastSizeC!=d.wrapper.clientHeight;Lc(a,h,i),d.viewOffset=Kf(Ef(a.doc,d.viewFrom)),a.display.mover.style.top=d.viewOffset+"px";var k=Mc(a);if(j||0!=k||c){var l=Rg();return k>4&&(d.lineDiv.style.display="none"),bb(a,d.updateLineNumbers,f),k>4&&(d.lineDiv.style.display=""),l&&Rg()!=l&&l.offsetHeight&&l.focus(),Og(d.cursorDiv),Og(d.selectionDiv),j&&(d.lastSizeC=d.wrapper.clientHeight,Tb(a,400)),$(a),!0}}}function X(a){var b=a.display,c=bc(a,b.maxLine,b.maxLine.text.length).left;b.maxLineChanged=!1;var d=Math.max(0,c+3),e=Math.max(0,b.sizer.offsetLeft+d+qg-b.scroller.clientWidth);b.sizer.style.minWidth=d+"px",e<a.doc.scrollLeft&&hd(a,Math.min(b.scroller.scrollLeft,e),!0)}function Y(a,b){a.display.sizer.style.minHeight=a.display.heightForcer.style.top=b.docHeight+"px",a.display.gutters.style.height=Math.max(b.docHeight,b.clientHeight-qg)+"px"}function Z(a,b){a.display.sizer.offsetWidth+a.display.gutters.offsetWidth<a.display.scroller.clientWidth-1&&(a.display.sizer.style.minHeight=a.display.heightForcer.style.top="0px",a.display.gutters.style.height=b.docHeight+"px")}function $(a){for(var b=a.display,d=b.lineDiv.offsetTop,e=0;e<b.view.length;e++){var g,f=b.view[e];if(!f.hidden){if(c){var h=f.node.offsetTop+f.node.offsetHeight;g=h-d,d=h}else{var i=f.node.getBoundingClientRect();g=i.bottom-i.top}var j=f.line.height-g;if(2>g&&(g=vc(b)),(j>.001||-.001>j)&&(Hf(f.line,g),_(f.line),f.rest))for(var k=0;k<f.rest.length;k++)_(f.rest[k])}}}function _(a){if(a.widgets)for(var b=0;b<a.widgets.length;++b)a.widgets[b].height=a.widgets[b].node.offsetHeight}function ab(a){for(var b=a.display,c={},d={},e=b.gutters.firstChild,f=0;e;e=e.nextSibling,++f)c[a.options.gutters[f]]=e.offsetLeft,d[a.options.gutters[f]]=e.offsetWidth;return{fixedPos:U(b),gutterTotalWidth:b.gutters.offsetWidth,gutterLeft:c,gutterWidth:d,wrapperWidth:b.wrapper.clientWidth}}function bb(a,b,c){function i(b){var c=b.nextSibling;return h&&s&&a.display.currentWheelTarget==b?b.style.display="none":b.parentNode.removeChild(b),c}for(var d=a.display,e=a.options.lineNumbers,f=d.lineDiv,g=f.firstChild,j=d.view,k=d.viewFrom,l=0;l<j.length;l++){var m=j[l];if(m.hidden);else if(m.node){for(;g!=m.node;)g=i(g);var o=e&&null!=b&&k>=b&&m.lineNumber;m.changes&&(Cg(m.changes,"gutter")>-1&&(o=!1),cb(a,m,k,c)),o&&(Og(m.lineNumber),m.lineNumber.appendChild(document.createTextNode(T(a.options,k)))),g=m.node.nextSibling}else{var n=kb(a,m,k,c);f.insertBefore(n,g)}k+=m.size}for(;g;)g=i(g)}function cb(a,b,c,d){for(var e=0;e<b.changes.length;e++){var f=b.changes[e];"text"==f?gb(a,b):"gutter"==f?ib(a,b,c,d):"class"==f?hb(b):"widget"==f&&jb(b,d)}b.changes=null}function db(a){return a.node==a.text&&(a.node=Mg("div",null,null,"position: relative"),a.text.parentNode&&a.text.parentNode.replaceChild(a.node,a.text),a.node.appendChild(a.text),c&&(a.node.style.zIndex=2)),a.node}function eb(a){var b=a.bgClass?a.bgClass+" "+(a.line.bgClass||""):a.line.bgClass;if(b&&(b+=" CodeMirror-linebackground"),a.background)b?a.background.className=b:(a.background.parentNode.removeChild(a.background),a.background=null);else if(b){var c=db(a);a.background=c.insertBefore(Mg("div",null,b),c.firstChild)}}function fb(a,b){var c=a.display.externalMeasured;return c&&c.line==b.line?(a.display.externalMeasured=null,b.measure=c.measure,c.built):nf(a,b)}function gb(a,b){var c=b.text.className,d=fb(a,b);b.text==b.node&&(b.node=d.pre),b.text.parentNode.replaceChild(d.pre,b.text),b.text=d.pre,d.bgClass!=b.bgClass||d.textClass!=b.textClass?(b.bgClass=d.bgClass,b.textClass=d.textClass,hb(b)):c&&(b.text.className=c)}function hb(a){eb(a),a.line.wrapClass?db(a).className=a.line.wrapClass:a.node!=a.text&&(a.node.className="");var b=a.textClass?a.textClass+" "+(a.line.textClass||""):a.line.textClass;a.text.className=b||""}function ib(a,b,c,d){b.gutter&&(b.node.removeChild(b.gutter),b.gutter=null);var e=b.line.gutterMarkers;if(a.options.lineNumbers||e){var f=db(b),g=b.gutter=f.insertBefore(Mg("div",null,"CodeMirror-gutter-wrapper","position: absolute; left: "+(a.options.fixedGutter?d.fixedPos:-d.gutterTotalWidth)+"px"),b.text);if(!a.options.lineNumbers||e&&e["CodeMirror-linenumbers"]||(b.lineNumber=g.appendChild(Mg("div",T(a.options,c),"CodeMirror-linenumber CodeMirror-gutter-elt","left: "+d.gutterLeft["CodeMirror-linenumbers"]+"px; width: "+a.display.lineNumInnerWidth+"px"))),e)for(var h=0;h<a.options.gutters.length;++h){var i=a.options.gutters[h],j=e.hasOwnProperty(i)&&e[i];j&&g.appendChild(Mg("div",[j],"CodeMirror-gutter-elt","left: "+d.gutterLeft[i]+"px; width: "+d.gutterWidth[i]+"px"))}}}function jb(a,b){a.alignable&&(a.alignable=null);for(var d,c=a.node.firstChild;c;c=d){var d=c.nextSibling;"CodeMirror-linewidget"==c.className&&a.node.removeChild(c)}lb(a,b)}function kb(a,b,c,d){var e=fb(a,b);return b.text=b.node=e.pre,e.bgClass&&(b.bgClass=e.bgClass),e.textClass&&(b.textClass=e.textClass),hb(b),ib(a,b,c,d),lb(b,d),b.node}function lb(a,b){if(mb(a.line,a,b,!0),a.rest)for(var c=0;c<a.rest.length;c++)mb(a.rest[c],a,b,!1)}function mb(a,b,c,d){if(a.widgets)for(var e=db(b),f=0,g=a.widgets;f<g.length;++f){var h=g[f],i=Mg("div",[h.node],"CodeMirror-linewidget");h.handleMouseEvents||(i.ignoreEvents=!0),nb(h,i,b,c),d&&h.above?e.insertBefore(i,b.gutter||b.text):e.appendChild(i),kg(h,"redraw")}}function nb(a,b,c,d){if(a.noHScroll){(c.alignable||(c.alignable=[])).push(b);var e=d.wrapperWidth;b.style.left=d.fixedPos+"px",a.coverGutter||(e-=d.gutterTotalWidth,b.style.paddingLeft=d.gutterTotalWidth+"px"),b.style.width=e+"px"}a.coverGutter&&(b.style.zIndex=5,b.style.position="relative",a.noHScroll||(b.style.marginLeft=-d.gutterTotalWidth+"px"))}function qb(a){return ob(a.line,a.ch)}function rb(a,b){return pb(a,b)<0?b:a}function sb(a,b){return pb(a,b)<0?a:b}function tb(a,b){this.ranges=a,this.primIndex=b}function ub(a,b){this.anchor=a,this.head=b}function vb(a,b){var c=a[b];a.sort(function(a,b){return pb(a.from(),b.from())}),b=Cg(a,c);for(var d=1;d<a.length;d++){var e=a[d],f=a[d-1];if(pb(f.to(),e.from())>=0){var g=sb(f.from(),e.from()),h=rb(f.to(),e.to()),i=f.empty()?e.from()==e.head:f.from()==f.head;b>=d&&--b,a.splice(--d,2,new ub(i?h:g,i?g:h))}}return new tb(a,b)}function wb(a,b){return new tb([new ub(a,b||a)],0)}function xb(a,b){return Math.max(a.first,Math.min(b,a.first+a.size-1))}function yb(a,b){if(b.line<a.first)return ob(a.first,0);var c=a.first+a.size-1;return b.line>c?ob(c,Ef(a,c).text.length):zb(b,Ef(a,b.line).text.length)}function zb(a,b){var c=a.ch;return null==c||c>b?ob(a.line,b):0>c?ob(a.line,0):a}function Ab(a,b){return b>=a.first&&b<a.first+a.size}function Bb(a,b){for(var c=[],d=0;d<b.length;d++)c[d]=yb(a,b[d]);return c}function Cb(a,b,c,d){if(a.cm&&a.cm.display.shift||a.extend){var e=b.anchor;if(d){var f=pb(c,e)<0;f!=pb(d,e)<0?(e=c,c=d):f!=pb(c,d)<0&&(c=d)}return new ub(e,c)}return new ub(d||c,c)}function Db(a,b,c,d){Jb(a,new tb([Cb(a,a.sel.primary(),b,c)],0),d)}function Eb(a,b,c){for(var d=[],e=0;e<a.sel.ranges.length;e++)d[e]=Cb(a,a.sel.ranges[e],b[e],null);var f=vb(d,a.sel.primIndex);Jb(a,f,c)}function Fb(a,b,c,d){var e=a.sel.ranges.slice(0);e[b]=c,Jb(a,vb(e,a.sel.primIndex),d)}function Gb(a,b,c,d){Jb(a,wb(b,c),d)}function Hb(a,b){var c={ranges:b.ranges,update:function(b){this.ranges=[];for(var c=0;c<b.length;c++)this.ranges[c]=new ub(yb(a,b[c].anchor),yb(a,b[c].head))}};return hg(a,"beforeSelectionChange",a,c),a.cm&&hg(a.cm,"beforeSelectionChange",a.cm,c),c.ranges!=b.ranges?vb(c.ranges,c.ranges.length-1):b}function Ib(a,b,c){var d=a.history.done,e=Ag(d);e&&e.ranges?(d[d.length-1]=b,Kb(a,b,c)):Jb(a,b,c)}function Jb(a,b,c){Kb(a,b,c),Sf(a,a.sel,a.cm?a.cm.curOp.id:0/0,c)}function Kb(a,b,c){(og(a,"beforeSelectionChange")||a.cm&&og(a.cm,"beforeSelectionChange"))&&(b=Hb(a,b));var d=pb(b.primary().head,a.sel.primary().head)<0?-1:1;Lb(a,Nb(a,b,d,!0)),c&&c.scroll===!1||!a.cm||Sd(a.cm)}function Lb(a,b){b.equals(a.sel)||(a.sel=b,a.cm&&(a.cm.curOp.updateInput=a.cm.curOp.selectionChanged=!0,ng(a.cm)),kg(a,"cursorActivity",a))}function Mb(a){Lb(a,Nb(a,a.sel,null,!1),sg)}function Nb(a,b,c,d){for(var e,f=0;f<b.ranges.length;f++){var g=b.ranges[f],h=Ob(a,g.anchor,c,d),i=Ob(a,g.head,c,d);(e||h!=g.anchor||i!=g.head)&&(e||(e=b.ranges.slice(0,f)),e[f]=new ub(h,i))}return e?vb(e,b.primIndex):b}function Ob(a,b,c,d){var e=!1,f=b,g=c||1;a.cantEdit=!1;a:for(;;){var h=Ef(a,f.line);if(h.markedSpans)for(var i=0;i<h.markedSpans.length;++i){var j=h.markedSpans[i],k=j.marker;if((null==j.from||(k.inclusiveLeft?j.from<=f.ch:j.from<f.ch))&&(null==j.to||(k.inclusiveRight?j.to>=f.ch:j.to>f.ch))){if(d&&(hg(k,"beforeCursorEnter"),k.explicitlyCleared)){if(h.markedSpans){--i;continue}break}if(!k.atomic)continue;var l=k.find(0>g?-1:1);if(0==pb(l,f)&&(l.ch+=g,l.ch<0?l=l.line>a.first?yb(a,ob(l.line-1)):null:l.ch>h.text.length&&(l=l.line<a.first+a.size-1?ob(l.line+1,0):null),!l)){if(e)return d?(a.cantEdit=!0,ob(a.first,0)):Ob(a,b,c,!0);e=!0,l=b,g=-g}f=l;continue a}}return f}}function Pb(a){for(var b=a.display,c=a.doc,d=document.createDocumentFragment(),e=document.createDocumentFragment(),f=0;f<c.sel.ranges.length;f++){var g=c.sel.ranges[f],h=g.empty();(h||a.options.showCursorWhenSelecting)&&Qb(a,g,d),h||Rb(a,g,e)}if(a.options.moveInputWithCursor){var i=pc(a,c.sel.primary().head,"div"),j=b.wrapper.getBoundingClientRect(),k=b.lineDiv.getBoundingClientRect(),l=Math.max(0,Math.min(b.wrapper.clientHeight-10,i.top+k.top-j.top)),m=Math.max(0,Math.min(b.wrapper.clientWidth-10,i.left+k.left-j.left));b.inputDiv.style.top=l+"px",b.inputDiv.style.left=m+"px"}Pg(b.cursorDiv,d),Pg(b.selectionDiv,e)}function Qb(a,b,c){var d=pc(a,b.head,"div"),e=c.appendChild(Mg("div","\xa0","CodeMirror-cursor"));if(e.style.left=d.left+"px",e.style.top=d.top+"px",e.style.height=Math.max(0,d.bottom-d.top)*a.options.cursorHeight+"px",d.other){var f=c.appendChild(Mg("div","\xa0","CodeMirror-cursor CodeMirror-secondarycursor"));f.style.display="",f.style.left=d.other.left+"px",f.style.top=d.other.top+"px",f.style.height=.85*(d.other.bottom-d.other.top)+"px"}}function Rb(a,b,c){function j(a,b,c,d){0>b&&(b=0),b=Math.round(b),d=Math.round(d),f.appendChild(Mg("div",null,"CodeMirror-selected","position: absolute; left: "+a+"px; top: "+b+"px; width: "+(null==c?i-a:c)+"px; height: "+(d-b)+"px"))}function k(b,c,d){function m(c,d){return oc(a,ob(b,c),"div",f,d)}var k,l,f=Ef(e,b),g=f.text.length;return fh(Lf(f),c||0,null==d?g:d,function(a,b,e){var n,o,p,f=m(a,"left");if(a==b)n=f,o=p=f.left;else{if(n=m(b-1,"right"),"rtl"==e){var q=f;f=n,n=q}o=f.left,p=n.right}null==c&&0==a&&(o=h),n.top-f.top>3&&(j(o,f.top,null,f.bottom),o=h,f.bottom<n.top&&j(o,f.bottom,null,n.top)),null==d&&b==g&&(p=i),(!k||f.top<k.top||f.top==k.top&&f.left<k.left)&&(k=f),(!l||n.bottom>l.bottom||n.bottom==l.bottom&&n.right>l.right)&&(l=n),h+1>o&&(o=h),j(o,n.top,p-o,n.bottom)}),{start:k,end:l}}var d=a.display,e=a.doc,f=document.createDocumentFragment(),g=Zb(a.display),h=g.left,i=d.lineSpace.offsetWidth-g.right,l=b.from(),m=b.to();if(l.line==m.line)k(l.line,l.ch,m.ch);else{var n=Ef(e,l.line),o=Ef(e,m.line),p=Re(n)==Re(o),q=k(l.line,l.ch,p?n.text.length+1:null).end,r=k(m.line,p?0:null,m.ch).start;p&&(q.top<r.top-2?(j(q.right,q.top,null,q.bottom),j(h,r.top,r.left,r.bottom)):j(q.right,q.top,r.left-q.right,q.bottom)),q.bottom<r.top&&j(h,q.bottom,null,r.top)}c.appendChild(f)}function Sb(a){if(a.state.focused){var b=a.display;clearInterval(b.blinker);var c=!0;b.cursorDiv.style.visibility="",a.options.cursorBlinkRate>0&&(b.blinker=setInterval(function(){b.cursorDiv.style.visibility=(c=!c)?"":"hidden"},a.options.cursorBlinkRate))}}function Tb(a,b){a.doc.mode.startState&&a.doc.frontier<a.display.viewTo&&a.state.highlight.set(b,Gg(Ub,a))}function Ub(a){var b=a.doc;if(b.frontier<b.first&&(b.frontier=b.first),!(b.frontier>=a.display.viewTo)){var c=+new Date+a.options.workTime,d=he(b.mode,Wb(a,b.frontier));Ac(a,function(){b.iter(b.frontier,Math.min(b.first+b.size,a.display.viewTo+500),function(e){if(b.frontier>=a.display.viewFrom){var f=e.styles,g=gf(a,e,d,!0);e.styles=g.styles,g.classes?e.styleClasses=g.classes:e.styleClasses&&(e.styleClasses=null);for(var h=!f||f.length!=e.styles.length,i=0;!h&&i<f.length;++i)h=f[i]!=e.styles[i];h&&Hc(a,b.frontier,"text"),e.stateAfter=he(b.mode,d)}else jf(a,e.text,d),e.stateAfter=0==b.frontier%5?he(b.mode,d):null;return++b.frontier,+new Date>c?(Tb(a,a.options.workDelay),!0):void 0})})}}function Vb(a,b,c){for(var d,e,f=a.doc,g=c?-1:b-(a.doc.mode.innerMode?1e3:100),h=b;h>g;--h){if(h<=f.first)return f.first;var i=Ef(f,h-1);if(i.stateAfter&&(!c||h<=f.frontier))return h;var j=wg(i.text,null,a.options.tabSize);(null==e||d>j)&&(e=h-1,d=j)}return e}function Wb(a,b,c){var d=a.doc,e=a.display;if(!d.mode.startState)return!0;var f=Vb(a,b,c),g=f>d.first&&Ef(d,f-1).stateAfter;return g=g?he(d.mode,g):ie(d.mode),d.iter(f,b,function(c){jf(a,c.text,g);var h=f==b-1||0==f%5||f>=e.viewFrom&&f<e.viewTo;c.stateAfter=h?he(d.mode,g):null,++f}),c&&(d.frontier=f),g}function Xb(a){return a.lineSpace.offsetTop}function Yb(a){return a.mover.offsetHeight-a.lineSpace.offsetHeight}function Zb(a){if(a.cachedPaddingH)return a.cachedPaddingH;var b=Pg(a.measure,Mg("pre","x")),c=window.getComputedStyle?window.getComputedStyle(b):b.currentStyle,d={left:parseInt(c.paddingLeft),right:parseInt(c.paddingRight)};return isNaN(d.left)||isNaN(d.right)||(a.cachedPaddingH=d),d}function $b(a,b,c){var d=a.options.lineWrapping,e=d&&a.display.scroller.clientWidth;if(!b.measure.heights||d&&b.measure.width!=e){var f=b.measure.heights=[];if(d){b.measure.width=e;for(var g=b.text.firstChild.getClientRects(),h=0;h<g.length-1;h++){var i=g[h],j=g[h+1];Math.abs(i.bottom-j.bottom)>2&&f.push((i.bottom+j.top)/2-c.top)}}f.push(c.bottom-c.top)}}function _b(a,b,c){if(a.line==b)return{map:a.measure.map,cache:a.measure.cache};for(var d=0;d<a.rest.length;d++)if(a.rest[d]==b)return{map:a.measure.maps[d],cache:a.measure.caches[d]};for(var d=0;d<a.rest.length;d++)if(If(a.rest[d])>c)return{map:a.measure.maps[d],cache:a.measure.caches[d],before:!0}}function ac(a,b){b=Re(b);var c=If(b),d=a.display.externalMeasured=new Ec(a.doc,b,c);d.lineN=c;var e=d.built=nf(a,d);return d.text=e.pre,Pg(a.display.lineMeasure,e.pre),d}function bc(a,b,c,d){return ec(a,dc(a,b),c,d)}function cc(a,b){if(b>=a.display.viewFrom&&b<a.display.viewTo)return a.display.view[Jc(a,b)];var c=a.display.externalMeasured;return c&&b>=c.lineN&&b<c.lineN+c.size?c:void 0}function dc(a,b){var c=If(b),d=cc(a,c);d&&!d.text?d=null:d&&d.changes&&cb(a,d,c,ab(a)),d||(d=ac(a,b));var e=_b(d,b,c);return{line:b,view:d,rect:null,map:e.map,cache:e.cache,before:e.before,hasHeights:!1}}function ec(a,b,c,d){b.before&&(c=-1);var f,e=c+(d||"");return b.cache.hasOwnProperty(e)?f=b.cache[e]:(b.rect||(b.rect=b.view.text.getBoundingClientRect()),b.hasHeights||($b(a,b.view,b.rect),b.hasHeights=!0),f=gc(a,b,c,d),f.bogus||(b.cache[e]=f)),{left:f.left,right:f.right,top:f.top,bottom:f.bottom}}function gc(a,b,c,e){for(var h,i,j,k,f=b.map,l=0;l<f.length;l+=3){var m=f[l],n=f[l+1];if(m>c?(i=0,j=1,k="left"):n>c?(i=c-m,j=i+1):(l==f.length-3||c==n&&f[l+3]>c)&&(j=n-m,i=j-1,c>=n&&(k="right")),null!=i){if(h=f[l+2],m==n&&e==(h.insertLeft?"left":"right")&&(k=e),"left"==e&&0==i)for(;l&&f[l-2]==f[l-3]&&f[l-1].insertLeft;)h=f[(l-=3)+2],k="left";if("right"==e&&i==n-m)for(;l<f.length-3&&f[l+3]==f[l+4]&&!f[l+5].insertLeft;)h=f[(l+=3)+2],k="right";break}}var o;if(3==h.nodeType){for(;i&&Lg(b.line.text.charAt(m+i));)--i;for(;n>m+j&&Lg(b.line.text.charAt(m+j));)++j;if(d&&0==i&&j==n-m)o=h.parentNode.getBoundingClientRect();else if(g&&a.options.lineWrapping){var p=Ng(h,i,j).getClientRects();o=p.length?p["right"==e?p.length-1:0]:fc}else o=Ng(h,i,j).getBoundingClientRect()}else{i>0&&(k=e="right");var p;o=a.options.lineWrapping&&(p=h.getClientRects()).length>1?p["right"==e?p.length-1:0]:h.getBoundingClientRect()}if(d&&!i&&(!o||!o.left&&!o.right)){var q=h.parentNode.getClientRects()[0];o=q?{left:q.left,right:q.left+wc(a.display),top:q.top,bottom:q.bottom}:fc}for(var r,s=(o.bottom+o.top)/2-b.rect.top,t=b.view.measure.heights,l=0;l<t.length-1&&!(s<t[l]);l++);r=l?t[l-1]:0,s=t[l];var u={left:("right"==k?o.right:o.left)-b.rect.left,right:("left"==k?o.left:o.right)-b.rect.left,top:r,bottom:s};return o.left||o.right||(u.bogus=!0),u}function hc(a){if(a.measure&&(a.measure.cache={},a.measure.heights=null,a.rest))for(var b=0;b<a.rest.length;b++)a.measure.caches[b]={}}function ic(a){a.display.externalMeasure=null,Og(a.display.lineMeasure);for(var b=0;b<a.display.view.length;b++)hc(a.display.view[b])}function jc(a){ic(a),a.display.cachedCharWidth=a.display.cachedTextHeight=a.display.cachedPaddingH=null,a.options.lineWrapping||(a.display.maxLineChanged=!0),a.display.lineNumChars=null}function kc(){return window.pageXOffset||(document.documentElement||document.body).scrollLeft}function lc(){return window.pageYOffset||(document.documentElement||document.body).scrollTop}function mc(a,b,c,d){if(b.widgets)for(var e=0;e<b.widgets.length;++e)if(b.widgets[e].above){var f=Ze(b.widgets[e]);c.top+=f,c.bottom+=f}if("line"==d)return c;d||(d="local");var g=Kf(b);if("local"==d?g+=Xb(a.display):g-=a.display.viewOffset,"page"==d||"window"==d){var h=a.display.lineSpace.getBoundingClientRect();g+=h.top+("window"==d?0:lc());var i=h.left+("window"==d?0:kc());c.left+=i,c.right+=i}return c.top+=g,c.bottom+=g,c}function nc(a,b,c){if("div"==c)return b;var d=b.left,e=b.top;if("page"==c)d-=kc(),e-=lc();else if("local"==c||!c){var f=a.display.sizer.getBoundingClientRect();d+=f.left,e+=f.top}var g=a.display.lineSpace.getBoundingClientRect();return{left:d-g.left,top:e-g.top}}function oc(a,b,c,d,e){return d||(d=Ef(a.doc,b.line)),mc(a,d,bc(a,d,b.ch,e),c)}function pc(a,b,c,d,e){function f(b,f){var g=ec(a,e,b,f?"right":"left");return f?g.left=g.right:g.right=g.left,mc(a,d,g,c)}function g(a,b){var c=h[b],d=c.level%2;return a==gh(c)&&b&&c.level<h[b-1].level?(c=h[--b],a=hh(c)-(c.level%2?0:1),d=!0):a==hh(c)&&b<h.length-1&&c.level<h[b+1].level&&(c=h[++b],a=gh(c)-c.level%2,d=!1),d&&a==c.to&&a>c.from?f(a-1):f(a,d)}d=d||Ef(a.doc,b.line),e||(e=dc(a,d));var h=Lf(d),i=b.ch;if(!h)return f(i);var j=oh(h,i),k=g(i,j);return null!=nh&&(k.other=g(i,nh)),k}function qc(a,b){var c=0,b=yb(a.doc,b);a.options.lineWrapping||(c=wc(a.display)*b.ch);var d=Ef(a.doc,b.line),e=Kf(d)+Xb(a.display);return{left:c,right:c,top:e,bottom:e+d.height}}function rc(a,b,c,d){var e=ob(a,b);return e.xRel=d,c&&(e.outside=!0),e}function sc(a,b,c){var d=a.doc;if(c+=a.display.viewOffset,0>c)return rc(d.first,0,!0,-1);var e=Jf(d,c),f=d.first+d.size-1;if(e>f)return rc(d.first+d.size-1,Ef(d,f).text.length,!0,1);0>b&&(b=0);for(var g=Ef(d,e);;){var h=tc(a,g,e,b,c),i=Pe(g),j=i&&i.find(0,!0);if(!i||!(h.ch>j.from.ch||h.ch==j.from.ch&&h.xRel>0))return h;e=If(g=j.to.line)}}function tc(a,b,c,d,e){function j(d){var e=pc(a,ob(c,d),"line",b,i);return g=!0,f>e.bottom?e.left-h:f<e.top?e.left+h:(g=!1,e.left)}var f=e-Kf(b),g=!1,h=2*a.display.wrapper.clientWidth,i=dc(a,b),k=Lf(b),l=b.text.length,m=ih(b),n=jh(b),o=j(m),p=g,q=j(n),r=g;if(d>q)return rc(c,n,r,1);for(;;){if(k?n==m||n==qh(b,m,1):1>=n-m){for(var s=o>d||q-d>=d-o?m:n,t=d-(s==m?o:q);Lg(b.text.charAt(s));)++s;var u=rc(c,s,s==m?p:r,-1>t?-1:t>1?1:0);return u}var v=Math.ceil(l/2),w=m+v;if(k){w=m;for(var x=0;v>x;++x)w=qh(b,w,1)}var y=j(w);y>d?(n=w,q=y,(r=g)&&(q+=1e3),l=v):(m=w,o=y,p=g,l-=v)}}function vc(a){if(null!=a.cachedTextHeight)return a.cachedTextHeight;if(null==uc){uc=Mg("pre");for(var b=0;49>b;++b)uc.appendChild(document.createTextNode("x")),uc.appendChild(Mg("br"));uc.appendChild(document.createTextNode("x"))}Pg(a.measure,uc);var c=uc.offsetHeight/50;return c>3&&(a.cachedTextHeight=c),Og(a.measure),c||1}function wc(a){if(null!=a.cachedCharWidth)return a.cachedCharWidth;var b=Mg("span","xxxxxxxxxx"),c=Mg("pre",[b]);Pg(a.measure,c);var d=b.getBoundingClientRect(),e=(d.right-d.left)/10;return e>2&&(a.cachedCharWidth=e),e||10}function yc(a){a.curOp={viewChanged:!1,startHeight:a.doc.height,forceUpdate:!1,updateInput:null,typing:!1,changeObjs:null,cursorActivityHandlers:null,selectionChanged:!1,updateMaxLine:!1,scrollLeft:null,scrollTop:null,scrollToPos:null,id:++xc},jg++||(ig=[])}function zc(a){var b=a.curOp,c=a.doc,d=a.display;if(a.curOp=null,b.updateMaxLine&&M(a),b.viewChanged||b.forceUpdate||null!=b.scrollTop||b.scrollToPos&&(b.scrollToPos.from.line<d.viewFrom||b.scrollToPos.to.line>=d.viewTo)||d.maxLineChanged&&a.options.lineWrapping){var e=V(a,{top:b.scrollTop,ensure:b.scrollToPos},b.forceUpdate);a.display.scroller.offsetHeight&&(a.doc.scrollTop=a.display.scroller.scrollTop)}if(!e&&b.selectionChanged&&Pb(a),e||b.startHeight==a.doc.height||P(a),null!=b.scrollTop&&d.scroller.scrollTop!=b.scrollTop){var f=Math.max(0,Math.min(d.scroller.scrollHeight-d.scroller.clientHeight,b.scrollTop));d.scroller.scrollTop=d.scrollbarV.scrollTop=c.scrollTop=f}if(null!=b.scrollLeft&&d.scroller.scrollLeft!=b.scrollLeft){var g=Math.max(0,Math.min(d.scroller.scrollWidth-d.scroller.clientWidth,b.scrollLeft));d.scroller.scrollLeft=d.scrollbarH.scrollLeft=c.scrollLeft=g,R(a)}if(b.scrollToPos){var h=Od(a,yb(a.doc,b.scrollToPos.from),yb(a.doc,b.scrollToPos.to),b.scrollToPos.margin);b.scrollToPos.isCursor&&a.state.focused&&Nd(a,h)}b.selectionChanged&&Sb(a),a.state.focused&&b.updateInput&&Qc(a,b.typing);var i=b.maybeHiddenMarkers,j=b.maybeUnhiddenMarkers;if(i)for(var k=0;k<i.length;++k)i[k].lines.length||hg(i[k],"hide");if(j)for(var k=0;k<j.length;++k)j[k].lines.length&&hg(j[k],"unhide");var l;if(--jg||(l=ig,ig=null),b.changeObjs&&hg(a,"changes",a,b.changeObjs),l)for(var k=0;k<l.length;++k)l[k]();if(b.cursorActivityHandlers)for(var k=0;k<b.cursorActivityHandlers.length;k++)b.cursorActivityHandlers[k](a)}function Ac(a,b){if(a.curOp)return b();yc(a);try{return b()}finally{zc(a)}}function Bc(a,b){return function(){if(a.curOp)return b.apply(a,arguments);yc(a);try{return b.apply(a,arguments)}finally{zc(a)}}}function Cc(a){return function(){if(this.curOp)return a.apply(this,arguments);yc(this);try{return a.apply(this,arguments)}finally{zc(this)}}}function Dc(a){return function(){var b=this.cm;if(!b||b.curOp)return a.apply(this,arguments);yc(b);try{return a.apply(this,arguments)}finally{zc(b)}}}function Ec(a,b,c){this.line=b,this.rest=Se(b),this.size=this.rest?If(Ag(this.rest))-c+1:1,this.node=this.text=null,this.hidden=Ve(a,b)
@@ -1148,142 +1152,205 @@ ready(function() {
 
                     <tr>
                         <td class="level-1">
-                            <a href="#pipe-default">4.1.  <span class="pipes2">&lt;named...&gt; [by &lt;named...&gt;] [over &lt;window&gt;] [every &lt;period&gt; | at the end]</span></a>
+                            <a href="#pipe-stateful">4.1. Stateful pipes</a>
+                        </td>
+                        <td class="description"></td>
+                    </tr>
+
+                    <tr>
+                        <td class="level-2">
+                            <a href="#pipe-default">4.1.1.  <span class="pipes2">&lt;named...&gt; [by &lt;named...&gt;] [over &lt;window&gt;] [every &lt;period&gt; | at the end]</span></a>
                         </td>
                         <td class="description">Transforms or aggregates records over configurable data window and output.</td>
                     </tr>
 
                     <tr>
-                        <td class="level-1">
-                            <a href="#pipe-join">4.2.  <span class="pipes2">&lt;pipe&gt; join [on &lt;fields...&gt;] &lt;pipe&gt;</span></a>
+                        <td class="level-2">
+                            <a href="#pipe-join">4.1.2.  <span class="pipes2">&lt;pipe&gt; join [on &lt;fields...&gt;] &lt;pipe&gt;</span></a>
                         </td>
                         <td class="description">Computes the cartesian product of the outputs from two pipes with same output rates.</td>
                     </tr>
 
                     <tr>
-                        <td class="level-1">
-                            <a href="#pipe-union">4.3.  <span class="pipes2">&lt;pipe&gt; union &lt;pipe&gt;</span></a>
+                        <td class="level-2">
+                            <a href="#pipe-union">4.1.3.  <span class="pipes2">&lt;pipe&gt; union &lt;pipe&gt;</span></a>
                         </td>
                         <td class="description">Concatenates the outputs from two pipes with compatible output rates.</td>
                     </tr>
 
                     <tr>
-                        <td class="level-1">
-                            <a href="#pipe-compress">4.4.  <span class="pipes2">@compress &lt;number k&gt;, [&lt;number k2&gt;,] &lt;number... y&gt; [by &lt;object...&gt;]</span></a>
+                        <td class="level-2">
+                            <a href="#pipe-compress">4.1.4.  <span class="pipes2">@compress &lt;number k&gt;, [&lt;number k2&gt;,] &lt;number... y&gt; [by &lt;object...&gt;]</span></a>
                         </td>
                         <td class="description">Compresses the result from the previous pipe to at most k most important rows.</td>
                     </tr>
 
                     <tr>
-                        <td class="level-1">
-                            <a href="#pipe-debounce">4.5.  <span class="pipes2">@debounce &lt;period&gt; [by &lt;object...&gt;]</span></a>
+                        <td class="level-2">
+                            <a href="#pipe-debounce">4.1.5.  <span class="pipes2">@debounce &lt;period&gt; [by &lt;object...&gt;]</span></a>
                         </td>
                         <td class="description">Only outputs rows that follows &lt;period&gt; time without any output.</td>
                     </tr>
 
                     <tr>
-                        <td class="level-1">
-                            <a href="#pipe-filter">4.6.  <span class="pipes2">@filter &lt;boolean condition&gt;</span></a>
-                        </td>
-                        <td class="description">Filters the results from previous pipe.</td>
-                    </tr>
-
-                    <tr>
-                        <td class="level-1">
-                            <a href="#pipe-for">4.7.  <span class="pipes2">@for &lt;named(seq)&gt;, &lt;named... aditional&gt;</span></a>
-                        </td>
-                        <td class="description">Unwinds events in the <code class="pipes">seq</code> instance</td>
-                    </tr>
-
-                    <tr>
-                        <td class="level-1">
-                            <a href="#pipe-latest">4.8.  <span class="pipes2">@latest</span></a>
+                        <td class="level-2">
+                            <a href="#pipe-latest">4.1.6.  <span class="pipes2">@latest</span></a>
                         </td>
                         <td class="description">Keeps the latest batch of input events and output it at the end.</td>
                     </tr>
 
                     <tr>
-                        <td class="level-1">
-                            <a href="#pipe-onchange">4.9.  <span class="pipes2">@onchange &lt;object...&gt; [by &lt;object...&gt;]</span></a>
+                        <td class="level-2">
+                            <a href="#pipe-onchange">4.1.7.  <span class="pipes2">@onchange &lt;object...&gt; [by &lt;object...&gt;]</span></a>
                         </td>
                         <td class="description">Outputs only events that change the last value of any expression in the group</td>
                     </tr>
 
                     <tr>
-                        <td class="level-1">
-                            <a href="#pipe-onfalse">4.10.  <span class="pipes2">@onfalse &lt;boolean condition&gt; [by &lt;object...&gt;]</span></a>
+                        <td class="level-2">
+                            <a href="#pipe-onfalse">4.1.8.  <span class="pipes2">@onfalse &lt;boolean condition&gt; [by &lt;object...&gt;]</span></a>
                         </td>
                         <td class="description">Outputs only events for which condition evaluates false and was not false in the previous event</td>
                     </tr>
 
                     <tr>
-                        <td class="level-1">
-                            <a href="#pipe-ontrue">4.11.  <span class="pipes2">@ontrue &lt;boolean condition&gt; [by &lt;object...&gt;]</span></a>
+                        <td class="level-2">
+                            <a href="#pipe-ontrue">4.1.9.  <span class="pipes2">@ontrue &lt;boolean condition&gt; [by &lt;object...&gt;]</span></a>
                         </td>
                         <td class="description">Outputs only events for which condition evaluates true and was not true in the previous event</td>
                     </tr>
 
                     <tr>
-                        <td class="level-1">
-                            <a href="#pipe-set">4.12.  <span class="pipes2">@set &lt;named...&gt;</span></a>
-                        </td>
-                        <td class="description">Sets fields in the original event (both typed and raw)</td>
-                    </tr>
-
-                    <tr>
-                        <td class="level-1">
-                            <a href="#pipe-skip">4.13.  <span class="pipes2">@skip &lt;number&gt;, [&lt;number take&gt;] [by &lt;object...&gt;]</span></a>
-                        </td>
-                        <td class="description">Skips (and optionally limits) some results from previous pipe.</td>
-                    </tr>
-
-                    <tr>
-                        <td class="level-1">
-                            <a href="#pipe-sort">4.14.  <span class="pipes2">@sort &lt;sortfield... expr&gt;</span></a>
-                        </td>
-                        <td class="description">Sorts the results from previous pipe.</td>
-                    </tr>
-
-                    <tr>
-                        <td class="level-1">
-                            <a href="#pipe-take">4.15.  <span class="pipes2">@take &lt;number&gt; [by &lt;object...&gt;]</span></a>
-                        </td>
-                        <td class="description">Limits the results from previous pipe.</td>
-                    </tr>
-
-                    <tr>
-                        <td class="level-1">
-                            <a href="#pipe-throttle">4.16.  <span class="pipes2">@throttle [&lt;number k&gt;, ] &lt;period&gt; [by &lt;object...&gt;]</span></a>
+                        <td class="level-2">
+                            <a href="#pipe-throttle">4.1.10.  <span class="pipes2">@throttle [&lt;number k&gt;, ] &lt;period&gt; [by &lt;object...&gt;]</span></a>
                         </td>
                         <td class="description">Limits the output of the previous pipe to at most &lt;k&gt; rows per &lt;period&gt;.</td>
                     </tr>
 
                     <tr>
-                        <td class="level-1">
-                            <a href="#pipe-top">4.17.  <span class="pipes2">@top &lt;number k&gt;, &lt;sortfield... expr&gt; [by &lt;object...&gt;]</span></a>
+                        <td class="level-2">
+                            <a href="#pipe-unbatch">4.1.11.  <span class="pipes2">@unbatch</span></a>
                         </td>
-                        <td class="description">Sorts the results and gets the first k rows (possibly grouped) from previous pipe.</td>
+                        <td class="description">Extracts a batch of events in many batches, one for each event.</td>
                     </tr>
 
                     <tr>
-                        <td class="level-1">
-                            <a href="#pipe-unsafe">4.18.  <span class="pipes2">@unsafe</span></a>
+                        <td class="level-2">
+                            <a href="#pipe-unsafe">4.1.12.  <span class="pipes2">@unsafe</span></a>
                         </td>
                         <td class="description">Marks that any pipe executed after this must run in a non-distributed environment.</td>
                     </tr>
 
                     <tr>
+                        <td class="level-2">
+                            <a href="#pipe-atomic">4.1.13.  <span class="pipes2">atomic &lt;pipe&gt;</span></a>
+                        </td>
+                        <td class="description">Modify a pipe to run entirely in the same node, ignoring any distribution invariants.</td>
+                    </tr>
+
+                    <tr>
                         <td class="level-1">
-                            <a href="#pipe-yield">4.19.  <span class="pipes2">@yield [&lt;object expr&gt;]</span></a>
+                            <a href="#pipe-stateless">4.2. Stateless pipes</a>
+                        </td>
+                        <td class="description"></td>
+                    </tr>
+
+                    <tr>
+                        <td class="level-2">
+                            <a href="#pipe-chain">4.2.1.  <span class="pipes2">@chain [&lt;seq expr&gt;]</span></a>
+                        </td>
+                        <td class="description">Chains many sequences in a batch into a single sequence</td>
+                    </tr>
+
+                    <tr>
+                        <td class="level-2">
+                            <a href="#pipe-filter">4.2.2.  <span class="pipes2">@filter &lt;boolean condition&gt;</span></a>
+                        </td>
+                        <td class="description">Filters the results from previous pipe.</td>
+                    </tr>
+
+                    <tr>
+                        <td class="level-2">
+                            <a href="#pipe-for">4.2.3.  <span class="pipes2">@for &lt;named(seq)&gt;, &lt;named... aditional&gt;</span></a>
+                        </td>
+                        <td class="description">Unwinds events in the <code class="pipes">seq</code> instance</td>
+                    </tr>
+
+                    <tr>
+                        <td class="level-2">
+                            <a href="#pipe-seq">4.2.4.  <span class="pipes2">@seq</span></a>
+                        </td>
+                        <td class="description">Changes the static type of any row to the highest corresponding seq.</td>
+                    </tr>
+
+                    <tr>
+                        <td class="level-2">
+                            <a href="#pipe-set">4.2.5.  <span class="pipes2">@set &lt;named...&gt;</span></a>
+                        </td>
+                        <td class="description">Sets fields in the original event (both typed and raw)</td>
+                    </tr>
+
+                    <tr>
+                        <td class="level-2">
+                            <a href="#pipe-skip">4.2.6.  <span class="pipes2">@skip &lt;number&gt; [by &lt;object...&gt;]</span></a>
+                        </td>
+                        <td class="description">Skips some results from previous pipe.</td>
+                    </tr>
+
+                    <tr>
+                        <td class="level-2">
+                            <a href="#pipe-skipwhile">4.2.7.  <span class="pipes2">@skipwhile &lt;condition&gt;</span></a>
+                        </td>
+                        <td class="description">Skips rows from every batch while some condition is true.</td>
+                    </tr>
+
+                    <tr>
+                        <td class="level-2">
+                            <a href="#pipe-slice">4.2.8.  <span class="pipes2">@slice [&lt;number start&gt;], [&lt;number end&gt;], [&lt;number step&gt;] [by &lt;object...&gt;]</span></a>
+                        </td>
+                        <td class="description">Gets some rows (based on index) from previous pipe.</td>
+                    </tr>
+
+                    <tr>
+                        <td class="level-2">
+                            <a href="#pipe-sort">4.2.9.  <span class="pipes2">@sort &lt;sortfield... expr&gt;</span></a>
+                        </td>
+                        <td class="description">Sorts the results from previous pipe.</td>
+                    </tr>
+
+                    <tr>
+                        <td class="level-2">
+                            <a href="#pipe-take">4.2.10.  <span class="pipes2">@take &lt;number&gt; [by &lt;object...&gt;]</span></a>
+                        </td>
+                        <td class="description">Limits the results from previous pipe.</td>
+                    </tr>
+
+                    <tr>
+                        <td class="level-2">
+                            <a href="#pipe-takewhile">4.2.11.  <span class="pipes2">@takewhile &lt;condition&gt;</span></a>
+                        </td>
+                        <td class="description">Takes rows from every batch while some condition is true.</td>
+                    </tr>
+
+                    <tr>
+                        <td class="level-2">
+                            <a href="#pipe-top">4.2.12.  <span class="pipes2">@top &lt;number k&gt;, &lt;sortfield... expr&gt; [by &lt;object...&gt;]</span></a>
+                        </td>
+                        <td class="description">Sorts the results and gets the first k rows (possibly grouped) from previous pipe.</td>
+                    </tr>
+
+                    <tr>
+                        <td class="level-2">
+                            <a href="#pipe-yield">4.2.13.  <span class="pipes2">@yield [&lt;object expr&gt;]</span></a>
                         </td>
                         <td class="description">Extracts one field of the stream to be the output event.</td>
                     </tr>
 
                     <tr>
-                        <td class="level-1">
-                            <a href="#pipe-atomic">4.20.  <span class="pipes2">atomic &lt;pipe&gt;</span></a>
+                        <td class="level-2">
+                            <a href="#pipe-zip">4.2.14.  <span class="pipes2">@zip [&lt;seq expr&gt;]</span></a>
                         </td>
-                        <td class="description">Modify a pipe to run entirely in the same node, ignoring any distribution invariants.</td>
+                        <td class="description">Takes elements from a batch of seqs, one by one and make a seq of seqs.</td>
                     </tr>
 
                     <tr>
@@ -1330,142 +1397,170 @@ ready(function() {
 
                     <tr>
                         <td class="level-1">
-                            <a href="#operator-sub">5.6.  <span class="pipes2">&lt;number&gt; - &lt;number&gt; → &lt;number&gt;</span></a>
+                            <a href="#operator-add-seq">5.6.  <span class="pipes2">&lt;seq&gt; + &lt;seq&gt; → &lt;seq&gt;</span></a>
+                        </td>
+                        <td class="description">Concatenates two seqs.</td>
+                    </tr>
+
+                    <tr>
+                        <td class="level-1">
+                            <a href="#operator-sub">5.7.  <span class="pipes2">&lt;number&gt; - &lt;number&gt; → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Subtracts one number from another.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#operator-mul">5.7.  <span class="pipes2">&lt;number&gt; * &lt;number&gt; → &lt;number&gt;</span></a>
+                            <a href="#operator-mul">5.8.  <span class="pipes2">&lt;number&gt; * &lt;number&gt; → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Multiplies two numbers.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#operator-div">5.8.  <span class="pipes2">&lt;number&gt; / &lt;number&gt; → &lt;number&gt;</span></a>
+                            <a href="#operator-div">5.9.  <span class="pipes2">&lt;number&gt; / &lt;number&gt; → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Divides one number by another (float division).</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#operator-intdiv">5.9.  <span class="pipes2">&lt;number&gt; // &lt;number&gt; → &lt;number&gt;</span></a>
+                            <a href="#operator-intdiv">5.10.  <span class="pipes2">&lt;number&gt; // &lt;number&gt; → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Divides one number by another (integer division).</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#operator-pow">5.10.  <span class="pipes2">&lt;number&gt; ** &lt;number&gt; → &lt;number&gt;</span></a>
+                            <a href="#operator-pow">5.11.  <span class="pipes2">&lt;number&gt; ** &lt;number&gt; → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Raises one number to another's power.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#operator-mod">5.11.  <span class="pipes2">&lt;number&gt; % &lt;number&gt; → &lt;number&gt;</span></a>
+                            <a href="#operator-mod">5.12.  <span class="pipes2">&lt;number&gt; % &lt;number&gt; → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Returns the rest of the division of one number by another.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#operator-neg">5.12.  <span class="pipes2">-&lt;number&gt; → &lt;number&gt;</span></a>
+                            <a href="#operator-neg">5.13.  <span class="pipes2">-&lt;number&gt; → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Negates one number.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#operator-and">5.13.  <span class="pipes2">&lt;boolean&gt; and &lt;boolean&gt; → &lt;boolean&gt;</span></a>
+                            <a href="#operator-and">5.14.  <span class="pipes2">&lt;boolean&gt; and &lt;boolean&gt; → &lt;boolean&gt;</span></a>
                         </td>
                         <td class="description">Returns the logical AND of two booleans.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#operator-or">5.14.  <span class="pipes2">&lt;boolean&gt; or &lt;boolean&gt; → &lt;boolean&gt;</span></a>
+                            <a href="#operator-or">5.15.  <span class="pipes2">&lt;boolean&gt; or &lt;boolean&gt; → &lt;boolean&gt;</span></a>
                         </td>
                         <td class="description">Returns the logical OR of two booleans.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#operator-xor">5.15.  <span class="pipes2">&lt;boolean&gt; xor &lt;boolean&gt; → &lt;boolean&gt;</span></a>
+                            <a href="#operator-xor">5.16.  <span class="pipes2">&lt;boolean&gt; xor &lt;boolean&gt; → &lt;boolean&gt;</span></a>
                         </td>
                         <td class="description">Returns the logical XOR of two booleans.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#operator-not">5.16.  <span class="pipes2">not &lt;boolean&gt; → &lt;boolean&gt;</span></a>
+                            <a href="#operator-not">5.17.  <span class="pipes2">not &lt;boolean&gt; → &lt;boolean&gt;</span></a>
                         </td>
                         <td class="description">Returns the logical NOT of a boolean.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#operator-eq">5.17.  <span class="pipes2">&lt;object&gt; == &lt;object&gt; → &lt;boolean&gt;</span></a>
+                            <a href="#operator-eq">5.18.  <span class="pipes2">&lt;object&gt; == &lt;object&gt; → &lt;boolean&gt;</span></a>
                         </td>
                         <td class="description">Checks whether two objects are equal.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#operator-neq">5.18.  <span class="pipes2">&lt;object&gt; != &lt;object&gt; → &lt;boolean&gt;</span></a>
+                            <a href="#operator-neq">5.19.  <span class="pipes2">&lt;object&gt; != &lt;object&gt; → &lt;boolean&gt;</span></a>
                         </td>
                         <td class="description">Checks whether two objects are not equal.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#operator-lt">5.19.  <span class="pipes2">&lt;comparable&gt; &lt; &lt;comparable&gt; → &lt;boolean&gt;</span></a>
+                            <a href="#operator-lt">5.20.  <span class="pipes2">&lt;comparable&gt; &lt; &lt;comparable&gt; → &lt;boolean&gt;</span></a>
                         </td>
                         <td class="description">Checks whether the left operand compares lesser than the right one.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#operator-lt-eq">5.20.  <span class="pipes2">&lt;comparable&gt; &lt;= &lt;comparable&gt; → &lt;boolean&gt;</span></a>
+                            <a href="#operator-lt-eq">5.21.  <span class="pipes2">&lt;comparable&gt; &lt;= &lt;comparable&gt; → &lt;boolean&gt;</span></a>
                         </td>
                         <td class="description">Checks whether the left operand compares lesser than or equal to the right one.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#operator-gt">5.21.  <span class="pipes2">&lt;comparable&gt; &gt; &lt;comparable&gt; → &lt;boolean&gt;</span></a>
+                            <a href="#operator-gt">5.22.  <span class="pipes2">&lt;comparable&gt; &gt; &lt;comparable&gt; → &lt;boolean&gt;</span></a>
                         </td>
                         <td class="description">Checks whether the left operand compares greater than the right one.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#operator-gt-eq">5.22.  <span class="pipes2">&lt;comparable&gt; &gt;= &lt;comparable&gt; → &lt;boolean&gt;</span></a>
+                            <a href="#operator-gt-eq">5.23.  <span class="pipes2">&lt;comparable&gt; &gt;= &lt;comparable&gt; → &lt;boolean&gt;</span></a>
                         </td>
                         <td class="description">Checks whether the left operand compares greater than or equal to the right one.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#operator-peek">5.23.  <span class="pipes2">&lt;row&gt; -&gt; &lt;identifier&gt; → &lt;object&gt;</span></a>
+                            <a href="#operator-peek">5.24.  <span class="pipes2">&lt;row&gt; -&gt; &lt;identifier&gt; → &lt;object&gt;</span></a>
                         </td>
                         <td class="description">Extracts a field from another field.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#operator-coalesce">5.24.  <span class="pipes2">&lt;object&gt; ?? &lt;object&gt; → &lt;object&gt;</span></a>
+                            <a href="#operator-indexing">5.25.  <span class="pipes2">&lt;object&gt;[&lt;object...&gt;]</span></a>
+                        </td>
+                        <td class="description">Accesses an object by index/key in a list/string/map.</td>
+                    </tr>
+
+                    <tr>
+                        <td class="level-1">
+                            <a href="#operator-hat">5.26.  <span class="pipes2">^&lt;object&gt;</span></a>
+                        </td>
+                        <td class="description">Evaluates the expression in the parent semantic context (if any).</td>
+                    </tr>
+
+                    <tr>
+                        <td class="level-1">
+                            <a href="#operator-coalesce">5.27.  <span class="pipes2">&lt;object&gt; ?? &lt;object&gt; → &lt;object&gt;</span></a>
                         </td>
                         <td class="description">Returns the first if it is not null; otherwise, returns the second.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#operator-iif">5.25.  <span class="pipes2">&lt;boolean&gt; ? &lt;object&gt;, &lt;object&gt; → &lt;object&gt;</span></a>
+                            <a href="#operator-iif">5.28.  <span class="pipes2">&lt;boolean&gt; ? &lt;object&gt;, &lt;object&gt; → &lt;object&gt;</span></a>
                         </td>
                         <td class="description">If the condition is true, returns the first object; otherwise, returns the second.</td>
+                    </tr>
+
+                    <tr>
+                        <td class="level-1">
+                            <a href="#operator-transform">5.29.  <span class="pipes2">&lt;seq&gt; |&gt; &lt;object&gt;</span></a>
+                        </td>
+                        <td class="description">Transforms a sequence into another sequence or object.</td>
                     </tr>
 
                     <tr>
@@ -2850,6 +2945,13 @@ AvgAggregation: The parameter #1 &lt;someproperty&gt;; must be 'number' instead 
     <li>Be yielded at the pipe <a href="#pipe-yield"><code class="pipes2">@yield [&lt;object expr&gt;]</code></a></li>
     <li>Be peeked by the <a href="#operator-peek"><code class="pipes2">&lt;row&gt; -&gt; &lt;identifier&gt; → &lt;object&gt;</code></a> operator</li>
 </ul>
+
+<p>
+    The types <code class="pipes">row</code> and <code class="pipes">seq</code> share an intimate relation, because every <code class="pipes">row</code> is also a <code class="pipes">seq</code>
+    by polymorphism. The type argument of the underlying <code class="pipes">seq</code> depends on the types of the row. A
+    <code class="pipes">row(number, number)</code> is a <code class="pipes">seq(number)</code>, but a <code class="pipes">row(number, string)</code> is a <code class="pipes">seq(comparable)</code>.
+</p>
+
 <p><strong>Examples</strong></p>
 <pre class="pipes">*
 =&gt; id, name, value#
@@ -2891,7 +2993,8 @@ AvgAggregation: The parameter #1 &lt;someproperty&gt;; must be 'number' instead 
 </p>
 
 <p>
-    Also, it's not exactly a literal, but you can write filters as expressions using the operator <a href="#operator-filter"><code class="pipes2">\&lt;filter&gt;</code></a>.
+    Also, not exactly a literal, but you can write boolean filters with the <a href="#chapter-filters">filter syntax</a>
+    using the operator <a href="#operator-filter"><code class="pipes2">\&lt;filter&gt;</code></a>.
 </p>
 
 <p><strong>Null literal</strong></p>
@@ -2908,19 +3011,21 @@ AvgAggregation: The parameter #1 &lt;someproperty&gt;; must be 'number' instead 
         <tr><th>name</th><th>example</th><th>escaping?</th><th>interpolation?</th><th>useful for</th></tr>
         <tr><th>Single quoted</th>    <td><code class="expr">'abcde'</code></td><td>&#x2714; yes</td><td>&#x2716; no</td><td>ordinary strings</td></tr>
         <tr><th>Single quoted raw</th><td><code class="expr">r'\(some text\)'</code></td><td>&#x2716; no</td><td>&#x2716; no</td><td>regexes</td></tr>
-        <tr><th>Double quoted</th>    <td><code class="expr">"abc{x#+y#}def"</code></td><td>&#x2714; yes</td><td>&#x2714; yes</td><td>interpolated strings</td></tr>
+        <tr><th>Double quoted</th>    <td><code class="expr">"abc${x#+y#}def"</code></td><td>&#x2714; yes</td><td>&#x2714; yes</td><td>interpolated strings</td></tr>
     </table>
 </p>
-<p><strong>Seq literals</strong></p>
+<p><strong>Row and seq literals</strong></p>
 <p>
-    You can write <code class="pipes">seq</code> instances using the syntax as in the following example: <code class="expr">(1, 2, 3, 4)</code>.
+    You can write <code class="pipes">row</code> instances using the syntax as in the following examples: <code class="expr">(1, 2, 3, 4)</code>,
+    <code class="expr">(123 as propa, '456' as propb)</code>.
 </p>
 <p>
-    The sequence will be strongly typed using the most specific type that covers all the values. For example, <code class="expr">(1, '2', 3)</code>
-    will be a <code class="pipes">seq(comparable)</code>.
+    The row will be strongly typed. And because of the polymorphism, the row
+    will also be a strongly typed <code class="pipes">seq</code> using the most specific type that covers all the values. For example,
+    <code class="expr">(1, '2', 3)</code> will be a <code class="pipes">row(_1&lt;number&gt;, _2&lt;string&gt;, _3&lt;number&gt;)</code>, but also a <code class="pipes">seq(comparable)</code>.
 </p>
 <p>
-    <strong>Important:</strong> if you wish to define a sequence with only one element, you <strong>MUST</strong> use a comma
+    <strong>Important:</strong> if you wish to define a row with only one element, you <strong>MUST</strong> use a comma
     after the single element (<code class="pipes">(42,)</code>). If you don't, the compiler will treat the value as an expression, i.e. <code class="pipes">(42) != (42,)</code>.
 </p>
 </div>
@@ -3318,22 +3423,24 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
     pipes can run on a distributed environment, some cannot. Some pipes may consume very low memory, some
     may need a lot of memory to run. All of these properties are derived and checked in compile time.
 </p>
-
 <p>
-    <strong>Examples:</strong>
+    In this chapter we will split them in two types: <strong>stateful</strong> and
+    <strong>stateless</strong> pipes. The main difference between them is that stateless pipes
+    consume no additional memory and can be used to transform sequence expressions through
+    the operator <a href="#operator-transform"><code class="pipes2">&lt;seq&gt; |&gt; &lt;object&gt;</code></a>.
 </p>
-<pre class="pipes">type:http
-=&gt; avg(response_time#) as time by host every minute
-=&gt; @top 10, time desc</pre>
-<p class="legend">Outputs every minute the 10 hosts with greatest average response time.</p>
 </div>
 </div><hr/>
-<div id="pipe-default" class="level-1">
-<h4 class="header">4.1.  <span class="pipes2">&lt;named...&gt; [by &lt;named...&gt;] [over &lt;window&gt;] [every &lt;period&gt; | at the end]</span> <span class="permalink"><a href="#pipe-default">¶</a></span></h4>
+<div id="pipe-stateful" class="level-1">
+<h4 class="header">4.1. Stateful pipes <span class="pipes2"></span> <span class="permalink"><a href="#pipe-stateful">¶</a></span></h4>
+<div class="text"><p><strong></strong></p></div>
+</div><hr/>
+<div id="pipe-default" class="level-2">
+<h5 class="header">4.1.1.  <span class="pipes2">&lt;named...&gt; [by &lt;named...&gt;] [over &lt;window&gt;] [every &lt;period&gt; | at the end]</span> <span class="permalink"><a href="#pipe-default">¶</a></span></h5>
 <div class="text"><p><strong>Transforms or aggregates records over configurable data window and output.</strong></p><p>
     This is the default type of pipe. It receives events, aggregates them and output
-    the result based on what is configured on the <code class="pipes">every</code> clause. By default, the aggregation
-    resets its state on every output, but the event retention can be configured on the <code class="pipes">over</code>
+    the result based on what is configured on the <code class="expr">every</code> clause. By default, the aggregation
+    resets its state on every output, but the event retention can be configured on the <code class="expr">over</code>
     clause. The acceptable values for both clauses are discussed at <a href="#concepts-outputs">Section 2.3: Output rates and aggregation windows</a>.
 </p>
 <p>
@@ -3341,7 +3448,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
     of expressions and treats them all as aggregations.
     <a href="#concepts-expressions-level">All expressions can act as aggregations.</a>
     The expression can receive an automatic name based on its contents or you can defined
-    custom one using the keyword <code class="pipes">as</code>. Example:
+    custom one using the keyword <code class="expr">as</code>. Example:
 </p>
 <pre class="pipes">* =&gt; sum(x#)/count()**2 as value</pre>
 <p class="legend">Outputs the sum of the variable <code class="pipes">x</code> divided by the event count squared every second.</p>
@@ -3396,8 +3503,8 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 <pre class="pipes">* =&gt; avg(value#) every 10 seconds</pre>
 </div>
 </div><hr/>
-<div id="pipe-join" class="level-1">
-<h4 class="header">4.2.  <span class="pipes2">&lt;pipe&gt; join [on &lt;fields...&gt;] &lt;pipe&gt;</span> <span class="permalink"><a href="#pipe-join">¶</a></span></h4>
+<div id="pipe-join" class="level-2">
+<h5 class="header">4.1.2.  <span class="pipes2">&lt;pipe&gt; join [on &lt;fields...&gt;] &lt;pipe&gt;</span> <span class="permalink"><a href="#pipe-join">¶</a></span></h5>
 <div class="text"><p><strong>Computes the cartesian product of the outputs from two pipes with same output rates.</strong></p><p>
     The outputs from two pipes are compatible if they are same type. For example <code class="expr">every 5 seconds</code>
     is compatible with <code class="expr">every 7 seconds</code>, but not with <code class="expr">every 5 items</code>. In this case, the
@@ -3465,8 +3572,8 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 {"timestamp":1399927869000, "host":"host3","cpu":40.0}</pre>
 </div>
 </div><hr/>
-<div id="pipe-union" class="level-1">
-<h4 class="header">4.3.  <span class="pipes2">&lt;pipe&gt; union &lt;pipe&gt;</span> <span class="permalink"><a href="#pipe-union">¶</a></span></h4>
+<div id="pipe-union" class="level-2">
+<h5 class="header">4.1.3.  <span class="pipes2">&lt;pipe&gt; union &lt;pipe&gt;</span> <span class="permalink"><a href="#pipe-union">¶</a></span></h5>
 <div class="text"><p><strong>Concatenates the outputs from two pipes with compatible output rates.</strong></p><p>
     The outputs from two pipes are compatible if they are same type. For example <code class="expr">every 5 seconds</code>
     is compatible with <code class="expr">every 7 seconds</code>, but not with <code class="expr">every 5 items</code>. In this case, the
@@ -3496,8 +3603,8 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 {"timestamp":1399927869000, "host":"Total","sum_value":129.0}</pre>
 </div>
 </div><hr/>
-<div id="pipe-compress" class="level-1">
-<h4 class="header">4.4.  <span class="pipes2">@compress &lt;number k&gt;, [&lt;number k2&gt;,] &lt;number... y&gt; [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-compress">¶</a></span></h4>
+<div id="pipe-compress" class="level-2">
+<h5 class="header">4.1.4.  <span class="pipes2">@compress &lt;number k&gt;, [&lt;number k2&gt;,] &lt;number... y&gt; [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-compress">¶</a></span></h5>
 <div class="text"><p><strong>Compresses the result from the previous pipe to at most k most important rows.</strong></p><p>
     Compress pipe keeps most of the previous pipe metadata, except for the output. It
     outputs only <code class="pipes">at the end</code>. It is also an <strong>unsafe</strong> pipe (see
@@ -3525,8 +3632,8 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </p>
 </div>
 </div><hr/>
-<div id="pipe-debounce" class="level-1">
-<h4 class="header">4.5.  <span class="pipes2">@debounce &lt;period&gt; [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-debounce">¶</a></span></h4>
+<div id="pipe-debounce" class="level-2">
+<h5 class="header">4.1.5.  <span class="pipes2">@debounce &lt;period&gt; [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-debounce">¶</a></span></h5>
 <div class="text"><p><strong>Only outputs rows that follows &lt;period&gt; time without any output.</strong></p><p>
     The exceeding rows are discarded. Due to its nature, this is an <strong>semi-safe</strong>
     pipe (see <a href="#concepts-pipes-chaining">Section 2.2: Chained computation model</a>). When running in distributed environment, this pipe
@@ -3556,51 +3663,8 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </p>
 </div>
 </div><hr/>
-<div id="pipe-filter" class="level-1">
-<h4 class="header">4.6.  <span class="pipes2">@filter &lt;boolean condition&gt;</span> <span class="permalink"><a href="#pipe-filter">¶</a></span></h4>
-<div class="text"><p><strong>Filters the results from previous pipe.</strong></p><p>
-    Filter pipe does not change any pipe metadata, it just repeats previous pipe info.
-</p>
-<p><strong>Examples:</strong></p>
-<pre class="pipes">*
-=&gt; count() by host
-=&gt; @filter _ &gt; 10</pre>
-<p class="legend">
-    Filter only hosts that have event count greater than 10.
-</p>
-</div>
-</div><hr/>
-<div id="pipe-for" class="level-1">
-<h4 class="header">4.7.  <span class="pipes2">@for &lt;named(seq)&gt;, &lt;named... aditional&gt;</span> <span class="permalink"><a href="#pipe-for">¶</a></span></h4>
-<div class="text"><p><strong>Unwinds events in the <code class="pipes">seq</code> instance</strong></p><p>
-    If the <code class="pipes">seq</code> has a type argument, the resulting field has the same type of that argument.
-</p>
-<p><strong>Examples:</strong></p>
-<pre class="pipes">*
-=&gt; @for products:seq as product</pre>
-<p class="legend">
-    Creates one event for each element inside the field <code class="pipes">products</code>.
-</p>
-
-<pre class="pipes">*
-=&gt; @for range(10) as i</pre>
-<p class="legend">
-    Creates 10 events with <code class="pipes">timestamp&lt;number&gt;</code> and <code class="pipes">i&lt;number&gt;</code>.
-</p>
-
-<pre class="pipes">=&gt; 100 as upto at the end
-=&gt; @for range(2, upto) as prime
-=&gt; @for range(1, floor(prime**0.5)+1) as j, prime
-=&gt; count(prime%j==0) by prime
-=&gt; @filter _==1
-=&gt; summary(prime$) as primes</pre>
-<p class="legend">
-    Computes prime numbers up to 100.
-</p>
-</div>
-</div><hr/>
-<div id="pipe-latest" class="level-1">
-<h4 class="header">4.8.  <span class="pipes2">@latest</span> <span class="permalink"><a href="#pipe-latest">¶</a></span></h4>
+<div id="pipe-latest" class="level-2">
+<h5 class="header">4.1.6.  <span class="pipes2">@latest</span> <span class="permalink"><a href="#pipe-latest">¶</a></span></h5>
 <div class="text"><p><strong>Keeps the latest batch of input events and output it at the end.</strong></p><p>
     This pipe is a convenience to output only the latest batch of events with the output
     <code class="pipes">at the end</code>. This concept of item batch doesn't exist in the syntax, so it would
@@ -3618,8 +3682,8 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 <p class="legend">Outputs only the latest batch of counts by host at the end of the execution.</p>
 </div>
 </div><hr/>
-<div id="pipe-onchange" class="level-1">
-<h4 class="header">4.9.  <span class="pipes2">@onchange &lt;object...&gt; [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-onchange">¶</a></span></h4>
+<div id="pipe-onchange" class="level-2">
+<h5 class="header">4.1.7.  <span class="pipes2">@onchange &lt;object...&gt; [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-onchange">¶</a></span></h5>
 <div class="text"><p><strong>Outputs only events that change the last value of any expression in the group</strong></p><p>
     Please note that the first event is always outputed, even if the property value is null.
 </p>
@@ -3630,8 +3694,8 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 <p class="legend">Outputs only events whose value in the property <code class="pipes">valid</code> is different from the last event.</p>
 </div>
 </div><hr/>
-<div id="pipe-onfalse" class="level-1">
-<h4 class="header">4.10.  <span class="pipes2">@onfalse &lt;boolean condition&gt; [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-onfalse">¶</a></span></h4>
+<div id="pipe-onfalse" class="level-2">
+<h5 class="header">4.1.8.  <span class="pipes2">@onfalse &lt;boolean condition&gt; [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-onfalse">¶</a></span></h5>
 <div class="text"><p><strong>Outputs only events for which condition evaluates false and was not false in the previous event</strong></p><p>
     Please note that the first event is always outputed.
 </p>
@@ -3642,8 +3706,8 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 <p class="legend">Outputs only events whose value in the property <code class="pipes">valid</code> is <code class="pipes">false</code> and different from the last event.</p>
 </div>
 </div><hr/>
-<div id="pipe-ontrue" class="level-1">
-<h4 class="header">4.11.  <span class="pipes2">@ontrue &lt;boolean condition&gt; [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-ontrue">¶</a></span></h4>
+<div id="pipe-ontrue" class="level-2">
+<h5 class="header">4.1.9.  <span class="pipes2">@ontrue &lt;boolean condition&gt; [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-ontrue">¶</a></span></h5>
 <div class="text"><p><strong>Outputs only events for which condition evaluates true and was not true in the previous event</strong></p><p>
     Please note that the first event is always outputed.
 </p>
@@ -3654,83 +3718,8 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 <p class="legend">Outputs only events whose value in the property <code class="pipes">valid</code> is <code class="pipes">true</code> and different from the last event.</p>
 </div>
 </div><hr/>
-<div id="pipe-set" class="level-1">
-<h4 class="header">4.12.  <span class="pipes2">@set &lt;named...&gt;</span> <span class="permalink"><a href="#pipe-set">¶</a></span></h4>
-<div class="text"><p><strong>Sets fields in the original event (both typed and raw)</strong></p><p><strong>Examples:</strong></p>
-<pre class="pipes">*
-=&gt; @set (date+time):dateparse('yyyyMMddHHmmss') as timestamp</pre>
-<p class="legend">
-    Adds a new field to the original event that is the timestamp parsed using
-    both <code class="pipes">date</code> and <code class="pipes">time</code> fields from the event.
-</p>
-
-<pre class="pipes">*
-=&gt; date, time, text
-=&gt; @set (date+time):dateparse('yyyyMMddHHmmss') as timestamp</pre>
-<p class="legend">
-    Adds a new field to the original event that is the timestamp parsed using
-    both <code class="pipes">date</code> and <code class="pipes">time</code> fields from the event. Equivalent to <code class="expr">expand *, (date+time):dateparse('yyyyMMddHHmmss') as timestamp</code>
-    as the previous pipe is typed.
-</p>
-</div>
-</div><hr/>
-<div id="pipe-skip" class="level-1">
-<h4 class="header">4.13.  <span class="pipes2">@skip &lt;number&gt;, [&lt;number take&gt;] [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-skip">¶</a></span></h4>
-<div class="text"><p><strong>Skips (and optionally limits) some results from previous pipe.</strong></p><p>
-    Skip pipe does not change any pipe metadata, it just repeats previous pipe info.
-    It also doesn't make any aggregation, it just outputs as soon as it finishes processing
-    input.
-</p>
-<p><strong>Examples:</strong></p>
-<pre class="pipes">*
-=&gt; count() by url, host
-=&gt; @sort _ desc by host
-=&gt; @skip 3, 2 by host</pre>
-<p class="legend">
-    Gets the 4th and 5th most accessed urls by host
-</p>
-</div>
-</div><hr/>
-<div id="pipe-sort" class="level-1">
-<h4 class="header">4.14.  <span class="pipes2">@sort &lt;sortfield... expr&gt;</span> <span class="permalink"><a href="#pipe-sort">¶</a></span></h4>
-<div class="text"><p><strong>Sorts the results from previous pipe.</strong></p><p>
-    Sort pipe does not change any pipe metadata, it just repeats previous pipe info.
-    It also doesn't make any aggregation, it just outputs as soon as it finishes processing
-    input.
-</p>
-<p>
-    The expressions can be any <code class="pipes">comparable</code>, optionally followed by <code class="pipes">asc</code> or <code class="pipes">desc</code>
-    to make the sort order explicit.
-</p>
-<p><strong>Examples:</strong></p>
-<pre class="pipes">*
-=&gt; count() by host
-=&gt; @sort _ desc, host</pre>
-<p class="legend">
-    Sorts the hosts by event count descending, and then by host (when the counts are equal).
-</p>
-</div>
-</div><hr/>
-<div id="pipe-take" class="level-1">
-<h4 class="header">4.15.  <span class="pipes2">@take &lt;number&gt; [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-take">¶</a></span></h4>
-<div class="text"><p><strong>Limits the results from previous pipe.</strong></p><p>
-    Take pipe does not change any pipe metadata, it just repeats previous pipe info.
-    It also doesn't make any aggregation, it just outputs as soon as it finishes processing
-    input.
-</p>
-<p><strong>Examples:</strong></p>
-<pre class="pipes">*
-=&gt; count() by url, host
-=&gt; @sort _ desc by host
-=&gt; @skip 3 by host
-=&gt; @take 2 by host</pre>
-<p class="legend">
-    Gets the 4th and 5th most accessed urls by host
-</p>
-</div>
-</div><hr/>
-<div id="pipe-throttle" class="level-1">
-<h4 class="header">4.16.  <span class="pipes2">@throttle [&lt;number k&gt;, ] &lt;period&gt; [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-throttle">¶</a></span></h4>
+<div id="pipe-throttle" class="level-2">
+<h5 class="header">4.1.10.  <span class="pipes2">@throttle [&lt;number k&gt;, ] &lt;period&gt; [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-throttle">¶</a></span></h5>
 <div class="text"><p><strong>Limits the output of the previous pipe to at most &lt;k&gt; rows per &lt;period&gt;.</strong></p><p>
     The exceeding rows are discarded. This is an <strong>unsafe</strong> pipe (see
     <a href="#concepts-pipes-chaining">Section 2.2: Chained computation model</a>).
@@ -3759,34 +3748,15 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </p>
 </div>
 </div><hr/>
-<div id="pipe-top" class="level-1">
-<h4 class="header">4.17.  <span class="pipes2">@top &lt;number k&gt;, &lt;sortfield... expr&gt; [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-top">¶</a></span></h4>
-<div class="text"><p><strong>Sorts the results and gets the first k rows (possibly grouped) from previous pipe.</strong></p><p>
-    Top pipe does not change any pipe metadata, it just repeats previous pipe info.
-    It also doesn't make any aggregation, it just outputs as soon as it finishes processing
-    input.
-</p>
-<p>
-    The expressions can be any <code class="pipes">comparable</code>, optionally followed by <code class="pipes">asc</code> or <code class="pipes">desc</code>
-    to make the sort order explicit.
-</p>
-<p><strong>Examples:</strong></p>
-<pre class="pipes">*
-=&gt; count() by host
-=&gt; @top 10, _ desc</pre>
-<p class="legend">
-    Outputs the 10 hosts with the most events.
-</p>
-<pre class="pipes">*
-=&gt; count() by url, host
-=&gt; @top 10, _ desc by host</pre>
-<p class="legend">
-    Outputs, for every host, the 10 urls with the most events.
+<div id="pipe-unbatch" class="level-2">
+<h5 class="header">4.1.11.  <span class="pipes2">@unbatch</span> <span class="permalink"><a href="#pipe-unbatch">¶</a></span></h5>
+<div class="text"><p><strong>Extracts a batch of events in many batches, one for each event.</strong></p><p>
+    Specially useful if used in conjunction with batch output type.
 </p>
 </div>
 </div><hr/>
-<div id="pipe-unsafe" class="level-1">
-<h4 class="header">4.18.  <span class="pipes2">@unsafe</span> <span class="permalink"><a href="#pipe-unsafe">¶</a></span></h4>
+<div id="pipe-unsafe" class="level-2">
+<h5 class="header">4.1.12.  <span class="pipes2">@unsafe</span> <span class="permalink"><a href="#pipe-unsafe">¶</a></span></h5>
 <div class="text"><p><strong>Marks that any pipe executed after this must run in a non-distributed environment.</strong></p><p>
     The engine forces that each <strong>unsafe</strong> pipe must be preceeded with a <strong>safe</strong>
     or <strong>semi-safe</strong> pipe. It is recommended to avoid excessive communication between
@@ -3801,24 +3771,8 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 <p class="legend">Outputs the total count of events since the beginning of the query every time an item arrives.</p>
 </div>
 </div><hr/>
-<div id="pipe-yield" class="level-1">
-<h4 class="header">4.19.  <span class="pipes2">@yield [&lt;object expr&gt;]</span> <span class="permalink"><a href="#pipe-yield">¶</a></span></h4>
-<div class="text"><p><strong>Extracts one field of the stream to be the output event.</strong></p><p>
-    If the expression is not defined, it is assumed to be <code class="pipes">_</code>.
-</p>
-<p>
-    If the expression type is <code class="pipes">row</code> and it has metadata, the pipe assumes the type's metadata.
-    See <code class="pipes">concepts-expression-typeargs</code> for more information.
-</p>
-<p><strong>Examples:</strong></p>
-<pre class="pipes">*
-=&gt; name:regex(r'^(?&lt;first&gt;\w+)( \w+)* (?&lt;last&gt;\w+)$') as name
-=&gt; @yield name</pre>
-<p class="legend">Yields an event with the fields <code class="pipes">first</code> and <code class="pipes">last</code>.</p>
-</div>
-</div><hr/>
-<div id="pipe-atomic" class="level-1">
-<h4 class="header">4.20.  <span class="pipes2">atomic &lt;pipe&gt;</span> <span class="permalink"><a href="#pipe-atomic">¶</a></span></h4>
+<div id="pipe-atomic" class="level-2">
+<h5 class="header">4.1.13.  <span class="pipes2">atomic &lt;pipe&gt;</span> <span class="permalink"><a href="#pipe-atomic">¶</a></span></h5>
 <div class="text"><p><strong>Modify a pipe to run entirely in the same node, ignoring any distribution invariants.</strong></p><p>
     This modifier is useful when the data is known to be already partitioned. For example, if you are sure
     that each host will be consistently sent to the same node, you can avoid distribution costs by writing
@@ -3849,6 +3803,268 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </p>
 </div>
 </div><hr/>
+<div id="pipe-stateless" class="level-1">
+<h4 class="header">4.2. Stateless pipes <span class="pipes2"></span> <span class="permalink"><a href="#pipe-stateless">¶</a></span></h4>
+<div class="text"><p><strong></strong></p></div>
+</div><hr/>
+<div id="pipe-chain" class="level-2">
+<h5 class="header">4.2.1.  <span class="pipes2">@chain [&lt;seq expr&gt;]</span> <span class="permalink"><a href="#pipe-chain">¶</a></span></h5>
+<div class="text"><p><strong>Chains many sequences in a batch into a single sequence</strong></p><p>
+    If the expression is not defined, it is assumed to be <code class="pipes">_</code>.
+</p>
+<p><strong>Examples:</strong></p>
+<pre class="pipes">*
+=&gt; @chain (x#, y#)</pre>
+<p class="legend">Yields a <code class="pipes">seq(number)</code> for each batch, with 2 numbers for each event in the input.</p>
+
+<pre class="pipes">*
+=&gt; (x1:seq, x2:seq) |&gt; @chain</pre>
+<p class="legend">Concatenates the sequences <code class="pipes">x1</code> and <code class="pipes">x2</code> for each event.</p>
+</div>
+</div><hr/>
+<div id="pipe-filter" class="level-2">
+<h5 class="header">4.2.2.  <span class="pipes2">@filter &lt;boolean condition&gt;</span> <span class="permalink"><a href="#pipe-filter">¶</a></span></h5>
+<div class="text"><p><strong>Filters the results from previous pipe.</strong></p><p>
+    Filter pipe does not change any pipe metadata, it just repeats previous pipe info.
+</p>
+<p><strong>Examples:</strong></p>
+<pre class="pipes">*
+=&gt; count() by host
+=&gt; @filter _ &gt; 10</pre>
+<p class="legend">
+    Filter only hosts that have event count greater than 10.
+</p>
+</div>
+</div><hr/>
+<div id="pipe-for" class="level-2">
+<h5 class="header">4.2.3.  <span class="pipes2">@for &lt;named(seq)&gt;, &lt;named... aditional&gt;</span> <span class="permalink"><a href="#pipe-for">¶</a></span></h5>
+<div class="text"><p><strong>Unwinds events in the <code class="pipes">seq</code> instance</strong></p><p>
+    If the <code class="pipes">seq</code> has a type argument, the resulting field has the same type of that argument.
+</p>
+<p><strong>Examples:</strong></p>
+<pre class="pipes">*
+=&gt; @for products:seq as product</pre>
+<p class="legend">
+    Creates one event for each element inside the field <code class="pipes">products</code>.
+</p>
+
+<pre class="pipes">*
+=&gt; @for range(10) as i</pre>
+<p class="legend">
+    Creates 10 events with <code class="pipes">timestamp&lt;number&gt;</code> and <code class="pipes">i&lt;number&gt;</code>.
+</p>
+
+<pre class="pipes">=&gt; 100 as upto at the end
+=&gt; @for range(2, upto) as prime
+=&gt; @for range(1, floor(prime**0.5)+1) as j, prime
+=&gt; count(prime%j==0) by prime
+=&gt; @filter _==1
+=&gt; summary(prime$) as primes</pre>
+<p class="legend">
+    Computes prime numbers up to 100.
+</p>
+</div>
+</div><hr/>
+<div id="pipe-seq" class="level-2">
+<h5 class="header">4.2.4.  <span class="pipes2">@seq</span> <span class="permalink"><a href="#pipe-seq">¶</a></span></h5>
+<div class="text"><p><strong>Changes the static type of any row to the highest corresponding seq.</strong></p><p><strong>Examples:</strong></p>
+<pre class="pipes">*
+=&gt; x, y#
+=&gt; @seq</pre>
+<p class="legend">Changes the type from <code class="expr">row(timestamp&lt;number&gt;;;x&lt;string&gt;,y&lt;number&gt;)</code> to <code class="expr">seq(comparable)</code>.</p>
+</div>
+</div><hr/>
+<div id="pipe-set" class="level-2">
+<h5 class="header">4.2.5.  <span class="pipes2">@set &lt;named...&gt;</span> <span class="permalink"><a href="#pipe-set">¶</a></span></h5>
+<div class="text"><p><strong>Sets fields in the original event (both typed and raw)</strong></p><p><strong>Examples:</strong></p>
+<pre class="pipes">*
+=&gt; @set (date+time):dateparse('yyyyMMddHHmmss') as timestamp</pre>
+<p class="legend">
+    Adds a new field to the original event that is the timestamp parsed using
+    both <code class="pipes">date</code> and <code class="pipes">time</code> fields from the event.
+</p>
+
+<pre class="pipes">*
+=&gt; date, time, text
+=&gt; @set (date+time):dateparse('yyyyMMddHHmmss') as timestamp</pre>
+<p class="legend">
+    Adds a new field to the original event that is the timestamp parsed using
+    both <code class="pipes">date</code> and <code class="pipes">time</code> fields from the event. Equivalent to <code class="expr">expand *, (date+time):dateparse('yyyyMMddHHmmss') as timestamp</code>
+    as the previous pipe is typed.
+</p>
+</div>
+</div><hr/>
+<div id="pipe-skip" class="level-2">
+<h5 class="header">4.2.6.  <span class="pipes2">@skip &lt;number&gt; [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-skip">¶</a></span></h5>
+<div class="text"><p><strong>Skips some results from previous pipe.</strong></p><p>
+    Skip pipe does not change any pipe metadata, it just repeats previous pipe info.
+    It also doesn't make any aggregation, it just outputs as soon as it finishes processing
+    input.
+</p>
+<p><strong>Examples:</strong></p>
+<pre class="pipes">*
+=&gt; count() by url, host
+=&gt; @sort _ desc by host
+=&gt; @skip 3 by host</pre>
+<p class="legend">
+    Gets most accessed urls by host, except the 3 most accessed in each host.
+</p>
+</div>
+</div><hr/>
+<div id="pipe-skipwhile" class="level-2">
+<h5 class="header">4.2.7.  <span class="pipes2">@skipwhile &lt;condition&gt;</span> <span class="permalink"><a href="#pipe-skipwhile">¶</a></span></h5>
+<div class="text"><p><strong>Skips rows from every batch while some condition is true.</strong></p><p>
+    This pipe also accepts aggregation as condition. In this case, it
+    will behave like every row is a batch and with a <code class="expr">over all</code>
+    window.
+</p>
+<p><strong>Examples:</strong></p>
+<pre class="pipes">*
+=&gt; count() by url
+=&gt; @sort _ desc
+=&gt; @skipwhile :sum &lt; 1000</pre>
+<p class="legend">
+    Gets the most accessed urls, skipping until the access count sum is greater than or equal to 1000.
+</p>
+</div>
+</div><hr/>
+<div id="pipe-slice" class="level-2">
+<h5 class="header">4.2.8.  <span class="pipes2">@slice [&lt;number start&gt;], [&lt;number end&gt;], [&lt;number step&gt;] [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-slice">¶</a></span></h5>
+<div class="text"><p><strong>Gets some rows (based on index) from previous pipe.</strong></p><p>
+    Slice pipe does not change any pipe metadata, it just repeats previous pipe info.
+    It also doesn't make any aggregation, it just outputs as soon as it finishes processing
+    input.
+</p>
+<p><strong>Examples:</strong></p>
+<pre class="pipes">*
+=&gt; count() by url, host
+=&gt; @sort _ desc by host
+=&gt; @slice 2, 10, 3 by host</pre>
+<p class="legend">
+    Gets the 2nd, 5th and 8th most accessed urls by host
+</p>
+</div>
+</div><hr/>
+<div id="pipe-sort" class="level-2">
+<h5 class="header">4.2.9.  <span class="pipes2">@sort &lt;sortfield... expr&gt;</span> <span class="permalink"><a href="#pipe-sort">¶</a></span></h5>
+<div class="text"><p><strong>Sorts the results from previous pipe.</strong></p><p>
+    Sort pipe does not change any pipe metadata, it just repeats previous pipe info.
+    It also doesn't make any aggregation, it just outputs as soon as it finishes processing
+    input.
+</p>
+<p>
+    The expressions can be any <code class="pipes">comparable</code>, optionally followed by <code class="pipes">asc</code> or <code class="pipes">desc</code>
+    to make the sort order explicit.
+</p>
+<p><strong>Examples:</strong></p>
+<pre class="pipes">*
+=&gt; count() by host
+=&gt; @sort _ desc, host</pre>
+<p class="legend">
+    Sorts the hosts by event count descending, and then by host (when the counts are equal).
+</p>
+</div>
+</div><hr/>
+<div id="pipe-take" class="level-2">
+<h5 class="header">4.2.10.  <span class="pipes2">@take &lt;number&gt; [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-take">¶</a></span></h5>
+<div class="text"><p><strong>Limits the results from previous pipe.</strong></p><p>
+    Take pipe does not change any pipe metadata, it just repeats previous pipe info.
+    It also doesn't make any aggregation, it just outputs as soon as it finishes processing
+    input.
+</p>
+<p><strong>Examples:</strong></p>
+<pre class="pipes">*
+=&gt; count() by url, host
+=&gt; @sort _ desc by host
+=&gt; @skip 3 by host
+=&gt; @take 2 by host</pre>
+<p class="legend">
+    Gets the 4th and 5th most accessed urls by host
+</p>
+</div>
+</div><hr/>
+<div id="pipe-takewhile" class="level-2">
+<h5 class="header">4.2.11.  <span class="pipes2">@takewhile &lt;condition&gt;</span> <span class="permalink"><a href="#pipe-takewhile">¶</a></span></h5>
+<div class="text"><p><strong>Takes rows from every batch while some condition is true.</strong></p><p>
+    This pipe also accepts aggregation as condition. In this case, it
+    will behave like every row is a batch and with a <code class="expr">over all</code>
+    window.
+</p>
+<p><strong>Examples:</strong></p>
+<pre class="pipes">*
+=&gt; count() by url
+=&gt; @sort _ desc
+=&gt; @takewhile :sum &lt; 1000</pre>
+<p class="legend">
+    Gets the most accessed urls, while the access count sum is lower than 1000.
+</p>
+</div>
+</div><hr/>
+<div id="pipe-top" class="level-2">
+<h5 class="header">4.2.12.  <span class="pipes2">@top &lt;number k&gt;, &lt;sortfield... expr&gt; [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-top">¶</a></span></h5>
+<div class="text"><p><strong>Sorts the results and gets the first k rows (possibly grouped) from previous pipe.</strong></p><p>
+    Top pipe does not change any pipe metadata, it just repeats previous pipe info.
+    It also doesn't make any aggregation, it just outputs as soon as it finishes processing
+    input.
+</p>
+<p>
+    The expressions can be any <code class="pipes">comparable</code>, optionally followed by <code class="pipes">asc</code> or <code class="pipes">desc</code>
+    to make the sort order explicit.
+</p>
+<p><strong>Examples:</strong></p>
+<pre class="pipes">*
+=&gt; count() by host
+=&gt; @top 10, _ desc</pre>
+<p class="legend">
+    Outputs the 10 hosts with the most events.
+</p>
+<pre class="pipes">*
+=&gt; count() by url, host
+=&gt; @top 10, _ desc by host</pre>
+<p class="legend">
+    Outputs, for every host, the 10 urls with the most events.
+</p>
+</div>
+</div><hr/>
+<div id="pipe-yield" class="level-2">
+<h5 class="header">4.2.13.  <span class="pipes2">@yield [&lt;object expr&gt;]</span> <span class="permalink"><a href="#pipe-yield">¶</a></span></h5>
+<div class="text"><p><strong>Extracts one field of the stream to be the output event.</strong></p><p>
+    If the expression is not defined, it is assumed to be <code class="pipes">_</code>.
+</p>
+<p>
+    If the expression type is <code class="pipes">row</code> and it has metadata, the pipe assumes the type's metadata.
+    See <code class="pipes">concepts-expression-typeargs</code> for more information.
+</p>
+<p>
+    If the expression is an aggregation, the pipe will yield the all the input rows applied
+    to the aggregation argument.
+</p>
+<p><strong>Examples:</strong></p>
+<pre class="pipes">*
+=&gt; name:regex(r'^(?&lt;first&gt;\w+)( \w+)* (?&lt;last&gt;\w+)$') as name
+=&gt; @yield name</pre>
+<p class="legend">Yields an event with the fields <code class="pipes">first</code> and <code class="pipes">last</code>.</p>
+<pre class="pipes">*
+=&gt; name:regex(r'^(?&lt;first&gt;\w+)( \w+)* (?&lt;last&gt;\w+)$') as name
+=&gt; @yield list(name)</pre>
+<p class="legend">Yields a single event for every batch with a list of names in that batch.</p>
+</div>
+</div><hr/>
+<div id="pipe-zip" class="level-2">
+<h5 class="header">4.2.14.  <span class="pipes2">@zip [&lt;seq expr&gt;]</span> <span class="permalink"><a href="#pipe-zip">¶</a></span></h5>
+<div class="text"><p><strong>Takes elements from a batch of seqs, one by one and make a seq of seqs.</strong></p><p>
+    If the expression is not defined, it is assumed to be <code class="pipes">_</code>.
+</p>
+<p><strong>Examples:</strong></p>
+<pre class="pipes">*
+=&gt; @zip (x#, y#)</pre>
+<p class="legend">Yields 2 sequences every batch, one with all the <code class="pipes">x#</code> in the batch, other with all the <code class="pipes">y#</code>.</p>
+
+<pre class="pipes">*
+=&gt; (x1:seq, x2:seq) |&gt; @zip</pre>
+<p class="legend">Generates a sequence like <code class="pipes">((x1[0], x2[0]), (x1[1], x2[1]), ... )</code>.</p>
+</div>
+</div><hr/>
 <div id="chapter-operators" class="level-0">
 <h2 class="header">5. Operators <span class="pipes2"></span> <span class="permalink"><a href="#chapter-operators">¶</a></span></h2>
 <div class="text"><p><strong></strong></p><p>
@@ -3876,6 +4092,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
             <a href="#operator-number"><code class="pipes2">&lt;object&gt;# → &lt;number&gt;</code></a><br>
             <a href="#operator-string"><code class="pipes2">&lt;object&gt;$ → &lt;string&gt;</code></a><br>
             <a href="#operator-filter"><code class="pipes2">\&lt;filter&gt;</code></a><br>
+            <a href="#operator-indexing"><code class="pipes2">&lt;object&gt;[&lt;object...&gt;]</code></a><br>
         </td>
     </tr>
 
@@ -3884,6 +4101,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
         <td>
             <a href="#operator-not"><code class="pipes2">not &lt;boolean&gt; → &lt;boolean&gt;</code></a><br>
             <a href="#operator-neg"><code class="pipes2">-&lt;number&gt; → &lt;number&gt;</code></a><br>
+            <a href="#operator-hat"><code class="pipes2">^&lt;object&gt;</code></a><br>
         </td>
     </tr>
 
@@ -3918,6 +4136,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
             <a href="#operator-add-number"><code class="pipes2">&lt;number&gt; + &lt;number&gt; → &lt;number&gt;</code></a><br>
             <a href="#operator-sub"><code class="pipes2">&lt;number&gt; - &lt;number&gt; → &lt;number&gt;</code></a><br>
             <a href="#operator-add-string"><code class="pipes2">&lt;string&gt; + &lt;string&gt; → &lt;string&gt;</code></a><br>
+            <a href="#operator-add-seq"><code class="pipes2">&lt;seq&gt; + &lt;seq&gt; → &lt;seq&gt;</code></a><br>
         </td>
     </tr>
 
@@ -3966,6 +4185,12 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
         <td>Ternary</td>
         <td>
             <a href="#operator-iif"><code class="pipes2">&lt;boolean&gt; ? &lt;object&gt;, &lt;object&gt; → &lt;object&gt;</code></a><br>
+        </td>
+    </tr>
+    <tr>
+        <td>Sequence transformation</td>
+        <td>
+            <a href="#operator-transform"><code class="pipes2">&lt;seq&gt; |&gt; &lt;object&gt;</code></a><br>
         </td>
     </tr>
 </table>
@@ -4038,93 +4263,98 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 <div class="text"><p><strong>Concatenates two strings.</strong></p><p>The expression <code class="pipes">a+b</code> is equivalent to <code class="pipes">.add(a, b)</code>.</p>
 </div>
 </div><hr/>
+<div id="operator-add-seq" class="level-1">
+<h4 class="header">5.6.  <span class="pipes2">&lt;seq&gt; + &lt;seq&gt; → &lt;seq&gt;</span> <span class="permalink"><a href="#operator-add-seq">¶</a></span></h4>
+<div class="text"><p><strong>Concatenates two seqs.</strong></p><p>The expression <code class="pipes">a+b</code> is equivalent to <code class="pipes">.add(a, b)</code>.</p>
+</div>
+</div><hr/>
 <div id="operator-sub" class="level-1">
-<h4 class="header">5.6.  <span class="pipes2">&lt;number&gt; - &lt;number&gt; → &lt;number&gt;</span> <span class="permalink"><a href="#operator-sub">¶</a></span></h4>
+<h4 class="header">5.7.  <span class="pipes2">&lt;number&gt; - &lt;number&gt; → &lt;number&gt;</span> <span class="permalink"><a href="#operator-sub">¶</a></span></h4>
 <div class="text"><p><strong>Subtracts one number from another.</strong></p><p>The expression <code class="pipes">a-b</code> is equivalent to <code class="pipes">.sub(a, b)</code>.</p>
 </div>
 </div><hr/>
 <div id="operator-mul" class="level-1">
-<h4 class="header">5.7.  <span class="pipes2">&lt;number&gt; * &lt;number&gt; → &lt;number&gt;</span> <span class="permalink"><a href="#operator-mul">¶</a></span></h4>
+<h4 class="header">5.8.  <span class="pipes2">&lt;number&gt; * &lt;number&gt; → &lt;number&gt;</span> <span class="permalink"><a href="#operator-mul">¶</a></span></h4>
 <div class="text"><p><strong>Multiplies two numbers.</strong></p><p>The expression <code class="pipes">a*b</code> is equivalent to <code class="pipes">.mul(a, b)</code>.</p>
 </div>
 </div><hr/>
 <div id="operator-div" class="level-1">
-<h4 class="header">5.8.  <span class="pipes2">&lt;number&gt; / &lt;number&gt; → &lt;number&gt;</span> <span class="permalink"><a href="#operator-div">¶</a></span></h4>
+<h4 class="header">5.9.  <span class="pipes2">&lt;number&gt; / &lt;number&gt; → &lt;number&gt;</span> <span class="permalink"><a href="#operator-div">¶</a></span></h4>
 <div class="text"><p><strong>Divides one number by another (float division).</strong></p><p>The expression <code class="pipes">a/b</code> is equivalent to <code class="pipes">.div(a, b)</code>.</p>
 </div>
 </div><hr/>
 <div id="operator-intdiv" class="level-1">
-<h4 class="header">5.9.  <span class="pipes2">&lt;number&gt; // &lt;number&gt; → &lt;number&gt;</span> <span class="permalink"><a href="#operator-intdiv">¶</a></span></h4>
+<h4 class="header">5.10.  <span class="pipes2">&lt;number&gt; // &lt;number&gt; → &lt;number&gt;</span> <span class="permalink"><a href="#operator-intdiv">¶</a></span></h4>
 <div class="text"><p><strong>Divides one number by another (integer division).</strong></p><p>The expression <code class="pipes">a//b</code> is equivalent to <code class="pipes">.intdiv(a, b)</code>.</p>
 </div>
 </div><hr/>
 <div id="operator-pow" class="level-1">
-<h4 class="header">5.10.  <span class="pipes2">&lt;number&gt; ** &lt;number&gt; → &lt;number&gt;</span> <span class="permalink"><a href="#operator-pow">¶</a></span></h4>
+<h4 class="header">5.11.  <span class="pipes2">&lt;number&gt; ** &lt;number&gt; → &lt;number&gt;</span> <span class="permalink"><a href="#operator-pow">¶</a></span></h4>
 <div class="text"><p><strong>Raises one number to another's power.</strong></p><p>The expression <code class="pipes">a**b</code> is equivalent to <code class="pipes">.pow(a, b)</code> or even <code class="pipes">pow(a, b)</code> .</p>
 </div>
 </div><hr/>
 <div id="operator-mod" class="level-1">
-<h4 class="header">5.11.  <span class="pipes2">&lt;number&gt; % &lt;number&gt; → &lt;number&gt;</span> <span class="permalink"><a href="#operator-mod">¶</a></span></h4>
+<h4 class="header">5.12.  <span class="pipes2">&lt;number&gt; % &lt;number&gt; → &lt;number&gt;</span> <span class="permalink"><a href="#operator-mod">¶</a></span></h4>
 <div class="text"><p><strong>Returns the rest of the division of one number by another.</strong></p><p>The expression <code class="pipes">a%b</code> is equivalent to <code class="pipes">.mod(a, b)</code>.</p>
 </div>
 </div><hr/>
 <div id="operator-neg" class="level-1">
-<h4 class="header">5.12.  <span class="pipes2">-&lt;number&gt; → &lt;number&gt;</span> <span class="permalink"><a href="#operator-neg">¶</a></span></h4>
+<h4 class="header">5.13.  <span class="pipes2">-&lt;number&gt; → &lt;number&gt;</span> <span class="permalink"><a href="#operator-neg">¶</a></span></h4>
 <div class="text"><p><strong>Negates one number.</strong></p><p>The expression <code class="pipes">-a</code> is equivalent to <code class="pipes">.neg(a)</code>.</p>
 </div>
 </div><hr/>
 <div id="operator-and" class="level-1">
-<h4 class="header">5.13.  <span class="pipes2">&lt;boolean&gt; and &lt;boolean&gt; → &lt;boolean&gt;</span> <span class="permalink"><a href="#operator-and">¶</a></span></h4>
+<h4 class="header">5.14.  <span class="pipes2">&lt;boolean&gt; and &lt;boolean&gt; → &lt;boolean&gt;</span> <span class="permalink"><a href="#operator-and">¶</a></span></h4>
 <div class="text"><p><strong>Returns the logical AND of two booleans.</strong></p><p>The expression <code class="pipes">a and b</code> is equivalent to <code class="pipes">a&amp;b</code>, <code class="pipes">a&amp;&amp;b</code> and <code class="pipes">.and(a, b)</code>.</p>
 </div>
 </div><hr/>
 <div id="operator-or" class="level-1">
-<h4 class="header">5.14.  <span class="pipes2">&lt;boolean&gt; or &lt;boolean&gt; → &lt;boolean&gt;</span> <span class="permalink"><a href="#operator-or">¶</a></span></h4>
+<h4 class="header">5.15.  <span class="pipes2">&lt;boolean&gt; or &lt;boolean&gt; → &lt;boolean&gt;</span> <span class="permalink"><a href="#operator-or">¶</a></span></h4>
 <div class="text"><p><strong>Returns the logical OR of two booleans.</strong></p><p>The expression <code class="pipes">a or b</code> is equivalent to <code class="pipes">a|b</code>, <code class="pipes">a||b</code> and <code class="pipes">.or(a, b)</code>.</p>
 </div>
 </div><hr/>
 <div id="operator-xor" class="level-1">
-<h4 class="header">5.15.  <span class="pipes2">&lt;boolean&gt; xor &lt;boolean&gt; → &lt;boolean&gt;</span> <span class="permalink"><a href="#operator-xor">¶</a></span></h4>
+<h4 class="header">5.16.  <span class="pipes2">&lt;boolean&gt; xor &lt;boolean&gt; → &lt;boolean&gt;</span> <span class="permalink"><a href="#operator-xor">¶</a></span></h4>
 <div class="text"><p><strong>Returns the logical XOR of two booleans.</strong></p><p>The expression <code class="pipes">a xor b</code> is equivalent to <code class="pipes">a^b</code> and <code class="pipes">.xor(a, b)</code>.</p>
 </div>
 </div><hr/>
 <div id="operator-not" class="level-1">
-<h4 class="header">5.16.  <span class="pipes2">not &lt;boolean&gt; → &lt;boolean&gt;</span> <span class="permalink"><a href="#operator-not">¶</a></span></h4>
+<h4 class="header">5.17.  <span class="pipes2">not &lt;boolean&gt; → &lt;boolean&gt;</span> <span class="permalink"><a href="#operator-not">¶</a></span></h4>
 <div class="text"><p><strong>Returns the logical NOT of a boolean.</strong></p><p>The expression <code class="pipes">not a</code> is equivalent to <code class="pipes">!a</code> and <code class="pipes">.not(a)</code>.</p>
 </div>
 </div><hr/>
 <div id="operator-eq" class="level-1">
-<h4 class="header">5.17.  <span class="pipes2">&lt;object&gt; == &lt;object&gt; → &lt;boolean&gt;</span> <span class="permalink"><a href="#operator-eq">¶</a></span></h4>
+<h4 class="header">5.18.  <span class="pipes2">&lt;object&gt; == &lt;object&gt; → &lt;boolean&gt;</span> <span class="permalink"><a href="#operator-eq">¶</a></span></h4>
 <div class="text"><p><strong>Checks whether two objects are equal.</strong></p><p>The expression <code class="pipes">a==b</code> is equivalent to <code class="pipes">.eq(a, b)</code>.</p>
 </div>
 </div><hr/>
 <div id="operator-neq" class="level-1">
-<h4 class="header">5.18.  <span class="pipes2">&lt;object&gt; != &lt;object&gt; → &lt;boolean&gt;</span> <span class="permalink"><a href="#operator-neq">¶</a></span></h4>
+<h4 class="header">5.19.  <span class="pipes2">&lt;object&gt; != &lt;object&gt; → &lt;boolean&gt;</span> <span class="permalink"><a href="#operator-neq">¶</a></span></h4>
 <div class="text"><p><strong>Checks whether two objects are not equal.</strong></p><p>The expression <code class="pipes">a!=b</code> is equivalent to <code class="pipes">.neq(a, b)</code>.</p>
 </div>
 </div><hr/>
 <div id="operator-lt" class="level-1">
-<h4 class="header">5.19.  <span class="pipes2">&lt;comparable&gt; &lt; &lt;comparable&gt; → &lt;boolean&gt;</span> <span class="permalink"><a href="#operator-lt">¶</a></span></h4>
+<h4 class="header">5.20.  <span class="pipes2">&lt;comparable&gt; &lt; &lt;comparable&gt; → &lt;boolean&gt;</span> <span class="permalink"><a href="#operator-lt">¶</a></span></h4>
 <div class="text"><p><strong>Checks whether the left operand compares lesser than the right one.</strong></p><p>The expression <code class="pipes">a&lt;b</code> is equivalent to <code class="pipes">.lt(a, b)</code>.</p>
 </div>
 </div><hr/>
 <div id="operator-lt-eq" class="level-1">
-<h4 class="header">5.20.  <span class="pipes2">&lt;comparable&gt; &lt;= &lt;comparable&gt; → &lt;boolean&gt;</span> <span class="permalink"><a href="#operator-lt-eq">¶</a></span></h4>
+<h4 class="header">5.21.  <span class="pipes2">&lt;comparable&gt; &lt;= &lt;comparable&gt; → &lt;boolean&gt;</span> <span class="permalink"><a href="#operator-lt-eq">¶</a></span></h4>
 <div class="text"><p><strong>Checks whether the left operand compares lesser than or equal to the right one.</strong></p><p>The expression <code class="pipes">a&lt;=b</code> is equivalent to <code class="pipes">.lteq(a, b)</code>.</p>
 </div>
 </div><hr/>
 <div id="operator-gt" class="level-1">
-<h4 class="header">5.21.  <span class="pipes2">&lt;comparable&gt; &gt; &lt;comparable&gt; → &lt;boolean&gt;</span> <span class="permalink"><a href="#operator-gt">¶</a></span></h4>
+<h4 class="header">5.22.  <span class="pipes2">&lt;comparable&gt; &gt; &lt;comparable&gt; → &lt;boolean&gt;</span> <span class="permalink"><a href="#operator-gt">¶</a></span></h4>
 <div class="text"><p><strong>Checks whether the left operand compares greater than the right one.</strong></p><p>The expression <code class="pipes">a&gt;b</code> is equivalent to <code class="pipes">.gt(a, b)</code>.</p>
 </div>
 </div><hr/>
 <div id="operator-gt-eq" class="level-1">
-<h4 class="header">5.22.  <span class="pipes2">&lt;comparable&gt; &gt;= &lt;comparable&gt; → &lt;boolean&gt;</span> <span class="permalink"><a href="#operator-gt-eq">¶</a></span></h4>
+<h4 class="header">5.23.  <span class="pipes2">&lt;comparable&gt; &gt;= &lt;comparable&gt; → &lt;boolean&gt;</span> <span class="permalink"><a href="#operator-gt-eq">¶</a></span></h4>
 <div class="text"><p><strong>Checks whether the left operand compares greater than or equal to the right one.</strong></p><p>The expression <code class="pipes">a&gt;=b</code> is equivalent to <code class="pipes">.gteq(a, b)</code>.</p>
 </div>
 </div><hr/>
 <div id="operator-peek" class="level-1">
-<h4 class="header">5.23.  <span class="pipes2">&lt;row&gt; -&gt; &lt;identifier&gt; → &lt;object&gt;</span> <span class="permalink"><a href="#operator-peek">¶</a></span></h4>
+<h4 class="header">5.24.  <span class="pipes2">&lt;row&gt; -&gt; &lt;identifier&gt; → &lt;object&gt;</span> <span class="permalink"><a href="#operator-peek">¶</a></span></h4>
 <div class="text"><p><strong>Extracts a field from another field.</strong></p><p>
     The expression <code class="pipes">a-&gt;identifier[123, 456]</code> is equivalent to <code class="pipes">.property(a, 'identifier', 123, 456)</code>
 </p>
@@ -4142,8 +4372,41 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 <p class="legend">Extracts <code class="pipes">name</code> from the untyped field <code class="pipes">event</code>.</p>
 </div>
 </div><hr/>
+<div id="operator-indexing" class="level-1">
+<h4 class="header">5.25.  <span class="pipes2">&lt;object&gt;[&lt;object...&gt;]</span> <span class="permalink"><a href="#operator-indexing">¶</a></span></h4>
+<div class="text"><p><strong>Accesses an object by index/key in a list/string/map.</strong></p><p>The expression <code class="pipes">a[b, c]</code> is equivalent to <code class="pipes">.get(a, b, c)</code>.</p>
+<p class="bg-warning">
+  Please note that this operator has special semantics when used directly after a
+  property reference. So <code class="expr">field[123]</code> may be different from <code class="expr">(field+field2)[123]</code>.
+</p>
+<p>
+    <strong>Example:</strong>
+</p>
+<pre class="pipes">* =&gt; (field1+field2)[4]</pre>
+<p class="legend">Yields the 5th letter (index 4) of a string made of <code class="expr">field1+field2</code>.</p>
+</div>
+</div><hr/>
+<div id="operator-hat" class="level-1">
+<h4 class="header">5.26.  <span class="pipes2">^&lt;object&gt;</span> <span class="permalink"><a href="#operator-hat">¶</a></span></h4>
+<div class="text"><p><strong>Evaluates the expression in the parent semantic context (if any).</strong></p><p>
+  The expression <code class="pipes">^a</code> is almost equivalent to <code class="pipes">.hat(a)</code>, but <code class="pipes">a</code>
+  in the former case is evaluated in the parent semantic context.
+</p>
+<p>
+    This operator is useful in conjunction with other operators that generate child semantic contexts,
+    like <a href="#operator-transform"><code class="pipes2">&lt;seq&gt; |&gt; &lt;object&gt;</code></a> and <a href="#operator-peek"><code class="pipes2">&lt;row&gt; -&gt; &lt;identifier&gt; → &lt;object&gt;</code></a>. In those operators, it may be necessary to
+    evaluate some expressions in the parent context.
+</p>
+<p>
+    <strong>Example:</strong>
+</p>
+<pre class="pipes">=&gt; at the end
+=&gt; @for range(10)|&gt;(range(10)|&gt;"${^_}x${_} = ${^_*_}")|&gt;@chain as line</pre>
+<p class="legend">Yields a multiplication table with one event for each line.</p>
+</div>
+</div><hr/>
 <div id="operator-coalesce" class="level-1">
-<h4 class="header">5.24.  <span class="pipes2">&lt;object&gt; ?? &lt;object&gt; → &lt;object&gt;</span> <span class="permalink"><a href="#operator-coalesce">¶</a></span></h4>
+<h4 class="header">5.27.  <span class="pipes2">&lt;object&gt; ?? &lt;object&gt; → &lt;object&gt;</span> <span class="permalink"><a href="#operator-coalesce">¶</a></span></h4>
 <div class="text"><p><strong>Returns the first if it is not null; otherwise, returns the second.</strong></p><p>The expression <code class="pipes">a??b</code> is equivalent to <code class="pipes">.coalesce(a, b)</code>.</p>
 <p>
     <strong>Example:</strong>
@@ -4153,7 +4416,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="operator-iif" class="level-1">
-<h4 class="header">5.25.  <span class="pipes2">&lt;boolean&gt; ? &lt;object&gt;, &lt;object&gt; → &lt;object&gt;</span> <span class="permalink"><a href="#operator-iif">¶</a></span></h4>
+<h4 class="header">5.28.  <span class="pipes2">&lt;boolean&gt; ? &lt;object&gt;, &lt;object&gt; → &lt;object&gt;</span> <span class="permalink"><a href="#operator-iif">¶</a></span></h4>
 <div class="text"><p><strong>If the condition is true, returns the first object; otherwise, returns the second.</strong></p><p>The expression <code class="pipes">a?b,c</code> is equivalent to <code class="pipes">.iif(a, b, c)</code>.</p>
 <p>
     Please note this is the only right-associative operator. It is so to allow constructions like:
@@ -4168,6 +4431,61 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </p>
 <pre class="pipes">* =&gt; count()%2==0 ? 'Even', 'Odd' as type every second</pre>
 <p class="legend">Yields 'Even' or 'Odd' every second, depending on the number of events in the window.</p>
+</div>
+</div><hr/>
+<div id="operator-transform" class="level-1">
+<h4 class="header">5.29.  <span class="pipes2">&lt;seq&gt; |&gt; &lt;object&gt;</span> <span class="permalink"><a href="#operator-transform">¶</a></span></h4>
+<div class="text"><p><strong>Transforms a sequence into another sequence or object.</strong></p><p>
+  The expression <code class="pipes">a|&gt;b</code> is almost equivalent to <code class="pipes">.transform(a, b)</code>, but <code class="pipes">b</code>
+  in the former case is evaluated in the semantic context of <code class="pipes">a</code>. E.g., in <code class="pipes">(1, 2, 3) |&gt; _+1</code>,
+  <code class="pipes">_</code> is each element of the sequence on the left.
+</p>
+<p>
+  If the expression on the right is an aggregation, the result is the application
+  of it into all elements of the sequence. E.g. <code class="pipes">range(10) |&gt; sum(*)</code> is the
+  sum of all numbers between 0 and 9.
+</p>
+<p class="bg-warning">
+  In the right operand, the expression <code class="pipes">_</code> has a special meaning. It always mean
+  the entire object (like the <code class="pipes">*</code> expression). This allows us to write the example above
+  as <code class="expr">range(10) |&gt; :sum</code>.
+</p>
+<p>
+  If the expression on the right is a scalar, the result is another <code class="pipes">seq</code>
+  with the expression applied to all the elements in the original sequence.
+  E.g.: <code class="expr">(1, 2, 3) |&gt; $</code> casts all numbers in the sequence to string.
+  If the original sequence is an instance of <code class="pipes">row</code>, the result will
+  also be a row with the same name, but with types changed, e.g. <code class="pipes">(1 as a, 2 as b) |&gt; $</code>
+  is the same as <code class="pipes">('1' as a, '2' as b)</code>.
+</p>
+<p>
+  This operator also allows a special construction: the right operand may be
+  a call to a <a href="#pipe-stateless">stateless pipe</a>. In this case, all the elements in
+  the sequence will be passed through the pipe as a single batch. E.g.
+  <code class="pipes">range(20)|&gt;@filter(_%2==0)</code> returns all the even numbers between 0 and 19.
+  Please note that the syntax requires parentheses, as it would be in a function call.
+  The pipe syntax doesn't. If no arguments are needed, the parentheses are
+  optional, e.g. <code class="expr">(range(5), "abcde":split)|&gt;@zip</code>
+</p>
+<p class="bg-warning">
+  Some stateless pipes may use grouping, like <a href="#pipe-top"><code class="expr">@top</code></a>. In this case, you can
+  use it inside the parentheses, e.g. <code class="expr">range(20)|&gt;@top(2, _ desc by _%2)</code>.
+</p>
+<p>
+  The expression on the right is always evaluated on the context of the left operand. I.e.
+  it behaves like each element of the sequence is an event with the same type as the
+  sequence's type argument. You can use the operator <a href="#operator-hat"><code class="pipes2">^&lt;object&gt;</code></a> to access
+  the outer semantic context, e.g. <code class="expr">range(10)|&gt;(range(10)|&gt;^_*_)</code> returns
+  a multiplication table.
+</p>
+<p>
+    <strong>Example:</strong>
+</p>
+<pre class="pipes">=&gt; at the end
+=&gt; range(2, 100)
+   |&gt; @filter(range(2, floor(_**0.5)+1) |&gt; not any(^_%_==0))
+   as primes</pre>
+<p class="legend">Computes all primes less than 100.</p>
 </div>
 </div><hr/>
 <div id="chapter-scalars" class="level-0">
@@ -5236,7 +5554,7 @@ a day, an hour and 5 minutes</pre>
 </table>
 </div>
 </div><hr/>
-<p>Page generated at 09-Jun-2015 11:17:20</p>
+<p>Page generated at 09-Jun-2015 18:03:45</p>
 </div>
 
     <script>
