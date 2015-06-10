@@ -944,7 +944,7 @@ ready(function() {
 </head><body><div class="container">
 <h1>Intelie Pipes</h1>
 <h3>Language Reference Documentation</h3>
-<p>version 0.13 <small>(for previous versions, <a href="../versions">click here</a>)</small></p>
+<p>version 0.13 <small>(for older versions, <a href="../versions">click here</a>)</small></p>
 <p>Copyright 2015 Intelie</p><hr/>
 <h2>Table of Contents</h2>
 <table class="summary">
@@ -965,7 +965,7 @@ ready(function() {
 
                     <tr>
                         <td class="level-1">
-                            <a href="#quickstart-default">1.2. Default pipe</a>
+                            <a href="#quickstart-simple">1.2. Simple pipe</a>
                         </td>
                         <td class="description"></td>
                     </tr>
@@ -1166,7 +1166,7 @@ ready(function() {
 
                     <tr>
                         <td class="level-2">
-                            <a href="#pipe-default">4.1.1.  <span class="pipes2">&lt;named...&gt; [by &lt;named...&gt;] [over &lt;window&gt;] [every &lt;period&gt; | at the end]</span></a>
+                            <a href="#pipe-simple">4.1.1.  <span class="pipes2">&lt;named...&gt; [by &lt;named...&gt;] [over &lt;window&gt;] [every &lt;period&gt; | at the end]</span></a>
                         </td>
                         <td class="description">Transforms or aggregates records over configurable data window and output.</td>
                     </tr>
@@ -1791,7 +1791,7 @@ ready(function() {
                         <td class="level-1">
                             <a href="#scalar-keep">6.30.  <span class="pipes2">&lt;object&gt;:keep([&lt;number ttl&gt;]) → &lt;object&gt;</span></a>
                         </td>
-                        <td class="description">When used in a default pipe, delays or disable (if ttl not supplied or &lt; 0) inactive group removal.</td>
+                        <td class="description">When used in a simple pipe, delays or disable (if ttl not supplied or &lt; 0) inactive group removal.</td>
                     </tr>
 
                     <tr>
@@ -2582,8 +2582,8 @@ ready(function() {
 </ul>
 </div>
 </div><hr/>
-<div id="quickstart-default" class="level-1">
-<h4 class="header">1.2. Default pipe <span class="pipes2"></span> <span class="permalink"><a href="#quickstart-default">¶</a></span></h4>
+<div id="quickstart-simple" class="level-1">
+<h4 class="header">1.2. Simple pipe <span class="pipes2"></span> <span class="permalink"><a href="#quickstart-simple">¶</a></span></h4>
 <div class="text"><p><strong></strong></p><p>
     After the filter, you can chain one or more pipes. The simplest pipe just selects
     some fields from the event.
@@ -2637,7 +2637,7 @@ ready(function() {
 <ul>
     <li>... possible output rates and window types, please see <a href="#concepts-outputs">Section 2.3: Output rates and aggregation windows</a>.</li>
     <li>... inner workings of expression types, aggregations, etc., please see <a href="#concepts-expressions">Section 2.4: Expressions</a>.</li>
-    <li>... the default pipe itself, please see <a href="#pipe-default"><code class="pipes2">&lt;named...&gt; [by &lt;named...&gt;] [over &lt;window&gt;] [every &lt;period&gt; | at the end]</code></a>.</li>
+    <li>... the simple pipe itself, please see <a href="#pipe-simple"><code class="pipes2">&lt;named...&gt; [by &lt;named...&gt;] [over &lt;window&gt;] [every &lt;period&gt; | at the end]</code></a>.</li>
     <li>... all operators, please see <a href="#chapter-operators">Chapter 5: Operators</a>.</li>
     <li>... all scalar functions, please see <a href="#chapter-scalars">Chapter 6: Scalar Functions</a>.</li>
     <li>... all aggregations, please see <a href="#chapter-aggregations">Chapter 7: Aggregation Functions</a>.</li>
@@ -2834,7 +2834,7 @@ but only if it didn't already happen in the last 30 minutes.</p>
 </p>
 <ul>
     <li><strong>safe:</strong> pipes that can execute completelly in parallel without affecting the final result (e.g. <a href="#pipe-filter">filter pipe</a>)</li>
-    <li><strong>semi-safe:</strong> pipes that can execute most of their work in parallel, but must merge their output with another nodes (e.g. <a href="#pipe-default">default pipe</a>)</li>
+    <li><strong>semi-safe:</strong> pipes that can execute most of their work in parallel, but must merge their output with another nodes (e.g. <a href="#pipe-simple">simple pipe</a>)</li>
     <li><strong>unsafe:</strong> pipes that must execute in a single node in order to compute the correct result (e.g. <a href="#pipe-compress">compress pipe</a>)</li>
 </ul>
 <p>
@@ -2857,7 +2857,7 @@ but only if it didn't already happen in the last 30 minutes.</p>
 <div id="concepts-outputs" class="level-1">
 <h4 class="header">2.3. Output rates and aggregation windows <span class="pipes2"></span> <span class="permalink"><a href="#concepts-outputs">¶</a></span></h4>
 <div class="text"><p><strong></strong></p><p>
-    Every pipe in the chain will have one or more output rates. In this section, we will focus on how to declare them in <a href="#pipe-default">default pipe</a>,
+    Every pipe in the chain will have one or more output rates. In this section, we will focus on how to declare them in <a href="#pipe-simple">simple pipe</a>,
     but the concept itself can be applied to any pipe type.
 </p>
 <p>
@@ -2888,7 +2888,7 @@ but only if it didn't already happen in the last 30 minutes.</p>
     <tr><td>year</td><td>yr</td><td></td></tr>
 </table>
 <p>
-    Keep in mind that in the case of <a href="#pipe-default">default pipe</a>, there may be a difference between the <em>declared rate</em> and the <em>effective rate</em>.
+    Keep in mind that in the case of <a href="#pipe-simple">simple pipe</a>, there may be a difference between the <em>declared rate</em> and the <em>effective rate</em>.
     In the query bellow, for example, the declared output rate in the last pipe is <code class="pipes">every item</code>, but effectivelly the query outputs <code class="pipes">every 10 seconds</code>.
 </p>
 <pre class="pipes">* =&gt; count() every 10 seconds =&gt; count, prev(count) every item</pre>
@@ -2899,11 +2899,11 @@ but only if it didn't already happen in the last 30 minutes.</p>
     two items
 </p>
 <p>
-    Also in <a href="#pipe-default">default pipe</a>, it is allowed to aggregate over a period other than the output. You can, for example,
+    Also in <a href="#pipe-simple">simple pipe</a>, it is allowed to aggregate over a period other than the output. You can, for example,
     output a result every minute, that corresponds to the last 5 minutes of aggregation. It is an aggregation over time window.
 </p>
 <p class="bg-warning">
-    The window concept only applies to the <a href="#pipe-default">default pipe</a>.
+    The window concept only applies to the <a href="#pipe-simple">simple pipe</a>.
 </p>
 <p>
     In traditional stream processing libraries, every event is stored inside a data window and the aggregation runs over them. This
@@ -3032,8 +3032,8 @@ AvgAggregation: The parameter #1 &lt;someproperty&gt;; must be 'number' instead 
     An instance of typed <code class="pipes">row</code> has three main uses:
 </p>
 <ul>
-    <li>Be expanded with the <code class="expr">expand</code> keyword in a select or <code class="expr">by</code> clause. (see <a href="#pipe-default">default pipe</a>)</li>
     <li>Be yielded at the pipe <a href="#pipe-yield"><code class="pipes2">@yield [&lt;object expr&gt;]</code></a></li>
+    <li>Be expanded with the <code class="expr">expand</code> keyword in a select or <code class="expr">by</code> clause. (see <a href="#pipe-simple">simple pipe</a>)</li>
     <li>Be peeked by the <a href="#operator-peek"><code class="pipes2">&lt;object&gt;-&gt;&lt;identifier&gt; → &lt;object&gt;</code></a> operator</li>
 </ul>
 
@@ -3173,7 +3173,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
     One of the main features in Pipes is the ability to run aggregations distributedly. To make this possible, most aggregations
     are written using parallel versions of the algorithms. Most of the solutions presented in this section only affect how
     <strong>semi-safe</strong> pipes (see <a href="#concepts-pipes-chaining">Section 2.2: Chained computation model</a>) represent their result over the wire. Additionally, this
-    same mechanism is used by windows in <a href="#pipe-default">default pipe</a> (see <a href="#concepts-outputs">Section 2.3: Output rates and aggregation windows</a>) and meta-aggregations (e.g.
+    same mechanism is used by windows in <a href="#pipe-simple">simple pipe</a> (see <a href="#concepts-outputs">Section 2.3: Output rates and aggregation windows</a>) and meta-aggregations (e.g.
     <a href="#aggregation-overlast">overlast</a>, <a href="#aggregation-overall">overall</a>) to merge the results from many outputs.
 </p>
 
@@ -3225,7 +3225,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 <div id="concepts-expression-ttl" class="level-2">
 <h5 class="header">2.4.6. Aggregation TTL <span class="pipes2"></span> <span class="permalink"><a href="#concepts-expression-ttl">¶</a></span></h5>
 <div class="text"><p><strong></strong></p><p>
-    When using <a href="#pipe-default">default pipe</a> with a non-empty group, the query tries to reduce memory consumption
+    When using <a href="#pipe-simple">simple pipe</a> with a non-empty group, the query tries to reduce memory consumption
     by removing any group that has not received any event in the last output period. Most aggregations do not hold
     any state other than the required in the last period, so this is fine. But some aggregations need additional
     state (e.g. <a href="#aggregation-overlast">overlast</a>, <a href="#aggregation-prev">prev</a>) and may prevent this memory reclaim.
@@ -3246,7 +3246,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 <h5 class="header">2.4.7. Property access <span class="pipes2"></span> <span class="permalink"><a href="#concepts-expressions-property">¶</a></span></h5>
 <div class="text"><p><strong></strong></p><p>
     Property expressions are the way to access event's properties. In a glance, every identifier denotes a property
-    access. Properties are scalar expressions, but they can also be used in <a href="#pipe-default">aggregation pipes</a>,
+    access. Properties are scalar expressions, but they can also be used in <a href="#pipe-simple">aggregation pipes</a>,
     yielding the last evaluated expression.
 </p>
 <pre class="pipes">* =&gt; last(cpu#), len(host) by host</pre>
@@ -3292,15 +3292,15 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
     There are also two special expressions that act like properties, but have special semantics: <code class="pipes">_</code> and <code class="pipes">*</code>.
 </p>
 <p>
-    The expression <code class="pipes">_</code> returns the value of the default property. In the first pipe it is the first filter
-    default property. In subsequent pipes, it is the first property of the previous pipe. Assuming "host" is the
-    default property, the two queries bellow are equivalent.
+    The expression <code class="pipes">_</code> returns the value of the default property. In untyped pipes, this is the entire event.
+    In typed pipes, it is the first property of the previous pipe. I.e., in untyped pipes, <code class="pipes">_</code> is equivalent
+    to <code class="pipes">*</code>, and in typed pipes, it is equivalent to <code class="pipes">{0}</code>.
 </p>
 <pre class="pipes">host1 | host2
 =&gt; avg(cpu#) as avg by _ every minute
 =&gt; _*2 as doubled</pre>
 <pre class="pipes">host:host1 | host:host2
-=&gt; avg(cpu#) as avg by host every minute
+=&gt; avg(cpu#) as avg by * every minute
 =&gt; avg*2 as doubled</pre>
 <p>
     The expression <code class="pipes">*</code> returns the raw input event. Very useful when you don't want to repeat every field
@@ -3526,8 +3526,8 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 <h4 class="header">4.1. Stateful pipes <span class="pipes2"></span> <span class="permalink"><a href="#pipe-stateful">¶</a></span></h4>
 <div class="text"><p><strong></strong></p></div>
 </div><hr/>
-<div id="pipe-default" class="level-2">
-<h5 class="header">4.1.1.  <span class="pipes2">&lt;named...&gt; [by &lt;named...&gt;] [over &lt;window&gt;] [every &lt;period&gt; | at the end]</span> <span class="permalink"><a href="#pipe-default">¶</a></span></h5>
+<div id="pipe-simple" class="level-2">
+<h5 class="header">4.1.1.  <span class="pipes2">&lt;named...&gt; [by &lt;named...&gt;] [over &lt;window&gt;] [every &lt;period&gt; | at the end]</span> <span class="permalink"><a href="#pipe-simple">¶</a></span></h5>
 <div class="text"><p><strong>Transforms or aggregates records over configurable data window and output.</strong></p><p>
     This is the default type of pipe. It receives events, aggregates them and output
     the result based on what is configured on the <code class="expr">every</code> clause. By default, the aggregation
@@ -3571,14 +3571,14 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
     For more information on pipes safety, see <a href="#concepts-pipes-chaining">Section 2.2: Chained computation model</a>.
 </p>
 <p>
-    The default pipe is <strong>safe</strong> if and only if all the expressions are
+    The simple pipe is <strong>safe</strong> if and only if all the expressions are
     at least scalars, it has no <code class="pipes">by</code> nor <code class="pipes">over</code> clauses and the <code class="pipes">every</code> clause
     is ommitted or exactly <code class="pipes">every item</code>. This means in practice the pipe is safe if
     it is only a stateless transformation item-by-item of the input stream. Example:
 </p>
 <pre class="pipes">* =&gt; id, name, value# * 3.14</pre>
 <p>
-    The default pipe is <strong>unsafe</strong> if and only if the output type is
+    The simple pipe is <strong>unsafe</strong> if and only if the output type is
     <code class="pipes2">every &lt;n&gt; items</code> or it has some aggregation that forces the pipe to be unsafe
     (e.g. <a href="#aggregation-smooth">smooth</a>). This means in practice the pipe is unsafe if it depends
     on some total order in the input, achieved running in a single node. This is true for
@@ -3588,7 +3588,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 <pre class="pipes">* =&gt; @unsafe =&gt; avg(value#) every 10 items</pre>
 <pre class="pipes">* =&gt; @unsafe =&gt; smooth(value#) every 10 seconds</pre>
 <p>
-    The default pipe is <strong>semi-safe</strong> in all other cases, i.e., when the output
+    The simple pipe is <strong>semi-safe</strong> in all other cases, i.e., when the output
     is by time period and it has no aggregation that makes it unsafe.
 </p>
 <pre class="pipes">* =&gt; avg(value#) every 10 seconds</pre>
@@ -4752,7 +4752,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div><hr/>
 <div id="scalar-keep" class="level-1">
 <h4 class="header">6.30.  <span class="pipes2">&lt;object&gt;:keep([&lt;number ttl&gt;]) → &lt;object&gt;</span> <span class="permalink"><a href="#scalar-keep">¶</a></span></h4>
-<div class="text"><p><strong>When used in a default pipe, delays or disable (if ttl not supplied or &lt; 0) inactive group removal.</strong></p></div>
+<div class="text"><p><strong>When used in a simple pipe, delays or disable (if ttl not supplied or &lt; 0) inactive group removal.</strong></p></div>
 </div><hr/>
 <div id="scalar-len" class="level-1">
 <h4 class="header">6.31.  <span class="pipes2">&lt;object&gt;:len() → &lt;object&gt;</span> <span class="permalink"><a href="#scalar-len">¶</a></span></h4>
@@ -5725,7 +5725,7 @@ a day, an hour and 5 minutes</pre>
 </table>
 </div>
 </div><hr/>
-<p>Page generated at 10-Jun-2015 14:11:02</p>
+<p>Page generated at 10-Jun-2015 14:40:05</p>
 </div>
 
     <script>
