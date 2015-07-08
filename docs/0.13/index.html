@@ -2055,7 +2055,7 @@ ready(function() {
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-happened">6.68.  <span class="pipes2">happened([&lt;number&gt;], &lt;number tested&gt;, &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span></a>
+                            <a href="#scalar-happened">6.68.  <span class="pipes2">happened([&lt;number&gt;], [&lt;number tested&gt;], &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Returns true if the tested timestamp is inside the span, false otherwise.</td>
                     </tr>
@@ -2146,51 +2146,100 @@ ready(function() {
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-realtimestamp">6.81.  <span class="pipes2">realtimestamp() → &lt;number&gt;</span></a>
-                        </td>
-                        <td class="description">Returns the system's real timestamp (not the query timestamp).</td>
-                    </tr>
-
-                    <tr>
-                        <td class="level-1">
-                            <a href="#scalar-span">6.82.  <span class="pipes2">span([&lt;number&gt;], &lt;string&gt;, [&lt;string tz&gt;]) → &lt;row&gt;</span></a>
+                            <a href="#scalar-span">6.81.  <span class="pipes2">span([&lt;number&gt;], &lt;string&gt;, [&lt;string tz&gt;]) → &lt;row&gt;</span></a>
                         </td>
                         <td class="description">Calculates start and end timestamps of span based on target.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-spanend">6.83.  <span class="pipes2">spanend([&lt;number&gt;], &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span></a>
+                            <a href="#scalar-spanend">6.82.  <span class="pipes2">spanend([&lt;number&gt;], &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Calculates end timestamp of span based on target.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-spanstart">6.84.  <span class="pipes2">spanstart([&lt;number&gt;], &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span></a>
+                            <a href="#scalar-spanstart">6.83.  <span class="pipes2">spanstart([&lt;number&gt;], &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Calculates start timestamp of span based on target.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-spantest">6.85.  <span class="pipes2">spantest([&lt;number&gt;], &lt;number tested&gt;, &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span></a>
+                            <a href="#scalar-spantest">6.84.  <span class="pipes2">spantest([&lt;number&gt;], &lt;number tested&gt;, &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Returns -1 if the tested timestamp is before the span, 0 if it is inside and 1 if it is after.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-timestamp">6.86.  <span class="pipes2">timestamp() → &lt;number&gt;</span></a>
+                            <a href="#scalar-timestamp">6.85.  <span class="pipes2">timestamp() → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Returns the most appropriate timestamp, whether in scalar or aggregation contexts.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-uuid">6.87.  <span class="pipes2">uuid() → &lt;string&gt;</span></a>
+                            <a href="#scalar-uuid">6.86.  <span class="pipes2">uuid() → &lt;string&gt;</span></a>
                         </td>
                         <td class="description">Returns a random UUID string.</td>
+                    </tr>
+
+                    <tr>
+                        <td class="level-1">
+                            <a href="#scalar-sys">6.87. System functions</a>
+                        </td>
+                        <td class="description"></td>
+                    </tr>
+
+                    <tr>
+                        <td class="level-2">
+                            <a href="#scalar-sys-cpu">6.87.1.  <span class="pipes2">sys.cpu() → &lt;row&gt;</span></a>
+                        </td>
+                        <td class="description">Returns the system's CPU usage info.</td>
+                    </tr>
+
+                    <tr>
+                        <td class="level-2">
+                            <a href="#scalar-sys-disks">6.87.2.  <span class="pipes2">sys.disks() → &lt;seq(row)&gt;</span></a>
+                        </td>
+                        <td class="description">Returns info about all devices in the filesystem.</td>
+                    </tr>
+
+                    <tr>
+                        <td class="level-2">
+                            <a href="#scalar-sys-heap">6.87.3.  <span class="pipes2">sys.heap() → &lt;row&gt;</span></a>
+                        </td>
+                        <td class="description">Returns the system's current JVM heap info.</td>
+                    </tr>
+
+                    <tr>
+                        <td class="level-2">
+                            <a href="#scalar-sys-hostname">6.87.4.  <span class="pipes2">sys.hostname() → &lt;string&gt;</span></a>
+                        </td>
+                        <td class="description">Returns the system's hostname.</td>
+                    </tr>
+
+                    <tr>
+                        <td class="level-2">
+                            <a href="#scalar-sys-memory">6.87.5.  <span class="pipes2">sys.memory() → &lt;row&gt;</span></a>
+                        </td>
+                        <td class="description">Returns the system's memory usage info.</td>
+                    </tr>
+
+                    <tr>
+                        <td class="level-2">
+                            <a href="#scalar-sys-threads">6.87.6.  <span class="pipes2">sys.threads() → &lt;row&gt;</span></a>
+                        </td>
+                        <td class="description">Returns info about running threads in current process.</td>
+                    </tr>
+
+                    <tr>
+                        <td class="level-2">
+                            <a href="#scalar-sys-timestamp">6.87.7.  <span class="pipes2">sys.timestamp() → &lt;number&gt;</span></a>
+                        </td>
+                        <td class="description">Returns the system's real timestamp (not the query timestamp).</td>
                     </tr>
 
                     <tr>
@@ -2370,7 +2419,7 @@ ready(function() {
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-quantile">7.25.  <span class="pipes2">quantile(&lt;number q&gt;, &lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span></a>
+                            <a href="#aggregation-quantile">7.25.  <span class="pipes2">quantile(&lt;number&gt;, &lt;number q&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Estimates the q (0..1) quantile of the population using Count-Min Sketch.</td>
                     </tr>
@@ -2440,42 +2489,42 @@ ready(function() {
 
                     <tr>
                         <td class="level-2">
-                            <a href="#aggregation-wcount">7.34.1.  <span class="pipes2">wcount()</span></a>
+                            <a href="#aggregation-wcount">7.34.1.  <span class="pipes2">wcount() → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Yields how many outputs are merged in the current window.</td>
                     </tr>
 
                     <tr>
                         <td class="level-2">
-                            <a href="#aggregation-wstart">7.34.2.  <span class="pipes2">wstart()</span></a>
+                            <a href="#aggregation-wstart">7.34.2.  <span class="pipes2">wstart() → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Returns the window's first allowed timestamp (or item index).</td>
                     </tr>
 
                     <tr>
                         <td class="level-2">
-                            <a href="#aggregation-wend">7.34.3.  <span class="pipes2">wend()</span></a>
+                            <a href="#aggregation-wend">7.34.3.  <span class="pipes2">wend() → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Returns the window's last allowed timestamp (or item index).</td>
                     </tr>
 
                     <tr>
                         <td class="level-2">
-                            <a href="#aggregation-ostart">7.34.4.  <span class="pipes2">ostart()</span></a>
+                            <a href="#aggregation-ostart">7.34.4.  <span class="pipes2">ostart() → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Returns the output's first allowed timestamp (or item index).</td>
                     </tr>
 
                     <tr>
                         <td class="level-2">
-                            <a href="#aggregation-oend">7.34.5.  <span class="pipes2">oend()</span></a>
+                            <a href="#aggregation-oend">7.34.5.  <span class="pipes2">oend() → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Returns the output's last allowed timestamp (or item index).</td>
                     </tr>
 
                     <tr>
                         <td class="level-2">
-                            <a href="#aggregation-otimestamp">7.34.6.  <span class="pipes2">otimestamp()</span></a>
+                            <a href="#aggregation-otimestamp">7.34.6.  <span class="pipes2">otimestamp() → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Returns the timestamp when the outputs were merged (equal to <code class="expr">oend()</code> on time pipes).</td>
                     </tr>
@@ -4968,9 +5017,12 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="scalar-happened" class="level-1">
-<h4 class="header">6.68.  <span class="pipes2">happened([&lt;number&gt;], &lt;number tested&gt;, &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-happened">¶</a></span></h4>
+<h4 class="header">6.68.  <span class="pipes2">happened([&lt;number&gt;], [&lt;number tested&gt;], &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-happened">¶</a></span></h4>
 <div class="text"><p><strong>Returns true if the tested timestamp is inside the span, false otherwise.</strong></p><p>
     Please note that <code class="pipes">someprop:happened('today')</code> is equivalent to <code class="pipes">happened(timestamp(), someprop, 'today')</code>.
+</p>
+<p>
+    Also, <code class="pipes">happened('today')</code> is equivalent to <code class="pipes">happened(timestamp(), timestamp(), 'today')</code>.
 </p>
 </div>
 </div><hr/>
@@ -5049,12 +5101,8 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 <p class="legend"><code class="pipes">(7, 7.5, 8, 8.5, 9, 9.5)</code></p>
 </div>
 </div><hr/>
-<div id="scalar-realtimestamp" class="level-1">
-<h4 class="header">6.81.  <span class="pipes2">realtimestamp() → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-realtimestamp">¶</a></span></h4>
-<div class="text"><p><strong>Returns the system's real timestamp (not the query timestamp).</strong></p></div>
-</div><hr/>
 <div id="scalar-span" class="level-1">
-<h4 class="header">6.82.  <span class="pipes2">span([&lt;number&gt;], &lt;string&gt;, [&lt;string tz&gt;]) → &lt;row&gt;</span> <span class="permalink"><a href="#scalar-span">¶</a></span></h4>
+<h4 class="header">6.81.  <span class="pipes2">span([&lt;number&gt;], &lt;string&gt;, [&lt;string tz&gt;]) → &lt;row&gt;</span> <span class="permalink"><a href="#scalar-span">¶</a></span></h4>
 <div class="text"><p><strong>Calculates start and end timestamps of span based on target.</strong></p><p>
     The result is a row with three fields: <code class="pipes">timestamp</code>, <code class="pipes">start</code> and <code class="pipes">end</code>.
 </p>
@@ -5066,33 +5114,123 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="scalar-spanend" class="level-1">
-<h4 class="header">6.83.  <span class="pipes2">spanend([&lt;number&gt;], &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-spanend">¶</a></span></h4>
+<h4 class="header">6.82.  <span class="pipes2">spanend([&lt;number&gt;], &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-spanend">¶</a></span></h4>
 <div class="text"><p><strong>Calculates end timestamp of span based on target.</strong></p><p>
     Please note that <code class="pipes">spanend('today')</code> is equivalent to <code class="pipes">spanend(timestamp(), 'today')</code>.
 </p>
 </div>
 </div><hr/>
 <div id="scalar-spanstart" class="level-1">
-<h4 class="header">6.84.  <span class="pipes2">spanstart([&lt;number&gt;], &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-spanstart">¶</a></span></h4>
+<h4 class="header">6.83.  <span class="pipes2">spanstart([&lt;number&gt;], &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-spanstart">¶</a></span></h4>
 <div class="text"><p><strong>Calculates start timestamp of span based on target.</strong></p><p>
     Please note that <code class="pipes">spanstart('today')</code> is equivalent to <code class="pipes">spanstart(timestamp(), 'today')</code>.
 </p>
 </div>
 </div><hr/>
 <div id="scalar-spantest" class="level-1">
-<h4 class="header">6.85.  <span class="pipes2">spantest([&lt;number&gt;], &lt;number tested&gt;, &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-spantest">¶</a></span></h4>
+<h4 class="header">6.84.  <span class="pipes2">spantest([&lt;number&gt;], &lt;number tested&gt;, &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-spantest">¶</a></span></h4>
 <div class="text"><p><strong>Returns -1 if the tested timestamp is before the span, 0 if it is inside and 1 if it is after.</strong></p><p>
     Please note that <code class="pipes">someprop:spantest('today')</code> is equivalent to <code class="pipes">spantest(timestamp(), someprop, 'today')</code>.
+</p>
+<p>
+    Also, <code class="pipes">spantest('today')</code> is equivalent to <code class="pipes">spantest(timestamp(), timestamp(), 'today')</code>.
 </p>
 </div>
 </div><hr/>
 <div id="scalar-timestamp" class="level-1">
-<h4 class="header">6.86.  <span class="pipes2">timestamp() → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-timestamp">¶</a></span></h4>
+<h4 class="header">6.85.  <span class="pipes2">timestamp() → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-timestamp">¶</a></span></h4>
 <div class="text"><p><strong>Returns the most appropriate timestamp, whether in scalar or aggregation contexts.</strong></p></div>
 </div><hr/>
 <div id="scalar-uuid" class="level-1">
-<h4 class="header">6.87.  <span class="pipes2">uuid() → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-uuid">¶</a></span></h4>
+<h4 class="header">6.86.  <span class="pipes2">uuid() → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-uuid">¶</a></span></h4>
 <div class="text"><p><strong>Returns a random UUID string.</strong></p></div>
+</div><hr/>
+<div id="scalar-sys" class="level-1">
+<h4 class="header">6.87. System functions <span class="pipes2"></span> <span class="permalink"><a href="#scalar-sys">¶</a></span></h4>
+<div class="text"><p><strong></strong></p><p>
+    Functions that return information about the system where the query is running.
+</p>
+</div>
+</div><hr/>
+<div id="scalar-sys-cpu" class="level-2">
+<h5 class="header">6.87.1.  <span class="pipes2">sys.cpu() → &lt;row&gt;</span> <span class="permalink"><a href="#scalar-sys-cpu">¶</a></span></h5>
+<div class="text"><p><strong>Returns the system's CPU usage info.</strong></p><p>
+  The returned row has the following fields:
+</p>
+<table class="table table-striped">
+    <tr><th>field</th><th>type</th><th>description</th></tr>
+    <tr><td>process</td><td>number</td><td>Current process CPU load (in range [0..1])</td></tr>
+    <tr><td>system</td><td>number</td><td>System's CPU load (in range [0..1])</td></tr>
+    <tr><td>loadavg</td><td>number</td><td>Load average in the last minute</td></tr>
+    <tr><td>cores</td><td>number</td><td>Number of processor cores installed</td></tr>
+</table>
+</div>
+</div><hr/>
+<div id="scalar-sys-disks" class="level-2">
+<h5 class="header">6.87.2.  <span class="pipes2">sys.disks() → &lt;seq(row)&gt;</span> <span class="permalink"><a href="#scalar-sys-disks">¶</a></span></h5>
+<div class="text"><p><strong>Returns info about all devices in the filesystem.</strong></p><p>
+  Each row  in the returned sequence has the following fields:
+</p>
+<table class="table table-striped">
+    <tr><th>field</th><th>type</th><th>description</th></tr>
+    <tr><td>name</td><td>string</td><td>Name of the device or partition</td></tr>
+    <tr><td>type</td><td>string</td><td>Format type</td></tr>
+    <tr><td>readonly</td><td>boolean</td><td>Is read only?</td></tr>
+    <tr><td>unallocated</td><td>number</td><td># of unallocated bytes in the device</td></tr>
+    <tr><td>usable</td><td>number</td><td># of usable bytes (considering write permissions, etc.)</td></tr>
+    <tr><td>total</td><td>number</td><td>Total bytes in the device</td></tr>
+</table>
+</div>
+</div><hr/>
+<div id="scalar-sys-heap" class="level-2">
+<h5 class="header">6.87.3.  <span class="pipes2">sys.heap() → &lt;row&gt;</span> <span class="permalink"><a href="#scalar-sys-heap">¶</a></span></h5>
+<div class="text"><p><strong>Returns the system's current JVM heap info.</strong></p><p>
+  The returned row has the following fields (all values in bytes):
+</p>
+<table class="table table-striped">
+    <tr><th>field</th><th>type</th><th>description</th></tr>
+    <tr><td>used</td><td>number</td><td>Used heap memory</td></tr>
+    <tr><td>max</td><td>number</td><td>Max heap size</td></tr>
+    <tr><td>committed</td><td>number</td><td>Commited memory by the OS for the current VM</td></tr>
+</table>
+</div>
+</div><hr/>
+<div id="scalar-sys-hostname" class="level-2">
+<h5 class="header">6.87.4.  <span class="pipes2">sys.hostname() → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-sys-hostname">¶</a></span></h5>
+<div class="text"><p><strong>Returns the system's hostname.</strong></p></div>
+</div><hr/>
+<div id="scalar-sys-memory" class="level-2">
+<h5 class="header">6.87.5.  <span class="pipes2">sys.memory() → &lt;row&gt;</span> <span class="permalink"><a href="#scalar-sys-memory">¶</a></span></h5>
+<div class="text"><p><strong>Returns the system's memory usage info.</strong></p><p>
+  The returned row has the following fields (all values in bytes):
+</p>
+<table class="table table-striped">
+    <tr><th>field</th><th>type</th><th>description</th></tr>
+    <tr><td>used</td><td>number</td><td>Used physical memory</td></tr>
+    <tr><td>total</td><td>number</td><td>Total physical memory</td></tr>
+    <tr><td>usedswap</td><td>number</td><td>Used swap memory</td></tr>
+    <tr><td>totalswap</td><td>number</td><td>Total swap memory</td></tr>
+</table>
+</div>
+</div><hr/>
+<div id="scalar-sys-threads" class="level-2">
+<h5 class="header">6.87.6.  <span class="pipes2">sys.threads() → &lt;row&gt;</span> <span class="permalink"><a href="#scalar-sys-threads">¶</a></span></h5>
+<div class="text"><p><strong>Returns info about running threads in current process.</strong></p><p>
+  The returned row has the following fields:
+</p>
+<table class="table table-striped">
+    <tr><th>field</th><th>type</th><th>description</th></tr>
+    <tr><td>running</td><td>number</td><td># of running threads</td></tr>
+    <tr><td>peak</td><td>number</td><td>Max # of running threads</td></tr>
+    <tr><td>total</td><td>number</td><td># of threads ever started in this JVM</td></tr>
+    <tr><td>daemon</td><td>number</td><td># of daemon threads</td></tr>
+    <tr><td>deadlocked</td><td>number</td><td># of deadlocked threads</td></tr>
+</table>
+</div>
+</div><hr/>
+<div id="scalar-sys-timestamp" class="level-2">
+<h5 class="header">6.87.7.  <span class="pipes2">sys.timestamp() → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-sys-timestamp">¶</a></span></h5>
+<div class="text"><p><strong>Returns the system's real timestamp (not the query timestamp).</strong></p></div>
 </div><hr/>
 <div id="chapter-aggregations" class="level-0">
 <h2 class="header">7. Aggregation Functions <span class="pipes2"></span> <span class="permalink"><a href="#chapter-aggregations">¶</a></span></h2>
@@ -5300,7 +5438,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 <div id="aggregation-median" class="level-1">
 <h4 class="header">7.22.  <span class="pipes2">median(&lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-median">¶</a></span></h4>
 <div class="text"><p><strong>Estimates the median value of the population using Count-Min Sketch.</strong></p><p>
-  Equivalent to <a href="#aggregation-quantile"><code class="pipes2">quantile(0.5, &lt;number&gt;, [&lt;number weight&gt;])</code></a>.
+  Equivalent to <a href="#aggregation-quantile"><code class="pipes2">quantile(&lt;number&gt;, 0.5, [&lt;number weight&gt;])</code></a>.
 </p>
 </div>
 </div><hr/>
@@ -5313,7 +5451,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 <div class="text"><p><strong>Aggregates the proportion of events that evaluate true to expression.</strong></p></div>
 </div><hr/>
 <div id="aggregation-quantile" class="level-1">
-<h4 class="header">7.25.  <span class="pipes2">quantile(&lt;number q&gt;, &lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-quantile">¶</a></span></h4>
+<h4 class="header">7.25.  <span class="pipes2">quantile(&lt;number&gt;, &lt;number q&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-quantile">¶</a></span></h4>
 <div class="text"><p><strong>Estimates the q (0..1) quantile of the population using Count-Min Sketch.</strong></p></div>
 </div><hr/>
 <div id="aggregation-set" class="level-1">
@@ -5362,27 +5500,27 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="aggregation-wcount" class="level-2">
-<h5 class="header">7.34.1.  <span class="pipes2">wcount()</span> <span class="permalink"><a href="#aggregation-wcount">¶</a></span></h5>
+<h5 class="header">7.34.1.  <span class="pipes2">wcount() → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-wcount">¶</a></span></h5>
 <div class="text"><p><strong>Yields how many outputs are merged in the current window.</strong></p></div>
 </div><hr/>
 <div id="aggregation-wstart" class="level-2">
-<h5 class="header">7.34.2.  <span class="pipes2">wstart()</span> <span class="permalink"><a href="#aggregation-wstart">¶</a></span></h5>
+<h5 class="header">7.34.2.  <span class="pipes2">wstart() → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-wstart">¶</a></span></h5>
 <div class="text"><p><strong>Returns the window's first allowed timestamp (or item index).</strong></p></div>
 </div><hr/>
 <div id="aggregation-wend" class="level-2">
-<h5 class="header">7.34.3.  <span class="pipes2">wend()</span> <span class="permalink"><a href="#aggregation-wend">¶</a></span></h5>
+<h5 class="header">7.34.3.  <span class="pipes2">wend() → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-wend">¶</a></span></h5>
 <div class="text"><p><strong>Returns the window's last allowed timestamp (or item index).</strong></p></div>
 </div><hr/>
 <div id="aggregation-ostart" class="level-2">
-<h5 class="header">7.34.4.  <span class="pipes2">ostart()</span> <span class="permalink"><a href="#aggregation-ostart">¶</a></span></h5>
+<h5 class="header">7.34.4.  <span class="pipes2">ostart() → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-ostart">¶</a></span></h5>
 <div class="text"><p><strong>Returns the output's first allowed timestamp (or item index).</strong></p></div>
 </div><hr/>
 <div id="aggregation-oend" class="level-2">
-<h5 class="header">7.34.5.  <span class="pipes2">oend()</span> <span class="permalink"><a href="#aggregation-oend">¶</a></span></h5>
+<h5 class="header">7.34.5.  <span class="pipes2">oend() → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-oend">¶</a></span></h5>
 <div class="text"><p><strong>Returns the output's last allowed timestamp (or item index).</strong></p></div>
 </div><hr/>
 <div id="aggregation-otimestamp" class="level-2">
-<h5 class="header">7.34.6.  <span class="pipes2">otimestamp()</span> <span class="permalink"><a href="#aggregation-otimestamp">¶</a></span></h5>
+<h5 class="header">7.34.6.  <span class="pipes2">otimestamp() → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-otimestamp">¶</a></span></h5>
 <div class="text"><p><strong>Returns the timestamp when the outputs were merged (equal to <code class="expr">oend()</code> on time pipes).</strong></p></div>
 </div><hr/>
 <div id="chapter-timespan" class="level-0">
@@ -5725,7 +5863,7 @@ a day, an hour and 5 minutes</pre>
 </table>
 </div>
 </div><hr/>
-<p>Page generated at 10-Jun-2015 14:40:54</p>
+<p>Page generated at 07-Jul-2015 22:25:18</p>
 </div>
 
     <script>
