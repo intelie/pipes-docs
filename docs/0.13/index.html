@@ -476,6 +476,7 @@ var syntax = function(usage, expr) {
         function tokenBase(stream, state) {
             var ch = stream.next();
             curPunc = null;
+            state.last_arrow = null;
             if (state.mcall) {
                 state.mcall = null;
                 if (ch.match(/[_\w\d\.]/)) {
@@ -511,13 +512,13 @@ var syntax = function(usage, expr) {
                 return state.tokenize(stream, state);
             }
             if (ch == "\"" || ch == "}") {
-              state.interpolating = false;
-              state.tokenize = tokenLiteral("\"", 'string');
-              return state.tokenize(stream, state);
+                state.interpolating = false;
+                state.tokenize = tokenLiteral("\"", 'string');
+                return state.tokenize(stream, state);
             }
             if (ch == "{") {
-              state.tokenize = tokenLiteral('}', 'variable');
-              return state.tokenize(stream, state);
+                state.tokenize = tokenLiteral('}', 'variable');
+                return state.tokenize(stream, state);
             }
             else if (/[{}\(\),;\[\]]/.test(ch)) {
                 curPunc = ch;
@@ -526,15 +527,22 @@ var syntax = function(usage, expr) {
                 state.post_filter = false;
                 return "string-2";
             } else if (ch == '=' && stream.eat(">") || ch == '\\') {
+                if (ch == '=') state.last_arrow = '=>';
                 state.post_filter = true;
                 return "string-2";
+            } else if (ch == '|' && stream.eat(">")) {
+                state.last_arrow = '|>';
+                return "keyword";
             } else if (ch == ':' || ch=='#' || ch == '$' || ch == '→') {
-                if (stream.peek() != ' ' && state.post_filter)
+                if (stream.peek() != ' ' && state.post_filter) {
                     state.mcall = true;
+                }
                 return "string-2";
             } else if (ch == '@') {
-                if (state.post_filter)
+                if (state.post_filter) {
                     state.mcall = true;
+                }
+
                 return "string-2";
             } else if (usage && ch == '<' && stream.peek().match(/[_\w\d\.]/)) {
                 stream.eatWhile(/[_\w\d\.]/);
@@ -564,9 +572,9 @@ var syntax = function(usage, expr) {
                     return "keyword";
                 } else if (/^(at|the)$/.test(last) && /^(the|end)$/.test(word)) {
                     return "keyword";
-                } else if (stream.peek() == "(")
+                } else if (stream.peek() == "(") {
                     return "variable-2";
-                else if (word == "_")
+                } else if (word == "_")
                     return "string-2";
                 else {
                     if (!isNaN(word))
@@ -582,7 +590,7 @@ var syntax = function(usage, expr) {
                 while ((ch = stream.next()) != null) {
                     if ((ch == quote || /\"|\}/.test(quote) && ch=='$' && stream.eat("{")) && !escaped) {
                         if (ch=='{')
-                          state.interpolating = true;
+                            state.interpolating = true;
                         state.tokenize = tokenBase;
                         break;
                     }
@@ -1754,492 +1762,527 @@ ready(function() {
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-decode">6.25.  <span class="pipes2">&lt;object&gt;:decode(&lt;object,object... pairs&gt;) → &lt;object&gt;</span></a>
+                            <a href="#scalar-comparable">6.25.  <span class="pipes2">&lt;object&gt;:comparable() → &lt;comparable&gt;</span></a>
+                        </td>
+                        <td class="description">Converts object to comparable.</td>
+                    </tr>
+
+                    <tr>
+                        <td class="level-1">
+                            <a href="#scalar-decode">6.26.  <span class="pipes2">&lt;object&gt;:decode(&lt;object,object... pairs&gt;) → &lt;object&gt;</span></a>
                         </td>
                         <td class="description">Transforms the parameter using the translation rules defined in &lt;pairs&gt;.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-get">6.26.  <span class="pipes2">&lt;object&gt;:get(&lt;object... keys&gt;) → &lt;object&gt;</span></a>
+                            <a href="#scalar-get">6.27.  <span class="pipes2">&lt;object&gt;:get(&lt;object... keys&gt;) → &lt;object&gt;</span></a>
                         </td>
                         <td class="description">Much like property[keys]. Works for strings, containers and arrays.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-indexin">6.27.  <span class="pipes2">&lt;object&gt;:indexin(&lt;object... list&gt;) → &lt;number&gt;</span></a>
+                            <a href="#scalar-indexin">6.28.  <span class="pipes2">&lt;object&gt;:indexin(&lt;object... list&gt;) → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Returns the first index of the value in &lt;list&gt;, or null if &lt;list&gt; does not contain it.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-isin">6.28.  <span class="pipes2">&lt;object&gt;:isin(&lt;object... list&gt;) → &lt;boolean&gt;</span></a>
+                            <a href="#scalar-isin">6.29.  <span class="pipes2">&lt;object&gt;:isin(&lt;object... list&gt;) → &lt;boolean&gt;</span></a>
                         </td>
                         <td class="description">Returns true if &lt;list&gt; contains the value, false otherwise.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-json">6.29.  <span class="pipes2">&lt;object&gt;:json() → &lt;string&gt;</span></a>
+                            <a href="#scalar-json">6.30.  <span class="pipes2">&lt;object&gt;:json() → &lt;string&gt;</span></a>
                         </td>
                         <td class="description">Converts the object to its JSON string representation.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-keep">6.30.  <span class="pipes2">&lt;object&gt;:keep([&lt;number ttl&gt;]) → &lt;object&gt;</span></a>
+                            <a href="#scalar-keep">6.31.  <span class="pipes2">&lt;object&gt;:keep([&lt;number ttl&gt;]) → &lt;object&gt;</span></a>
                         </td>
                         <td class="description">When used in a simple pipe, delays or disable (if ttl not supplied or &lt; 0) inactive group removal.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-len">6.31.  <span class="pipes2">&lt;object&gt;:len() → &lt;object&gt;</span></a>
+                            <a href="#scalar-len">6.32.  <span class="pipes2">&lt;object&gt;:len() → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Tries to get &lt;target&gt;'s size. Works for strings, containers and arrays.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-number">6.32.  <span class="pipes2">&lt;object&gt;:number() → &lt;number&gt;</span></a>
+                            <a href="#scalar-number">6.33.  <span class="pipes2">&lt;object&gt;:number() → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Converts object to number.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-object">6.33.  <span class="pipes2">&lt;object&gt;:object() → &lt;object&gt;</span></a>
+                            <a href="#scalar-object">6.34.  <span class="pipes2">&lt;object&gt;:object() → &lt;object&gt;</span></a>
                         </td>
                         <td class="description">Casts any object to its canonical object representation.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-row">6.34.  <span class="pipes2">&lt;object&gt;:row() → &lt;seq&gt;</span></a>
+                            <a href="#scalar-row">6.35.  <span class="pipes2">&lt;object&gt;:row() → &lt;seq&gt;</span></a>
                         </td>
                         <td class="description">Casts any object to a row.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-seq">6.35.  <span class="pipes2">&lt;object&gt;:seq() → &lt;seq&gt;</span></a>
+                            <a href="#scalar-seq">6.36.  <span class="pipes2">&lt;object&gt;:seq() → &lt;seq&gt;</span></a>
                         </td>
                         <td class="description">Casts any object to a seq.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-string">6.36.  <span class="pipes2">&lt;object&gt;:string() → &lt;string&gt;</span></a>
+                            <a href="#scalar-string">6.37.  <span class="pipes2">&lt;object&gt;:string() → &lt;string&gt;</span></a>
                         </td>
                         <td class="description">Converts object to string.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-typename">6.37.  <span class="pipes2">&lt;object&gt;:typename() → &lt;string&gt;</span></a>
+                            <a href="#scalar-typename">6.38.  <span class="pipes2">&lt;object&gt;:typename() → &lt;string&gt;</span></a>
                         </td>
                         <td class="description">Returns the compile-time type of an expression.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-seqrepeat">6.38.  <span class="pipes2">&lt;seq&gt;:repeat(&lt;number&gt;) → &lt;seq&gt;</span></a>
+                            <a href="#scalar-seq-contains">6.39.  <span class="pipes2">&lt;seq&gt;:contains(&lt;object&gt;) → &lt;boolean&gt;</span></a>
+                        </td>
+                        <td class="description">Returns whether the target seq contains the argument.</td>
+                    </tr>
+
+                    <tr>
+                        <td class="level-1">
+                            <a href="#scalar-seq-repeat">6.40.  <span class="pipes2">&lt;seq&gt;:repeat(&lt;number&gt;) → &lt;seq&gt;</span></a>
                         </td>
                         <td class="description">Repeats the sequence a certain number of times.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-contains">6.39.  <span class="pipes2">&lt;string&gt;:contains(&lt;string&gt;) → &lt;boolean&gt;</span></a>
+                            <a href="#scalar-contains">6.41.  <span class="pipes2">&lt;string&gt;:contains(&lt;string&gt;) → &lt;boolean&gt;</span></a>
                         </td>
                         <td class="description">Returns whether the target string contains the argument.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-dateparse">6.40.  <span class="pipes2">&lt;string&gt;:dateparse([&lt;string format&gt;], [&lt;string tz&gt;]) → &lt;number&gt;</span></a>
+                            <a href="#scalar-dateparse">6.42.  <span class="pipes2">&lt;string&gt;:dateparse([&lt;string format&gt;], [&lt;string tz&gt;]) → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Parses timestamp using specified format</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-endswith">6.41.  <span class="pipes2">&lt;string&gt;:endswith(&lt;string&gt;) → &lt;boolean&gt;</span></a>
+                            <a href="#scalar-endswith">6.43.  <span class="pipes2">&lt;string&gt;:endswith(&lt;string&gt;) → &lt;boolean&gt;</span></a>
                         </td>
                         <td class="description">Returns whether the target string ends with the argument.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-hlleval">6.42.  <span class="pipes2">&lt;string&gt;:hlleval() → &lt;number&gt;</span></a>
+                            <a href="#scalar-hlleval">6.44.  <span class="pipes2">&lt;string&gt;:hlleval() → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Evaluates compressed base64 HyperLogLog data.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-indexof">6.43.  <span class="pipes2">&lt;string&gt;:indexof(&lt;string s&gt;, [&lt;number fromIndex&gt;]) → &lt;boolean&gt;</span></a>
+                            <a href="#scalar-indexof">6.45.  <span class="pipes2">&lt;string&gt;:indexof(&lt;string s&gt;, [&lt;number fromIndex&gt;]) → &lt;boolean&gt;</span></a>
                         </td>
                         <td class="description">Returns the index of position of &lt;s&gt; inside the target string. Returns null otherwise.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-jsonparse">6.44.  <span class="pipes2">&lt;string&gt;:jsonparse() → &lt;object&gt;</span></a>
+                            <a href="#scalar-jsonparse">6.46.  <span class="pipes2">&lt;string&gt;:jsonparse() → &lt;object&gt;</span></a>
                         </td>
                         <td class="description">Parses JSON string into objects.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-lower">6.45.  <span class="pipes2">&lt;string&gt;:lower() → &lt;string&gt;</span></a>
+                            <a href="#scalar-lower">6.47.  <span class="pipes2">&lt;string&gt;:lower() → &lt;string&gt;</span></a>
                         </td>
                         <td class="description">Converts string to lowercase.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-ltrim">6.46.  <span class="pipes2">&lt;string&gt;:ltrim([&lt;string chars&gt;]) → &lt;string&gt;</span></a>
+                            <a href="#scalar-ltrim">6.48.  <span class="pipes2">&lt;string&gt;:ltrim([&lt;string chars&gt;]) → &lt;string&gt;</span></a>
                         </td>
                         <td class="description">Trims leading characters from a string</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-ord">6.47.  <span class="pipes2">&lt;string&gt;:ord() → &lt;number&gt;</span></a>
+                            <a href="#scalar-ord">6.49.  <span class="pipes2">&lt;string&gt;:ord() → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Gets the unicode codepoint from the first char in the string.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-parse">6.48.  <span class="pipes2">&lt;string&gt;:parse([&lt;string format&gt;], [&lt;string locale&gt;]) → &lt;number&gt;</span></a>
+                            <a href="#scalar-parse">6.50.  <span class="pipes2">&lt;string&gt;:parse([&lt;string format&gt;], [&lt;string locale&gt;]) → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Parses a number according to format string and locale.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-regex">6.49.  <span class="pipes2">&lt;string&gt;:regex(&lt;string regex&gt;) → &lt;row&gt;</span></a>
+                            <a href="#scalar-regex">6.51.  <span class="pipes2">&lt;string&gt;:regex(&lt;string regex&gt;) → &lt;row&gt;</span></a>
                         </td>
                         <td class="description">Returns a strongly typed row composed by all named groups in &lt;regex&gt;.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-regexall">6.50.  <span class="pipes2">&lt;string&gt;:regexall(&lt;string regex&gt;) → &lt;seq(row)&gt;</span></a>
+                            <a href="#scalar-regexall">6.52.  <span class="pipes2">&lt;string&gt;:regexall(&lt;string regex&gt;) → &lt;seq(row)&gt;</span></a>
                         </td>
                         <td class="description">Returns a sequence of rows composed by all matches of all named groups in &lt;regex&gt;.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-regexfind">6.51.  <span class="pipes2">&lt;string&gt;:regexfind(&lt;string regex&gt;, [&lt;number|string group&gt;]) → &lt;string&gt;</span></a>
+                            <a href="#scalar-regexfind">6.53.  <span class="pipes2">&lt;string&gt;:regexfind(&lt;string regex&gt;, [&lt;number|string group&gt;]) → &lt;string&gt;</span></a>
                         </td>
                         <td class="description">Returns the matched string by &lt;regex&gt; in target (or one specific group).</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-regexfindall">6.52.  <span class="pipes2">&lt;string&gt;:regexfindall(&lt;string regex&gt;, [&lt;number|string group&gt;]) → &lt;seq(string)&gt;</span></a>
+                            <a href="#scalar-regexfindall">6.54.  <span class="pipes2">&lt;string&gt;:regexfindall(&lt;string regex&gt;, [&lt;number|string group&gt;]) → &lt;seq(string)&gt;</span></a>
                         </td>
                         <td class="description">Returns all the matched strings by &lt;regex&gt; in target (or one specific group).</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-regexmatch">6.53.  <span class="pipes2">&lt;string&gt;:regexmatch(&lt;string regex&gt;) → &lt;boolean&gt;</span></a>
+                            <a href="#scalar-regexmatch">6.55.  <span class="pipes2">&lt;string&gt;:regexmatch(&lt;string regex&gt;) → &lt;boolean&gt;</span></a>
                         </td>
                         <td class="description">Returns true if the target matches &lt;regex&gt;. False otherwise.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-regexsplit">6.54.  <span class="pipes2">&lt;string&gt;:regexsplit(&lt;string regex&gt;, [&lt;number limit&gt;]) → &lt;seq(string)&gt;</span></a>
+                            <a href="#scalar-regexsplit">6.56.  <span class="pipes2">&lt;string&gt;:regexsplit(&lt;string regex&gt;, [&lt;number limit&gt;]) → &lt;seq(string)&gt;</span></a>
                         </td>
                         <td class="description">Splits string by regular expression &lt;regex&gt; in up to &lt;limit&gt; pieces.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-regexsub">6.55.  <span class="pipes2">&lt;string&gt;:regexsub(&lt;string regex&gt;, &lt;string replacement&gt;) → &lt;string&gt;</span></a>
+                            <a href="#scalar-regexsub">6.57.  <span class="pipes2">&lt;string&gt;:regexsub(&lt;string regex&gt;, &lt;string replacement&gt;) → &lt;string&gt;</span></a>
                         </td>
                         <td class="description">Replaces all matches of &lt;regex&gt; in target by &lt;replacement&gt;.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-stringrepeat">6.56.  <span class="pipes2">&lt;string&gt;:repeat(&lt;number&gt;) → &lt;string&gt;</span></a>
+                            <a href="#scalar-stringrepeat">6.58.  <span class="pipes2">&lt;string&gt;:repeat(&lt;number&gt;) → &lt;string&gt;</span></a>
                         </td>
                         <td class="description">Repeats the string a number of times.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-replace">6.57.  <span class="pipes2">&lt;string&gt;:replace(&lt;string from&gt;, &lt;string to&gt;) → &lt;string&gt;</span></a>
+                            <a href="#scalar-replace">6.59.  <span class="pipes2">&lt;string&gt;:replace(&lt;string from&gt;, &lt;string to&gt;) → &lt;string&gt;</span></a>
                         </td>
                         <td class="description">Replaces all instances of &lt;from&gt; with the string &lt;to&gt;.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-rtrim">6.58.  <span class="pipes2">&lt;string&gt;:rtrim([&lt;string chars&gt;]) → &lt;string&gt;</span></a>
+                            <a href="#scalar-rtrim">6.60.  <span class="pipes2">&lt;string&gt;:rtrim([&lt;string chars&gt;]) → &lt;string&gt;</span></a>
                         </td>
                         <td class="description">Trims trailing characters from a string</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-split">6.59.  <span class="pipes2">&lt;string&gt;:split([&lt;string delim&gt;], [&lt;number limit&gt;]) → &lt;seq(string)&gt;</span></a>
+                            <a href="#scalar-split">6.61.  <span class="pipes2">&lt;string&gt;:split([&lt;string delim&gt;], [&lt;number limit&gt;]) → &lt;seq(string)&gt;</span></a>
                         </td>
                         <td class="description">Splits string by &lt;delim&gt; in up to &lt;limit&gt; pieces.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-sprintf">6.60.  <span class="pipes2">&lt;string&gt;:sprintf(&lt;object... args&gt;) → &lt;string&gt;</span></a>
+                            <a href="#scalar-sprintf">6.62.  <span class="pipes2">&lt;string&gt;:sprintf(&lt;object... args&gt;) → &lt;string&gt;</span></a>
                         </td>
                         <td class="description">Uses the target string as format to arguments.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-startswith">6.61.  <span class="pipes2">&lt;string&gt;:startswith(&lt;string&gt;) → &lt;boolean&gt;</span></a>
+                            <a href="#scalar-startswith">6.63.  <span class="pipes2">&lt;string&gt;:startswith(&lt;string&gt;) → &lt;boolean&gt;</span></a>
                         </td>
                         <td class="description">Returns whether the target string starts with the argument.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-substring">6.62.  <span class="pipes2">&lt;string&gt;:substring(&lt;number from&gt;, [&lt;number to&gt;]) → &lt;string&gt;</span></a>
+                            <a href="#scalar-substring">6.64.  <span class="pipes2">&lt;string&gt;:substring(&lt;number from&gt;, [&lt;number to&gt;]) → &lt;string&gt;</span></a>
                         </td>
                         <td class="description">Returns the substring between the indices &lt;from&gt; and &lt;to&gt;.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-trim">6.63.  <span class="pipes2">&lt;string&gt;:trim([&lt;string chars&gt;]) → &lt;string&gt;</span></a>
+                            <a href="#scalar-trim">6.65.  <span class="pipes2">&lt;string&gt;:trim([&lt;string chars&gt;]) → &lt;string&gt;</span></a>
                         </td>
                         <td class="description">Trims a string</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-truncate">6.64.  <span class="pipes2">&lt;string&gt;:truncate(&lt;number length&gt;, [&lt;string ellipsis&gt;]) → &lt;string&gt;</span></a>
+                            <a href="#scalar-truncate">6.66.  <span class="pipes2">&lt;string&gt;:truncate(&lt;number length&gt;, [&lt;string ellipsis&gt;]) → &lt;string&gt;</span></a>
                         </td>
                         <td class="description">Truncates the string to the specified length, optionally adding an ellipsis at the end.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-upper">6.65.  <span class="pipes2">&lt;string&gt;:upper() → &lt;string&gt;</span></a>
+                            <a href="#scalar-upper">6.67.  <span class="pipes2">&lt;string&gt;:upper() → &lt;string&gt;</span></a>
                         </td>
                         <td class="description">Converts string to uppercase.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-compare">6.66.  <span class="pipes2">compare(&lt;comparable a&gt;, &lt;comparable b&gt;) → &lt;number&gt;</span></a>
+                            <a href="#scalar-compare">6.68.  <span class="pipes2">compare(&lt;comparable a&gt;, &lt;comparable b&gt;) → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Returns a number &lt; 0 if a &lt; b, &gt; 0 if a &gt; b or 0 if a = b.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-cron">6.67.  <span class="pipes2">cron(&lt;string&gt;, [&lt;string tz&gt;]) → &lt;period&gt;</span></a>
+                            <a href="#scalar-concat">6.69.  <span class="pipes2">concat(&lt;string...&gt;) → &lt;string&gt;</span></a>
+                        </td>
+                        <td class="description">Concatenetes many strings together</td>
+                    </tr>
+
+                    <tr>
+                        <td class="level-1">
+                            <a href="#scalar-cron">6.70.  <span class="pipes2">cron(&lt;string&gt;, [&lt;string tz&gt;]) → &lt;period&gt;</span></a>
                         </td>
                         <td class="description">Constructs a period instance from a constant cron string</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-happened">6.68.  <span class="pipes2">happened([&lt;number&gt;], [&lt;number tested&gt;], &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span></a>
+                            <a href="#scalar-happened">6.71.  <span class="pipes2">happened([&lt;number&gt;], [&lt;number tested&gt;], &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Returns true if the tested timestamp is inside the span, false otherwise.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-hllmerge">6.69.  <span class="pipes2">hllmerge(&lt;string... data&gt;) → &lt;string&gt;</span></a>
+                            <a href="#scalar-hllmerge">6.72.  <span class="pipes2">hllmerge(&lt;string... data&gt;) → &lt;string&gt;</span></a>
                         </td>
                         <td class="description">Merge many instances of compressed base64 HyperLogLog data.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-itermap">6.70.  <span class="pipes2">itermap(&lt;object&gt;, [&lt;string keyField&gt;], [&lt;string valueField&gt;]) → &lt;seq(row)&gt;</span></a>
+                            <a href="#scalar-itermap">6.73.  <span class="pipes2">itermap(&lt;object&gt;, [&lt;string keyField&gt;], [&lt;string valueField&gt;]) → &lt;seq(row)&gt;</span></a>
                         </td>
                         <td class="description">Creates a seq that iterates through java.utilMap or row entries</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-max">6.71.  <span class="pipes2">max(&lt;comparable&gt;, &lt;comparable&gt;, &lt;comparable...&gt;) → &lt;comparable&gt;</span></a>
+                            <a href="#scalar-max">6.74.  <span class="pipes2">max(&lt;comparable&gt;, &lt;comparable&gt;, &lt;comparable...&gt;) → &lt;comparable&gt;</span></a>
                         </td>
                         <td class="description">Returns the greatest value of all supplied arguments.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-metadata">6.72.  <span class="pipes2">metadata() → &lt;object&gt;</span></a>
+                            <a href="#scalar-metadata">6.75.  <span class="pipes2">metadata() → &lt;object&gt;</span></a>
                         </td>
                         <td class="description">Returns a representation of the previous pipe metadata.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-min">6.73.  <span class="pipes2">min(&lt;comparable&gt;, &lt;comparable&gt;, &lt;comparable...&gt;) → &lt;comparable&gt;</span></a>
+                            <a href="#scalar-min">6.76.  <span class="pipes2">min(&lt;comparable&gt;, &lt;comparable&gt;, &lt;comparable...&gt;) → &lt;comparable&gt;</span></a>
                         </td>
                         <td class="description">Returns the least value of all supplied arguments.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-newlist">6.74.  <span class="pipes2">newlist(&lt;object...&gt;) → &lt;object&gt;</span></a>
+                            <a href="#scalar-newlist">6.77.  <span class="pipes2">newlist(&lt;object...&gt;) → &lt;object&gt;</span></a>
                         </td>
                         <td class="description">Creates a instance of java.util.List with the supplied objects.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-newmap">6.75.  <span class="pipes2">newmap(&lt;object,object... pairs&gt;) → &lt;object&gt;</span></a>
+                            <a href="#scalar-newmap">6.78.  <span class="pipes2">newmap(&lt;object,object... pairs&gt;) → &lt;object&gt;</span></a>
                         </td>
                         <td class="description">Creates a instance of java.util.Map with the supplied keys and values.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-period">6.76.  <span class="pipes2">period(&lt;number&gt;, &lt;string unit&gt;, [&lt;string tz&gt;]) → &lt;period&gt;</span></a>
+                            <a href="#scalar-period">6.79.  <span class="pipes2">period(&lt;number&gt;, &lt;string unit&gt;, [&lt;string tz&gt;]) → &lt;period&gt;</span></a>
                         </td>
                         <td class="description">Constructs a period instance from constant parameters</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-pi">6.77.  <span class="pipes2">pi() → &lt;number&gt;</span></a>
+                            <a href="#scalar-pi">6.80.  <span class="pipes2">pi() → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Returns the constant value of pi.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-random2">6.78.  <span class="pipes2">random(&lt;number min&gt;, &lt;number max&gt;) → &lt;number&gt;</span></a>
+                            <a href="#scalar-random2">6.81.  <span class="pipes2">random(&lt;number min&gt;, &lt;number max&gt;) → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Returns a random value between &lt;min&gt; and &lt;max&gt;.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-random">6.79.  <span class="pipes2">random([&lt;number max&gt;]) → &lt;number&gt;</span></a>
+                            <a href="#scalar-random">6.82.  <span class="pipes2">random([&lt;number max&gt;]) → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Returns a random value of at most &lt;max&gt; (1 if not defined).</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-range">6.80.  <span class="pipes2">range([&lt;number start&gt;], &lt;number end&gt;, [&lt;number step&gt;]) → &lt;object&gt;</span></a>
+                            <a href="#scalar-range">6.83.  <span class="pipes2">range([&lt;number start&gt;], &lt;number end&gt;, [&lt;number step&gt;]) → &lt;object&gt;</span></a>
                         </td>
                         <td class="description">Creates a seq that iterates through numbers</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-span">6.81.  <span class="pipes2">span([&lt;number&gt;], &lt;string&gt;, [&lt;string tz&gt;]) → &lt;row&gt;</span></a>
+                            <a href="#scalar-span">6.84.  <span class="pipes2">span([&lt;number&gt;], &lt;string&gt;, [&lt;string tz&gt;]) → &lt;row&gt;</span></a>
                         </td>
                         <td class="description">Calculates start and end timestamps of span based on target.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-spanend">6.82.  <span class="pipes2">spanend([&lt;number&gt;], &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span></a>
+                            <a href="#scalar-spanend">6.85.  <span class="pipes2">spanend([&lt;number&gt;], &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Calculates end timestamp of span based on target.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-spanstart">6.83.  <span class="pipes2">spanstart([&lt;number&gt;], &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span></a>
+                            <a href="#scalar-spanstart">6.86.  <span class="pipes2">spanstart([&lt;number&gt;], &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Calculates start timestamp of span based on target.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-spantest">6.84.  <span class="pipes2">spantest([&lt;number&gt;], &lt;number tested&gt;, &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span></a>
+                            <a href="#scalar-spantest">6.87.  <span class="pipes2">spantest([&lt;number&gt;], &lt;number tested&gt;, &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Returns -1 if the tested timestamp is before the span, 0 if it is inside and 1 if it is after.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-timestamp">6.85.  <span class="pipes2">timestamp() → &lt;number&gt;</span></a>
+                            <a href="#scalar-timestamp">6.88.  <span class="pipes2">timestamp() → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Returns the most appropriate timestamp, whether in scalar or aggregation contexts.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-uuid">6.86.  <span class="pipes2">uuid() → &lt;string&gt;</span></a>
+                            <a href="#scalar-uuid">6.89.  <span class="pipes2">uuid() → &lt;string&gt;</span></a>
                         </td>
                         <td class="description">Returns a random UUID string.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-sys">6.87. System functions</a>
+                            <a href="#scalar-sys">6.90. System functions</a>
                         </td>
                         <td class="description"></td>
                     </tr>
 
                     <tr>
                         <td class="level-2">
-                            <a href="#scalar-sys-cpu">6.87.1.  <span class="pipes2">sys.cpu() → &lt;row&gt;</span></a>
+                            <a href="#scalar-sys-cpu">6.90.1.  <span class="pipes2">sys.cpu() → &lt;row&gt;</span></a>
                         </td>
                         <td class="description">Returns the system's CPU usage info.</td>
                     </tr>
 
                     <tr>
                         <td class="level-2">
-                            <a href="#scalar-sys-disks">6.87.2.  <span class="pipes2">sys.disks() → &lt;seq(row)&gt;</span></a>
+                            <a href="#scalar-sys-disks">6.90.2.  <span class="pipes2">sys.disks() → &lt;seq(row)&gt;</span></a>
                         </td>
                         <td class="description">Returns info about all devices in the filesystem.</td>
                     </tr>
 
                     <tr>
                         <td class="level-2">
-                            <a href="#scalar-sys-heap">6.87.3.  <span class="pipes2">sys.heap() → &lt;row&gt;</span></a>
+                            <a href="#scalar-sys-fds">6.90.3.  <span class="pipes2">sys.fds() → &lt;row&gt;</span></a>
+                        </td>
+                        <td class="description">Returns info about process file descriptors.</td>
+                    </tr>
+
+                    <tr>
+                        <td class="level-2">
+                            <a href="#scalar-sys-heap">6.90.4.  <span class="pipes2">sys.heap() → &lt;row&gt;</span></a>
                         </td>
                         <td class="description">Returns the system's current JVM heap info.</td>
                     </tr>
 
                     <tr>
                         <td class="level-2">
-                            <a href="#scalar-sys-hostname">6.87.4.  <span class="pipes2">sys.hostname() → &lt;string&gt;</span></a>
+                            <a href="#scalar-sys-hostname">6.90.5.  <span class="pipes2">sys.hostname() → &lt;string&gt;</span></a>
                         </td>
                         <td class="description">Returns the system's hostname.</td>
                     </tr>
 
                     <tr>
                         <td class="level-2">
-                            <a href="#scalar-sys-memory">6.87.5.  <span class="pipes2">sys.memory() → &lt;row&gt;</span></a>
+                            <a href="#scalar-sys-memory">6.90.6.  <span class="pipes2">sys.memory() → &lt;row&gt;</span></a>
                         </td>
                         <td class="description">Returns the system's memory usage info.</td>
                     </tr>
 
                     <tr>
                         <td class="level-2">
-                            <a href="#scalar-sys-threads">6.87.6.  <span class="pipes2">sys.threads() → &lt;row&gt;</span></a>
+                            <a href="#scalar-sys-threads">6.90.7.  <span class="pipes2">sys.threads() → &lt;row&gt;</span></a>
                         </td>
                         <td class="description">Returns info about running threads in current process.</td>
                     </tr>
 
                     <tr>
                         <td class="level-2">
-                            <a href="#scalar-sys-timestamp">6.87.7.  <span class="pipes2">sys.timestamp() → &lt;number&gt;</span></a>
+                            <a href="#scalar-sys-timestamp">6.90.8.  <span class="pipes2">sys.timestamp() → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Returns the system's real timestamp (not the query timestamp).</td>
+                    </tr>
+
+                    <tr>
+                        <td class="level-2">
+                            <a href="#scalar-sys-version">6.90.9.  <span class="pipes2">sys.version() → &lt;row&gt;</span></a>
+                        </td>
+                        <td class="description">Returns Pipes version info</td>
                     </tr>
 
                     <tr>
@@ -3190,6 +3233,11 @@ AvgAggregation: The parameter #1 &lt;someproperty&gt;; must be 'number' instead 
     a constant, and may be optimized in compile to time to the value 10.
 </p>
 <p>
+    When a scalar does not depend on the value of the event, but isn't a constant either, it is called a
+    <strong>unbound scalar</strong>. Most notable examples are the <a href="#scalar-sys">system functions</a> or the
+    <a href="#scalar-random">random()</a> function.
+</p>
+<p>
     Most functions just assume the same level as some (sometimes all) of its parameters. E.g. in the expression
     <code class="pipes">len(first(someproperty))</code> the resulting expression is an aggregation, because
     <code class="pipes">first(someproperty)</code> is also an aggregation. When a function always result in an
@@ -3205,12 +3253,13 @@ AvgAggregation: The parameter #1 &lt;someproperty&gt;; must be 'number' instead 
 AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar instead of an aggregation.</pre>
 
 <p class="bg-warning">
-    For most purposes, <strong>every constant is also an scalar</strong> (it just ignores the event) and <strong>every
+    For most purposes, <strong>every constant is also an unbound scalar</strong> (that always return the same value),
+    <strong>every unbound scalar is also scalar</strong> (it just ignores the event) and <strong>every
     scalar may act like an aggregation</strong>, if required to.
 </p>
 
             <div class="picture">
-                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAYcAAADBCAYAAAAkaHy7AAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAZiS0dEAP8A/wD/oL2nkwAAAAlvRkZzAAABaQAAAF8AboWicwAAAAlwSFlzAAAASAAAAEgARslrPgAAAAl2cEFnAAAEgAAAA2AAmJZYPAAAVfVJREFUeNrtnXdYVNfWh99pdEV6FbCAogSxi0Zjw2hij7maxMRUTf/STO/lmnoT026KSTQ3Jhp7NGrEFg2iKFJEaUrvfaQO074/BkZQ7MAMsN/n4RnmzJl91hyY8zt7rbXXkiAQdC7cAasr2OYE2F3BeBWA8rxtVUDJFWwTCDosElMbIBA0wQrDhdwZw4Xbq%2BGx6TbvJtt6NPyYKyUYRCOn4bEAg9hUNNlWeN42jamNFghAiIOg7bEC/ADfhkf3hsfzhcCvNQ5mbeeokSmaTxJse7hL5ZbW0vP2Q2Fpe9nxVLVnUdU0nzjU11RqaytL9E23qVXVqGqU8lb4CBoMIlHBOcGoa3jMATKAzIZHISSCNkOIg%2BB6Of/if/6P%2B5UOJJNb6Ky7OeusuztLLay7Se0cPFFY2mJr74pVN8PF3LDNBht7NyxtumNpY2/qz39RaqvKUNdVU1Weh0ZVQ7WykPoag9hUleehVlVTrSyirrJco6qpoFpZKNPrtFfznWwUi/N/hHgIrhshDoIrwQ/ow7kLfl%2Bu8OIvk1vo7By9dT3c/OTdnHywtXelm3NP5AorbLq7NFz07eju3NPUn9Es0Ok0VJXlo6pRUl%2BjpKoiH61aRVVZHlXleZwtyaaiMF1dVZ4rvwIhaSoepzknHEkYXFwCwUUR4iBoSg8gCBjU8DgM6M8lArcSqUzfzdFL5%2BDRV9bNyYfuzj3p7uxDNydvujv7YGPvaurP1GlpFIvK0mzDY0kWZ0uyKc9P1VSV513OxVUBJACxDY/RGESjytSfS2AeCHHomsgxXPQHAiEYhCAEQ7D3AuwcPDUOHv7y7s496eZsEIBuTj3p7twTOwdPU38WwUUwCkZpNpUl2Zxt%2BL0sJ1FTW1V2MfE4TXPROIlBNARdDCEOnR93zs0EQhoe%2B3NhaicWVnZaB48AiVvvIVIHj764%2Bg7CwcPfrP36gmujtqqMspxESrJPUpqbSFFmvK48P0Wvqa%2BTtbB7FQaBiMUgGHENjyJ1txMjxKFzIcdw8b8JuLHhp8WYgKNHgNbRq5/M2ecGnLz649wzSPj9BZTnp1KWl0xx1glKc5MozkxQV5ZmKS6yewbwT8NPBAbBEHQShDh0bKyAURjEYBQGMWgWH7C07aF19R0kc/Lqj5N3IM49B%2BLkFYhMYWlq2wUdBLWqmtKcRIoy4yjPP01xZpyuNCdRX19Xdf4sowLYDxwG/gaOITKmOixCHDoWPWg%2BKxiGYbZwbge33lrvwHEyz4CRePQdKWYDgjajPD%2BV/NNR5KUcJvvUgZaC4HUYhKLp7EIEvDsIQhzMGz/OzQrGY4gVGJFIZXpX30F6r36hUg//kXj1Gy3iAwKTUaMsIjf5EAVnjpGdeEBbmpPYUvwiluazC5FSa6YIcTAvrDCIwWxgOudlD8ktrHUGIRiFZ98RuPcZJtxDArNFraomPzWKvNTD5CVH6grSotFq6qXn7XYa2Az8iWF2IdxQZoIQB9PjDdyMQRDG0yRmYN3NSevVb7TM038Unv1G4%2BTdH6m0NSo0CATtj1atojjrhGF2kRZNzqkD2vPiFhXATmAb8BciG8qkCHEwDaOAW4GpGOIGRjz6Dtf5BodJew%2BeipNXoKntFAjalIIzx8iIDyc9dqeuJPtU01mFBoPraSewBZEJ1e4IcWgf7DDMDqZicBcZ00vlFta63oOnSv0GTcEnaCLWdo6mtlUgMAlV5XlkJezjTPSf%2BuxTf%2BvPc0FlYJhRbMMQq6gztb2dHSEObYcfhtnBbAyZRcZFZ/YuvrpeIQZB8Oo/WriKBILz0KpVZCceIO34dtLjdmlqlEVNvyRVwG4MQvEnIqjdJghxaF3sgPnAQgzxA8CQVeTpP5JeITdLeg%2Behr1rL1PbKRB0KIqzEgzup5id2sL0403jFBoMrqdfMLifxIyilRDicP3IMbiMFmKYJViBwV3UZ%2Bh0qe8NE/ELDhMppgJBK1GjLDIIRdwuMuN365q4n6qANcBqDOmygutAiMO1EwIsAhbQEEOQSGV6n4E3SfqF3k7foTNEmqlA0MaoapScid7GqYOrdfmnjzaNUeQAK4FVGNJlBVeJEIerwxu4C8MsIahxo3PPAbr%2Bo%2BdL/UfMFlVKBQIToSxKJzlyPYkRa7RnS7Kaup4OY3A7rUWkx14xQhwujx0wC7gXmNy40bqbk7bfqHmy/mMW4OITdK1jCwSCNiAv9QhJEWtIjdrcdC2FBkMQeyWGdRQiPnEJhDhcnBDgMQxuIzswdDXrM/RWaeCYO/AeMFZkGQkEZo5WrSIjPpxT//xG5ok9%2Bibd80owzCa%2BQridWkSIw4XcCjxFk1mCV7/R%2Bv6j/yXxHzH7iprSCwQC86O2qoyUyPUkHlqrK86Mb4xPNM4mPsFQvkPQgBAHA1YYgstP0VDczsK6m27AjXdKB4UtEZVNBYJORmluInHh35F06Pem2U7HgI%2BBDYgaT11eHNwxuI4eBpwBujl56wZPeUTaf8x8kX4qEHRyapRFJOxfRfzeH7S1laWNsYkc4DPgBwz1nrokXVUcQoD/wxBPsAJw7z1UP2Ta45Jeg6eKWIJA0MXQqlUkH15PzM6vtWX5KY0iUQWsoIvGJbqaODSLJ0ikMn2fIbdIBt/8KO59hl3XwAKBoHOQlbCPmF3/1Wcl7Gu8PnbJuERXEAc5hrUJLyLiCQKB4Aq5RFziXQylOjo1nV0cbsXwhwwBsO3hrht88yPSAWPvEvEEgUBwRdQoi4jf%2BwPxe3/UqqorGl1O%2B4HX6MQzic4qDqOAZTQUv7N38dUNn/mctF/oPBFPEAgE14RWrSJh/yqObvtP0%2BD1ZuAlIMnU9rU2nU0c%2BgIfYSiAh5Wtg27EzOekQeMXiTpHAoGgVVDVKIkL/47oHV/oNPW1UgwxiV8wiESnKR/eWcTBHXgHQ4kLuUxuoR9261OSQWGLhftIIBC0CTXKIo5u%2B5QT%2B35qXHldhyEF9gM6QQpsRxeHHsCzwHOAlUQq0w8cd7dk5Kyl2Ni7mto2gUDQBVAWpXN40zJSjmxq3FSBIdb5FR24flNHFQcrYAnwJgaBoO%2BwGYye95popCMQCExCcVYCB397RZ%2BbfKjxupoDvIqhv0SHW3HdEcXhVuBLDG048eo/htG3vSrWKQgEArMg%2B9QB/ln7mq4k%2B1Rj%2BmsC8BCG0uEdho4kDs4Ygs33Ajj3HKgPve0ViV9wmKntEggEggtIjFjD0T8%2B1imLMxuD1p8Bb2FYeW32dBRxuA34BnCWyS30obe9IhkUtlikpQoEArNGq1ZxeNMyYnZ90xi0zgDuowO0MTV3cXAG/gvMA4MLacLdH%2BHg4W9quwQCgeCKKThzjH0/P9vU1fQlhtRXs51FmLM4LMIwDeuhsLTRj779dUnwxAdMbZNAIBBcEzqdhmNbPyVq6yeNs4gcDBWh/zS1bS1hjuLgjWG2MB2g54CbmHjvp6IGkkAg6BQUZyWwd%2BVT%2BqKMuMbr70rgacxsbYTs%2BodoVZYAG4FgC%2Bvu%2BgmLPpaMXfC2WMgmEAg6Dbb2rgwYe6fE0ro7ucmHdHqddjCwEMgCEk1tXyPmMnPwBv5HQy0kv0FTmHDPR9g5eJraLoHguslNiuDkwdVMeehrU5siMDPK81PZ/cMT%2BoK06MZr8XoMaa8VprZNev1DXDfjgaPAeCs7R/3Uh79nxv%2BtFsIg6JDkpR6hOCuh2bazpdlkn/rb1KYJzBAHD39ue3mb5KaF7yO3sNZhSL45CgSZ2jZTzxyWYIjay736j2Haoz9ibedo6nMiEFwzW5ffRd9hMwgcs8DUpgg6GGdLstm6/E59WW6SBEMW00JM2DfCVOIgxxB0fhAgeNKDjL3jHbFuoROi02nIiAsn%2B9QB6qpKsbC2p1/oPDz9RzbbJ2H/KnKTItDptDi4%2ByNvqKLbf8wCujv3RFWjJOavrynNTUKusMTB/Vw684hZSzlbkk16zA4GhS3m1MHVnDm%2BHe/%2BYxh886OA4Yt3Yu8PlOYm0s3Jh4Hj7sLVL6SZDcmR68lK2Et9XTVOXoFGG3oNnoaLTxCqGiVnordRcOYYalU1dg6e3DDxAbo790SrVhG/9wciN/4b3xsm4dIzCEsbewaFLaY4K4G85EMMClvc7HhJEWvJPvU39XXVuPcZRvDE%2B5vF19JidmBl54jC0pZTB1dTnp%2BKg4c/wRPvF%2BncnRS1qprdPzzB6WNbGze9iWHhXLtjCreSO3AQeFAmt9BPfuALbrprmRCGTkpVWT6H1r%2BDpU13fIImArDpg9nkpR4x7rP3p6eJ3/MDgTfewQ3j76UoI5b4PSuwd%2BuFpU13tGoVG5bNoDgrgeCJD9B32EySIteRmbAXJ%2B9AACpLsvhn7RscWv8uJw/8gptfCN2dfQBDYbR1703lbEkW/iPmIFdYsn7ZdLIS9hlt%2BPuXl4je/jn%2BI%2BYwaNKDlOYmcnznV9i79cK2oYhj8uH1pBzZhJNXID0H3ETBmWNsWDYdrVqFRl2Huq4aucLqgnNQkp1AbPg3xuc6nYbNH8/j6NZPcPULwfeGiWSd2MOvr42jRllk3C/t%2BHYO/vYqf327GDsHD/oOm0F5fipr3w5rtp%2Bg86CwtGXaoz8yau7LSKQyPQZx2ArYtbct7X1FHtbwQd1turvoZzz1q6Tp3Zug89HduScL3ztkfB44ZgFFGbGcObYVT/%2BRqGqUJEasYe7zm/HqPwYAR69%2B/PTsIJx7DsTSxp6shH2U56cy//VwY18OnVbD37%2B8QJ%2Bh041j63QaSnMTue2lrc1uNv5e/SKe/iOZ9uiPhg2Gw/DP2je4M2gCOp2GUwd%2BYdpjP9J78DQAXPwGseLJfji49zVW%2BA2e%2BABN19r0GjyNFU/2ozAjFk//kYyYtZTEiN/oPXjaJd1KyZHrKclKYOF7h4xjB41fxKYPZnN40zIm3vupcd/y/FQWfXTc6G4NHLOAH54eSFrMDoLGLzL1n1fQRgyf/jRufiGS7V/dq1eraqZjiEPMoR2bCrXnzGERhhmDu3ufYdzx1n4hDF0MVY2SsyXZRjcRGKbRAFbdzsWaGl0rqpqzxvfJFJbNGjZZ2tgbX2/K8OlPNxMGrVpF9skD%2BN4wibMl2cYfBw9/SnMTUdUoUddVo9NpsLTu3mR8w%2B/quuoWP0uNssj4ml57dQU302J20HPAuGZl5aVSOf4j5zQt%2BwwYqgI0jcPJFJY4ePiLmUMXwCdoAvNf3y1xcO%2BrB/oDkcDN7XX89pg5yIFPgccBBo5byPh7PhJupC5CeX4qhzctI/PEXqwbBEBVc9Z4h27n4ImrXwjHtn3KxHs/RSqVE7Pza%2BwcPHFruHnw6jcagJi/vmZQ2GJUNWeJ27OC3kOmXXA8G3u3Zs%2BrlUXodBr2/PRUi/apas7S3bkn7n2GEbv7Oxy9A7GwtCV6%2B%2BfY2Lvi2ivEuO%2BZ6G3E7vqG4qwErLs5orC8tpm%2BqkaJe%2B8Lqwg7uPsbxbKRlhI0RFfDroODhz/z39gt2fnNYjLidvUAtmFwNb3X1sdu6yu0HQY30niJVKafuOgTyYCxd7X1ZxKYCWpVNRuWTaf3kFuauUY2fji72X5TH/6Ode9O5ZeXRyOVyXD1C2HuC5uNF0Ebe1dueewntn52J/F7ViCRyvG9YRKj5716WRsag8qzn9tAzwHjLrrfrY%2Bv4rc3J/Dra2ORKyxx9rmBuc9vRmFpC0BWwj62f3Ufkx/4gqa9yL%2B43%2BWazk3jzKkp9bVnr2EkQWdHYWnLjP9bTdSWjziy5UM5hkZCQcDdtGGfiLYUBztgB3CjTXcX/dSHv5c0%2BpQFXYOi9Fhqq8oYNv2ZZnfANcoiujudK4eSFrODxlTmixG3ZwVj73yXq62vZWPvip2DJ7nJEZcUh9Sozbj3Gcatj69q8fW81MO4%2BAQ1iyWcLcm%2BpvPi3nsYGXG7LjxGymGEq1VwMUbMWoqTdyDhKx7Tq1U1CzBcv%2B%2BgjQSirWIO54TB3pW5L2wRwtAFsXM0LGTMSTwAGPz/UVs%2B4mxJVrP9qsryOFuSTWLEGhIj1pB8eD2luc2rCFSX51FwJtq4z5nobVd8cR5665PE7vqW1KjN6HSG71F5fioZ8eHGfc6WZFFZkmUcPzFiDUUZscbXbexdqShMNx6zRlnE7h%2BfuMDFY2XnRPapA5e0J2j8Is6WZBG15SO0ahUAGfHhnNi/kiFTHzP1n01gxvQZOp2Zz/wuUVja6DEsmPuNNrrJb4tBmwvD85tFTnYXxd61F8NnPMO%2BVc8RufHfqOuqCRg5h5Gznqc8PxUwZBhZdXNCWZROwv5VyBSWVJZkUVWWj//IOUx56Gtqq8pw8PAn%2B9TfVJXnoVWrqCrLo0ZZxE0L379s1k7wxAfQqlXs%2B/k5dn7zEGAIAAdPegC/4DB0Og029q5UleUZbagqy6OqPI9eg6Yw7dEfCRyzgIy4Xax6fgh2Dp6oVdVMuu%2BzC4LRI2c/z/av7iPrxB6sujk1y9RqpLtzT2Y/t57dPz7Jse3LjemvY%2Ba9jv%2BI2ab%2BswnMHE//kcx85nfJH//5l16tqpnXsLnVZxCtvQhOCIPgAlQ1SlQ1Z7G06X5BEcWI39%2BkOCuBGf%2B3utldeF7qETYsm859n8Tx1zeLce8zjDH/erPZe2P%2B%2BprYXd9y3ydxV2SHTqehqiwfMBQ/azxe1JaPyD71N7Of29DMhuKsBNa8OYEFb%2B7DxcdQzaBGWYRGrWr2/vNRq6qprSxr8fOeT1V5HjqtFjtHD5GkIbgq8lKP0CAQEgw1mVpVIFrTrSQHNiGEQXAeljb2dHfu2eKFsnGNwPkX2sZAsFQqJy/1CC21g1VY2iKVXXlhYalUTnfnnnR37tnseDnJEXj1H3OBDY32yptst7F3veD9Ldl1sc97PnYOnnR37imEQXDVNM4gmriYvm/N8VurZLccg%2B9ruk13F/3cF7ZIhDAIroTy/NOkRG3C3tUPqcyCGmURWSf3sf9/z%2BMbNIHAMQvIOXWA3NTDOLj3RafTcrYkm5TD64nc8B6j5rx43UHcGmURJ/b9hL2LL3ILa6MNf//vBZx7DmTwzY%2BY%2BjQJBC3Szckbz36jJaePbtbrtOrBQA/gr9YYuzXcSo3CMM/Curv%2BX6/uFMIguGJ0Og0n9vzImZjtVJZkIVNY4eDhT99hM/AfMRupVI6qRsmxbZ%2BSkxRBXVUpljb2OHoFEjhmwSUzkK7GhoT9q0g7vgNlURoyhRX2rr3oNWgKA8bdJe7qBWZPXuoRNn0wuzHh4jMMzYOui%2BsVB6MwKCxt9DOf%2BV3StKCaQCAQCNqHM9Hb2PHfBxtbkH7GdQrE9bqVPgHuF8IgEAgEpsXRMwAnr/6S09Hb9Oj1oRgaBh251vGuRxxuBT6XSuXMeOpXibdYxyAQCAQmxdEzgG5O3pK0mB0AkzFUqCi4lrGuVRy8gZ2AzYiZzzFg7J2mPicCgUAgAFx8gqgsyaYkO0GKQSB%2BAuqvdpxrSWVtjDM49xxwE8NmXHfcQyAQCAStyE0L38fJKxCgL9eY4notM4f3gDtt7F2Z/ew6LKy7mfo8CAQCgaAJMrkFnv1GkXRorV6nVd%2BAwbUUfVVjXOUxbwa%2BkUrl3PL4Spx7DjD1ORAIBAJBC9h0d8HWwaNp/OFPriL%2BcDXi4A3sQsQZBAKBoEPQJP4g5yrjD1cac5AD/0PEGQQCgaBDca3xhytdBPcK8K6NvSt3vLmvWXtDgcDcaFpgD6CuqvSCdp911eXU11VddIzGfhMWNvbGGkndnXsiEHRESnMTWffu1MYifQuB1Zd7z5WIQ18gEZBfrpuWQNAWVJXnUVWWh1pVQ1V5HvU1Z1HVKKlWFqFWVTdsU6KqURqrprYlljb2xh7T3Zx9zm1r6EHdvck2i4b9morNlRblEwhak1MHVze2y60AejU8XpQrKRrzCiDvPeQWIQyCNqFGWWRotlOaw9mSLM6WZFNZanhUFqWj07ZOFWKZTI6jixcAdj2csLK2bbatJaqrlNRUVTS3t0pJTaUSPXpUFdmUFGRxtVjbOWLv1hsnr/44ePhj79oLB/e%2B2Lv1ErWcBG3CgLF3Eb9nBcVZCT2A/wPeutT%2Bl5s59AUSpVK5fOG/D2Hv2svUn0/QQdGqVZTmJlKam0RJVgIVRekoi9KpLMm67J1%2BN3snnD18L7iYd7N3wrJxm2uTbVa2SGVyHF09G7Y5Y2Vt26afT11fR0VZIVUVpdTVVlNSmEVdbTWVFSVUKktR1VZTXJBJXW01ZUW5KMsKWxxHKpMbhMLDnx4Nj46e/bB3692s1apAcC3kJkU09nCv4DKzh8uJwyZgduCYBUx%2B4AtTfy5BB6GqPI%2BS7JOU5iRSlBFLef7pC9p%2Bno/Cwgo3r954%2Bgbg5tUHT98APHr64%2BnbDxu7zueCqautpqQgk5KCLIoLsijJz6S4INP4e6Wy9IL3WNrY4%2BDhj4N7X8Ojhz/2rn44ePiL2Ybgitn44WxykyLgMsX5LiUOIUCMTGHJwvciRTBO0CJnS7IpTIsmL/UIJVknKM1NQlWjvOj%2B9o5uePoG4OnTr0EIeuPhY3gUnKOmSklxfiYlhVkU5qaRnnSc7LRT5GWltOhma3RNOXr44%2BE/EvfeQ0XiiKBFCs4cY9170wDqMMweWlz7cClx2AFMDQlbwtg73jX15xGYCeX5qeQmHyIv9Qj5qUc4W3Khv/38WYB37wF49vTHzbtPp5wFtCfq%2BjryMlPIOnOCzNR4ctJPkZka3%2BJMw8HDH0//kXj4j8Sr3xhxgycw8ueXi0g7vh3gG6DFblYXE4fxwD6FpS33vB8l7kC6KDqdhqL0WPJPR5GXeoTcpIgLZgX2jm70HTiCAYPHilmACVGWFZKeHEN22ilSTkSSHH%2BImqrmfysbe1e8%2B4/BvfcwPPuNNvbFFnQ9irMS%2BP3tMHQ6jQYIBE6fv8/FxGEfMH7krOcZMWupqT%2BHoB2pKs8jK2EfZ45vJzc54oL1AS7uvgQOHktAcCgBN4Ti6RNgapMFFyEzNZ6UhMOkxB/iVMzBC4Lgljb2%2BN4wEb9BU/AJmigC3l2M3T88QWLEGoCVwH3nv96SONwM7LS0sWfRh9EiH7sLUJQRS0ZcOOlxuyjKiG32mq9/MH0HjDAIwg2jLpn2KTBvCnPTSDkRSWLMQU6fjCIvK8X4mlQmx733UPwGTaH34GmIVr%2BdH2VROr%2B8PLpx9jAYSGj6ekvisAOYeuP8txh886Omtl/QBqhV1eQmHyLt%2BHYyE/ZSVZZnfM3K2pbBo6cRMnoawSMm083eydTmCtqIsuJc4qN2E31wGwnH9qGurzO%2B1sO1F36DpuA3aAqe/iORKSxNba6gDfh79UvE71kBLcQezhcHOySSEvR6y/s%2BicPOwdPUtgtaCa1aRUZ8OEmR68g6safZ2gI3r94MHj2NwaOn0T/kRmQykRbZ1VDX13Eyej/HDm4j/kg4ZcW5xtcUVrb0HnwL/UNvx3vAWJE224nISz3ChmXTAXKAZhkL54vDfGCNp/9Ibntpm6ntFrQCBWeOkRixljPRW6mtNGS0yGRy%2Bg4cTkjoNIaOnS7iBoILSE86TkzkTmIid5KedNy43c7Rk4ARc%2Bg/Zn5jMTdBB%2BenZwdRVZ4HMBw41rj9fHH4H7Bw1NyXGT5dVF7tqFSV55EYsZakiN%2BoKEw3bu87cARjpixg1MTbhLtIcMWUFecSsWstEbvWkJN%2ByrjdxSeIwDF3EBA6TwSzOzB7Vz7NyQO/ALwLvNa4vak4yBtcSvb3vB8lSmV0MLRqFSlRm0iKWEOOYfUjAI4uXoyZsoCx0%2B4SMwTBdZOedJwDO1dzeM9649oKqUyOT9BEBtx4B70GTxVupw5G9qkDbP74NjAEpG9o3N5UHCYBu%2B1de3HP%2B1GmtldwhdQoi4gN/46E/SuNaxCsrG0ZOnYG46YtZODQ8aY2UdAJ0Wo1xEbu5MCO1cQfCTcGs23tXRkUtoSg8YtEpmMHQatW8f2T/VCrqgH8aVjz0FQcPgWeGj7jGUbNecnU9gouQ3FWAjF/fU1q1CZjOYV%2BwaGMn34vw2%2Ba3eaF5gSCRiqVpRzeu4H921aSmRoPgFxhyYBxdxMStlh4IToAu75/lOTIdQBPAcuhqThIJDno9V63vbQNT/%2BRprZVcBEy4sOJ3fUt2af%2BBgzB5RHjZzP9zmfw9Q82tXmCLk5izEG2r/2cmEM7AIPLyW/QFAbf/Ki4rpgxyYfXs%2Bu7RwD%2BAcbCOXEIAWLsHDy575M4U9spOA%2BtWkVixBriwr%2BlLD8VABs7e8ZNW8gtC54UC9MEZkdeVgrb13xOxK41RpeTq18IQ6Y%2BRp9h00VcwsxQq6r5/sl%2BaNUqDeABlMgaXlsCjPcfMYteIVNNbaegAZ1OQ9Kh39nx9QMkR66jtqoMF3dfbrv/FZa89C1Dx07H2ra7qc0UCC6gm70TQ8bcwoTpi7CytiMvK4Wy/DOcPraVtOjt2Dq4i1XYZoRMbkFu8iHOFmdKgVNAXKM43AuEDJr8kCjGZSZkJexj538fJGH/KlQ1Snz9g7n7yQ%2B579nP8A8aicLCytQmCgSXxcrajsDBY5kydwlOrl7kZaZQnJtKatQm8pIP4eDeFztHsdjWHDhbnElucgRALPB349zODxAros2AooxYIn5/05iO6uLuy9z7X2bs1LtMbZpAcM0oLKyYOPMBbrp1Ebs3fccfv3xCTlIE696bRu8ht3Djv94UgWsT00Sk/aChh7REIvXU63XY2LuY2r4ui7IoncOblpFyZBNgiCncdv8rTJx5v5glCDoNMpmcm%2Bc9ytipd7Fz3VdsXf0f0o5vJyNuFwPGLmTkrKWiRYCJaHLe3aEhIC2Rys7qddpui788LXKT2xm1qprDG5cRv/cHdFoNCgsrpt7%2BGDPuekY0xhF0epRlhaxb8Q4Hd/yCVqtBrrBk2IxnGXrLEyJo3c4UZyWw5s0JYHArDZYAdkClTGHJo9/mmNq%2BLkVuUgS7f3ySsyVZyGRyxkxZwLwHXxPZR4IuR2FuGr9%2B/QrRB7cChtIck%2B7/QsRA25EaZRE/PD0QJJJS9HpnCdAXSO3u3JNFHx6/3vEFV4BaVc2h9e82lsrF1z%2BYB5d%2BSa/%2BQ0xtmkBgUk5G72fFB49RXJCJVCZn%2BPRnGDbjaTGLaCe%2BuN8YWlBIAW%2BAbs4%2BprarS5CbFMFvr40jfs8KZDI5c%2B97mbe/OyCEQSAABg4dz7JVUYTNXYJOq%2BHIlg/5/e0wirMSrn9wwWVp0mfcWwaMAeZ6%2Bo%2Biz9BbTW1bp0VVo2T/z0s5uOZVY2rqcx9sIHTSPKRSqanNEwjMBrnCgpBRNxMYMpak2H8ozk3l1MHVqOuq8AoIRSr6jbQZZ45tpbIsF2CDlIbItK3IEGgzijJi%2Be31cSRGrEFhYWWcLYhyFwLBxQkcPNY4i5AAx3d%2Bxdp3wlAWpV/32IKWaZKx5CbFEJBGYSkKtbUFyYfXs2HZdCrL8ujVfwjv/XiIufe9LLqtCQRXgJW1LYue%2BoTXvtyFm1dvSnMSWft2GNmnDpjatE5Jk2zVHlKgDmjWNlJw/eh0GiJ%2Bf5Nd3z2CRq1i3LSFvP7lLtFTQSC4BvoOHME73x8keGQYqholf3w6n5i/vja1WZ2OhrLdAFVSoACgRlloars6DaoaJduWL%2BT4zq%2BQyeQsevo/LH7pG7GYrYNx%2BmQUyjLxvTAXbOzsefb9dcy%2B5wV0Wg3/rH2D3T88gVbc2LYa1cqixl8LpUAmwNnSbFPb1SkozU3k93fCyDyxh272Tjz/8WbC5iw2tVmCa%2BCrt%2B4jPmq3qc0QNEEmkzPvwdd45LUfsLK2JTFiDRuWTW/sgSy4TipLshp/zTDOHKrKxMm9XvJSj7D%2BvWlUFKbj6x/M298fEJ3YBII2YEzYfF77MhwXd18KM2L5/e0wyhvK2Quunaqy/MZfC5q4lYqueUCBQRi2fjqf%2Brpqho6dYfzHFQgEbYOvfzBvfrOXfsGhVCuL2PThbCEQ10FtVRk6nQaJRHoWqJMDFRKprFatqrZWq6pF1tI10FQYRoyfzWNvrBTZSO3A0b%2B3cGDHL9TVVqGwsKJ3vyHcfPujdLN3AgztK7ev%2BZzTpww90d28%2BnD7g69h7%2BiGsqyQ/dtWcfrUUepqq%2Bhm78TN8x6jX3DoRY/X%2BJ7kE5Go6%2Bvo4ejGLfOfbLaA8btlD3PHo%2B9xMno/%2B7etxNLajqff%2B83Up6rTYu/oxtKPNvPR0tkkx0ey6cPZzHl%2Bs%2BgVcQ00xp31el0WgBRAIpEVgXAtXQtCGEzD4b0b%2BPHjJwkeGcbce19m2NjpFBdkGntnVypLef2hcSTGHiR00jzGTFmATCY3FjPMSU8k83Q8Q8dOZ8Zdz2Jlbcf7z8yguCDzosc8feooOemnGDNlATPuehaA9/5vGpXKUuM%2BB3b8wtpv3%2BDPNcsZMX42oZPmmfpUdXqsrG1Z%2BtFmMYO4TqrLCxp/LYCGkt16nToD8K1RFgnFvQoKzhwTwmAi4o%2BEEzRsgjHYHzh4LBNnPmB8fdvq/wDw4n%2B2GgVj/K2LjK8PHDq%2BWTxo4NDxHDu4lZQThy/qDhx643SG3jjd%2BDww5EYW3%2BJNUuw/DL9plnH76ZNRvPnNPuNxBW1Po0A0nUHc9tI20SPiKqg%2Bl7GaAw0zB71enw0iY%2BlqKM9PZftXi4QwmIihY6cTtX8za799g7Li3AteT4jex4jxsy97ga5UllJckElKfCQKCyt0Ws1lj934ntMnj2JjZ09dbVWz1yfNflAIgwk4fwaxbfldIpZ6FVSWGK//OdAwc2h8UpKVYKi0JLgkqholWz9dQHVFkRAGEzH0xuk8%2B8F6tq7%2BhO1rlhM8Moz5S97Cu9cAAGoqlVhe4gIdEb6WjT%2B%2BR02VEk/fAKQyOTVVykse8%2BDO1Wxe9QF1tdV4%2BhoWM7b0HiEMpuP8GcTW5Xdx%2B6s7RFXXK6A421jc8NzMAfgTID1ul6nt6xDs%2BfFJlCVZ%2BPoH88irK4QwmIjgEZN5ZfkOlq2KwsraljcfnkBO%2BikApDIZOq22xfclx0fy33ceYPaiF/jv1kxe%2BzKcV5bvoIej20WPFR%2B1m2//vYS7n/yQrzaf4ZXlO3hl%2BQ4hBGaIlbUtT723BkcXL0Pb3bVvmtoks0erVpF98u/Gp3/COXH4RypTKJVF6aI07mWIC/%2BOM8e3Y2Vty5Nv/yJWPZsBnj4BPPbGSpzdfYk5tBMwlFtIjG25/s6ZxKPYO7o168tdqSxt0T3VyOmTUbi4%2BxISOtW4raw4t1kwWmA%2BdLN3Ms7oY8O/JS1mh6lNMmsyE/aiVlUjkUiPc97MAZ1WvQ4gIz7c1HaaLcVZCRxa/zYAD77wNW5evU1tUpfl8N4NJMYcpK62Gq1Ww8no/RTmphkr3YbNWczpk0dZv%2BIdCnPTKC7IJD5qt8GN5BOAsqyQ6H%2B2AZCXlcJXb917STeUp28/yopzORm9H4Cc9FP8910RWzBn%2BgWHMu/B1wHYu/JpsYr6EmQ0eI30et3Gxm1N/SGbgQfPHPuD4dOfNrWtZodaVc3O/96PRq1i/PR7GTXxNlOb1KWpqapg1afPGO/c7R3dmHvfywSPmAwYZg5P/3sNv371Mpt//gAAF3df3v7%2BACGhUwmbu4Qv37wXdX0dji5ezH/4bTx8ArCytjMew9HV0/h8%2BE2zSIw5yIfPzUar1eDo4sWipz8h5tDOZu9xcfdt9lxgWmbc9Qwno/eRcGwff32zmDkvbBbxh/PQ6TSkHd/e%2BHRL4y%2BSJvtYSaSyMr1Oa33fJ3HYOXia2mazIvz7R0mKXId3rwEiTdGMqKutRqfVGNcvXGwfaDlQXKksNS6auxK0Wg01Vcqreo/AtCjLCnn5/tEoywoZPuMZRs15ydQmmRV5qUfYsGw6EqksXa/TGt0hTVuQ1SGR7AY4c2ybqe01KwrOHCMpch0KCysef3OlEAYzwsra9pLC0LjPxf5mV3uRl8nkQhg6GPaObjz62g8AxOz8irMlImW/KWeObQVAr9Nuabq9WX9KvVazFkTW0vlEbngXgEmzHjCmSgoEgo7DwKHjGTp2Bhq1iqgtH5raHLOiyfX%2B4uIA/IVEos1NiqC2qszUNpsFuUkR5CRFYGNnz6x7nje1OQKB4BqZv%2BQtZDI5yYfXi1ajDRRnJaAsSkcilZUD/zR97XxxKJFIZYd0Og3pIvULgMOblwEw9fbHhDtBIOjAePoEMGbKAnRaDUe2fGRqc8yCM9HNXErNygOcLw7otZpvASI3/rvLd1hKi9lBXsoRutk7MfX2x0xtjkAguE5m3fM8CgsrkiPXdfk1XTXKIo7v/Krx6Q/nvy5t4T2r5QrLxBplEQn7V5nafpPS6JucveiFywY9BQKB%2BePm1ZtJswwFGqP%2B6Nqzh%2Bjtn6NVq5BIJFs4z6UELYsDGrXqJYCjWz9BVaOkK1KclUBxVgLd7J2YOPN%2BU5sjEAhaiRl3PYNMJicjbleXja0qi9I5sX8lAHq9/s2W9pFe5L1bZHKL6NqqMuLCvzP15zAJjSvFh46dIUpkCASdCHtHNwIHj0Wn1ZCVsNfU5piEo1v/0xg2WAPEtrTPxcQBrab%2BOYDY8G%2B7pLqmxxhWDA4ePfU6RxIIBObG4NHTAJquDO4ylOenkhy5HiQSLfDaxfaTXmKM/TKZ4h9VjZJjW/9j6s/TrlSV51GYHouVta2xHINAIOg8NDZnykzY2%2BUSbw5teBedTgN6/f%2BA0xfb71LigFarfhrgxP6VXappRkacwaU0cNhE4VISCDohji5e%2BPoHo66rJjf5kKnNaTeKsxJIO74diURazyVmDXAZcQCOSWTyrVq1ikPr3zH152o3TjcsJx8xfrapTREIBG3EiJtmA3D62B%2BmNqXdOLjmVQD0et3XNJTmvhiXLU%2Bo12peB2YkR65nUNgSXHyCTP352pyCtGMAwqXUSVDX11FRVkhNpdLYua3qbNkF7T2b4uzmA4CNnT023QxpzI4uXqKxUycieMRk1q14m4Iz0aY2pV3IiA8nNykCiURar9frPrjc/lfynx4rlcq%2B1uk0j%2B74%2Bn7ueGsfCsvOW3hOrapGXVeNwsJKrIjuAJQV51Kcn0VJYRYl%2BZkUF2RRUpBJRWkhqtpqyopz0V5BX%2Birwcralm72zgDYO7nRzd4JN6/eePoG4ObVB%2B9egdhfoqucwDxwdPUCoEZZaGpT2pyq8jx2r3gcAL1e9zJQcLn3XNFtkE6nfVausBivLEofsHfl09y8pPOmtzbGVnqIL7dZUVacS9bpE%2BRlpZCedJy8rBRy0k5d1YXfwtIKJ2fD37WHgzPWtrbIZXJc3b0u%2Bp7Ks0oqz1agB6rOKqmsrKC4IJfigkwA4%2BP5WFnb4ubdB0%2BfBsHoPQA3z164efcRCyrNhEYBr60qQ6fTdNo%2BDzqdhr%2B%2BWUxtVRkSiWyXXq/95Ered6Vno06jrp8vlcqPphzZZOXVbwxB4xeZ%2BjO3CVVlhm5Rzh4%2Bpjaly1JXW03KiUhOn4wi5UQkaUnHje6glnB196JPwEC8ffrg16cf3j59sOtmj5OL4cvv5OyGhWXrJhbUq%2BooLSmk8mwFZSVF5Odmkp%2BbSV5OJnk5GeTnZpKZGk9mavwF77V3dKPvwBEEDZvAwKHj8fQJMPUp77K4uPtSXJBJVVk%2B3Z17mtqcNuHwxvfJSz2CRCor1uu0V3zhvhqpTNDpNA8DKw/89gpuvYd2yvhDVUU%2BYPAvC9qHutpqTkbvIzHmIImxB1ucEdh170FPnz749Qmgt/9Aevr2wcunN369%2B7X6hf9KsLC0wsPLFw8v34vuU1tTRUZaMqmJJziTepKUU3GcST1paFF6cCvRBw2JD/aObgQNm0DQsAn0D7kRF3ffKzVDcJ04unoaxKE8r1OKQ1bCPqK3LweJRKvXae/gCtxJjVztPGqVVCqbqFWr7ums8QfhVmofCnPTiI/aTfTBrSTHR6Kur2v2ul/vfgwfPZERoycSPHQ0PRw6XvzH2saOwKChBAYNbba9qCCXpITjREcdIPbYIVIT44jYtYaIXWsAQ/XQwMHjCBw8luARk4Ubqg0xupbOFpvalFanqjyPXd89bHii178D7Lma91%2B1k02n0z4mV1iMUhalB3TG%2BIO6ztBS0lJ0e2t1CnPTiNi1hsN71pOXldLsNScXN0LHTmHIyJsYHjrhknGAjo6ruxeu7l6MmzwDMMwwEuKOEncsgkMHdnEyLoq8rBT2bFkBQK/%2BQxg3bSFjwuYLoWhlbOx6AHS6GnLnxRn26vXa9652jGuJwFRp1PW3ddb4g0xhCYC6vmutmmwrKpWlHN67gcN71pEcH2ncbtetB0NHjmPEmIkMC52AX%2B9%2BpjbVZFjb2DE8dALDQyfw4BOvUlFeSsT%2BHfyzbzuRB3aRnnSc9KTj/PrVy4ROmsfEmffTd%2BAIU5vdKVA1pDN3Ng/IeXGGuzivV8OVcK3h%2BQSdTvM4sKKzxR9s7F0BQ1NywbVz%2BmQU29d%2BTvTBbcb4gYWlFTdNnsncBQ8yaNhosWbgIvRwcOLWOQu5dc5CtFoNRw/tY%2Bcfv7Jn5yYO7PiFAzt%2BwbvXACbNflDMJq6TiobvuU13F1Ob0mpcT5yhKZLrMUIqU/yu06pvt7F3Ze7zm3Hw8Df1eblucpMi2PjhbAIHj%2BWV5aIb3tWg1Wo4%2BvcW/lyznPSk48btfr37MfNf93HrnLs7ZOzAXKitqWLvX5vZvvlXjkUaqokqLKwInTSPm25dRL/gUFOb2OF4%2Bl8DKS7IZNGHxztFQDov9Qh//Gc%2BalU1wPvAS9c61nWJA2AnU1jt0arrRnQWgSjPT%2BWXV0bj5tWbT36Lv/4BuwBarYbdm77jz9%2BWU1acCzSfJQwZOc7UJnY6cjLPsO6Xb9iy7idqawyuEU%2BfAG5/6A1jUTnB5Vk0oQdarYZHv80xupQ7Kk2FQSKRbNDr9Qu4BndSI9crDtBEIOwcPJn/erjRNdMRUdUo%2Be7xvlhZ27LiL%2BFauhRarYZD4WvZvOoDCnPTAPDt3Y9ZYpbQblSerWD7pl/4deUXFOQaFuQFDZvAwic%2BwLvXAFObZ9ZUKkt5ZIYvljb2LP7y9PUPaELK81NZ%2B3ZYqwkDtI44QBOBcPDwZ%2B7zmzu0QHzzqB/qumpW/FWIlchaapH4qN2s/fZ14yIvDy9fHlv6LmG33G5q07okWq2GnX%2Bs4bvP36EgNxOZTE7Y3CXMve9lEZO4CDnpp3hx0QicvAK5850DpjbnminPT2Xjh7OpURa1mjDA5auyXilVWnXdJKnc4mRTQzsqLj0NwfXYyJ2mNsXsqFSW8tVb9/Lhc7PJTI3HwtKKh554ld93xglhMCEymZxb5yxk3c44nnnlY%2By62bNz3Vc8e0cw%2B/9c1er1pToDMYcM32/nDpxM00wYZPLw1hIGAFkr2lmv12k3SqWK2bWVxY4Z8eH0HTYDhVXHu/NW1VSQdXI/Cgsrho%2BbaWpzzIaI8LV88sI8ziQaqlhOnDqXj79Zz02TZyKTi8wjc0AmlxMUMoLZ8x9Ao9EQe/Qg0Qe3EXdkF16%2B/XF26/hB19bi9%2B9ep7Qwh5GzluLo2fFKmJwnDJF6rWY6UHfdAzfQWm6lprjLFJYRWrWqd0d1MSmL0vn5xRFYWdvy7fbcLp9yWVOl5L/vPkjMIUP2Vh//gTz96scMD51gatMElyElMY63XniI00kG99%2BkWQ9yz1Mfd/n/aWVZIY/N7oNMYclDnyd3uHUOLQjDFKDqugduQmu5lZpSoFWrxsgUlmkd1cVk79oLJ69A6mqrSYr9x9TmmJSc9FO89tBYYg7twK6bPc%2B88jH/%2B%2BOIEIYOQkDgIH7edIgnX3wfC0sr9mxZwWev3EFdbbWpTTMpMQ0u454DbhLCcBHaQhygBYEoz09t2zPWyvQeYmhAHrlnvalNMRlH/97Cmw9PoDA3DVd3L35Yd4D5ix7v8nedHQ2ZTM5d9z/Fd7/twcXNi5hDO/ho6ewuvdDzcMP3us%2BQW0xtylVRcOZYuwgDtJ04QINASBsEYu3bYWQl7GvDw7UufsFhAMQfCe%2BSwby/1n/N8tfuoq62mj4BA1m54VCXLnHRGQgMGsqqjYcYGjqR5PhI3ntymjEFuStRU6U0lnJp/J53BBIj1rBh2Yx2EQZo3YB0S1TpddofZTKLIRp1Xd/UI5uQSGV4BZj/Sk47R0%2BSI9dTUZyFo4sHvfoNMbVJ7cZf67/mf58/D8CQkeP4%2BueddO/haGqzBK2Aja0dU2fOp6KinKh//uLIvo0EDZ1AD6euU4V440/LSIw9SM8BN3HDxPtMbc5l0ek0HPj1FSI3vIderwNYgV43j1YMPrdEW4sDQL1er10NoNfrxuckHqQsNwm/4MnI5BbtcPhrx87Bg9SjW0hLimHK3CVdwp3SVBimzbqDD75ca5J%2BCYK2QyqVMmb8VCqVSqIP7%2BVQ%2BBr6DBiOq6efqU1rc5RlhXz51r3otBqmPbIC2x7upjbpktQoi9j2xd2cProFJBItsBh4C9C19bHbQxwa%2BRs4JpXK55bmJsnTY//CN3gyljbmu0DH0TOA9JgdlBWkY2FhRf9BY0xtUpsS/c82vv33EgAWLVnK0jeWI5W2pedRYEpCx02h8mwFccciiNz9OyGjpuDg7GFqs9qUX754kbTEY/QecguDpzxianMuSXFWAps%2BnE1pzimkUnmJXq8LA7a21/HbUxwAUvV63RaZwnJ6dUWBfUrkOlx8B2HvYr6dr%2BwcvUg5vIGMlFgmzXoQhUXnvIsuLsjkw%2BfmoK5X8fDTb7L4yddNbZKgHQgdN8XYfCjh6F7GTVvYaf/HC3PTWPHhY0gkUqYs/gZbM06xTz68nu1f3ktdVRkSqTxGr9OMB061pw3tLQ4ARXqddqVMbjm8vq6qd8rhjSgsbfDoO9wEplyeHm59yE0%2BRFleKiAhaFjnS%2BHUajV88NxsivMyGDV2Ci%2B985WpTRK0I6NunMw/%2B7aTnZFCXlYqoZPmmdqkNmHVp0%2BTfSaB/qP/xQ0T7jW1OS2i02k4tO5t/ln7BjqtGqlU9rNep50DlLW3LaYQB4A6vU77q1Qqt9LpNGOyTu5HWZSBT9B4s4xDdHfqSWLEGtKTYwidNA%2B77g6mNqlV2bzqfSJ3/46Lmxdf/PQnVtY2pjZJ0I7I5HJGjJ7I9s2ryUyNx8XDF9%2B%2BwaY2q1VJjo9k9VcvIZXKmfboCqxsze87rKpR8ufn95Acua4xvvCMXq9/kVYqh3G1mEocAHR6vW43cFoqld9Skp0gP3P8T1z9BmHn6GlCsy6ku7MPZblJlGSfIjk%2BgnHT7uo0wWllWSFfvXUvGo2aT77ZQK%2B%2BgaY2SWACuvdwxNnVg793/0F6UgyT5zzUaf7HK5WlvP/MDGprKhl88yP4j5hjapMuICM%2BnK2f3kFJdgJSqbxCr9fNBH4zpU2mFIdGTuj1uj9lCsspNcoih1MHV1NXVY5Xv1CzmkX4DBxPatQminJSqVKWMXj0VFOb1CqsX/EOSXERjBo7hfsffdHU5ghMSJ%2BAAezdtYX87DN07%2BFM3wHm6eq9Wpa/dhcZKbG4%2BoVw88PfIZGYT5JFbVUZu1c8xuGNy6ivq0QmUxzT6TSTgBhT22YO4gBQoNdpvwPkEol0dGFatCTlyAZcegbR3dnH1LYBIFdY4ek/ksR/fiMt8VinmHqXFefyzXuL0Wk1LPviV5xczDutT9C2SKVSXN08Cf9zHelJx7l53iMdfvaw8ad/s3/bKixt7JmzdJNZuZPORG/jj//8i6KMOCRSWS16/Ut6ve4hTBBfaAnzkVDDgo6X9HrdULnC4tTZkmw2fjibvSufRlWjNLVtALj6hXDjv94CYNWnz5CT3q7JA61O9D9/oq6vY9zkmQQEDjK1OQIzYNzkGfTtH0ylspST0ftNbc51cTJ6P5t//hCAyQ98YTZtQKvK8/jzy0Vs/%2Bo%2BaqvKkMjkB/U67QDgE0wUX2gJcxKHRmI16vpBwJtIJNqTB37h19fGkREfbmq7ABgUtpjeQ26hrraaL9%2B8t0MXMIs%2BaEiZHh8mypILztH4/3Ds4DZTm3LNKMsK%2BfqdB9BpNYSELaH34GmmNgkwlMD49bVxpB3fbpgtwON6rWYckGFq287HHMUBDOr5Fnp9kFxhebyqPI%2Btn93J7h%2BeoLbK9DOuyfd/TnfnnuSkn%2BKjpbM7pEDU1VaTGHMQmUzOmPHm8cUxN/b9tYm1q75ss/HrVXU8ca/5FX67afIMAGOJ9o6GsqyQ956chrKsEFe/EMbMf9PUJnG2JJuty%2B9i9w9PoKpRIpHItut12gDAbPPGzVUcGknSqFUjgeckUpk6MWINq18O5Uy0ae9oLG3smfn0WmzsXUmOj%2ByQApGedBytVkP/oCGi1/NF%2BHv3H1SerWiz8eOOR5KdecbUH/MCAgIH4ejshrKskOKCTFObc1U0CkNeVgoOHv7M%2BL/VSKWmjZvE7/2BX18bS0bcLqRSeRVwr16vvRXIMfX5uhTmLg5gmEV8otdpg2Vyy4jaqjK2f3UfW5ffRXFWgsmMatrIqCMKRFlJHgCe3n6mNuUC9v21iTunD2VkgBWjA%2B1YfMdEY2Xc2poqPv/gJSYPc2dkgBW3jPHlp/%2B%2B36xy7r6/NvHskrkcPhjO3bNGMjLAivEhzrzz4kPU1pwrYpmYEM3iOyYyOtCOkQFWzJ7Qj5/%2B%2Bz4Azy6Zy44tv7Fm1ZfMntCP2RPOVaRdu%2BpL7p07htGBdowOtOORu6eQkZZ8VcfftGYFLz1xB0UFucbx9/21ydSn3oi7l6FqQVlRnqlNuWLOFwZTNxrLTYpgw7Lp/P3Li6hV1Ugkkg06nSYQWGXqc3UldKRUhCStRnUj8JhUpvggI26XbdaJvfQLnceIWc%2BbJNjU%2BA%2B48cPZRoFY%2BtFmrKzNv3lIYy1/V3cvU5vSjH1/beKVp%2B7m4affZOLNc6ipqSIzPcWYNfPGc/eTmZbMJ99uxNXdi8y0FN5%2B8UFKiwt57vVPAaipqSbq0F6KCnJ57vVPcXX3Ij8nk5eevAN7B2eefGEZYBCAqTPvZNnnhnTy1KR4Y7vT517/lIryEoJCRrJg0ePNbLS2seP%2BR19k4KAR1NZU8d6rj/DOiw/xw%2B8Hrvj4Exo%2B25qVX/DfX3YBmNUMzs3Ni1PA2fKO0ajLnIShNDeRw5veJ%2B34dgCkUnmJTqd5WK/XbzD1eboaOpI4NPKVTqveIJXKX9LptY8lRqyRpURtYtCkBxk2/el2L%2BTXUQWiruEO1sbGvOxc9e3HTJt1B/csfs64rTGTKiUxjr93/8HKjREEBg0FwMPLl9ffX8Ezi%2Bdwz%2BLnjGJXr6rjhbe%2BIChkhHG/W%2BfeQ1x0hHHc0uJCbhw/DScXQ7lqJ5dztf09vHyxsLSiWzd7PLya1/6aefu9TZ65sfCBp3lmcfOFVZc7fg8HJ3o4OCOTyS8Y3xzoZt8DgOqqClObclnMRRhqlEUcWv8OyZHr0ek0SKSyWr1O%2B4FOp1kOVJj6PF0tHcGt1BIFOp3m/9Dr%2B0tlit%2B0ahXHd37FqueHEr39c7RqVbsa05KLydy7bDUWV6uvb99zdTkSE6K5cULLQdqTcUfp1r2HURgaGTJiLFqthpNxUc22N16YG7GxsaW0%2BNzf5faFj/DMkrl8/clrzdxCV0JKYhzh29fx56ZfiDq0t8V9Lnd8c6amxuAitbK2M7Upl6QwN83kwqCqUXJo/busfH4IiRFr0Om1WuBLvU7bG0N57QpTn6droaOKQyOndVr1ncBgmUyx3/BHeufcH0nXfinD5wvEaw%2BN4/TJqOsfuI1obO5SVGB%2BMTH7Hi27V0qLC7DrduHMsLHfROMF7Up57vVPefvjn0hJjGP%2B1EE8/%2Bi/yM%2B9dAA2Iy2ZO6cP5flH/8XhA7vIz8mgqg2D1qaiKN/wf2HvYL6VS2Mjd/LaQ2NNJgxatYqYv75uuCldjlatQiqVrkWv7w88ARSY%2BhxdDx1dHBqJ1WrVE4AJUrnFyRplEbt/eMKQTxzTful4Dh7%2B3PHmPtz7DKOsOJd3Hp/C/j/NM/bk7GZYeZ6XY17ZKDKZnKLC3BZf8/btQ0V56QVtWxuDvN26Xb1LcdzkGXy24g82hJ%2BkoryEZ5fMveT%2Bn/17KU7ObmzYfZLX3v%2BeB594lYlT517h0ToOjSLp7GEeFQrOZ%2BNP/%2BbjF%2BZRU6XEb9AU5r8e3m7CoNNpSIxYw88vjuCftW%2BgqlEikyn%2BAQbrdLoFwGlTn5/WoLOIQyP7dZr6IGCBTGGZVZ6fyp9f3MOGZdPJTYq47sGvBBt7V257aSsDxy1Eq9Ww4oPHWPHh42bXh9q79wAAEhOON8vgMTVBISMI/3Ndi68NGTGOelUdB3Y373ey96/NWFhaETx09LWfD98%2B3P/oS5xJOdls%2B/lut4wzyQSFjGxWViLywK5rPm59fZt2erwmcjLPUFyYi42dPY4u5pWwUFdbzScv3s7Gn/4NwMhZzzPj/1ajsGyf2FlazA7WvDGR3T88QVV5HlK5xUlgslarHgvEmvr8tCYdMSB9JazVqlUbgCUyucXbealHHDd%2BOBv3PsMYMvUxeg2e2qa5z1KpnIn3fop7n2Hs%2B/k59m9bSU76KZ5%2B7zfsHc2jV283eyf6BYeSHB/JP/t3EHbL7aY2CYCHn3qTx%2B%2B9hX%2B/8gg3hc2kpqaKuGOHjFk/i5Ys5f3XH6eivBTfXgEknjzO95%2B/y0NPvHrV2T6vPn0PN06YhqubF7W11fz49bJm8Y4%2B/gPZtvFnggaNwMLSilFjwxgxeiI7tvxKQGAwdt178M%2B%2B7STEXpv70LdXAKXFhfz03/cZNGQ0Ht6%2BZhGc3tuQUjt49DSzqq2Ul5XCZy8vIC8rBYWlLVMf%2BR6/4LDrH/gyaNUqkg%2BvJ3bXt5TmJgIglVlk6rT1r%2Bg09atNfV7aCnMpvNcW6ICjep32a6BeKpUPqyzLsUg9uoWUwxtBr8fJu3%2BbVn518Q3GZ%2BB4MuLDKcxO4eCO1Ti7%2B%2BDda4Cpzw0AZ8tLOBm9D0tLK8ZPmW1qcwDw8PZl5I2TOXbkb7Zt/B%2Bn4o/h4uZhvGgPGzUeFzdPdm1dy9YNq6hUlvPQk68yd8FDxjHKSgopKsxl%2Bty7m42dn5dFvUrFxKmGzKKkk8fZvWM9O//4jVPxxxg8fCxLX/8UhcLwPzF4%2BI3kZWew6fcfSD4Zw4x5ixgWOp68nAy2rl/FscP76RMwkFfe%2B5r4mMPG413p8V3dvfD09mPr%2BlVE7N/BwEHD8erZy9R/Ar76%2BFUK87OZdfdSs/hf1Wo17Nmygi/fuJvy0gIcPPyZs3RjmzcIq60qI3bXN/z13RJSDm%2BgtrIEqUxRqtfrXtbrtXcDcaY%2BN22JxNQGtCNWwAMyheXzWrXKBwwrnQeOW8igsMXYObRdD4kaZRE7v11sdG0NHj2N%2B579zORT9sLcNJ5fOASA33fG4e3bx6T2CEzP8SMHeOTuKVhZ2/Ll5jSTp2TnZaXw3bKHjckdfYfNYPIDX7SpG6k8P5XY8O9IjPjNmPkolVuc1GnqlwFrMaPieG1JZ545nI8Gw0ziMyBWprDyUauqe%2BafPkr87hWU56fQ3bkntj1av2y1wsqWwDELsLV3Iz/1CDlpCfy9/X9Y2XSjT%2BDQ6z/ANWLX3YHi/AwyUmKpPFtuNrMHgel4Y%2Bl9FOZnM/PupdwwfJLJ7NBqNWxe9T7/ffdBSgoysXPwZPIDnzNi1tI2m%2B1nnzrAgV9f5sCvL1OUEYtep0Uik29Fr3tYr9M%2BD5zA4JHoEnSlmUNLhEhliuf1Ou18vV4nBfD0H8ngqY/hNyisTeISVeV57Pt5KRlxhiBm4OCx3Pfscjx9AkxyAhpnD1qthv9tOSJKd3dhDuzeytJHb8fGzp7Pfj%2BFjV37Liht5PTJKH76z1NkpsYDEDhmAWPveLdNFrhq1SpSojYRF/6tsRyPRCKt1%2Bt13wHL6SSZR9dCV5o5tESBXq/bAPrvAI1UKg85W5ptkRq1qc3iEhbW3eg36jacvQeQk3iQ/Kxk9m9bhUwmp3f/we0eALTr7kB1ZTmnTx0l/ngkt8y%2By%2BhzF3QdSosLeXbJHGprqlnw8DsEhoxtdxtqqpSsX/EOP3z8JBUl%2BXR37smtj/9MyJQlyBVWrXqspvGE5Mj11CiLGuMJb4N%2BAbAJM2m6Yyq6%2BszhfC6ISygsbek7bAb9Qm%2Bn54BxrXqw2qoyIta%2BQWLEGgBc3H2Ze//LjA6b364iUVdbzSv3h1KYm8b0uXfz2vvft9uxBaZHq9Xw1AMziTq0l37Boby8fEe7/v%2Bp6%2BvY%2B8ePbF71AZXKUqQyOSFhSxgxa2mrxhZ0Og0ZceEkR64jPW5Xl44nXAlCHC7OLJnC6hmtus6oCHYOnvQLvZ3AMfNx8PBvtQNlJezj0Pq3jdNaT58A5j/8NkNvnN5uHzYzNZ43H5mIur6O1z9Ywa1zFrbbsQWmZcUX7/L9F%2B/Szd6J93481G6JElqthkPha1n3/duUFRsWPnr1H8Po217Fvc%2BwVjtOUUYsiRFrST2y8Vw/GIlEK5HKtuu1mv8A%2B9vlA3cwhDhcHj/gLpnCcolWrTKWfnX1C6F/6O0EhM7D2s6xVQ6UGLGGo1v/g7IoHYC%2BA0cwf/FbBA5unyn%2B3j9%2B4MeP/w%2BZTM57n/2PCTfPuf5BBWbNt5%2B9xY9fG6rUPv/xZoJHTG6X40b/s42137xOXlYKAC4%2BQYya%2B3KrrVuoKs8jMWItyZHrKM9PNW5vmCV8j2GW0KHLW7Q1QhyujhulUtndEql0gVaj7g6GBW9%2BIVPoH3o7fsFhyBSW13UAnU7DiT0/cmz7cmqUhnLJwSPDmL/4LXz9g9v8A275%2BUPWrXhbCEQnR6vV8O9XHmHbxv8BcPeTH3LzvEfb/LiJMQdZ%2B90bxtRUe9deDJ/xDIFjFlz32GpVNaePbSU5cj3Zp/42bpfJLYu0GtXPwGo62SrmtkSIw7VhBdwsk1k8qNNrb9brtAowrJvwHzGHfqHz8PQfeV0H0KpVRG//nNjwb1HVKAGDSEyZu4SQ0Klt%2BuEO7lzNig8eA%2BCtT34ym9XTgtahtqaK5x/9l7GabFsLg1ar4ejfW9i57iujKNjYuzJ8xjMEjV90XVmBOp2G3KRDJEas4fSxP87FEaTyOtBt0Ol0PwF/I2IJV40Qh%2BvHGZgvV1jer1GrhjRutHftRcDIOfgETbwuoVDVKDm27VNO7F%2BJus5QddTTJ4Cw2x5m/K33GEtvtzaxkTv58s17qautYtGSpSx56g2zKqUguDZKiwt56sGZpCQaFve2pTDUVCnZs%2BUHwjd%2Ba4wpWNs5MmjKwwy5%2BdFrnmU3CkJG3C5OH9tKVfm5bnUymWK/VqteCWwAzKdoWAdEiEPr0hdYJJNbPaDV1Hk0brS2c8Rv0BR6hdyMT9CEa8rAUNUoOXVwNfF7VnC2JBsAGzt7Js16kLC5i9skiHj6ZBSfvXIHFWWFjBg9kXc%2B/Z9ZdSsTXB0Zack89cBM8nMzsbK2477nljMmbH6rHycvK4Xwjd%2Byf9sq1A2FBZ28Agme9ACBYxZckyjUVpWRlbCXjLhdpMfuQq06V55drrBI0ajrf8TgNjK/GvQdFCEObcd44FaZwnJ%2B00C2TGGJp/8oeg2agt%2BgMOxdr66Wjk6nIT1mJ7G7viEv9YhhTJmcEeNnc/O8R%2Bk7cMRVjXc58rJS%2BOSFeRTmpjV0XfueISNbN6VX0Pb8sW4lX338ChXlpbi4%2B/LUe7%2B1egwrPmo34Ru/JebQuTL5foOmMGjSg/gETbjq8UpzE0mL2UnWiT0UnIlu1p9FrrA4pVHXbwS2AMdMdV47M0Ic2oe%2BGFJjZ%2Bo09Tc2rsYGQw%2BI3oNvwW9QGO59hl6V/7UoI5bY8O9IjdqErqEkuJtXb8ZNW8ioSfNw8%2BrdKsYrywr5%2BMXbSU86DsD0uXfz1Msf0a17D1OfV8FlSIiN4tN/P2esHBs0bAKPvbGSbvatMwPMTI3n8N4NROxaY3QdyRWWDBh3N8ET77%2BqlG%2BtWkVe6hHSYnaQEfeXcYYMhlXLUql8r1Zbvxn4EzFDaHOEOLQ/dsCtUpliFnCLTqs21gSwtLHHb9AUfG%2BYiF9w2BWXC6hRFhG/9wcS/1nTzP/aLziUMVMWMPym2dd9MdBqNez940fWf/8W1VVKnFzcePqVj0Ww2kwpLS7k609eNWYj2djZs%2BDht5k484HrHrusONcoCI0lLsAQZ7thwr0MGHvXVf3vZsSHkx63i%2ByTfzdzFzVkGf0BbAb2AObX/KITI8TB9NwI3CxXWM7XqFXG2yypVI5rrxA8/Ufi4T8Sr36jr%2BgLl33qAMmR6zgdvdUYwFZYWBE8MowbpywgJPTm6wpiVypLWb/iHfZvW4lWqyEoZASPPfuucDWZCVqthjWrvuSnr9%2BnsqF9aWtUAa6rrebo35uJ2LWGxJiDxuZV1nZO%2BI%2BcQ79Rt13RwrUaZRG5yYcoOHOM3OQI48LPRuQKy%2BMatWojhtlBrKnPZ1dGiIN54Q3cKldY/kur1YxtTJFtxMHDH69%2BY/AMGIlH35F0d%2B550YG0ahVpMTtIidpERtwuo9vJxs6eYWNnEDwyjJDQqddckjkzNZ6flz9LcnwkAKHjpvDos%2B%2BIwn0m5PDBcD597zky0pIBcPPuzYIl7zD8plnXNF6lspTYyJ3EHwnn2MFtxuCyXGFJn2EzG7LxJlzSFVqen0r%2B6SjyUg6TmxzRzFUEIJHKapFIduq1mi0YBKHE1OdRYECIg/liBwwDbpIrLMfptNrROp2m2S2/nYOnQSj8DWLh4hPU4kC1VWWkRm0i9cgmYxAbDIHsgOBQgkeEMXTs9GuqDBsRvpa1375OWZHB33zjhFtYcO8TDA%2B9%2BgCk4OqpV9URvn09G3/7zhhX6OHoxoyFzzJ5zuKrTj9OTzpOTORO4qN2G9ckAEhlcrz6jaFf6Dz6DpvRYsadTqehKD2WwrTj5CRHkJ9y%2BFy5inPjVEmQ7tdq6//BsP4gFuEuMkuEOHQc5EAQcJNMZjEeCeO0mvpmdTssbexx7zMUr35j8PAfiZtfyAVpg8qidNJidpB5Yi/5qYfRqM/1SHZx9yV4pEEoAkNuvGL3U11tNdtW/4c/1yw33l32CRjIgkVPMHXmAiws22YtRlfmTMpJNq1Zwc4/fjO6j2zt7Ln59seYcdczV/W3OxG1m5hDO4g7Eo6yrND4msLKFq9%2BY4yZdec3xFKrqik4E23oUZIcQVF6bLOYAYBMbpmv16n36nS6g0AEkHAFZgnMACEOHZu%2BwBipVDZRIleM09bX%2BTV9UaawxMkrEBefIJy8AnH06o%2BzT5CxFpRaVU32qQNkxO0iM2EvVWXngtkKCysCB48lMGQsfQcMp%2B/A4Ze94NRUKTm8dz37t60irSGzqYeDE1Nn3cnUmQsIDDJdY6POQEuzBAA37z5Mvf2xK1oUWVdbTcqJSE6fjCIx9iAp8ZHG%2BAFAD9de%2BNwwid6Dp%2BHpP9J4c1GjLKIoM47y/FSKsxIoy02kNCepWXopgNzCKklTX7cfQzG7CERWUYdFiEPnwh0YCYyXW1hN1qhVgej1F/TssLF3xdUvBEcPf5x9gnD07I%2BTd39Kc5LIiA835JWnRRvjFGAQC1//YPrdEEpAcCgBN4ReMgMqPek4%2B//8mYhdv1FXa7ib9Ovdj6mz7uDWOXfj6m7aFqkdiZZmCWBIS516%2B2OXLKdSVpxLyonDRjHISTvVTAzkCks8/Efhe8NEeg%2Behp2DJ6W5iZRkn6Q0J5HS3CRKsk5c4B4CkEhlaqlMEaNV1%2B0F/sEgBhUIOgVCHDo3dhhcUYOAILnCeqROpxmg06ovcBhLpXKcvPvj4OGPq18Itj3c0ahqKc1NJD/1CMXZCc3EAgxlPPoOHEFAcCh9BwxvsRl9XW01h8LXNJtNAAQGDSV03BTGjJ9GUEjrLtzr6FSereDwP%2BEcP3KAqEN7yck8Y3zN3bs3o8MWMGbKggvWsajr68jLTCEl4TAp8Yc4ffIoxQWZzfaRKyxx9QvBw38U9i6%2BKKztUBZlUJJ1gvL805TmJrZok1SmUEok0litRhWDIU5wEoOLSMQLOilCHLom3jQIhlSmGCqTyQar1apeLc0yLG3scfYJortTTyRSGfV1lVSV5lKen4qq9myzfRUWVnj6BuDdawC%2B/sF4%2BgTQq99g7B3dgJZnEwBOLm6Ejp3CqHFTGDRkdJebVdTWVBEXHcnxqANEHthlrHvUSLceToyaOI8xYfPpO3AEhblp5GelUJibRkHOGQpz08hJO2VchNYUK1sHHD0DsHXwxMLKFq1aRUVROqU5iRfEB8AwG5DJFWc09XWHMVz8E4BoRBZRl0OIg6ARK6A/MBAIkSssh%2Bj1umGNpclbQiqVYWnrgEQqQ69TU1ddgV53Yf91Gzt7fP2D8e41gJ69B%2BDdawB1tdWcPhlFUuxBUk8eNQayATy8fAkZNppBQ8cQPCSUPgEDTX1uWhWtVkPiieMcjdxL1KG9JMRGUa9qfgPes/cA/AIG093BGfRQkJtGfmYyhblpzdxCTZFIpVjZ9EAqV6DTqqmtvHSXS5ncsgi9/rhWWx%2BLoQRFMpCEqGAqQIiD4PI4Y3BN9QH8pFJpL6nccqBep/U5P1vqfCRSGQoLa0BPfd2Fd6lW1rY4u/vi4OyBTK5AVVtNeUkeBTlnmu1nbWNHn4ABBAQOok/AQPz7B9Pbf4DZl%2B%2BoKC8lJ/MMmekpZKYlk3EmmZysM2RnnrlADGxsu2Nt2x2JVEZlRTGquppLji23sEKrVqHX6y%2B5n0xuWSyRSDM06tqTQEbDT6MIVJj6HAnMFyEOguvBCkOnPN%2BGx0bx6Hcl4iGTG9b4aTXqFl%2BXSmVYWllTW9Ny5WUnFze8ffrg6e2Lh5cfHl6%2BeHj74uHpg5OLG9Y2dm1%2BAooKcqk8W0FuVhoZackGEUhLJifzDBXlpRd9n6WlNSpV7WXHl8kV6PX6C%2BI95143XvyTOXfxzwAyGx7FLEBwTQhxELQlF4gH4C5TWAVIJBIbPXp3vUbT4/zFfRKJBLnCEq1Wc9GLoqWlFRqNGq1We0kDXN29sLGxw9HFjR4OztjYGGLx9k1%2Bb4n8XEMgt/KsksrKCsAgBFqNhtqaqkte%2BJsibxBAzUUEUK6wAL3%2BgtelUlmNRKaolEok2TqdrlqrUaVjSAvNQFz8Be2AEAeBueCHQUzcAScMmVbegAfQVyKRe0qkEhs9ehf0eoVep7VufKNEKkUqlaHX65DJ5EilUrRaDRq1%2BlrsuCpkcjkyqQydTodGozbaImn4ZmnUaiQSWa1EKlGBpEKn01ag1xUCZzBc7PMwuHeUDc/rEGsDBGaAEAdBR6ZHw09T3DGITFNGA7YNPy4N27wxCJC0hTGaUgk0RnbrMNypl2C4uFc2bC9r2HbqvPeWILqRCToo/w8RW27yQVqYBwAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxNC0wNC0xNFQxODoxMjowMC0wMzowMFq8N/wAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTQtMDQtMTRUMTg6MTE6NDUtMDM6MDAWpBUeAAAAAElFTkSuQmCC" alt="Level set diagram" />
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAg8AAAEfCAYAAADGGyWkAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAZiS0dEAP8A/wD/oL2nkwAAAAlvRkZzAAAA%2BQAAACYAK2l9OwAAAAlwSFlzAAAASAAAAEgARslrPgAAAAl2cEFnAAAEgAAAA2AAmJZYPAAAgABJREFUeNrs3XdcVfUfx/EX9172FhFQFFRUHCgainvkXrkzR7nKrCzNlqVZlk0rrfSnDXNr5t5bnCiJE1SUIQiy975wx%2B%2BPCzdRVFTgML7Px8OHcO/lnM89jPu%2B32mAIAhVTU3AopiP72X3kNsfJ%2BK%2Bz1ML/t0rClBJfREEQSg7BlIXIAiCXuELvTOgAFwAE8Cx4PaaFA0DjgX3w8NDQkWQCSTed1sskHvP54noQkjUPR/f5b9wEi71kxAE4T8iPAhC2XJF9yLvUPC/I7pw4IjuBd8RsCn4VybkCkONsaVtXuHnMgMDuZl1TY3c0Firv00m11rUcFAXfm6gMDQF0Kryc%2B49ljo/P0ejVesfp8zJlOemp6jvfYxGnZ%2Bfl5tlqMrLNQFQKXNN1PlKE55dKv8FieI%2BjkCEDUEoFyI8CMLTMUEXDFwK/nelaDAoDAdPxEAm15pa2ylNza3VRmaWchsHF7mJpY2hsZklVvbOGJtbYWRmqX%2B8oYkZppa2RY5hUcMJmVwu9fUpljIrHWV2OgD5udnkZKQAkJedgTIrnay0BPJysrLTE6JUeVmZOZnJ0bJ8Za42JzPFSKXMMVbn55k%2BwelS%2BS9IFLZ%2BRAFB6IJGCLoWEEEQnpAID4JQvOLCwb3/HEtykMIwYG5Vw8DYwkZuVbOOwsTSFmNzKyxrOGJiZYuxqSUWdo6YWtbA0MRM6udd4eVkpJCfm0VmUiy5malkJsdmZyTF5CXfDc3NSU8mOy1RkZORYpSXnWFVgsNlogsRIehCRuHHN9EFDUEQiiHCg1DduQJNAHfAreD/FpQgHJhY2uZY1ayjqVmviaFtnQZG5tb2IgxUMNmpCWSlJpKdlkh2agIZyTGa5KiQ9NTY26qMxBjDnPQUS61WI3vIl%2BdSNFAU/gstuF0MChWqLREehOrAAl0oaIguGNwbFB7ZF29Zs7bS1qm%2BzNrRxdDGwQUbRxesHeph4%2BiC3NBY6ucllILM5FjS46NIT7xLyt3QlKS7IdmpMRHarJRYk9ysdFu02of1Ad0bKML5L1iEUHQwqCBUOSI8CFWNK9AK8Cz41wJdUCiWgUyutaxZW1mjjpuRrZOrzNrRBSv7Otg41MPawbXCjh0Qyk9qbAQpMWEkR4WkJ4Rdy06MuqVNj79rka/MsnzIl6iAQMAfuAxcKfg/U%2BrnIgilRYQHobIqbE14Dl1A8Cz43%2Bb%2BB8oNjfItbB2UtnUaKmrUcTOxcfyvBcHK3lnq5yFUUsqsdFLjIkiJDiMh/EZO0p2bOcl3Q2VZqXEWGrVaUcyXBKILEf7ABUSgECoxER6EysAEXTDwBtrzX1B4gNzQWFWzXpP82k2eM63VoAX2Lk2xq9tY6vqFakSjVpMSHUpCxA1iQ65kxAZfzk6KCrZUKXOKGwAjAoVQKYnwIFREbuiCghfQGV1QeGBsgsLIRF3TtanWyc1TIYKCUNHlZKQQHxZI3O3AtKhrZzOS7twyzE5PqlnMmIrCQFH47wIPruIpCJIS4UGQmgXQCV2LQmFYsLn/QQojE7W9azMc3VrJRVAQqgp1vpLku2FEXjubGhV4Nj0uLMA4Oy3RoZiHhqALEufQhYlziEGZgoREeBDKmw3QDehe8M/z/gcYGpvmOzTw0NRq2NLYqZEnNV2aYuPoInXdglAulFnpxN8O5O6N89mR18%2Blx4cFWhXT5ZGLLkAcAE6g6/YQU0eFciPCg1DWHNGFhfYUExZkcoW6Vv3mObXd21qIoCAIxUtPiCI%2BLJCoa%2BdyIq%2Bdy0mJDrO5b32KTOAIcBw4iq7rQxDKjAgPQmmrCfTkv5YF9/sfYO/aNMelVTdT52beODdrJ9ZLEIQnlJ%2BbTWzIZe4Ens0Mv%2BiTlRQVXEOrURve85BYdEHiCLowES51zULVIsKD8KwU6FoV%2BgK9Cj4uwtrBJd/Vs6thPY9O1GnaDmPzkqwaLAhCSanzlcQEXybi0onk25d8clNiwmpo1Op7BxmHowsSR9B1c4g9PYRnIsKD8DRc%2BS8s9OO%2BraAtajiq6nl0UtT16Ei9Fh0xs7GXul5BqFY0ajXxYQGEXTgWHfLvAXVqTLiDVqsxuuchgRTt5hDTQ4UnIsKDUBIm6MYtDEIXGIp0RRiamKnqt%2B4hd27e3sC5WTtsazeUul5BEO6Rn5tN1HU/9S3fvfERV04Y52Sk1LjnbhW6AZfHgYPAacTgS%2BExRHgQHsYGGAgM5b7WBbmhsapOk%2Bc0Lp7djOq26Ii9a1OpaxUE4QmkJ0QRfvmE8tbZvamxty7ZqlX597ZKJAI7gL/RdXGIICE8QIQH4V7OwAh0LQzd0Y1nAKBW/RZZDZ573rxui444Nmot9nwQhCpCo1YTfdOfiMsnc2%2Bd3ZeTnhBpe8/dIkgIxRLhQfBE18IwkvumUTq6tVI26TTY2M27HxY1HrtDtSAIVUB6QhSh/x5UXj%2BxPTUx8ua9K2AmAnvQhYmDiEWqqjURHqonT3QtDC9x346Tjo0885t0HGQoAoMgCDkZKYT5H8m9dmxzQmzI5XsHXWaiCxFbEEGiWhLhofpwA0ajCwz6TaUMZHKtc9N22kYdBsjqt%2BkhAoMgCMVS5ysJv3wy7/rxrTERV0/WUOfnFW5JLoJENSTCQ9VWOIZhPLp9I4D/AkOTzi/IGnj1wtTS9qlPIAhC9aNRq4m6fi7vyoG1DwsSB4CdiCmgVZYID1VPTWAIusDQvfBGA5lcW6dZO417pxfkIjAIglBaClskrh7ZEBcV6Gt/z%2BJUuehCxBZEkKhyRHioOvoCE9FNrTQBMDCQaeo0a6t27zzUUAQGQRDKWn5uNiHnD%2BVfO/p3YvStSzXvWTI7E1gF/IbYd6NKEOGhcnMFJgCvouuiwMBApqnn0SnPvetQk4ZevTE0MXuW4wuCIDyVnIwUws4f1gQc3ZgSFxpgd89d54DlwCbE%2BIhKS4SHyscEXbfEq%2BhWewTAzMour2WfcUbNn39RDHoUBKFCSU%2BIIvDo3%2BlXDq0nLzujcHObVP5rjQiSukbhyYjwUHl4oWtlGI9u9UcA6rXsovbs/4rcpWVXsXCTIAgVmkatJjLgjPrC7j/io6772d0z9fM4utaInYjWiEpBhIeKTYFutsRM7tmt0tTSVtX8%2BdEKj14vYWXvLHWNgiAITywnI4Vrx/5JvrRvZX52WqJDwc2J6FojliK2Ea/QRHiomByB14FpBR8DUKdZO61n31cMGnj1Fq0MgiBUGXFhAerz25dFhF046qTVqE0Lbj4A/ImuNUIsi13BiPBQsbQHZqBbKloBYGxurW7eY5S8xfOjxG6VgiBUacqsdK4eXhd3cc8KeW5mWs2Cm2P5rzUiSuoaBR0RHqRnwn9dE/qFnBwatlR59p%2BgaOTdD7mhsdQ1CoIglKvbF4/l%2BW1dEhcXerVuwU0qdK0Ry9GtZClaIyQkwoN0bIC3gOkUdE0YGpvmN%2Bs%2B0tCj1xjs6jaWuj5BEATJpcZG4L/rt6SgUzvM1Pl5hV0aIcACYD0iREhChIfy5wi8h26qpQ1AzXpNclv2GW/SrNtw0cogCIJQjPzcbK4d36z03/lbTlZKvE3BzSHAEnTTPcUsjXIkwkP5cQM%2BQjfV0gSgdpPn8jqMnmXk3Mxb6toEQRAqjdDzh9WnN3yfnBpz277gpljgW0SIKDciPJQ9T2AOumWjFQC1m7ZVdRg1UyFCgyAIwtOLunZOfWr9t7HxYYF1Cm4SIaKciPBQdrqjCw36VSDrNG2raT9qpkyEBkEQhNKTEH6DU%2Bu/iYoMPOuEVitHhIgyJ8JD6fMEFnJPaGjg1UvbesAkAxEaBEEQyk5qbARnNnx3O/T8kToFq1fGopud8TO65bCFUiLCQ%2BnxBD5D1z0BQMO2vfEe8Q72rk2lrk0QBKHayE5N4OTar0Nv%2Be6tWxAiUoHFiBBRakR4eHZuwJfAS4U3NPDqpW0/coaBCA2CIAjSyU5N4PjqL8OCz%2B13KejOSEWEiFIhwsPTc0M3pmE8BQMhRWgQBEGoeFJjIzi19uu7YRePOYoQUTpEeHhyNdF1T0wDFAYGMk2Dtr213sOny0VoEARBqLhSYyM4sXJ%2BfPiVk7UKbspEN7DyR8TAyiciwkPJKdDtOzEXsDEwkGmadBmi9R4%2BXW7j6CJ1bYIgCEIJJYTf4OTarxKjrp0r3D8jHN0WATulrq2yEOGhZAaia%2BJyA3Bs5Jnfa%2BrXhmIJaUEQhMorOsifI79/kpgSHVYYIg4Ab6NbuVJ4BBEeHs0TWIRuzQbMrGvmd3n5Y0P3zkOkrksQBEEoJTdObMv2WTU/Lz8nywZd98UPwFeIroyHEuGheI7oZlBMBBQGMrn2ucGvGbQb9iaGJmZS1yYIgiCUMnW%2BEt9/FsVf2vOXTcH0znBgNrBJ6toqIhEeilKg2%2Bnycwo2rarboqO2x%2BTPDGxrN5S6NkEQBKGMZSbHcmT5x6ERV08V/tE/gq4rI0jq2ioSER7%2B4wUsK/gfc9tamq6vzJE17jBQ6roEQRCEchYbcjV7/89vx6cn3HVFt%2B13YVdGptS1VQQiPIAFui6K6YBCrjDUPPfCVJnXC6%2BLLgpBEIRq7urh9TEnVn1pplGrrIEo4H1EV0a1Dw9D0O0F7wzg0qqLtvukzw3E1EtBEAShUE5GCgeXvnc74vLJ%2BgU3nQbeAAKlrk0q1TU8OAO/UrAPhUUNR1WPyZ8rGnj1eqaDCoIgCFVXZODZnH2L387OzUy1Q9eVsQSYTzVcpbI6hoe30K0oZiGTK9ReQ16Xtxv2JnJDY6nrEgRBECo4db6SM3//mHxp30rre7b/nkY1W2CqOoUHZ2AlBVtlu3p2ze828TND0UUhCIIgPKmU6FD2Lno7KSnyll3BTcuBD6gmAyqrS3gYje4ba2NoYqbq9fo3CjGLQhAEQXhWl/evyjm17hsDjVptgm4MxMvAZanrKmtVPTzURDf9ciSAQ8OWqgEzf1FY2TtLXZcgCIJQRaREh7Lz%2B6lxabERDuhWpXwfWCp1XWVJLnUBZWggsAdobyCTa71eeN2g3/SfZCYWNlLXJQjV2o0T27h1di/1PDpKXYoglApTyxq07D3eQqPOj4u%2BddESGIRuzaDDQLbU9ZUFmdQFlAELdK0NewBnc5ta6uFz1xh0GvM%2BMnlVzkqCUPGE%2BB0gPSGqyG2pcRHEBl%2BSujRBKFUyuZxOYz5wGPP1DrWJhXUsugBxCegpdW1loap1W7QANhb8T8O2vek59WtMLW2lrksQqqXVM3vSc%2BrXODfzlroUQSg36nwlR/%2BYE3Lj5A43/lud8tOCj6uEqhQexqEbFGkhNzTSdnn5E4NWfcZLXZMgFKHOVxJ0ehexwZdIT7iLbe0GePQaw73bu%2BfnZnPl0Fqigy4gk8uxq9sYmUzXaubZfyLG5lakJ0Rx5eA6EiNuYGZTExsH3awhY3MrPPtPJCH8BokRN2jccSAX9qzg7nU/mj//IoUDhRPCbxBwdCMpd0Oxd21Gyz7juXfm0f012NZuiMLQ6IEabp3dS0L4DdT5SuzqNqbNwCkYm1uRnZqA/67fubRvJc26jcDKvg72rs1o4NWLqOt%2BZCTcpWm34frzKbPSCTi6UX8%2B52beePQaU2QK9eX9q3Bt3YOUmDBu%2Be4hJz0Fu7qNaT1gIhY1HKX%2B1grCA%2B4EnE7Y9d1rcrUqvwbgD4xCt%2BFWpVcVui1M0HVTrAMs7Jwbacd8vUMEB6FCirr%2BL4HHNmHt6IJ75yFkpyaw6dORZKcmAKBRq9n8%2BWiigy7QesBEmj//IsHnDhDqfxi7uo1RGBmTnZrAhtkvoNWoaTvsTeq16MSVg2tJjg7Th5DEiBtc2r%2BS3T%2B8QXxYALWbPIdVzToARFw5xaZPR2JobEazbiPISk1gw%2BzBpESH6uvc9f1rRAb40qrvyzR//kUiA84Q7HdAXwPAlYPrSAi/gXMzb1xadSX43AF2fDsZgKzUxIdeg7vX/bh%2BYqv%2B85yMFDZ9OorQ84ep36YHdT06EXjsH7Z9NQF1vlL/uEv7VnF4%2BUf47/wNx0atadi2N5GBZ9j82UtFHicIFUU9j872k5ectLKt3eA2ujEQAehm/1V6CqkLeEauwHbAE8Cj91i6vTLHQCz4JFRULq264NKqi/7zJp2H8PvUtty%2BdJzmPUaREHGdhPAbDJuzRt/dJpMp2P3DNOq36YHc0Jig07sws7an6ytz9MdJjYvgTsAZ6rb4bxBiQvgN2g1/ng4vvlukhuMrP6fd8LdoN%2BxNAJp2G86ObyZzbsuv9H9nMQnhN4i67sekX49TODPJ2NSSrV%2BOo26LjvrWgC7jZxc5rp1zIzZ//hLZqQnYuzbF2HwCl/atpGm34Y/stji//X/I5HJGfb5JPy6pWdfhrJrZk0v7V%2BH1wuv6x%2BakpzB%2B4T7941xadWHl291JCL%2BBYyNPqb%2B9gvAAMxt7xfiF%2B%2BufXvfNnUv7V9UD/kY3HuINKvGaEJW55WEIusEonkam5urB7y/n%2BSlfiJUihUojMzmWzOQYDI3NyEyKAXTdBQBG92zKJjc0Qp2vJK/gPlW%2BEmNzyyLHMjazQpmV8cA52gycUuTzhPAbpMZG4NTIk/SEKP2/GnUaEht8GUD/Lt7YzOq/45tboVGryVc%2BOHBco1YXGRSpesJWgPDLJ2nccVCRAc2GJmY06TiI0POHizy2fpseRR5XGG5SosPK/hsmCE9JJpfTdcLcekM%2B%2BiNTbmiUAYxH9/rlJXVtT6sytjwo0O2CORugjns7db93fpKLPk%2BhMogM9OXcll9IiryFsZkVxuaW5GSk6O93aOCBqaUt/jt/w2vI6%2BTlZnN5/yrqeXTSt0S4tOqC35afCfE7QAOv3mQmx3D9xFYate9X5FxmNvYYm1sVuU2ZnQ7AtgWvPFBb4QuxvWtTLGo44rf1V32rxcU9K3Bo4FFkbMGVQ%2Bu4cmAt2WkJ%2BufyNNLiwrEs5vfX2MyS7Pu6P4zETrdCJebauofFxJ%2BPsfWL8fGpseFuwFl0Ozr/JnVtT6qyhQcLYC0w1MBApmn/4kyZ1wuvy8UUTKEySIq8xY5vJuE9cgbD56zWt5KtfLu7/jGGJmYMem8ZW78cx/UT25DJ5dT16FSk68GhgQedxnzIgSXvYW5jj6GJGY07DirSvA%2BgeEQr3NQ/zj90FpLc0JhB7y9j82cvEXr%2BsH4A4wsf/q5/zOX9qzi35RcGvbdM3yWRnhBV5LmUlLGZFXnK4qfCi5ZEoaqxqOHIyz8erOXz17zkwKObaqAb6O%2BGbmnrSqMyhQdHYD/gqTAyUQ9491d5/dY9pK5JEEosPiwQQxNz/VgD0HUR5GQkF3nclUPr8B45o8jj7nfl4FqGfPRHkTEOJWHv0hSZXE5koC%2BPWqL9xolttOr78gPjGgrdvuhD/TY9ioxlSIoKfqrrUtvdi%2Bggf%2B4f5Bx98wIODVs841UXhIpHJpfT87Wvaji6eeYe%2Bf0TQ7Ta99Htv/QylWQ6Z2UJD17AbsDR1NJW9cKHfyjE4CihsjGxskWZlU7UdT%2Bcm3mTk5GCz5%2BfPvC47NQE1PlKbpzYBoCBXI6jm6d%2BKmVh4Lh90YfMpFhA12JRu8lzmNnYP7IGY3MrPHqN5cTqBZha2lKnqe7FPyHiOrkZqfrBnJnJsajyitbg0KAFtrUbAmDt6EJkwBmUWekYm1uRFHmLs5t%2BKnIuixpOyA2NuVvwfB%2BmzcApbPtqAjdObKNJ5yEAXD20lqjr53jpqx1Sf9sEocw07zHKxNapvnrbVxNS1fnKl9BtqTCMSjCQsjKEhxHAKsDCqpazeujsFYrCP2CCUJm4tOxKs24j2PrFOEwtbcnLzabLyx8jN/qvaT4/NxsbRxfCL59EmaUbn5CVmkhKdCjtR76D98h3yEiKxd61GXcCzpAQfh2A5OgwlFnpDJy1hMe1yHV9ZS5yQ2N2fveafnCkoYkZHUfPwqVVF/Jzs7Go4Ujo%2BcP6KZVZqYmkxYXjNWQaHV58F68XphIbfInlU9pgammLoYk5fd/6gV0Lp%2BrPI5PL6fLyx5xc/SVXDq7Frm5jRsxb/0A9td29GDDjZ3z%2B%2BpxDyz4EdE27g95fjr1rU6m/bYJQpmq7e8nHL9xns2nuiLjczNRewCmgP7qtviusir5I1BxgAUCtBi20Qz78w%2BBx76wEoaLLyUghPzcLcxv7B/r0d30/FXObmvSc%2BnWR24NO7%2BTIb5/wxl8XWTWjJx1HzyqyyBLA0d8/ISMplqEf/1WiOtT5SrIK1pe4d7O4fYumY2hiTu83vnughsPLPuTt9Tf1t2Umx6JRq3jUZnPKrHSU2enFPt/7pSdEIZMrxKJPQrWTn5vN33OHRyRHhbigW0iqPxAkdV0PU1GnairQLfy0AMClVVdGztsggoNQJZha2mJl71zsC2nU9XPUb/P8A7fL5ApkcjnpCVFkJsdSt5hNpQxNzJHJS96YKDc0xsre%2BYEX/riwwGK7GYxMzDGQFT2%2BRQ1HHrdLrbG51UOf7/2s7J1FcBCqJUMTM8Z9t9eloVfvEHRrGJ0COktd18NUxGkKCnT7U7wC0KzbCPq/87N%2BVTtBqMoSbl8j7MJRrB3qYWBgQHrCXYLP7uXMhoW0HjCJ%2Bm2e5/qJbaTFRWBZszYaVT4p0WG6aZMH19J90jysa9V9phribwcQ8u8hrB3qFQSWu4T5H%2BHUum9p2Xus2A1TEMqIgUxG446DaqhUecExQf51gReB68DNZzx06dcqdQH30U/FBGg3/K0HVscThKosPzebS/tXEXHlJJlJsZha2uqWsu4yRD%2BWIT0hiot7VhAbfJmcjBQs7Byxq9uYVn3GF9kj42mp85Vc2LOCyIAzpCfc1dfQpOMgGnj1kvoSCUK1cOPEtvBDyz4sbNarcGtBVKTwYIFuKmZnA5lc223ip2J/CkEQBKHaCjq9M/7g0vft0Grl6LrxP33WY5aWitJt4QjsBDorjEzU/d9eJGt232AwQRAEQahOatZzN3du5p0adGonaLU90Y2F2AtopK6tIoQHR8AHaGNsbq0eOnuF3MWzq9Q1CYIgCILkrOydTZ2be6uCTu1Qa7VaL6AdujfbeVLWJXW3RWFwcLeo4ZA/fO4aQ7GGgyAIgiAUlRwdqt748bAslTLbCjiNbiqnZItJSRkeaqKbiuJu4%2BiiGvX53woxFVMQBEEQipcSHcqGj4elFwSILcAYJFrOWqpuCwt0y023MbWqoR795RaFua2DRKUIgiAIQsVnalmDRt59jK/5bE3TqFVtgBroJhqUOynCg35WhcLYVPPSgi1y61r1pHjugiAIglCpmFrWoH7r7oaBx/5RotV2AnKBM%2BVdR3mHh8IFoPoYyOTaEXPXyGrVF7vmCYIgCEJJmdvYy5ybe6tunNieD9r%2BQAgQUJ41lGd4KAwOwwEGzvzVQMyqEARBEIQnZ1WzjqFTk9YZQad3GqFbWNEXuF1e5y/P8PAbMB6g24S5NOs%2BshxPLQiCIAhVi7VDPVNrh3oxoecPWQAj0Q0JKJfdOMsrPMwAPgFoPWAS3iPfKafTCoIgCELVZe/ibmVuU/PW7Ys%2BtdG1QGwFUsv6vOURHvoCqwBZI%2B9%2B9Jr2bTmcUhAEQRCqB4cGHjWzUhOvx4cF1Af6AZuA7LI8Z1mHB3fgCGBS292LFz78AwNZRd0FXBAEQRAqpwZtetjfuXr6ZmZSjDvQEdhMGa5CWZaLRNUEzgJutrUbaMd8vcPA0MSsDE8nCEJxNGo1mckxRW7LyUghP/e/NyZajZrMpMd3lVra1ynyubGZFcbmlkVus7J3fuxxBEEoffm52ax%2Bt3dkVkpcXcp4EamyCg8K4DDQ3czKTjPu%2Bz0ysXqkIDw9ZVY6ORkpZCbHkpuRgjI7g8ykGHIyUlBmp5OZFKsPBDkZyUWCgdSMza30IcPYzAore2dMLG0xNrfCsoYjJla2GJtaYmHniKllDcSbDEF4etmpCfz1dvdUdb7SBlgCvF0W5ymr8PAH8KrC2FQz9psdMrFfhSAULzM5lpToMDKTYklPiEKZnYEyK73g43SUWRmkJ0Q90zlkcgU2NZ3uuUWLhY0dxqb/vUjL5Qpq1Kpd5OsMAO19x0qIuVPk8%2ByMdHIy04vclhwX%2BYz1yrGo4YRpQcCwqOFYJGxYO9TDxtEF8YZEEIqXEH5dvfGTYXlajdoUmA18V9rnKIvwMA5YJ5Mr1CM%2BXSev7e5V1tdJECq01NgI0uLukBoXQVpsBKkF/9LiwtGo1SU6hqmFFaYW1tg5OmNuaY2ljR12tZywsLbDzNIKW3snLK1rYGxqjqWN7v%2BKIjszjeyMdLIz08hMSyElIYaM1CSyM9NIioshIzWZ7Iw0UhJiyExPJi8nq0THNTQxw8bRBRsHF6wdXbFxdMHKvg62tRtgUcNR6qctCJIKOX8od%2B%2BPb5qg67boApwrzeOXdnhwAy4BFl3Gf0ybQVPK5yoJgoQ0ajVpceGkxt25LxxEkJ4Q9ciAYGPvhGM9N%2BwcamPvVBczC2vMLHUhwczCCjMLa2o61ZX6KZYrjVpFcnwMmWnJZGem3xM20kmKiyYu8jbx0bfJSE546DHkhsa6YOHogrWDyz0f1xNjMoRq4%2Bgfc5IDj26qAQQBrdEtZV0qSjM8KNANkPRydGulHTX/HwOZXKp9twShbCiz0om/HUhC%2BA1igy%2BRGBlMSnToI7%2BmZh1XHOrUx6FufRyd61PTqS616rhSy7k%2BhkbGUj%2BlSkuZk0Vc1G3i74YTHxVOTORtYiKCib/76GAhk8uxq9sYhwYe1HRthqNbK2rWbYzcUHwvhKpFo1azamaP2IyEaEfgB%2BCD0jp2aYaHhcD7YpyDUFXcHxQSIm6QGhvxwONkcgX2tV1xqFsfe6e6ODjXp5ZzfWrVccXB2RWZXCH1U6l2lDlZJMZEEn83nLio28RF3SYm8jZxd0JITYh54PEiUAhVVWpsuHrNrL55Wo3akFLsviit8NAXOADQffLntOozXpKLJAhPq6RBwdjUnLpuzWnQzBNX91bUc2tOnQbuUpcvPIH8PCV3w4IIvXaRiFuBhN24TEz4TTTqojPaRKAQqorAo5uij/4xpza6DbRaA5nPeszSCA%2BO6MY5ODo382bEvPXSXiVBKIGkyFtEBvoSHeQvgoJQNFAEB3L7xmWibz86UNRu4oVLqy5i1odQKWz%2BfPT16KALzSil6ZulER52A4MMjU2143/YbyAGIwkVUXpCFJGBZ7kTcIao635kpxbtExdBQbhfSQOFbe2G1PPoSD2PTtRt0VGsUyFUSPm52fz%2BuvddlTKnDtADOP4sx3vW8DAC3SpWPP/ql3j0GiP19REEQLeCYmSgL1HX/Yi4fPKBtRLsHOvSsn0PGrXyFkFBKLF7A8X1i2e44X%2ByyDoXMrmcWg089EHCqZGn6OYQKoy7N/6N2TJ/rD0QBXjwDN0XzxIebIAAwLl%2Bm%2Bd54cPfpb4uQjWWn5tN9M0L3Ak4Q2TgGRLCbxS536pGLdzbdKR52640e65LtZv%2BKJSd0GsXuHnpLAH/niQkwA9VnlJ/n9zQGOdm3jg396Zui444NPCQulyhmtv1/WtXb1/0ackzdl88S3hYBMw0NrPUjv9hv4FYlEUob9FB/vrWheib/kXWUzA2NadRy3a0bP88TVp3oF6jFlKXK1QD%2BXlKgq/%2By3X/k1y/cIbb1y8Wud/Y3AqXVl1xbuZN/TY9xGJWQrlTZqXzx7QOCep8pT0wCNj7NMd52vDghW5NB0WfN76nabfhUl8PoZqIDvIn5N%2BDBJ/bT2byfxs5yeQKGrVsR9M2HWnm1YWGzZ8TUyQFyWVnpnHd/xTXzp/ixsUzxN0JKXJ/bXcvGnn3w827nwgSQrkJOr0z/uCS92rxX/dF6pMe42nCg34xKNFdIZSHhwWGWnVcadNtAM29utCoZbsKtSSzIBQnMSaSm5fPcu38CS6ePIDynqW4RZAQytPfc4ZHxoVerQusAiY96dc/TXiYASw2NrdWT1h8RG5qaSv1NRCqoEcFBu/ew/DqPlB0RQiVWn6ekkA/H8777BZBQih36QlRrJ7ZM1ejVpvwFN0XTxoebIDbgE3/GT/TuMNAqZ%2B/UEVo1Gru3vDjlu8ewi76FJlKKQKDUNWJICFI4d8dy9LO/v2jNbrFo5qi20SrRJ40PHwJzK1Zz10z7vs9MqmfuFD5RQb6cst3D6HnD5OTkaK/XQQGobr6L0js4eLJ/cUGicYdBorFqYRnplGr%2BXNa%2B%2BScjJQawKvAipJ%2B7ZOEB0d0rQ4mg99fTgOvXlI/b6GSyslI4caJbQQe%2B6fIplK16tTHu/dQERgEocDDgoRMLqehV2%2BaPz8al1ZdpC5TqMSu%2BfyTfeS3T8yAWKA%2BJdx580nCwyJgprVDPe3En4%2BV9lbeQjUQG3yZS/tXEXr%2BMOp83Vx4O8e6dHthHF7dB%2BHk4iZ1iYJQYRUGiXNHdnDx5H79ehK2tRvS4vkXadptOGIMmvCkNGo1f77RISYnPdkJmAn8XJKvK2kIcEO3IJSJmJopPAllVjpBZ3YRcHgDSZG3AN20yjZd%2B9Ft8DhaePeQukRBqHQy05I5vW8TR7b8RVJsJKBbkKpJx0F49BqDYyNPqUsUKpFgv/0p%2Bxa9bQskAo0owdTNkoaHlcBEK3tnJiw%2Bikwul/q5ChVcXFgA13w2E3RqB/m52QDY2jvR7YVxdB00DttaTlKXKAhVQqCfD0e2/EWAn49%2B3w1716Z49BqLe%2BchYq8NoUR%2Bf73d7Zy05PrA58D8xz2%2BJOHBDbgBKLpNmItn/4lSP0ehglLnKwk6rWtliAsL0N/ewvt5ur0wljZd%2BomFmwShjKTEx%2BCzcw0ndq0nPTkeAEMTM5p1G4FHrzHY1W0sdYlCBRZ%2B5eTdnd9MroOu1aE%2Bj2l9KEl4%2BBWYbmZjz%2BRfj4tNXoQHpMZGcHn/KoJO70SZpdskyMK6Bp0HvkTP4ZPEPhKCUI40ahUXTx3gyJa/uHnJV3%2B7YyNP2g6ZJga7Cw/15xsdr2WlxDcH3gd%2BfNRjHxcebIBIwKLT2A/weuF1qZ%2BbUIGkxkZwfvv/CDq9Q7%2BvRKOW7eg1cgqtu/TD0EgETUGQUkxECMd3ruHU3r/1u3/auzbFa8g03Nr1E13QQhFBp3fdPrhkVn0gHN3Yh4eu%2B/C48FCwmqQVk345jrG5ldTPTagA7g8NMrmCjn1H0G/MG2Jra0GogPLzlJw9tJW9a34l/u5tAGwcXWg37C2adB4iQoQA6GZeLJvsGadS5jgAQ4GdD3vs435i1gE12g55HRfPrlI/L0FiqbERnFr7Dcf%2BnEP87WsYyOR06j%2BKN7/8nS6DxmBlW1PqEgVBKIZcrsClsQc9h0%2BkVh1XokKDSIoJJ9T/MLd8d2Nsaold3cYYyMTaf9WZgUyGSpkTFx3kXwOoCax96GMfcZyBwB65oZF28q8nDMRqZtVXSnQo/jt/17c0GBoZ03nAS/QbM41azvWlLk8QhCekUas4e2gbu1YuEi0RQhHKrHR%2Be9UrT6vVGKHbcTOwuMc96ifkF8DNs98rBm7e/aR%2BPoIEEsJv4LNiHsdXzich4gYKQyN6jZzCWwv%2BxLvXUMytxII0glAZGchk1GvUXLRECA9QGBmTeOfGneS7obaABthf3OMe1vLgCtw2kMm1r/7vtGh1qGYSwm/gt/UXQs8fBsDQyJgewyYwYNx0rO1qSV2eIAilTLRECPdKirzFug8GAGQCTgX/F/Gw8DAHWNC44yD6v7NY6uchlJPs1AROrf%2BWoFO6MTIiNAhC9aIPEasWER%2BlCxG2tRvSY/Jn1G3RUeryhHK0ZlafxJTosJrAeGD9/fc/LE7%2BAjh2HD0L29oNpH4OQhnTqNVcObiGvYvfJi7kKoZGxvruCa8egzAxM5e6REEQysED3RlhQSTdDePGye2kRIfh1MgTI1MLqcsUyoFGlSePuHpaAciATfffX1zLgxsQrDA21Uz7018mFoWq2qKD/Dm2Yp5%2B34k2Xfsx5p0vxcJOgiCgUas4sHE5O1YsJD9PiaGJGe1HzsCz/0TRlVHFZSbHsuLNzqDbZdOe%2B7ouivvuvwE837jjQING7QdIXb9QRrJTEzi2Yh4n13xFTnoStZzrM%2B3zZQye8C5mltZSlycIQgVgIJPRqGU7OvQdSVJsFHdDb3Dn6mlCzx%2BiZr0mWNasLXWJQhkxMrUg5Oy%2B%2BJyMZGvgOrrNMfWKCw%2B/AI4dXnxXdFlUQRq1mgt7/mDvounEhwViaGTM0CkfMHXeUrEltiAIxTKztMa711DcWjxH6LWLJEaFcv34FtLiIqjduA2GJqJrsypSq5SKh3Vd3N9t4QrcFl0WVVNkoC8%2Bf80nJToUEF0UgiA8ufw8JQc2LmP3qkXk5ykxNrei/ch3aNnnZdGVUcXc13VhW/A/8GDLwwSgn%2BiyqFoyk2M5%2BsdcTq//jtyMFNFFIQjCU5PLFTTxbK/vyogKuUbElZOiK6MKMjK1INh3T2xORooN4A/cLLzv/vAwF2j83AtTqVlP7FFQFQQc2cjuha%2BTcPua6KIQBKHUFHZl1G/qSUjgeZLu3ub68S1kpyXi3MwbucJQ6hKFUpCTniy7e%2BNfQyCRexaMuj88/A8w6fryJ2ITrEpOmZXOoaXvcWH3H2hU%2BbTp2p%2BZ36%2Bldee%2ByOUKqcsTBKGKcKzbgB5DJ4CBAbevXyIm%2BDJhF45Sp2lbzKztpC5PeFYGBoY3TmwDMAJ%2B0998z0M8gUsWNRy0U/535nG7bQoVWHSQP/t/mUlmcizGpuZM%2BPB7OvQZIXVZgiBUcXeCA1n%2B2TRiIkKQGxrTbcJcPHqNkbos4Rmo85UsfcVDo9VqZOjGPaRC0ZaHIcAg19Y9DBqJvSwqJY1azb/blnDkt9koszNwdW/F7CXbaOLZXurSBEGoBqztatF5wGhSE%2BOIuHmF2xd9SIy4gUurriiMxAD8ykgmV3DTd09ybkaKGXAcCIWi4WEm0NKj91gcG7aUul7hCWUmx7Jr4VRunNyOVqtl4MtvM%2B3z/4nNqwRBKFcKQyPadO1PbddGBJzzISEiiFtn9%2BLQoIUYTFlJpUSH5seFXjUBwgEfKBoefgJsOo5%2BD3OxEValEuZ/hO1fTyQ15jZWNWrxzrer6PbCeLEjniAIkqnTwJ12z79ASKA/cXeCCTq1HbmhEY5urcXfpkpGo1aZ3PLdA7pdNleDbuEHAGfA1cjUQmPv2lTqOoUSUucrObZiHrt/mIYyKx2P9j34at1xmnl1kbo0oYrJTEtmxVcziIkIkboUoRKp5VyfT3/fS5/RU9Go1ZzZsJCd304mMzlW6tKEJ1CnabvCD9sDCvgvPDQHqFW/uYiDlURC%2BA02fjKMgMMbkMkVjJ3xJbN%2B3IiFdQ2pSxOqoNzsLE7v20RacrzUpQiVjEyuYMw7X/DeT7q/T3cCzrDho8FEXDkldWlCCRmbW2FiaZsOmKDb/0ofHtwAbOs0lLpGoQTC/I%2Bw%2BfPRJEXeopZzfT5bcYDeL74mdVmCIAgP1cK7BwvWHqdZ267kZKSw45tJXN6/SuqyhBKydXTNK/iwIdwXHmwcXKSuT3iMaz6b2bvoLfJzs%2BnQdyRfrDpCvUYtpC5LqCAy05JJjIkkOzOt2Ps1ahWJMZGkxMcUe39aUjyJMZHk5ylLfM7Cr9GoVY98XGJMJGlJouWiOrO2q8V7P25g%2BNTZAJxYvYCTa76SuiyhBGo4uxWu%2BuUGBX0XhZ/YOIrwUJH5bfmFc1t%2BAWDgy28zctocqUsSKoj4qNv8/sV0bgddwdKmBmlJ8TRs/hyfLNuJrGBRMN1%2BBIv1wcK2lhPfbTqHoZExZw9tZdvv35KWFI%2BhkQlqtYpRb8yl54hJDz3nmf3/sPX3b8hMTcbQyASA0W9/RtdBYwFdWPhgZFsW77rK4g9fJjzoCq069Wbm92ulvlyChGRyBYMnzKRGrdr89c0sLu1bSVZqAn3f%2BlHsjVGB1azXpHAvgwfDg7VDPanrE4qhUavxWfEpgcf%2BQSZX8NL0z0Q3hVDE5uVfYW1Xi%2BVHQjE0MiYzLZk7wdf0weHM/n/Y9vu3vDr3F7y6DyQ/T0lUWBCGBXPvneq5MWXOzzRu2Q6ZXMGBjcvY8POneHUfiLVdrWLPWauOC2/MX06jlt4A7PzrB9b9%2BDHePYdgbPrfLos/vTeWfmPfwKv7oMe2TgjVR6f%2BL2JhXYNl817nlu8ecjNSGPTeMgxNzKQuTSiG9X%2BNCw%2BOebCyd5a6PuE%2B%2BbnZ7Fs8ncBj/2BoZMwbXywXwUF4gDInG0MjY30YsLCuUWTWzZEtK%2Bg6eBzteg5BJldgbGpOw%2BbP6e93dW%2BFe%2BuO%2BrDRc8RkNGoVMXcePruiUUtvfXAA6NR/NPl5ygdmZLTp2o8OfUZgaGRcJFQIQquOvXjvpw1Y16jFnYAzbP1iHNmpCVKXJRTD5r/GBX3LgyugMLOuqTU0MRPLUlcg2akJ7F38NtFB/phaWPHuwrVF/lgLQqEhk9/jp1lj%2BWxiL3qOnPzAu//woCsMfPnth369Rq3i1tV/CQ%2B6gjIni4zU5MeeU6NWEXTpLHeCA1HmZJEYEwlAbk5Wkce17iJWrBUerlFLbz5aso2f3htDXFgAW74Yz%2BD3/4dtbTGAvyK5p3FB3/LgCmDj5CqCQwWSGhvBli/GEx3kj1WNWnz6%2Bz4RHISHatj8ORZu/RfvXkPZvWoRs4a24eSeDQAoC17MHzaNNzMtmflT%2BrFm4YdkpiVjW6s29Zt6PvJ8KfExzJvYi01L5pOZlkxNp3rUaVD8TrxmFmLbd%2BHRnFzcmPvbXuo0cCclOpQtX4wnLixA6rKEe8gNjTG2sM4s%2BNRVv72iTCYGqlQUCeE32PHtZLJTE3ByceOjX7c9tN9ZEAqZWVgzYPx0%2Bo2ZxtGtK1n5zSwaebTDycUNQyNjYiNCcG/d8YGvO/TPH2RnprFg7XF9a8XDZmsUOvD3MjRqFV%2BsOqLv6oiPus2mJfOlvgxCJWVtV4tPf9/Lj7PGEnzVj61fjGPw%2B8up26Ljsx9cKBX35gQZ4ABgJpakrhCig/zZ/PloslMTaNSyHZ%2BtOCiCg/BEZHKFfpZE4aJOrTr1xvfg1mIHLKYlxWNdo1aRbo5/j%2Bx85DmyM9KwrVVbHxwALp46IPVTFyo5Y1NzZi/ZilePQeTnZrPjm0mE%2BR%2BRuiyhgIlljcK1HhwV6FaMQmEodjyTWkp0KHsXv01%2BbjZePQbxxvzlRf44C8LDLP9sGhbWNajf1BO1WoW/zx5sazlR370VAKOmzWH%2BlH58O30EbXsMIjcni9BrF5j5/VradO3Pyd3r2fjLPOo1asHtG5e5Gxb0yO4Gj/bP89v8t9j2x3c4ONcnNPACMRHB%2BgGbgvC0ZHIFb8xfzqZaX3Bo0%2B8cWDKL4XPW4NjIU%2BrSqj1DY5PCSRYmcsALeMGhoQcNnuspdW3VVnZqAtu/mkBGYjTN2nblnW9WiuAglJiZpTUxESHcunKOhOgI6ru3Ysoni/UBwNzKFu9eQ8nKSOXWlXNkpCTSyKMtjVq2w7FuA1wat%2BDWVT8iQ6/j5NKIce8uwMbeEZfGHphZWoMBGBmb4N66I2aW1tRp4I5TvYbcuHCaqLAg6ro1Y/ysr7G0saNB09ZFv6ZNR/06EIJQEgYyGR7ePYi9E8KdWwHcvuRDQ6/emFjYSF1atXbdZ3NOZnKcKbDOAPgM%2BLz9yHfwHvmO1LVVS/m52Wz9YhxxYQHUa9ScT5btElPaBEGo9jRqFd9OH0HwVT9sazdk5Lx1ootdQnsXv50Scm6/LTBRbIQlMY1azd5F04kLC8DOsS6zftwogoMgCAK6Loz3ftqAk4tbkW5dQRpymbxwiWpEeJDY0d8/IeLKSSysa/DeTxvF4EhBEIR7GJua88HizVjb1SI6yJ/Dyz5Eo1ZLXVa1ZCCTaws%2BVIjwIKGz/yzi%2BomtGJua8863K3FycZO6JEEQhArHtpYTHyz%2BB2NTc4L9DnB6/bdSl1QtabXqwsygEuFBIgFHNvLvtqXI5ApenfuzWABKEAThEeo0cOedb1chkyu4tG8lF/eskLqk6kdLYcsDMiAWICstUeqyqo0w/yMcX/k5AGNnfIlX90FSlyQIglDhNfPqwuSPfwLg1LpvCPETa4uUp6zU%2BMKVqGNlQC6AOk8pdV3VQkp0KAeWzEKjVjPw5bcfueWxIAiCUFSn/i8yfOpsAA4ueY%2BU6FCpS6o28nKz8ws%2BVOq7LTQasVVuWdOo1Rxa9pF%2BEaiR0%2BZIXZIgCEKlM3jCTDr0HYkqX8mhZR%2BJAZTlRKtR6/fAkgERAJlJsVLXVeVd3r%2BK2ODLWFjXYMIH30tdjiAIQqU1ftZX2NZyIjb4Mpf3r5K6nGohKyWhcKpmuBgwWU5SokPx3aTrq5vw4fcP3eFQEARBeDwzC2smfLAQgLObfiIp8pbUJVV5Wq1GU/ixDIgC3RbQQtnQqNUcXPI%2B6nwlnQeMFgMkBUEQSkGrjr3oPGA0qnwlB5e%2BJ7ovypBGrSYnPdmi4NMoGRAOkJkcKy58GTm/fSlxYQHY2jsxZsYXUpcjCIJQZYyZ8QW2tZxICL/B%2Be1LpS6nykqLCy/8MIqCdR5UQMh9dwqlJCH8Bv8W/EBP%2BHDhI3cqFARBEJ7Mvd0X/25fSkL4DalLqpLSE6ILPwyC/5anDgFIjbsjdX1Vikat5vBy3VKqPYZOoFXHXlKXJAiCUOUUdl/c%2BzdXKF2pcfqhDSFwX3hIE%2BMeStX5ghRs51iX0dPnSV2OIAhClSW6L8rWPfngwfAgBk2WnqTIW/ruilfn/ix2yhQEQShD93dfiNez0pUcFZJb8GEIgOLeT8TFLj3/bv8fGrWaroPH4d66o9TlCAKJMZH6j7Mz08jOTC9yf1JsVLFfZ2xqhoV1DeRyObb2tQGoUcsJmVyBIFQkrTr2okPfkZw9uIXz2/9H7ze%2Bk7qkKiMlOrSwLygU/gsPNwHiwwKkrq9KSI2NIMRvPzK5goHjp0tdjlBFZaYlk5YUT0ZaMikJMWSmJpOdmUZiTCTZmelkZ6SRGBtJdkY62ZlpZVKDhXUNTMzMMTY1x9K6BjKFghr2TgDY1qqNXC7Hwtqu4DFFQ4ilTQ3RIieUusETZnL24BaCTu%2Bg05j3MbOxl7qkSi8/N5v0xGhz7plgcW/LQ2xORopjSnQotrUbSl1rpXa%2BoNWh84DR1HKuL3U5QiWWmZZMXNRt4u%2BGExMRQnzUbd3nUeGlEgiMjE2oUbMWBgbg5OwCgJ29A8bGxvrHaLWg0WpRq9XExdzV3wZa0lKSycnOIj83m4SsdJLiop/o/DWd6lKngTtOLo2o16g5deo3wcmlEYZGxk90HEEo5OTiRpuu/bl4cj/%2Bu36n6ytiG4BnFX3zQuGH/hTsh3Vvu%2BNpYGT0zYsiPDyD7NQEbvruAaDfmDekLkeoJFLiYwi/eYXbQVeIiQgmPiq8oAXh4QHBwtIaCytrajvXAwMD7GvpXvQtrWywtLLGyMSEmva1AHCqUw%2BAmrUcMDI2wdLKGkurspk2nJqcREZ6GnExd0lLSSYtLY3YmChSk5NITkoiOTGOpIQ4khPiSYyJJDEmkitnDhc5hpOLG04ujajTwJ16jZrjVM8NJxc30VUilMjgCTO5eHI/AYc34D3ibYzNraQuqVKLvulf%2BOHpwg8eDA9B/jTvMUrqWist/12/o85X0rpLf%2Bo0cJe6HKECujco3AkOJDTwAplpyQ99vKmZOfXdmuDWpCluTZrRsEkzmjTzwM7eQeqnUiybGnbY1LCjrmuDxz42NTmJyPAwIiPCCAm%2BScTtMKLCw7h7J4yYiBAuntyvf6xMrigIFW7Ud/fEycUNx4JQIQj3cnVvhXvrjgRd8uXy/lV4j3xH6pIqtahr5/IAI%2B4JDwb33O8FnLdxdGHC4qNS11opKbPS%2BWNaB9T5SuavOkK9Ri2kLkmQmDIni%2BCr/3Lr6r%2BPDQpyuQI392a4NmxMk%2BYtqd%2BwMQ0bNy3Ri3BVVBgsbt8O5XrgVW5dv8qtwMtkZRRtjTE0Mv6v26OBO67urWjY/DnR9VHNBV3y5bvpwzE2t%2BK15WeRG4qfh6ehUatZ%2BkpztUatkgP2QCIUbXm4DGSmxkZYZKcmiEEmT%2BHy/lWo85U0ad1RBIdqSqNWcTvoCoF%2BPgRd9OXW1X/RqB/c7t61YWPquzWmSbOWuDVphkvDRtRv2Bi5QjTLFypswfBo05YXRrykvz0yPIyb1wO4dOFfbl67SlDAJe4EB3InOFD/GEMjY9zbdMK9dUdaeHcXv4/VkHvB3%2BE7wYEEHNmIZ/%2BJUpdUKcWHBVAQHIIoCA5QtOUB4DDQa%2BC7S3Dz7id1zZVKfm42K97qjDIrnY%2BWbBPTM6uRmIgQAv18uOZ/kqCLvihzsvT3GRkb49G6Hc1btaFJMw8aNm5KfbfGGBmbSF12lRIZHsat6wFcvXieC//6EhRwCfU9oc3MwhqP9j0KwkQPajrVlbpkoRxcOnWAX2ZPxMLOkUm/nEAml0tdUqVzcc8KTq37BuBP4LXC2%2B9/m3Mc6BVx5aQID0/oms8/KLPSadSynQgOVVx%2BnpJAPx/O%2B%2Bzhuv9J0pLii9zfuFlL2nfpgXfn7nh6dcDMXExHLGt1XRtQ17UBPQcMASAjPY0L505z2ucw58%2Be4k7YLfyO7MDvyA5AN8ujmVdXvHsNxb11BzEQs4pq3aUftZzrEx91m5und9K023CpS6p0bl8%2Brgbk6PKB3v0tD%2B7ADVNLW15dfk6ktCewemZPUmMjeOfbVbTuIoJXVXNvYLh4cn%2BR1gUn53q07dCFjt1749W%2Bc4UdyFidRUfd4cK5U5z2OYL/2ZMkJ/4X%2BCysa9Cma38RJKqok3s2sPKbWTg28mT0l1ukLqdSyclI4Y/X22u1us1CbIHMwvsMinl8MOA2fO4a6rYQ76BLIjU2gtUze2JqYcWSfdfFH58q4lGBwbNtB3oPHErHbr1wbdhY6lKFJ3Tz2lVOHTvIoT3bCb7x3%2BJ4IkhUPcqcLN7s2wTQMvX382La5hO45rOZI799DHAE6H3vfcX9ZvwNzL3lu0eEhxKKuHoKAI/2z4s/NlXAFd8j%2BB3Z8dDA0LP/EByc6khdpvAMmjRvSZPmLXn17Q%2BIDA/j4O6t%2BiBxcvd6Tu5erw8SnQe8SKOW3lKXLDwlY1NzGrdsR9AlXyKunqJxh4FSl1RpBJ3ZVdhl8ff99xXX8uAJXBJdFyW345vJRFw5yatzf6FT/xelLkd4CmlJ8ZzZ/w8%2BO1YX2QNCBIbq5f4gUahOA3d6DJ1Ah77DMbMom8W1hLKzb90SNi9bQLNuI8R%2BFyV0X5eFE/fMtIDiwwOIrosSU%2Bcr%2Be21tuTnZvPT9kvY1nKSuiThCQRd8uX4jjVcPLmf/DwloJtGOXzMBPoMHiECQzUWGR7Gvu2b2LpxFQmxumW3jU3N6dh3JF0Hj8XVvZXUJQolFB50hflT%2BmJh58iUpaef/YDVwKO6LKD4bgsQXRclFn3zAvm52dSu7y6CQyWRnZnG2YPb8NmxmrthQYBugaZeA4Yy6uUptOvUXeoShQqgrmsDXn/3Y159%2BwNOHTvIP2v/5OyJI/jsWI3PjtU0bP4cPYZNoF3PIWJBqgrO1b0V1na1SEuKJSnyFnZ1xTilx7l5epcGkFFMlwU8PDxsAube9N1D11fmYmhiJvXzqLDCL58EoHXn3s94JKGspSXFs2/9Ek7sWq8fy1DLsQ7Dx0xg5PjJYpaEUCy5QkH3PgPp3mcgkeFhbFn/Fzv/WUfotQuEXrvA379%2BTq%2BRk%2Bn94muiS6MC8/Duwel9m4i4ckqEh8dIiQ4l8tpZGbpNsHYW95iHDWiIB/ppVPnO5jUccGzYUurnUmGdWPUluRkpDJ86Wyw8U0HFR93m718/Z%2BW37xF89V/Uqnw6du/NjNlfMOfrxbTt1A0zcwupyxQqAWsbWzp0fZ6xk6dRr35DEuPjiAoPJeiSL0e3riQjNYl6bs0xMRNre1Q0ytxsLpzYB1otTbsOk7qcCu30uu9IiLgBsAVYW9xjDB7x9aOBv21rN%2BSVnw5K/VwqpPSEKFa%2B3R1jU3P%2Bd/CmmGlRwcRH3Wb36sX4HtyKRq1CLlcwcPhoJr05S0yvFErN9asX%2BfPXhfgc1O2ma2hkTI9hExgwbjrWdrWkLk8okJmWzNsDmqEwNGbaXxfFXhcPkRobwZpZfbRajdoA6ACcK%2B5xskccYysQmxIdSsSVU1I/nwopMvAsAB7te4jgUIHER91mxVcz%2BHhsF07v24QB8MKocWz3ucD8H5eL4CCUqmYt2/DTHxv5e/8ZevQdRH6ekkObfueDkW3Z%2BMu8B1YgFaRhYV2Dhs2fQ5WvJOr6v1KXU2FdPbSOguDgz0OCAzw6PKiAJQBXDq5FeFBs8CUA3Ft3kroUAd2YhhVfzeCTh4SG6ro7pVA%2BmjRv%2BdAQsWnpF2Rnpj37SYRn4t5GNwGg8G%2B3UFR2agJXD6/XFny6%2BFGPlT3mWCuA3NsXj5EaGyH186pw0hPuAuDg7Cp1KdWaRq3i8D9/6EMDiNAgSKe4EHFgw//4ZGwXzh7aKnV51Vot5/oAZCbHSl1KhXRhzwrU%2BXkGQCy63oeHelx4iEU3YIKrh9ZJ/bwqnJyMZEDXHCZII/TaBeZN7MWGnz8lOzONHn0HidAgVAj3hgjPth1IS4rn9/lv8fUbQ4iJCJG6vGrJsuBvdVZq4jMeqepRZqVzzeefwk//RDfT4qEeFx4AfgS4eni9Njs1QernV6HkpKcAYF1DDIoqb5lpyaz89j0WTB3I3bAgajvXY9Gff/PTHxtFaBAqlCbNW7Jy6yE%2B%2B34pNrZ2BF/1Y%2B7L3dmy/Ksiy58LZc/C2hb4742f8J/L%2B1ehzEoHXWhY%2BrjHlyQ8XAZ2qPPzDM7%2Bs0jq51ehFDZ9icWhyo9GreL4jjV89GIHTu5ej5GxCa%2B98yHbfS7QvY9Ys16ouIa%2B9Aq7Tl1h5PgpGAB71/7Kx2M78%2B/Rnc98bKFkbO1rA5AtWh6KUOcr7x3buBxdr8MjlSQ8AMwHVNdPbBVjHwoUtsJY1bCXupRqIzEmkq/fGMLqhR%2BSnZlGx%2B692XLYjzff/xQjYxOpyxOEx7K0smbO14tZs/MoHq3bkhIfw7J5r7P4w5fJTBPvhstajYI3epnJMVKXUqEEHNlITkYK6LbcLtHmHyUND5eBdRq1Gr%2Btv0j9PCuEwj4zC2s7qUupFv49upPPJvYi9NoFHJzqsOjPv1m6ZpvoohAqpWYt27Bm5zE%2B%2B34pFlbWXDlzmHkTe3LdX0yLL0syuQIzC2s0anVhE321p1GrOb/zt8JPf6AErQ5Q8vAA8BWgCjq1k4TwG1I/X8nlZorxDuVBmZPFmoUfsWze6/oBkZsP%2B4kuCqFKGPrSK2w57Idn2w6kxMfw46wxbPvjOzRqldSlVVkWNrpBkwXvtKu9m6d3FrakpwI/l/TrniQ8hKAbgSlaH4DMJF04s3MQ4x3Kyp3gQL6cOhCfHasxMjZh9pc/8tMfG7G0EvsHCFWHg1Md/ty0j9fe%2BRADYPeqRXw7fUSRreGF0lPDvrDrQkzX1KjV%2BG1bUriuw7foAkSJPEl4AJiPgYEy9Pxhoq77Sf28JZWVphvzIJafLRvHd6zRz6RwbdiYNTuOMnrCVKnLEoQyIVcoePP9T/nfuu3UcqxN8FU/PpvYi0unDkhdWpVT%2BDc7O00MmrxxchtpcXcK13UocasDPHl4iEWr/Qbg2J/zUOcrpX7uklHn6Z672Iq3dGnUKn7/YjqrF35Ifp6SF0aNY/2ekzRpLjZnE6q%2Bdp26s%2BmALx279yY7M41fZk9ky/KvpC6rSjE21W1alp%2BbLXUpkspMjuXU2q8LWx3m8ph1He73pOEB4CsDA9nVlOhQ/P8bZFHtGBTsZaFWq6UupcpQ5mSx%2BMNXOHtwC2bm5ny7dBXzf1yOmbnYoVCoPmxq2LF0zTY%2B%2BPw75HIFe9f%2ByoqvZohxEKUkv%2BCNn9zQSOpSJHV42UcoszMMgNPoVpN%2BIk8THlRarWYCBgbq8zt/IyU6VOprIAnLGo4ApMRHS11KlZCWFM/CGS8ScO4YNjXsWLJmO30Hj5C6LEGQzNjJb/Ld0lWYmplzet8mfvl4klhUqhQU/s22KPgbXh1dObSOOwFnQLeH1WtPc4ynCQ8Al9FqP1PnKzn25zypr4MkzGx06zukJIod855VfNRtvnt7uH4a5sqth2jdtoPUZZWruJi7ZGdVrheG6Kg75CmfqKWzVCUlxJGanCT1ZShTPQcMYena7VgWTOf8cdZYsUvnM0pL1l0/c5uaUpciifSEKM5s%2BL7w0x%2BAoKc5ztOGB4DvDAzk/0Zd9%2BPGiW1SX49yZ2JpA/z3gyg8nTvBgXz9pm6tf9eGjVm/50S13DJ78og%2BHN2/Q%2BoynsjAjs25evG8ZOefPX0Si76aI/VlKHOt23Zgzc5j2Nk7EHzVj%2B/eHi5mYjyDjFTdYlwmltVzT6LDyz4qHO8Rjm4ByKfyLOFBpdWqJxgYyPJOrfum2s2ZNS9oeRCrwj294Kt%2BfPPGENKS4mndtgPr95zEzt5B6rIEocJxbdiYTQfO4NqwMTERISx4faDYXOspaNQq/d9sU0tbqcspd5f3r7p3puQ0nnCQ5L2eJTwABGm1mk9yMlI4%2BvsnUl%2BXclXYX5aaIJY5fRoxESH8%2BvEkcnOy6DVgKMs37BIDIwXhEezsHViz85h%2Bh87FH74sujCeUHK87u%2B1lb2z1KWUu5ToUE5vWFj46d/AwWc5nqIUavrZwED%2BYuj5w%2B2uHFpHqz7jpb5G5cbMxp7s1ATSkuLFeg9PIC0pnp8/fJmM1GS8O/fg2yUrkStK40ex/Bw/tBfggZUud29Zj1Odenh16KL/vHFTD7Kzs9i9ZT1xMdG4NWnG6AlTqe1c74Hj7tu%2BCb/TPqjVajxat2XkuMkPXJvjh/bic3A3iQnxuDVpxshxk4ss0%2B1/9hQxd%2B8weOS4R9Z8/NBerG1rYGZmzo5Na7gdcov6bo0ZPWHqA11H/mdPsXvLelKTk/Bo065Ea26Eh95i%2B99rCLl5HUsra5o0b8mAoS/i4FQHALVKxcHdW/E9cYSU5CTqN2zMyPGTcW3YGLVKhe/Jo/geP0xGehqmZuYMGDb6kWNh1CoVp44dxO%2B0z0O/pvD7YWxiwprffyEpPo75Py7HpkblWGbe0sqapWu2M2Ho84TcvM6vH0/ig5//0U8/FB6tsJu5urU6aNRqDi37qHB5hSjg7Wc95rO2PMB/3RfZp9Z%2BU62Wri78ARTjHkpONx3zZeKibtOkeUt%2B%2BmNjpQsOAD4Hd%2BNzcPcDt%2B/avJ4L504X%2BfyrOTP5%2BpOZuDVpRo%2B%2Bg/A/e4pXhjz/wADJ9Sv%2Bx8FdW/Bo046GTZrxxy/fM2dm0YHQi76ay7xZr1Pb2YXeA4YSF3OXl/p3JOCesQcXzp1m1%2Bb1j63Z5%2BBuvpv3Ph%2B88TK1nOrQa%2BBQbofcYtygriQlxOkft2/7JqaNewEzcwt6DRxKUkIck0f0eeT1iQwPY9ygrmRnZdLvhRE0b9kav1M%2BRY47Z%2BZrLJz/EXb2DrRu24HEhDiyszIBSEyI45dv5mFpZY135%2B4AvDZ6AJfOn33oOW%2BH3mLpwi%2BwsbXDu3N38pS5vDZ6ADevXS3y/Ti4eyvTxr6ApZUNTZq3rDTBoZCZuTnLN%2ByillMdQq9dYNln08Q0zhLKTNN1r5tUs/Bwef8qYoMvg252xcvAM6%2BQVVp/tYO0Ws2H6nzlkoNL32P0l1swNDGT7kqVk8LwUPgDKTyaRq1i2WfTCA%2B6goNTHZau2VYtuiqiI%2B%2Bw6%2BQV/XPtO3gEPTxdOXviCD0HDNE/zszMnJ9XbtZ/3rFrT17q34mR4ybj1aELN69dZc1vP7NmxzE82rQFdHsjfPXJTL6aM5O/95954toiw0PZdfKKfqzJCyPH0us5Nw7u3srYyW%2BiVqn4acEcJr85izff/xSAwSPH8eevCwlZ%2BMVDj3vZ/yw2tnbM%2BXqx/raXp76j//jUsYMc2beDv/efwa1Jswe%2B3sGpDpsP/7eK7eCR4wgPvcWh3Vsf2vrg1qTZA19z/eolTh07WGSRsfUr/sf6PSeKPW9lYWfvwG8bdjF2YFeunDnMup/m8MoHJdoMsVorHO9QOGatOkgIv4Hvpp8KP/0WOF4axy2NlodCSw0MDE4kRd7i1Ppvy/nySKOw3yw%2B6rbUpVQK636aw5Uzh7G0smb5hl3VZnBkp%2B69ioQkSytrHBxrk52dWeRxvQYOLfJ5k%2BYtcWvSTN%2BS4XvyKHVdG%2BiDQ6EXRo7j5rWrRIaHPXFtnm07Fvk%2BGBmb0KR5SzLS0gC4ef0qSQlx9LlvzY3HbUzWuKkHcbHRLPpqbpHWhkK%2Bxw/TrGXrEr2AZ2dlER11BxtbO33LxONkpKcRHXUHU3NzoqMiitzXo%2B%2BgSh0cCrk2bMzStduRyxX47FjN7tWLpS6pwouJCAbAyr6O1KWUC41azeHlHxZ2V5zmGWZX3K80wwNarXaigYEsO%2BDwBm6d3VvOl6n81WroAcCtq/9KXUqFd3TrSnx2rEauUPDzys3VajpmbWeXEj2uuA2/bGrY6V/8wkNu6scL3Muulu7FPy7m7hPXVtP%2B0WN1CrtW6t239bntY5r6mzRvyfL1u7h03pe%2B3u7Mem0M169e1N9/JzyM%2Bo/4GQgPvcUH016mawtnRvVux2sv9n9klwXAzWtXmfXaGDo1deSlfh2ZNnYw4SG3UKuKNunXr0I/e63bduC7pasA2Pb7t1zxPSJ1SRXarSu6v9V2davOz8CjnN%2B%2BtHAoQSq67opS698q1fAAhGu1mg8Bjv35aZVffdKlpW5QXMC5Y1KXUqElxkSyZdkCAOZ%2B/XOVXgAqIz3tqb9WrXpwqXOlMhczcwsALK1sUBazKFPhi6Oxsckjjx8ddafUnpdS%2Bfh9bbw6dGHNjmP8vf8MZuYWvDK0J/%2BeOV7wXKwfuihWdlYWk0b0wczcnF0nr7DX9xp7fa/RvkuPh54rNTmJySP7YGfvwGH/UPb6XmPXySvVYk%2BUngOG8No7HwKweuEHZGc%2B/c9gVabMySL02gVkcjkurbpKXU6Ziw7y59/tSws/fRXdug6lprTDA%2Bi6L3Yqs9LZ/cObKLPSy/gSScfG0QUbRxcy05IJvXZB6nIqrBVfzSA3J4uuPfsx9KVXpC6n1Nz/4penzCUy/OkD883rV4t8nqfMJfTmdZo0070Atm7bgZvXAh54IQ%2B4dB4jYxMa3tMUX1zIeJpujfpuundo1wMuF7k9OjKixMdwa9KMBYv/oGvPfuzd9rf%2BtoBL5x9oFQC4fvUiqclJvPr2h0UGM9478PF%2BITevk52VxTuz5xfpInqSOiuz12d%2BTJNmLUmJj2Hjz9Vz1d/HCfDzQaNWUbuJV5Ufk5cUeYsd305Go9t7aQmwtbTPURbhAa1WO95ArjibEh3Knh/fKHwCVVJdj04ABPr5SF1KhXR060qCLvliU8OOed8vkbqcUuPWpBl%2Bp330L2jZWVl8O%2B/9Er0jf5i92/7G94Su2TlPmcvC%2BbMxMjbRD6rs0rMvtZ3r8cWH0/UB4ua1qyxd%2BAUvTXxd/6Lp6taY61cv4X/2lP5Y//vhSxKLGXvwOHb2DnTs3pulC7/Qd4vExdzlfz98%2BcivC7l5vUg3Q1JCHJHhYfpul2EvvUJGeio/fDFbH8LCQ28RHXVH/5jCsR55ylx%2BW/QNt0NvPfR8hSHj39PH9V/z3bz3SU2p2stXF5IrFCz4%2BQ%2BMjE04vW%2BT6L4oRsA53d/owr/ZVVVmcizbvppQuIrkEeDdsjhPmYQHIFOrVg2XyeUhUdf98FnxaVldJ8nVb6NrSr16VoSH%2B93fXVGVBkiOGDeF1m078FL/TvR6zo2uHs7Y2NrRo8%2Bgpz7mt0tXsWjBHLq2cKZLi7r4nfbhpz826sdCGBmb8MvKzaSmJNG1hTM9PF15ZWhPuvbqzzsffa4/Tq/%2BQxg4bDSvjR5AD09XOjZ10k3pnPD6U9X1xY/LsLSypp%2B3Oz08XRnV25txU9565PczOTGe6a8Mw7uRPf283en1nBuuDRsz8Y1ZgC6ULFmznTPHD9OpqSOt61kysrc3obduUNe1Aa%2B98yELPplBr%2Bfc6NKiLnGxd3nrg4e/o3Zr0oxJb87io%2BkT9V9jambOuClvleWPQYXi1qQZ0z/Q/a0V3RcPCvDTdS%2B7tOoidSllRpmVzrYFE8hOTQDdnhWjKMVxDvcyKOPn4iaTy89q1Oqa3SbMxbP/xDI%2BXfnLz83mt9faos5X8uu%2B61hYV8/10ovz3dvDCbroS68BQ1m4fK3U5ZSJ1OQksrOzsLG1K7Vpp3Exd1Gr1cUuIlUoKSEOpVL5yPNmpKeRkZ6GpZV1sYMxn1ThOWva18LoMeMrQDcWIy5Wt4Pho2oofL73P5enqb%2B0n3Nlo1apmDSiDwGXztN5wGimzPlZ6pIqhJiIED4Z2xlTS1um/iHdfixlSZ2vZNtXE4gO8gfdAMkOPOWmVyUhL%2BPnk6zVan0MZPKX7wScNnR088TGsWQjzysLucKQuzf%2BJS0%2BkrpuzajbsPJPASsNZ/b/w6FNv2NTw46la7ZjYlo1%2BxhNTM2wtLLG0Mio1I5pYWn12Bc%2BM3OLx57X2NgESyvrxw6kLKnCc5Z0US%2BZTKZ/EX9UDYXP9/7n8jT1l/ZzrmxkMhmt23Vg%2B99ruB10Bfc2HanpVFfqsiR3Zv8mrv17Ajfvvri16yt1OaVOo1Zz8Nd3ibhyEnQtDS8AZZqSyqrb4l7%2BWo16mEajUe9d9FaVnIFROHJXzLr4z6FNvwMw7d1PKt0KfoJQmbk2bMxLE3VdVIf/%2BUPqciqEgIIxaVV1lsXp9d8S7Heg8NPpwNGyPmd5hAeAg2i1U/Jzs9nyxfgqFyDqt%2BkO/Dcgp7q7dOoAd4IDsbN3YFgVml0hCJXFK1PfxsjYhIsn93MnOFDqciSlzMki%2BIpu5dF6LTpKXU6pu7hnBZf2rSz8dDnwW3mct7zCA8BqYG52agJbvhhfOKCjSrCt3RCLGo5kpiVz3f%2BU1OVI7sDGZQBMeP2dEvWNC4JQuuzsHRg%2BZgIABzYul7ocSQX4%2BZCfp8ShgQdmVWxZ6ltn93Jq3TeFn26hFDa8KqnyDA8AXwHLq2KAaPH8iwDsWrVI6lIkFXTJl1tX/LC0smboSxOkLkcQqq2xk99ELlfgd2RHtV5Cf/eqxQA07T7i2Q5UwURd9%2BPgklmFn24BxlBGMyuKU97hAeBtAwODnSnRoWz5YnyVWUTKs/9EjM2tuHnJt1ovGFXY6jBuylvVcrS7IFQUdV0bMHD4aDRqFYeq6diHK75HuBMciLmNPS16jJK6nFKTFHmLXd%2B/VriG0mlgEuUYHECa8KC6dxGpXQunFi5mUakZm1vRvIeu9WHv2qqzGNKTiI%2B6zZUzhzEyNmHk%2BMlSlyMI1d7YyW8CcHL3epQ5Wc94tMrnwIb/AeA5YCJyQ2OpyykV9y0CdRroD5Rsx7hSJEV4gHsWkYoO8mfHt5OrRIB4btAU5IbGXDpVPQcpXTylG%2B3be%2BDQKrUglCBUVk2at6R12w7k5yn1Mw6qi6BLvgRd8sXY3AqPnmOkLqdUZKcm3L8I1GAkCA4gXXgAiNWo1f1lcnliVQkQZjb2tOw9FoB966pf60PhYFHvzt2lLkUQhALenXWr4F4/X70GcxdOU23V92WMza2kLueZpUSHsvnzlwpnKwYBPdAtBiUJKcMDQIhGre4ikyvuRgf5s%2BnTkZV%2BEGXLPuORyeWc99lTrQYp5ecpCbp4BoCO3XpJXY4gCAUKfx8Ll2euDu4EB3Lx5H4Uhsa06jNe6nKeWXSQP1u%2BGE9qbAT8FxxipaxJ6vAAEKRRq7xkCsNrSZG3Kv0sDBtHF9w7D0WjVrF79WKpyyk3Ny/5kp%2BnpFnLNqLLQhAqEI82bbGxtSMxJpKYiBCpyykXhX97PXqPrfTTM8P8j7Dj28mFr4unqQDBASpGeACI1ajy2xvIFT4p0aFs/GRYpV5IymvIVAB8D24lJT5G6nLKRWF/aqfuotVBECqaTj16A9Vj99/4qNtcPHkAmVxOy0re6hBwZCN7F711/%2BBIyYMDVJzwALpBlH1kMtn6zOTYSr0SpW3thjRs2xuNWsXedb9KXU65KFyau4PoshCECue/rouqHx52r16MRq3CvfPQSr2Xkt%2BWXzj256eF0zH3INGsioepSOEBQKXRaMYD32anJrDp01GFO4RVOt4j3kEml%2BOzYw1Bl3ylLqfMFTaHtmzdVupSBEG4j0fB72VMRLDUpZSpoEu%2BnN63CZlcrm8Brmw0ajVHf/%2BEc1t%2BKbxpCzCMChQcoOKFh0IfAzPzsjM1W78cR9DpnVLX88TsXZvi2X8SGrWKFQtmVOk51oVdM3b2DiXecVEQhPLj4FQbgOQq3I2qzMlixVczAGg37C1sazeUuqQnlp%2BbzZ4f3yDw2D%2BFN/1JOa8cWVIV%2BS/9z1qtJgqtfOPBJe8ZpkSH0eHFd6Wu6Yl0HP0ukYFnSAi/weZlXzF%2B1tdSl1QmMtKSAKhZSwyUrGwy0tPISE9DrVIRF3MXgPjYaNTq//5WGRmbYFezFgC16%2BqagW1s7TAzN5e6fKGEjAq2Ks9ITyM7Mw0zi6q3%2Buu6nz4hMSYSe9emtB32ltTlPLHs1AR2//gGscGXC2/6HJgvdV0PU5HDA8BWrUb9vEwu3//vtqUWqbER9Jr6NYYmZlLXVSJyQ2N6T/uev%2BcM5ejWv/Bo/zytOla9MQGZaSmA7gVFqBjUKhW3Q28RERpMyM3rhNy8TmpKEtGREQAkJsSTp8x95vOYmZtjY2uHXKHAwakOdvYONGnekvoNG%2BPasBGuDRtLfSmEAjY17MhITyMzNbnKhYcrvkf03RW9p32PTC6XuqQnkhIdyu4f3tSN8zMwUKLVTgA2SV3Xo1T08ABwWqNWt5XJFcdv%2Be5xSE%2BIYvB7yyrN9Bt716a0G/YW57b8wurvP2DBuuNV7hc3JUHXFFrYNCqUn%2BJCQnjoLW6H3kKtenxLp7WNDTbWNigUCpydnTEwAGdnZxT3dD/l5uYSExuLVqslIjwCLZCUlEhWZibZWVlkZ%2Bm65CLDwwA4uGuL/muNjE2o79YY14aNRaiQmINTHSLDw0hOiKGWc32pyyk12ZlprF74AaDrrrB3bSp1SU8kLiyAXd9P1U3FNDCIQ6sdCpyTuq7HqQzhAXRrQXjK5IanY4MvN9z4yTBe%2BPCPSvND0nbYW9y%2B6ENcWADrfprD1HlVa/XJtKR4ALG%2BQzlQq1RcvXSesyeOcPLoAUJuXn9oSGjSxJ2mTd1p0aIFnp6e2NnZ4erqCoCjoyMmJs%2B%2BXXpmZiaJiYmoVCqioqKIi4vD39%2BfGzeCCAwMJCIinJvXrnLz2tUHQkWT5h507dmfjt160qxlG6kvbZVX%2BPuZnlx519Epzsaf55ESH4NDA49K110RceXUvVMxA9Fq%2BwNRUtdVEpUlPADEatT5nnKF4ZHM5FjvzZ%2BPptfr39C4w0Cp63osmVxO3%2Bk/sP6jFzh7cAttuvbDq/sgqcsqNfl5uuZvY%2BNnfzESHpSanITviSP4njjCySP7yUhPK3J/YUhwd3fH09OTJk2a4O7uXirh4HEsLCywsLAAwM3NDYDRo0fr78/MzCQoKIhr164RGBhYJFQEXDxPwMXzLF34BXb2DnTt1Y9O3XrToVsvMZ6iDBRe09wqNHi7sLtCYWhM3%2Bk/VKruiot7VnBm4/f3TsUcQwWbUfEolSk8AGSqVfmd5YaGa/Nzs1/a//MMooP86frK3Ar/Q2NbuyEdR8/i1LpvWP39h7i37oiFdQ2pyyoVMrnux%2BjeQXbCs7l57Sqnjh3E9/hhrl46X6R1oXmLFgwbOpS%2Bffvi5eVVLiHhaVlYWODl5YWXl1eR2zMzM/Hz82PPnj3s2r2HsNAQtm9czfaNqzEyNqF12w506t6L7n0GUde1gdRPo0rIUyoBMDSqIrtLpiXz54J3AOgwelalmV2RnZrAoWUfEXHlZOFNi4EPqIAzKh6lsoUHAJU6P38McFwmV/x85eBa49jgywx491es7J2lru2RPPtPJNT/MNFB/vz51Qxmfr9W6pJKRY1aurEOhaP1haeTlBDHptW/s2vz%2BiLX0sTEhP79%2BjFo0CAGDhyIs3PF/jkvCQsLC3r27EnPnj1ZtGgRISEh7Ny5k/37D3DixHH8Tvvgd9qHnxbMoa5rA0aNn8LQlyZgaVW1xguVp8KfKVt7J6lLKRWrF35IZloyjo088ew/UepySiTiyikOLplFTkYKGBhkodVOoYIPjHwYA6kLeEYtFEYmm1V5ue7G5lb0f%2BdnXFp1kbqmR0pPiGLdBwPIz82mz%2BipjHnnC6lLemaBfj78OGsMHbv3ZumabVKXU%2BncvHaVDX/9jwO7tupnQLi4uNK/fz%2BGDh1Kt27dKnTrQmnLzMzk4MGD7N6zhwP7DxAXp1uN18zcnGEvTWT0hKmiNeIpDOvxHOGht/h6w2mcXNykLueZbFn%2BFXvX/oqhiRljvt5e4VsdNGo1p9d/y6V9KwEwMDC4ptUNjKy0m41U9vAAYCKTyb7TaDTvAHgNmUaHF9%2Bt0N0YEVdOsev7V9Go1Yye/hn9xrwhdUnPJDzoCvOn9KVJ85b8vf%2BM1OVUGscP7eXvVb/hd1q3ZLBCoeCll15ixowZDzTzV2dHjx7ll1%2BXsGvnDgDkCgVde/Zj7OQ38epQsd8sVCQ9WrmSmpLEr/uuV%2Bou06NbV7Lup4%2BRyeUMfHcpDbwq9vT31NgI9i2eTkL4jcKbVgFvU4nGNxSnKoSHQgPlCsMNalW%2BlXMzb/pO/xGLGo5S1/RQQad3cnDJewBM/WwpHfqMkLqkp5YYE8kHI9vi4FSHA35BUpdToeUpc9n%2B9xrWr1iqn9poY2PDtGnTmDFjBo6OFfdnVmohISEs/vln/vzzT5S5uhaaJs1b8srUd%2Bg7eIRY3fQR1CoVXg1sAVh5pkLsq/RU/I/vYdm8aWjUKp5/9Us8eo2RuqRHuuazmROrv9TNptCt3/A6sFrqukpDVQoPAM5yQ%2BP16nxlV2NzK3pN/Ro3735S1/RQF/es4NS6b5DJFbz300aaeVXed1GTOule9C7dyZC6lApJrVKx4a//8ccv3%2BtnSzR0c%2BPt6dOZMmWKfsaC8HiJiYn89ttv/PrrEn2Xhp29AzM%2Bns/gkeOkLq9Cio66w8COzanpVJeFW85LXc5TCb7qx4%2BzxqLMycJryDQ6jXlf6pIeSpmVzrEV87jlu0d3g4FBKFrtSOCy1LWVloq6t8XTilLnK7sBs/OyMzV7F01n36LpKLPSpa6rWG0GTaH1AN3%2BF7/Mnkh40BWpS3pqNZ3qAhBwsXL%2BYSpL4aG3mDSyDz8tmENGehqdO3dmx44dBN24wYwZM0RweEI1a9Zkzpw5hIffZtWqVbRs5UlSQhzzZk1jxqRRYuBuMQIu6X4vazrWlbqUpxITEcIvsyehzMnCvcuQCh0cYoMvs2H2C/8FB1iHVutJFQoOUPXCQ6HvtFqNt9zIOCbY7wDrPhhAxJVTUtdUrM7jZtPIux/KnCwWf/CyfnfKysbD%2B3kAfE8ckbqUCkOtUvHbom8Y2dubgIvncXV1Zc%2BePZw6dYohQ4YUWcVReHImJiZMmDCBK5cvsWrVKuzsanLy6AGGP/8cm1b/LnV5FYrv8cMAeLR/XupSnlhaUjw/vTeGzLRk6nl0ove076UuqVgatZp/t/%2BPzZ%2BPJj0hCgMDWTIwEniZSj6%2BoTgVd1Ths4vWqtW/yQ0NGyiz0lsEnd5JbkYKdZq2Q64wlLo2PQOZjIbt%2BhJ1/RyJkcFc9z%2BJV/dBmJhVskVyDAw4d3gbarWKIaNflroayd28dpW3J43k4K4taDUapk%2BfztatW2nRooXUpVVJnp6eTJ48mbCw21y9coXTPoe4cO40Xh26iOmdwLfz3icrM4OxM77Ayram1OWUmDIni%2B/fGUVMRAj2rk0Z9skqFBVwnYrM5Fj2/PgG149vQavVAuwBbT%2BgyjbFVtWWh0KZBWtCjJfJ5blXDq5lw%2BzB9%2B5aViHI5HKGzv4L29oNiYkIYfGHL1e6LbzdW3dALldw9dL5B1ZArE7ylLks%2Bmou4wZ34%2Ba1q7i6uuLj48Ovv/4quifKWM2aNdmyZTNbtmzBzq4m/mdPMap3O9b%2B/kuJ9vmoqkJuXic%2B5i7WdrWo08Bd6nJKTKNW8cvHk7gTHIiVvTNDZ/9VITdFDPM/woaPBhN13Q8DA1k28CowGKi8I1NLoKqHh0LrNWq1h8LIOCA1NoLNn4/m5JqvCtcTrxAMTcwYOW8dFjUcCQ%2B6oh8YVFkYm5rTqFU71CpVte26SEqIY9ygbqz57WcMgPfff5%2BAgAC6d%2B8udWnVyogRIwgJCWbChIlkZ2Xx04I5TBv3gn4Dr%2Brm1LGDAHh495C6lBLLz1Oy7LNpXD9/ElNLW4Z%2BvKLCbYaYmRzLwaXvsfuHaeRkpGBgYHBGq9U0B1ZIXVt5qC7hASBEladsI5PJvtdqtJpL%2B1ayZlYfwvwrzgudmY09w%2BeuxszGnuCrfsyf0peU%2BBipyyox/biHgv7V6iQpIY5XXxxAyM3ruLm5cerUKRYuXChaGyRiY2PDqlUr2bNnDw4OjvifPcX0V4ZVywBR2cY7ZGemsXDGi/j77MHQxIxB7y2rUItAadRq/Hf9xppZfQg6tRMDA1ke8L5Wq%2B0OhEtdX3mpalM1S6qFoZHpyvy8HC%2BAhm17033SZxVmXYj0hCh2fDOFlOhQrO1q8cHifypFc%2BPdsCDmvtwdSytr9vpeqzZ9zYXBITz0Fp07d2bz5s1ivYYKJDw8nL79%2BnPrZhCt23ZgyZrt1WbjrcjwMIb1eA4t8Ou%2Ba5hZVOzfyZT4GBbO1I1xMLexZ8jsvyrU7smRgb74/DWflOhQAAwMDI5qtdppVOKVIp9WVR4w%2BSjxGrXqDyBEbmjUIyky2PT68S0YmppTy7U5BjJpG2SMza1o3HEQMcGXSIwM5syBzTRo1gb72i5SX7dHsrKtyc3LvkSHh2BsbFItVv%2B7Pzjs37%2BfGjUq7%2Bp9VZGNjQ2jRo5k9569XLt6mUv/nqH3oOEYGhlJXVqZ%2B%2BnLjwkKvEKn/qPw7jVU6nIeKSYihK/eGExiTCS2tRsyYt46atSpGC0OmcmxHP1jLqfXf0duRkrBTArta%2Bg2tEqWuj4pVNeWh3vZKBRGc9Rq1SytViNzbOTJ81O%2BrBBpV52v5OCS9wj2O4BMruDVuT9X%2BJUor/ufYuGMUdjZO7DPNxCjKrxNd3HBQXRTVFyxsbF0696j2rRAJCXEMaBjC/KUuXy36Sy1nOtLXdJD3bsAVG13Lwa9twxTS1upy0Kdr%2BTS/lX8u23pvWPk/kQXGlKlrk9K1bXl4V65Go36MGj/MTQxa50eH1nvms8/5KQn49S4jaTTgmRyBQ3b9SU/N4uYWxe5cGIfcoWCJp7tpb5mD2Vf24VLpw4QG3kbW7uaeLRuK3VJZUIEh8rHwsKiWrVA/O%2BHBVw%2Bf5Y2Xfvz/PCJUpfzUP7H97D4g1dQ5Slp5N2Pge8uwdjcSuqyCvYgeo3gs/vQqPIxMJDdAu1QYCmQK3V9UhPh4T%2BJGlX%2BX0CQTGHcPebWRbOAoxtRGBlTq4GHZF0ZBjIZLq26YmRizp2rp7lx4TTpyQl4tO8heffKw9jY1cLvyA5uXgvgpYlTq9yeA2qViqljBhMcFCiCQyVzf4C4HRJE3xdGSl1WqUtKiGPOjNdQq1VMm78ca7taUpdUrMP//MFfX7%2BLVqvBo/dYer3%2BreTrOKQnRHF4%2BUec3fQTuZlpBQMitZ%2BBdizVaEDk44jw8KBrWo1qmUJhZKRWKduFXzohu%2BW7G2uHetg6Sdfs59S4DTXrNib0/EFu37hEVOgNPDv1RmFY8d41Obm4ce7QVhJio6hXvyFNmrWUuqRSteufdWxZtwJHR0f8/PxEcKhkLCwsGDZ0KP9btoyQm9dp064jdeq5Sl1WqVr7%2B6/4nfahWduuDBj3ltTlFGvjL/PYseIHADqMnkXnsR9K%2BoZIna/Ef9fv7Fv8DkmRtwpv/rugtWE3oJH4klUoIjwUL0%2BjUR/WarUbDU3MW2WnJrjePLObmJsXqFW/OWbWdpIUVcPZjbrNOxB6/hBRIdcI/PcEzZ7rjLmV9H2D9zO1sOLiyf1cOn%2BWoS%2B%2BjIlpxVvc5WlkpKfx3tRx5GRnsXz5crF1diVlZWWFgYEBx44dIyjwCiPGTkJWQVvynlR46C19q8PkTxbp952pKLIz01g69zV8929GJpfTe9p3ePZ7RdKabl/yYffC1wnxO4BWo8bAQHYRtC8Ci6jmYxseRoSHR0vWqPJXAZflRibdU2NuWwQe%2B5us1AQcGrTA0KT8B1tZ1qxNw7a9CD1/hPjIUE7t/RtbeyfqNWou9bUqwrlBE679e4KYO6HcvRNOn0HDpS6pVPy26Bt8Txyhffv2/Pzzz1KXIzyDdu3asW7dem6HBmPvWJtmLVtLXdIzU6tUzHx1NDFRd/DqMajCtToEX/Xj%2B3dGEh50BUMTMwa//5ukOx%2BnxkZw4NdZ/Lt1ia6LQiaPQat9A7TTgTtSX6%2BKTISHkrmpVauWymQyGQYGHeJCrsqu%2BWxGna/E3qVpuffRmVrWoHn3kaTFRRAffoOLJ/cTeyeEZm27YGhUMWY3GMhkuLfuyOl9f3PregCNmjSnQaOKv1bFo0SGhzHv3ddRq1Vs3rwZZ2dnqUsSnoFCocDJyYktW7YQcOk8I8ZOwriSzw5a/%2BcSdm5ai20tJ95duA4jE1OpSwJ0S03vWvUTK76eRU5mOg4NPBg2Zw2ObtJ0aWanJnD2n8UcXj6blOiwwnENX6LVvghckvp6VQYiPJScSqvVHtNqtRuNTMyb5OVkukVd9yPg6EYwAIcGHsjk5TcwUGFkTKMOA7C0cyLy2lnu3Arg36M7qe/eCjuHivGiZm5li6m5FVfPHuVf3xP0HzIKC0vpR1E/rQWz3yE4KJCJEycyffp0qcsRSkGLFi04cuQowbduolar6dC1cqzCWJyb167y8TtTdIMkP19eYVojE2Mi%2Bfmjifge2IxWq8FryDT6vb0IUwm6W1NjI/Dd9BOHln1E9E1/tBo1wKp7xjVU301QnpBY5%2BHpeRqbWXyvzM7sDbqlpdsOeR2PXmOQG5ZvS0RqbAQHfplJXFgAMrmCgS%2B/zdDJ75VrmHmU794eTtBFX7r27MfPKzdLXc5TuX71IuMGdcPCwoLg4GCxgmQVcvnyZdq2bYtMrmDXycs4ONWRuqQnplap9JuxdR4wmilzKkaXmv/xPaz85j2yM9Mwt7Gn7/QfqduiY7nXkRobwfnt/yPo9A40ajUABgYGO7Va7efAZamvU2UkWh6eXqw6P28tsNPYzKJhbkZqw4grJwn02YyZZQ3s6jYut5HDJhY2NOs%2BClVeLtE3/bl1%2BRzX/j1BM6%2BumFlKvxyte%2BuOnNqzgdBbN3B0csa9RSupS3pih/dux/f4ESZPnsxLL70kdTlCKXJ0dMT37Flu3QzCpWGjSjn2YflPX3FozzZsazkx47vVkndfKnOy2LD4U/7535fk5ymp3%2BZ5hn6yCru6jcu1jtTYCE6t/YZjf84h/vY1tFotBgYGB4FRwGKq%2BM6XZUmEh2enDxEKYzNXZVaaW6j/YW757sbY1LLcQoSBTIZLy87UcfciMvAscXeCObNvE/a160m%2BL4aZpTUWVrZc8T3MaZ9DeHq1r3RT4zat/p3gG4FMmzaNNm3aSF2OUMpu3rzJyZMnMQD6D31R6nKeyO4t6/nxi48BeOvLPyT/fb8THMiP775EgJ8PCkNjurz8Md0mfoqhcfmNvyg%2BNMhPgnYisAARGp5Z1ZibVDFcVimz%2BwOtFcZmB9LiIjWHln3I2vf6cOXQOtT5ynIpom6Ljoz9bjcN2/YmOzOdZfNe5/cvppOdmSbpxek%2B9BX6jJ6KWqXi3Vdf4vrVi5LW86RCbl4HoFWrytdqUlpWrFjBwYMHy%2Bz4UVFRvPvuu5I8N09PTwD8z51Crao83d6njh1k/ge68TdjZ3xJC4m33T78zx8smDqQmIgQ7Oo25sUvt%2BDZf2K5nT8h/AaHl33E2vf6cP3EVjRqNXKFwh/oodWquwHHJb1AVYgY81B23IxMLRbk52aP0mo1MjMbe1oPmIhHzzHltvRqwJGNnFr3Dfm52Vjb1WLUG3Pp1F%2B6d1UatYpln03D32cPdvYOrNx6iLquDSSrp6TUKhXeje0xADIyMjAxqdwj8p9Whw4dmDZtGhMmTCiT4//222/8/fff%2BPj4lPtzCwkJoVGjRgDsOnmlUvxcBlw8z7Rxg8nOyqLP6KmMeecLyWoJD7rCup8%2BIfTaBQA8eo%2Bly7jZGJqUz/ouCeE38Nv6C6HnD%2BtvM5ApArQa1afATskuTBUmwkPZKxIijM2taN7jRZ4bNAUzG/syP3lS5C2O/P4JscGXAWjY/DnGz/oaV3dp3kFr1Cq%2Be3sEt6744dqwMX/%2Bsw87ewdJaimpm9eu8lL/TrRo0YKAgIByP//WrVtZsmQJ4eHhWFhYMGjQIL755hsAMjMz%2Beqrr9izZw%2BZmZm4ubkxe/Zsevbsqf/61atXk5iYiKenJwsWLCA8PBwbGxumTZvG66%2B/rn%2Bcv78/8%2BfPJzAwENDNRJg5cybe3t5MmjSJLVu24O7ujqOjI46OjmzcuBGApUuXsmfPHoKCgjAxMWHQoEF89tln%2BpU3S3L%2B7777jh9%2B%2BAGVSqVvBdi4cWO5Dky1tLQkMzOTPzbtq/A7woaH3uLVFweQlBCHd6%2BhTJu/XJI6MtOS2bzsK07v24RGrcLSzpGur8wtt7Ubig0NBvJjWq36S0QrQ5mqGMPxq7aQvJzMl4C5RqYWC/KyM0dd3POn7MrBtTTrPoI2A6dg41h2W23b1W3M6C%2B3EHR6J6fXfUvotQt8OXUgnQeMZtQbc7CwLt/to2VyBbN%2B3MD8KX0JD73Fu6%2BNYfn63RV6d8PQWzeA/5q2y9OKFSuYNm0as2fP5rPPPiMuLo7cXN2ePCqVisGDB5OZmcmCBQuwtrbmzJkzDBo0iC1btjBw4EAAwsPDWbJkiT5YWFtbc%2BHCBaZNm4azszMDBw4kMTGRHj16MHPmTD777DNyc3M5ceIEcrkchULBW2%2B9xZYtWxg6dCh9%2B/Yt0vri7%2B/PSy%2B9RPPmzbl79y6vvvoqCoVCH3BKcv5u3bpx/PhxYmNj%2BeyzzwDdVtrlydPTk9OnT5OUGF/u3%2BcnkZQQxzuTRpGUEId7645Mnbek3GvQqFWc3L2Bzcu%2BIjszDZlcjteQabQb9ma5tDY8EBoMDNQGsEer1X6u1aovl/sFqYZEeCg/%2BhBhaGTyqVqdPzbg8AbFtWObaOjVG8/%2BE6ntXnZLHbt3HkL91j3w3/U7F/f8wcnd6/H32cOoN%2BbQdfDYcp3WaWxqzke/buOzSb0IuHie6a8M46c/NmJTQ5plvx8nMjwMADc3t3I9r0qlYu7cucydO1f/gnqvvXv3cvr0aW7fvq1fsKp79%2B5kZmYyc%2BZMfXgASE1NZfv27fp38t27d2fPnj3s2bOHgQMHEhQURGZmJu%2B9957%2BRbtz5876r%2B/evTsA7u7u%2Bo8LrVy5Uv%2Bxl5cX586d48iRI/rwUJLzt2/fHkdHR3Jzcx84fnlxd3fn9OnT5GRlSXL%2BkoiOusNbLw8jMjyMOg3cmblwbblPyQ69doF1P31CeNAVAOp5dKL7pHnY1m5YpufVqNWE%2BR8m8Ng/RFw5CYCBgSxPq9WsQav9Tgsh5XohqjkxYLL8heTn5U7QqNV1DU3MlgGqYL8DbP78JTbMHkzhypVlwdjcik5j3mf8wn3U8%2BhEdmYaqxd%2ByLyJvQi%2B6leuF8HarhYf/boNa7taXDp/lkkj%2BhAdVTFXgy3cFTQqKqpczxsYGEhsbCwjRowo9v4jR47g5eX1wEqXI0aMICQkhPDwcP1thd0N93J1ddW3Ynh5eeHu7k6XLl3YtGmT/vaSSkxM5Pjx4xw/fpyoqCgSExOL3P%2B481cEhderdt16UpdSrJvXrvLKkOcJD72Fk4sbHyz%2BB2PT8muxS0uKZ8VXM1gwdSDhQVewsndm4LtLGDZndZkGh8zkWPy2/MLKt7uxd9F0Iq6cRCaXZwKLtVqNC/AaIjiUOxEepBObn5v9pkatriuTyT5RmJjFJ4Tf4MhvH7Pizc6cWvct6Qll82JlW7shw%2BasZvD7y7Gyd%2BZuWBBfvzGE37%2BYTkp8TLldACcXNz778yBOLm6Eh97ilSHPc/Pa1XI7f0k5ONUGdM3z5Sk1NRXgobt2ZmZmFjt4s2bNmgBFwkPhbQ9jYmLC2bNnGTlyJDNnzqRu3brMnz8f1WNmHgQFBdG2bVuaNm3Kd999x%2BrVq/VjJoqrqSIr/P42buohdSkP%2BPfMcSaP7ENSQhyNWnoz9/e95bbNtkat4vA/f/DJ2C6c3rcJhaEx7Ya/xSs/HSzTsQ23L/mw6/uprHy7G%2Be2/EJmciwyuWEEMFOjVtcF3kVMuZSMCA/Si9VoNN%2BocrMdgH7G5pbHczPTNBf3/MnqmT3Z8%2BMbRAb6lsmJG3j14pWfDtJh9CwUhsacPbiFj8d2Zt%2B6JeTnlc/UUttaTsz9fS%2BNW3mTlBDH5JF9%2BPfM8XI5d0kVDugMCgp67ItpaSoMDQ97d25hYVHsfYWh40n33rCxseGzzz4jMjKSH374geXLlz926uTgwYNxd3cnJiaG/fv3s3LlSoYOHVpu16i0REVFkZqaip29Q4XrPtu3fRNvvjyM7KwsvHoM4oOf/8HMonwWfwu65Mu8ib3Y8POnZGem4dKqK%2BMW7qPDi%2B%2BWyUq62akJ%2BO/6jZVvd2fXd69x%2B%2BIxNGo1BnLFYWCQRp3vCvyM2OlSciI8VCwHlVkZPbRajYtCYbRAZmicHHr%2BMNsWvMK6DwZw5dA6lFnppXpCuaEx7Ya9ycs/HaSRdz%2BUOVlsXraAD0a25fA/f5RLiDCzsOb9xf/QtscgsrOyePPlYezesr7Mz1tSrg11q%2BLl5uYW%2B666rLRo0QILC4uHrq3Qq1cvLl%2B%2BTGxs0TdfO3fuxNnZ%2BanHaCgUCiZMmMDs2bM5cuRIkdvvFxISwqBBg4rc97QtNMUdv7xcuKCbYti8gq0uuXLZIubMeBW1SkWf0VN5Y/5yDMthI76gS758N304300fzt2wIGwcXRj68UqGfvxXmQzwjgz0Zd%2Bi6ax4qzNnNiwkPSGqsGtiCdBUq1b1AfaW%2BRMXSkwMmKyYolSqvE9R5c0H%2BhqbWc5OirzV%2Bfhfn3Nq7Tc0bNubFs%2B/WKprxFvZOzPg3SVEBvpyat23JIRfZ8PPn7J33a/0eXEq3Ye%2BXKbvdgyNjJk2fzm2tb7g0KbfmTdrGjevBfDunAX6MQdSqe1cj3quDbkTHsq1a9fKbdaFiYkJs2fPZu7cuVhYWNCpUydiY2O5e/cu48aN0w80HDZsGAsXLsTZ2ZmDBw/yww8/sGTJk43Av3z5Mnv37mXgwIHY2NgQGxvL33//XWTQpJeXF%2BvWraNTp06AbgCpm5sbq1at0i%2BetXr1avz9/Z9qLQxPT0/%2B/vtvTp8%2BjbOzMzY2NuU246IwFLq6NSmX8z1OdlYWX3w0nYO7tgAwevpn9BvzRpmfN%2BiSLztX/EDQJV1rp7G5FW0Gvcpzg6aUektDTkYKN05sI/DYP6REh%2Bpvl8kNQzXq/EUatXo1kFnmT1p4KqLloWJTAXuV2RldgPoKhdEPBjJ5%2Bi3fPWxb8Aor3%2B6OX0FfYGmp26IjY7/dxeD3l%2BPczJu0pHhdS8SIduz864cyXalSJlcw5p0vGD/rG%2BRyBetXLGXc4G6Eh94q%2Byv9GB279wLKf9zDnDlz%2BPbbb1m8eDFNmzZl1KhR%2Bhc6hULB7t278fLyYtiwYTRq1Ig///yTP//8s8hCTjY2NsWul1CzZk39WAQbGxuOHz9O7969qV%2B/PqNGjcLLy4tFixbpH//rr7%2BSmJhIo0aNmDRpEgBr164lNTUVDw8PunTpgkqlYvfu3UW6TEpyfoApU6bQr18/evfuTevWrQkJKb8xcIXf14qwr0XAxfOM6t2Og7u2YGJqzltf/VnmweHSqQPMn9KX76YPJ%2BiSL6aWtrQf%2BQ6TfjlOu2FvlmpwiA2%2BzP5fZhaM7fqGlOhQDGTyfJnccDPQT6POdwOWIoJDhSYWiap8FMAQE3PrD3Oz0toV3ujSqivNuo%2BgoVevUv1Fj7ruh9%2BWX4i6rpuNYWZhTZ/Rr9H7xdfKtCUi9NoFfvtsGgkxkZiZm/Pu3K8ZOW5y2V3Vx/A/e4rXRg%2BgZs2aBAcHl/saBELZCQkJwcPDg3yViu3HLki2uqRapWLlskUsX/Q1apWKeo1aMG3%2Bcpxcym6K8KVTB9ix4gfuBOsCqbmNPV5lsDuwMiudoDO7CDi8gaTI/94MKAyNrqvy8/4HbAISn/oEQrkT4aFyczc0NXtTq1JPUuUrLQBMLW1x7zIUt3Z9S3XdiKjrfpzf/j/uBJwBdN0MPYZNYMC46WU26js7M401Cz/C78gOAHoNGMq875dgaSXNTqFTRw/g/NlTvP/%2B%2ByxcuFCSGoTSN2rUKLZs2cILo8Yx/0dpVmqMi7nL3Jmv4X/2FAB9Rk9l5LQ5ZTa%2BoTxCg0at5u4NP4JO7eSm7x79FHSZXJ6pUatXAauB8m3KE0qNCA9VgwkwxNjc8mNlVoZ%2B3Wkre2fcuwzBrV0/7F2blsqJ7l/ZrTxCxNlDW1mz8ENys7NwcKrDgsV/SLJ88M1rVxk/uBsAAQEBuLtLu3uh8OyOHj1Kr169MDM3Z9fJK5IslX50307mf/gWGelpWNvV4tU5P5fJBlcatYqLpw6we9XiMgsN6nwlEVdOEey3n9sXfYoM8JYrDE%2BoVfnL0O01UXEW%2BBCeiggPVU8LhcJonEyhmJCXm%2B1UeKNd3cY07jiIxh0Glspo6eJCRJuu/ek%2B9BXcW5feQM5CiTGR/O/TV7l9Q7eq3bAxE3jno/nlPq3uy4%2Bms23javr168f%2B/fvL9dxC6VKpVLRu3ZrAwEDe%2BmAer779QbmePzrqDj/M/wifg3sA8Gj/PFPnLSn1JeMz05I5vW8TPjvWEB91GwAbRxfaDXuLxh0HPnNouDcwhJ4/TH5utv4%2BhZFxsCpPuRpYD4SX5/UVypYID1Wbp0JhNFpubDpamZVWv/BGx0aeNOk4CDfvfljUeLaNh5Iib3FxzwqCTu9Ao1YDusWfegydQKcBL5bquAiNWsWOv35k39pfUatVWFpZM23WJ4x%2BZWq5zchISohj%2BPPPkZ6WxoEDB%2Bjbt2%2B5nFcofb/99hvTpk2jtnM9tvtcwMi4fHZLzVPm8uevC1n92y/kKXMxMTVn%2BNTZ9H7xtVI9T/BVP45uXcnFk/v1U64LQ0OTzkOQyeVPfexHBQa5kXGMOk%2B5AtgKXC6XiyqUOxEeqg83hcJonNzYdMK9QaK2uxcNvXrTwKvXM7VIZCbHcu3YP1zz%2BYeMJN3sD0MjY7x7DaX70Fdo2Py5Unsi8VG3WbdoDgHnjumeWJNmfPTFD%2BXWlbFy2SJ%2B%2BWYebm5u3LhxQ9L1CYSnk5qaSqNGjUhMTOTbpavoO3jEsx%2B0BI7u28lPCz7RL8Xeoe9IRr81r9S6/LIz0zh7cBs%2BO1ZzNywI0M1icmnVFY/eY3Bp2fWpQ0N%2Bbja3L/lw%2B%2BKxBwODoXGCOl%2B5Hl1gOF0uF1OQlAgP1VOxQcK2dkMate9H/dY9cGzk%2BVQH1qjVRFw9ScDLRSaXAAARyUlEQVThjURcOYlGrVuRsU4Dd3oMnUCHvsNLrTXi0qkDbFoyn7iCpti%2BL4zk3TkLcHCqU6YXL0%2BZy6g%2B7blzO5SRI0eyceNGESAqkczMTPr378/p06dp3bYDf209VObnDA%2B9xbefvo/faR8AXN1bMXbGFzRq6V0qxw%2B9doHjO9bgd2SHvpXB0s6R5j1epPnzLz51C2N%2Bbjah/ocJ8TtA%2BOWTRfbdkSsM07Ua9RaNRrMBOIFuarlQTYjwILjJZLIxhmaWY5SZafpRlRY1HKn/3PM08u5HnabeT/VupTxaI/LzlBzYuIzdqxaRn6fEzNycV6bOYOyUN8t0VkZ46C2mjh5AQnycCBCVyL3BoX7Dxvzxz74yHSSZlBDHyv8t4u/Vv6FWqTCzsC61nWyVOVmcPbiVI1v/KtVWhkcGBkPjBK06f7NGo9mGCAzVmggPwr2cZTLZKCMz68m5mSktCm80NDGjYdveuLTqSr0WHTGzsX%2Bigxa2RgQe3kh4Ma0R3r2GPPMgsZT4GDYtna%2Bf1mlpZc3I8VMYN%2BXNMntxEAGicinP4BAZHsaGv/7Hto2ryVPmIpcr6Dp4HCPf%2BOSZW97Cg65wcvcGfA9uQZmj2z7c3Maept1G4NHrJazsn2xPE4DU2AgiA32JuHLygcBgaGQSkp%2BX%2Bze6WRJiaqUAiPAgPFyxQQLAoYEHdT064dKqC7WbeD3Ru5viWiNkcgXubTri3Wsobbr0e6YgEXTJl4Mbl3H5jG4WiJGxCaPGT2HSm%2B%2BWyQuFCBCVQ3kFh8jwMP789Xv2bt%2BEWqVCLlfg1WMQA8ZPp16jFk993OCrfvgf38vFk/tJjInU3%2B7q2ZXmPV6kgVfvJ/o9zE5N4E6gL5EBvkRd9yuyg6%2BBgUyjMDS%2BmJ%2BXsw7dfhJiu2vhASI8CCXhDAw0tbQdnZeb1V6dn2daeIehiRnOzdpTv00P6rboWOJBl4WtEdeO/UPElZOo7tmAq1FLb9r2GIRX90HY1nIq0fHudyc4kJ1//cjFk7rplGUZIu4PEGvXrn2qvR2EspGamsrgwYPLNDgUFxo69B3B4AkzqeVc/6mOWRgYzvvsJiU%2BRn%2B7pZ0jTToPfaJWBmVWOndv/MudgDPcCfAtspcEgEyuyDIwYL9apdqDLjCI1R6FRxLhQXgaXjKZrLexhc0LedkZbdSqfKPCO2wcXajr0QnXVl2p07QdxuZWjz3YvX2sDwsSrbv0o6ZT3ScutDBEXDlzGLVahZGxCf1eGMHoCVNp1rJNqV2QewNE%2B/bt2bhxI66urmX8bRAe5/Lly4wZM4agoKAyCQ7%2BZ0%2Bx4a//cfLoAdQqlX5Mz9OEBo1aRdCls1zxPfxAYLB1dKGhd3/qt%2B5eopVj1flKom9e4E6AL1HXzxEbfLnI/QYGMo3C2ORSfm72buAgcK4Mvw1CFSTCg/CsTID2CoVRT4WpxTBlZmpTrVaj33DN3rUpjo1a49zMG%2Bem7R47XiI/N5vIQF9C/PYTev4IeblZ%2BvvqNWqBV49BePcc8sR/mOOjbrN7zc%2BcPbAFdcGYi2Yt2zBszAQGDB2Nmbn5M1%2BIewOEhYUF3377La%2B//rroxpBAbm4u3333HQsWLEClUpVqcEhNTmL3lvVs27hav2nb0660WhgY/I7s4OLJ/WSmJevvs3F0oXHHQSVaIVajVhMfFlDQFXGGmODLRcYtAMiNTGK1avV%2BjTp/L3AUSC23b4hQ5YjwIJQ2C6CToanZQJnMcNC9U0FBNx3Uubk3zs28qd3kuUdOIStciCakYKnb3HuWui0MEq069nqivuTEmEiO71zDmX2bSE2KB8DM3JwBw15i2EuvPHNrRGpyEt9/9j77d%2Bq2Um7fvj0rV64US1mXo3PnzjFp0iSCgoKQKxSMGj%2BFtz%2Ba/8wB0f/sKbas/wufg3vIU%2BpWV67pVFe3IFr/F0scGpQ5WQRf/ZfzPnseCAy1XJvh2qZHiQJDQvgN7t7w07cu3LvuAui6ImQKo1MqZfYBdK0LQeX/3RCqKhEehLJmA/Q1MrcaYKDV9lJmZ9S%2B904re2ecm3nj2MgTRzdP7Oo2LnbgV%2BEmO7d89xLmf4js9BT9fWYW1ri36YiHdw%2BatO5Yol0IC9f5P7V7A1cLFpuC0muNOHXsIF9/MoPY6LuYmJiwYMECZsyYIVohylBubi6ffvopixcv1rU2uDVm/g/L8WjT9qmPWVwrg1yuoHXXfnQbPK5Ee1Dk5ykJvXaBm5d8uXb%2BFKHXLuhnHIEuMDT07vfIpePzc7NJCL9O/O1AYoIvE3Xdj%2BzUhCKPkRsapaDlpFqV54NuGuVlqb8nQtUlwoNQ3lyBbqbWdkPyc3N6qpTZRQZFGJqYYe/aDEc3T5waeeLYyPOB1onCIBF6/ghRgWdIult08Je1XS3cW3fEo/3zNPHs8NixEsW1RhgZm9Cpey96DRhK9z6DnipIZKSn8eMXs9n5zzpA1wqxbNkyPD09pf4eVDnHjx/njTfe0Lc2jJvyFm%2B9P/eplpxOTU7i%2BKG9HNi1Bf9zp1CrdC/0JW1l%2BH975xYbxXkF4G/uu%2Bs7XswafAMbe4HFdgCDuZsoKVQlIVJTNUoeUJNKjUIrRU3ax/ahT614SdOoUguVol5pH0pVrJiUBhrA4GDAgI1tMNgGG9tcHNt78d5mpg/jXby%2BQEjSEmA%2BaeXxzr%2Bz45G18%2B05/zm/ocfp7jhH59kTdJxtpOPM8WTjJrCqixZUrKRg%2BfoZhWGyKAxdvcCtnvaUZawTSIr6qSAIh%2BPRyIdYsmBHFmz%2Bb9jyYPOw8QKbHWmZm02E2mjIXzx5zgSAK3tuUiTmLVqOp6waxeFK7g8MD3L9QiP97U30X2xi5GZfyhu48wtZumoTy2o2UVG9dtYP/kQ04tg//0TrqY%2BTcyNUzUHthjq2bH2Ouq9944EX4/rk%2BBF%2B9uPv03e9F1mWeemll3jrrbdsifgSOHLkCO%2B88w779%2B8HoGJZJT/5%2BbsPnH4aGujn3x/8g48PNaQIg6JqVK1/9r5RhoHeLlqbDk/IQiOhwGjKfk/pcgp865PpusT/byQ4xs3uVm71tDN4%2BSy3r1%2BeVgkB1gRHRXNdicciRww9dhw4jl1CafMQseXB5quGA/ABaxxpmWsQxbXRkL/E0PWUeH%2B2p5jcwnLmFi9hbslS3MXeZNlaouFN/8Um%2BtubCHyaGt7NLy5LysTiytUz9pUIjA5z5mgDpw7tp/1MY1IkJFlmVe1Gtj3/4gOJRCgY5Fe/%2BCl/%2B/1e4hM3prq6Ot5880127NjxsK/5I0U8Hmffvn3s3r2blpYWADTNwXfe%2BCHf/cGPPvMiaQlhOFS/n7OnTiSfV1SN5bVPs2rLdlZs3IbmnB51utnXTUfLCS6e%2BpiOs42MTkSsEuQuKKXAt46i5euTVUdTReFWbzsjg70znpusOu8g0BiPjP8HaMJKQQQe9rW3sUlgy4PNo4CMJRQrHRnZG4ANMwmFlpaZFIrcwnLyFvlwF5bflYn2JvramlImXgLk5OWz0FtNibeKosU%2BisqWpfSXCIwOc67xEC1HP%2BD8yY%2BIRu6GoJevqGFV7UZWrd1I9aq1901vDA308%2Bff/Zq//%2BV9xkZHACgrK%2BPtt99m586ddn%2BIezAyMsLevXvZvXs3g4NWgzF33jy%2BvfN7vPjKq/cVOf/YKKdPHqP5xFGajh2mq/Nicp/DlcZTG79O9fpnqVr3TIow9F/toL%2B7k%2B6Oc1y73EpP%2B7lpkYWsvAIWLFlDcfUmCpasRlK0zywKkqyEJNVxPhryH8Lq4NgEDD7s621jcy9sebB5VEkKheZIrxVkaXN0PLBwqlAA5BaWk%2B0pJmd%2BKXPmL8LQ4/iHB7l1pYUbl1qmyQRAetYcSn0rKVrsY6G3ipKKKnLy8omMBzlztIHTRw5wYYpISLLMUzVrWVW7kZW1G6hcUTNrzj0UDLJ/3/v89f3f0Ntthandbjevv/46u3btwuP5YkulP050dXXx3nvvsWfPHgIB68u3d1klL7/2Bluf%2B%2BY9r3FL8wmaTxyl%2BeRRLpw5lbI/IQw1W7bjW7MFRdXov9rBta42ejrO0d1uyUKiBfRkMnI95JevxF1UjitnHrHxACODvYwM9jI61DurKKiOtAHgfDQcPIEVTWjDTj/YPILY8mDzOJEiFJKqrYuExsomN7GajDMjh5wFpWTk5iNKCtFwkPi4n1u9HYTGhqeNT8%2BaQ1G5j6LFPkqXrWB%2B8WLGRu5Ys%2Bg/OczVi%2BeS6Q2wSkCra9ZNRCVqqVhaOS0yocfjHP3oIH/47S853dRo/RGyzIYNG9i2bRs7dux4Iss8m5ubqa%2Bvp6GhgZMn7/Yv2vTMNl55bRer19dNe82dW0N0XrzAhTOnaD55lPNnTiVLKsFKR5T5VuJb8zTllauRVY1rXW1cu9TKtctts4pC1twFpOV60NKyMA2DeDjEyNA1AsOzBwdESY7IiuOqrsca9VjkLHAaaMVOPdg8JtjyYPMk4ANKgTI1LbNSkpQKIx5dGAn5Z5w5KUoSGe4CVGc6giggGDr%2BOwOE/CPTxrrSs8gvLiOvYCHZbg%2BCAKN3btJ/9SI9na3TxpdVLKWktJzKFTVULKtkyfKnkqt/drad54973uXD%2Bv1EwndveiUlJWzfvp3t27ezefPmxzK1EQgEOHjwIA0NDRw4cCCZlgBwpaXz/Lde4eVX36CwZFFSEnquXKK76xKdF8/T03UJ/1hqKkGSZEoqKvEUl5E5xw0m3Bq4xs2%2BHgZ6L6dUQCTImJOHpDoxDINIaIzIlPTEVCRF9Uuy2mPq8bOxaPg8VhShE7vyweYxx5YHmycZGSgDioEyzZWxXJQ1nxGPLIyOBz1Tqz4SiJKMKyObeCxCOOif9eCaw0XmHDeKqmIaBmPDtwkGpqdICksWUbG0kopl1sOTv4D%2B670c%2B6iBxiP/YuBGf3Jseno6dXV1vPDCC2zdupWCggdfQfGrQldXF/X19Rw4cIBjx44RniRMxQtLqVy5huJFixFF0RKFK5dmlIQEquYgM8eNKMvEo1H8I3dmFIQEzoxs9FiU6JTmSlMRBNFQHM4bgiC0R0KBc1hikEg32GtA2DyR2PJgYzM7BUAFUCYr2hLF4ao0MRfGxoPzZ0uFqA4nkiQTj8WIRcOzHlgQRTKyclBVjWBgjPFgajRbkmXmFxRRWFJKRmYW4VCQoYE%2BOtoupIzzeDxUV1fj9Xrxer1UVVXh9XrJzs5%2B2Ncuye3bt2ltbaWtrY2Ojg5aW1tpbW3l9u27911JkiheVIbTlUYkEuHG9R5CweCsx1Q1DUV1EPTfOzKgaA5EUSQWiWAY%2BqzjZIdrWJKk66ZhdkXHA%2B1Az8Sjd%2BJnHBsbmyS2PNjYfD48WFGLUllWvbIzrVIwmW8Y8TzD0J2xcChn6gsUVUNWNHQ9RjQ8PuuBVVVF0TTi0RiRyMwCMjdvHgH/GOPjMx9nslT4fD6qqqpwu93/s8W64vE4fX19DA4Ocvr06VklYTIulwtd14lEZo8OCIKIpmnouk4sFp1xv6JpCIJANBzGNI1pYyRZCUmKOiyI8k3T0LttObCx%2BeLY8mBj87/DjdWeuwDITWxrjvQCUZHnGXFjsW7Ec009lga4FEVFkCQwTSvnPmXy3v2kIj09HUmSCIVCxGKxe56Yx%2BPB4XCQnZ1NdnY2siwnUyAFBQUpbbTD4XByDkJPTw9gRRMCgQCBQGBWOUg5b0UhHA6j69O//cuyjKJq6Ho8pXpFlCQURUMQRUzDwDSNlAmQkuoclWX5NjBgmmZ/dDxwGavEcRAYAvomtsPY2Nh8qdjyYGPz1WGqbKQDXtWRViQIwgLTpNDAyDTiMZcoiKIkyxKmKZmYoqHr6Hoc0zBwOl0ggGFY38LT0tLANInFYvj9/s99cvdCFEWcTicA0WiUWCyGqmqIkoQkSRiGFWEQBdESJMPExDQMw4ggCIYgiAFJkgKmyYCJ%2BWk8Mt6GVZnQh3XzH8JaBXIEa56BXbVgY/MQseXBxubxowbQJv2eg1VtMplVQBbgmngoQGLRMgepnw0mkAgZJFYki088N4oV%2Bk8wCtwBrgH%2BSa/pnNgewV4K2sbmkee/PAO/XrC6%2Bb8AAAAldEVYdGRhdGU6Y3JlYXRlADIwMTUtMDctMTJUMTM6MDc6MDItMDM6MDDqogZ/AAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE1LTA3LTEyVDEzOjA2OjMyLTAzOjAw%2BrLSHgAAAABJRU5ErkJggg%3D%3D" alt="Level set diagram" />
                 <p class="legend">Level set diagram</p>
             </div>
             
@@ -3890,7 +3939,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div><hr/>
 <div id="pipe-unbatch" class="level-2">
 <h5 class="header">4.1.11.  <span class="pipes2">@unbatch</span> <span class="permalink"><a href="#pipe-unbatch">¶</a></span></h5>
-<div class="text"><p><strong>Extracts a batch of events in many batches, one for each event.</strong></p><p>
+<div class="text"><p><strong>Extracts a batch of events in many batches, one for each event.</strong></p><p><em>Available since Pipes v0.13</em></p><p>
     Specially useful if used in conjunction with batch output type.
 </p>
 </div>
@@ -3978,9 +4027,13 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div><hr/>
 <div id="pipe-for" class="level-2">
 <h5 class="header">4.2.3.  <span class="pipes2">@for &lt;named(seq)&gt;, &lt;named... additional&gt;</span> <span class="permalink"><a href="#pipe-for">¶</a></span></h5>
-<div class="text"><p><strong>Unwinds events in the <code class="pipes">seq</code> instance</strong></p><p>
+<div class="text"><p><strong>Unwinds events in the <code class="pipes">seq</code> instance</strong></p><p><em>Available since Pipes v0.13</em></p><p>
     If the <code class="pipes">seq</code> has a type argument, the resulting field has the same type of that argument.
 </p>
+<p>
+    It is possible to use the keyword <code class="expr">expand</code> if the inner type is a strongly typed row.
+</p>
+
 <p><strong>Examples:</strong></p>
 <pre class="pipes">*
 =&gt; @for products:seq as product</pre>
@@ -3992,6 +4045,12 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 =&gt; @for range(10) as i</pre>
 <p class="legend">
     Creates 10 events with <code class="pipes">timestamp&lt;number&gt;</code> and <code class="pipes">i&lt;number&gt;</code>.
+</p>
+
+<pre class="pipes">*
+=&gt; @for expand range(10) |&gt; (_+1 as a, _$ as b)</pre>
+<p class="legend">
+    Creates 10 events with <code class="pipes">timestamp&lt;number&gt;</code>, <code class="pipes">a&lt;number&gt;</code> and <code class="pipes">b&lt;string&gt;</code>.
 </p>
 
 <pre class="pipes">=&gt; 100 as upto at the end
@@ -4007,7 +4066,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div><hr/>
 <div id="pipe-seq" class="level-2">
 <h5 class="header">4.2.4.  <span class="pipes2">@seq</span> <span class="permalink"><a href="#pipe-seq">¶</a></span></h5>
-<div class="text"><p><strong>Changes the static type of any row to the highest corresponding seq.</strong></p><p><strong>Examples:</strong></p>
+<div class="text"><p><strong>Changes the static type of any row to the highest corresponding seq.</strong></p><p><em>Available since Pipes v0.13</em></p><p><strong>Examples:</strong></p>
 <pre class="pipes">*
 =&gt; x, y#
 =&gt; @seq</pre>
@@ -4053,7 +4112,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div><hr/>
 <div id="pipe-skipwhile" class="level-2">
 <h5 class="header">4.2.7.  <span class="pipes2">@skipwhile &lt;boolean&gt;</span> <span class="permalink"><a href="#pipe-skipwhile">¶</a></span></h5>
-<div class="text"><p><strong>Skips rows from every batch while some condition is true.</strong></p><p>
+<div class="text"><p><strong>Skips rows from every batch while some condition is true.</strong></p><p><em>Available since Pipes v0.13</em></p><p>
     This pipe also accepts aggregation as condition. In this case, it
     will behave like every row is a batch and with a <code class="expr">over all</code>
     window.
@@ -4070,7 +4129,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div><hr/>
 <div id="pipe-slice" class="level-2">
 <h5 class="header">4.2.8.  <span class="pipes2">@slice [&lt;number start&gt;], [&lt;number end&gt;], [&lt;number step&gt;] [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-slice">¶</a></span></h5>
-<div class="text"><p><strong>Gets some rows (based on index) from previous pipe.</strong></p><p>
+<div class="text"><p><strong>Gets some rows (based on index) from previous pipe.</strong></p><p><em>Available since Pipes v0.13</em></p><p>
     Slice pipe does not change any pipe metadata, it just repeats previous pipe info.
     It also doesn't make any aggregation, it just outputs as soon as it finishes processing
     input.
@@ -4125,7 +4184,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div><hr/>
 <div id="pipe-takewhile" class="level-2">
 <h5 class="header">4.2.11.  <span class="pipes2">@takewhile &lt;boolean&gt;</span> <span class="permalink"><a href="#pipe-takewhile">¶</a></span></h5>
-<div class="text"><p><strong>Takes rows from every batch while some condition is true.</strong></p><p>
+<div class="text"><p><strong>Takes rows from every batch while some condition is true.</strong></p><p><em>Available since Pipes v0.13</em></p><p>
     This pipe also accepts aggregation as condition. In this case, it
     will behave like every row is a batch and with a <code class="expr">over all</code>
     window.
@@ -4192,7 +4251,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div><hr/>
 <div id="pipe-zip" class="level-2">
 <h5 class="header">4.2.14.  <span class="pipes2">@zip [&lt;seq expr&gt;]</span> <span class="permalink"><a href="#pipe-zip">¶</a></span></h5>
-<div class="text"><p><strong>Takes elements from a batch of seqs, one by one and make a seq of seqs.</strong></p><p>
+<div class="text"><p><strong>Takes elements from a batch of seqs, one by one and make a seq of seqs.</strong></p><p><em>Available since Pipes v0.13</em></p><p>
     If the expression is not defined, it is assumed to be <code class="pipes">_</code>.
 </p>
 <p><strong>Examples:</strong></p>
@@ -4406,7 +4465,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div><hr/>
 <div id="operator-add-seq" class="level-1">
 <h4 class="header">5.6.  <span class="pipes2">&lt;seq&gt; + &lt;seq&gt; → &lt;seq&gt;</span> <span class="permalink"><a href="#operator-add-seq">¶</a></span></h4>
-<div class="text"><p><strong>Concatenates two seqs.</strong></p><p>The expression <code class="pipes">a+b</code> is equivalent to <code class="pipes">.add(a, b)</code>.</p>
+<div class="text"><p><strong>Concatenates two seqs.</strong></p><p><em>Available since Pipes v0.13</em></p><p>The expression <code class="pipes">a+b</code> is equivalent to <code class="pipes">.add(a, b)</code>.</p>
 </div>
 </div><hr/>
 <div id="operator-sub" class="level-1">
@@ -4532,7 +4591,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div><hr/>
 <div id="operator-indexing" class="level-1">
 <h4 class="header">5.26.  <span class="pipes2">&lt;object&gt;[&lt;object...&gt;] → &lt;object&gt;</span> <span class="permalink"><a href="#operator-indexing">¶</a></span></h4>
-<div class="text"><p><strong>Accesses an object by index/key in a list/string/map.</strong></p><p>The expression <code class="pipes">a[b, c]</code> is equivalent to <code class="pipes">.get(a, b, c)</code>.</p>
+<div class="text"><p><strong>Accesses an object by index/key in a list/string/map.</strong></p><p><em>Available since Pipes v0.13</em></p><p>The expression <code class="pipes">a[b, c]</code> is equivalent to <code class="pipes">.get(a, b, c)</code>.</p>
 <p class="bg-warning">
   Please note that this operator has special semantics when used directly after a
   property reference. So <code class="expr">field[123]</code> may be different from <code class="expr">(field+field2)[123]</code>.
@@ -4546,7 +4605,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div><hr/>
 <div id="operator-hat" class="level-1">
 <h4 class="header">5.27.  <span class="pipes2">^&lt;object&gt; → &lt;object&gt;</span> <span class="permalink"><a href="#operator-hat">¶</a></span></h4>
-<div class="text"><p><strong>Evaluates the expression in the parent semantic context (if any).</strong></p><p>
+<div class="text"><p><strong>Evaluates the expression in the parent semantic context (if any).</strong></p><p><em>Available since Pipes v0.13</em></p><p>
   The expression <code class="pipes">^a</code> is almost equivalent to <code class="pipes">.hat(a)</code>, but
   in the former case, <code class="pipes">a</code> is evaluated in the parent semantic context.
 </p>
@@ -4593,7 +4652,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div><hr/>
 <div id="operator-transform" class="level-1">
 <h4 class="header">5.30.  <span class="pipes2">&lt;seq&gt; |&gt; &lt;object&gt; → &lt;object&gt;</span> <span class="permalink"><a href="#operator-transform">¶</a></span></h4>
-<div class="text"><p><strong>Transforms a sequence into another sequence or object.</strong></p><p>
+<div class="text"><p><strong>Transforms a sequence into another sequence or object.</strong></p><p><em>Available since Pipes v0.13</em></p><p>
   The expression <code class="pipes">a|&gt;b</code> is almost equivalent to <code class="pipes">.transform(a, b)</code>, but
   in the former case, <code class="pipes">b</code> is evaluated in the semantic context of <code class="pipes">a</code>.
   E.g., in <code class="pipes">(1, 2, 3) |&gt; _+1</code>, <code class="pipes">_</code> is each element of the sequence on the left.
@@ -4676,7 +4735,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div><hr/>
 <div id="scalar-chr" class="level-1">
 <h4 class="header">6.7.  <span class="pipes2">&lt;number&gt;:chr() → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-chr">¶</a></span></h4>
-<div class="text"><p><strong>Converts a unicode codepoint to a single-char string.</strong></p></div>
+<div class="text"><p><strong>Converts a unicode codepoint to a single-char string.</strong></p><p><em>Available since Pipes v0.13</em></p></div>
 </div><hr/>
 <div id="scalar-cos" class="level-1">
 <h4 class="header">6.8.  <span class="pipes2">&lt;number&gt;:cos() → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-cos">¶</a></span></h4>
@@ -4779,36 +4838,43 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 <h4 class="header">6.24.  <span class="pipes2">&lt;object&gt;:class() → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-class">¶</a></span></h4>
 <div class="text"><p><strong>Returns the underlying Java class of the object.</strong></p></div>
 </div><hr/>
+<div id="scalar-comparable" class="level-1">
+<h4 class="header">6.25.  <span class="pipes2">&lt;object&gt;:comparable() → &lt;comparable&gt;</span> <span class="permalink"><a href="#scalar-comparable">¶</a></span></h4>
+<div class="text"><p><strong>Converts object to comparable.</strong></p></div>
+</div><hr/>
 <div id="scalar-decode" class="level-1">
-<h4 class="header">6.25.  <span class="pipes2">&lt;object&gt;:decode(&lt;object,object... pairs&gt;) → &lt;object&gt;</span> <span class="permalink"><a href="#scalar-decode">¶</a></span></h4>
+<h4 class="header">6.26.  <span class="pipes2">&lt;object&gt;:decode(&lt;object,object... pairs&gt;) → &lt;object&gt;</span> <span class="permalink"><a href="#scalar-decode">¶</a></span></h4>
 <div class="text"><p><strong>Transforms the parameter using the translation rules defined in &lt;pairs&gt;.</strong></p></div>
 </div><hr/>
 <div id="scalar-get" class="level-1">
-<h4 class="header">6.26.  <span class="pipes2">&lt;object&gt;:get(&lt;object... keys&gt;) → &lt;object&gt;</span> <span class="permalink"><a href="#scalar-get">¶</a></span></h4>
-<div class="text"><p><strong>Much like property[keys]. Works for strings, containers and arrays.</strong></p></div>
+<h4 class="header">6.27.  <span class="pipes2">&lt;object&gt;:get(&lt;object... keys&gt;) → &lt;object&gt;</span> <span class="permalink"><a href="#scalar-get">¶</a></span></h4>
+<div class="text"><p><strong>Much like property[keys]. Works for strings, containers and arrays.</strong></p><p>
+  This function infers the correct return type in compile time, whenever possible.
+</p>
+</div>
 </div><hr/>
 <div id="scalar-indexin" class="level-1">
-<h4 class="header">6.27.  <span class="pipes2">&lt;object&gt;:indexin(&lt;object... list&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-indexin">¶</a></span></h4>
+<h4 class="header">6.28.  <span class="pipes2">&lt;object&gt;:indexin(&lt;object... list&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-indexin">¶</a></span></h4>
 <div class="text"><p><strong>Returns the first index of the value in &lt;list&gt;, or null if &lt;list&gt; does not contain it.</strong></p></div>
 </div><hr/>
 <div id="scalar-isin" class="level-1">
-<h4 class="header">6.28.  <span class="pipes2">&lt;object&gt;:isin(&lt;object... list&gt;) → &lt;boolean&gt;</span> <span class="permalink"><a href="#scalar-isin">¶</a></span></h4>
+<h4 class="header">6.29.  <span class="pipes2">&lt;object&gt;:isin(&lt;object... list&gt;) → &lt;boolean&gt;</span> <span class="permalink"><a href="#scalar-isin">¶</a></span></h4>
 <div class="text"><p><strong>Returns true if &lt;list&gt; contains the value, false otherwise.</strong></p></div>
 </div><hr/>
 <div id="scalar-json" class="level-1">
-<h4 class="header">6.29.  <span class="pipes2">&lt;object&gt;:json() → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-json">¶</a></span></h4>
+<h4 class="header">6.30.  <span class="pipes2">&lt;object&gt;:json() → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-json">¶</a></span></h4>
 <div class="text"><p><strong>Converts the object to its JSON string representation.</strong></p></div>
 </div><hr/>
 <div id="scalar-keep" class="level-1">
-<h4 class="header">6.30.  <span class="pipes2">&lt;object&gt;:keep([&lt;number ttl&gt;]) → &lt;object&gt;</span> <span class="permalink"><a href="#scalar-keep">¶</a></span></h4>
+<h4 class="header">6.31.  <span class="pipes2">&lt;object&gt;:keep([&lt;number ttl&gt;]) → &lt;object&gt;</span> <span class="permalink"><a href="#scalar-keep">¶</a></span></h4>
 <div class="text"><p><strong>When used in a simple pipe, delays or disable (if ttl not supplied or &lt; 0) inactive group removal.</strong></p></div>
 </div><hr/>
 <div id="scalar-len" class="level-1">
-<h4 class="header">6.31.  <span class="pipes2">&lt;object&gt;:len() → &lt;object&gt;</span> <span class="permalink"><a href="#scalar-len">¶</a></span></h4>
+<h4 class="header">6.32.  <span class="pipes2">&lt;object&gt;:len() → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-len">¶</a></span></h4>
 <div class="text"><p><strong>Tries to get &lt;target&gt;'s size. Works for strings, containers and arrays.</strong></p></div>
 </div><hr/>
 <div id="scalar-number" class="level-1">
-<h4 class="header">6.32.  <span class="pipes2">&lt;object&gt;:number() → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-number">¶</a></span></h4>
+<h4 class="header">6.33.  <span class="pipes2">&lt;object&gt;:number() → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-number">¶</a></span></h4>
 <div class="text"><p><strong>Converts object to number.</strong></p><p>
     <strong>Example:</strong>
 </p>
@@ -4817,19 +4883,19 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="scalar-object" class="level-1">
-<h4 class="header">6.33.  <span class="pipes2">&lt;object&gt;:object() → &lt;object&gt;</span> <span class="permalink"><a href="#scalar-object">¶</a></span></h4>
+<h4 class="header">6.34.  <span class="pipes2">&lt;object&gt;:object() → &lt;object&gt;</span> <span class="permalink"><a href="#scalar-object">¶</a></span></h4>
 <div class="text"><p><strong>Casts any object to its canonical object representation.</strong></p></div>
 </div><hr/>
 <div id="scalar-row" class="level-1">
-<h4 class="header">6.34.  <span class="pipes2">&lt;object&gt;:row() → &lt;seq&gt;</span> <span class="permalink"><a href="#scalar-row">¶</a></span></h4>
+<h4 class="header">6.35.  <span class="pipes2">&lt;object&gt;:row() → &lt;seq&gt;</span> <span class="permalink"><a href="#scalar-row">¶</a></span></h4>
 <div class="text"><p><strong>Casts any object to a row.</strong></p></div>
 </div><hr/>
 <div id="scalar-seq" class="level-1">
-<h4 class="header">6.35.  <span class="pipes2">&lt;object&gt;:seq() → &lt;seq&gt;</span> <span class="permalink"><a href="#scalar-seq">¶</a></span></h4>
+<h4 class="header">6.36.  <span class="pipes2">&lt;object&gt;:seq() → &lt;seq&gt;</span> <span class="permalink"><a href="#scalar-seq">¶</a></span></h4>
 <div class="text"><p><strong>Casts any object to a seq.</strong></p></div>
 </div><hr/>
 <div id="scalar-string" class="level-1">
-<h4 class="header">6.36.  <span class="pipes2">&lt;object&gt;:string() → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-string">¶</a></span></h4>
+<h4 class="header">6.37.  <span class="pipes2">&lt;object&gt;:string() → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-string">¶</a></span></h4>
 <div class="text"><p><strong>Converts object to string.</strong></p><p>
     <strong>Example:</strong>
 </p>
@@ -4838,27 +4904,31 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="scalar-typename" class="level-1">
-<h4 class="header">6.37.  <span class="pipes2">&lt;object&gt;:typename() → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-typename">¶</a></span></h4>
-<div class="text"><p><strong>Returns the compile-time type of an expression.</strong></p></div>
+<h4 class="header">6.38.  <span class="pipes2">&lt;object&gt;:typename() → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-typename">¶</a></span></h4>
+<div class="text"><p><strong>Returns the compile-time type of an expression.</strong></p><p><em>Available since Pipes v0.13</em></p></div>
 </div><hr/>
-<div id="scalar-seqrepeat" class="level-1">
-<h4 class="header">6.38.  <span class="pipes2">&lt;seq&gt;:repeat(&lt;number&gt;) → &lt;seq&gt;</span> <span class="permalink"><a href="#scalar-seqrepeat">¶</a></span></h4>
-<div class="text"><p><strong>Repeats the sequence a certain number of times.</strong></p></div>
+<div id="scalar-seq-contains" class="level-1">
+<h4 class="header">6.39.  <span class="pipes2">&lt;seq&gt;:contains(&lt;object&gt;) → &lt;boolean&gt;</span> <span class="permalink"><a href="#scalar-seq-contains">¶</a></span></h4>
+<div class="text"><p><strong>Returns whether the target seq contains the argument.</strong></p><p><em>Available since Pipes v0.13.2</em></p></div>
+</div><hr/>
+<div id="scalar-seq-repeat" class="level-1">
+<h4 class="header">6.40.  <span class="pipes2">&lt;seq&gt;:repeat(&lt;number&gt;) → &lt;seq&gt;</span> <span class="permalink"><a href="#scalar-seq-repeat">¶</a></span></h4>
+<div class="text"><p><strong>Repeats the sequence a certain number of times.</strong></p><p><em>Available since Pipes v0.13</em></p></div>
 </div><hr/>
 <div id="scalar-contains" class="level-1">
-<h4 class="header">6.39.  <span class="pipes2">&lt;string&gt;:contains(&lt;string&gt;) → &lt;boolean&gt;</span> <span class="permalink"><a href="#scalar-contains">¶</a></span></h4>
+<h4 class="header">6.41.  <span class="pipes2">&lt;string&gt;:contains(&lt;string&gt;) → &lt;boolean&gt;</span> <span class="permalink"><a href="#scalar-contains">¶</a></span></h4>
 <div class="text"><p><strong>Returns whether the target string contains the argument.</strong></p></div>
 </div><hr/>
 <div id="scalar-dateparse" class="level-1">
-<h4 class="header">6.40.  <span class="pipes2">&lt;string&gt;:dateparse([&lt;string format&gt;], [&lt;string tz&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-dateparse">¶</a></span></h4>
+<h4 class="header">6.42.  <span class="pipes2">&lt;string&gt;:dateparse([&lt;string format&gt;], [&lt;string tz&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-dateparse">¶</a></span></h4>
 <div class="text"><p><strong>Parses timestamp using specified format</strong></p></div>
 </div><hr/>
 <div id="scalar-endswith" class="level-1">
-<h4 class="header">6.41.  <span class="pipes2">&lt;string&gt;:endswith(&lt;string&gt;) → &lt;boolean&gt;</span> <span class="permalink"><a href="#scalar-endswith">¶</a></span></h4>
+<h4 class="header">6.43.  <span class="pipes2">&lt;string&gt;:endswith(&lt;string&gt;) → &lt;boolean&gt;</span> <span class="permalink"><a href="#scalar-endswith">¶</a></span></h4>
 <div class="text"><p><strong>Returns whether the target string ends with the argument.</strong></p></div>
 </div><hr/>
 <div id="scalar-hlleval" class="level-1">
-<h4 class="header">6.42.  <span class="pipes2">&lt;string&gt;:hlleval() → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-hlleval">¶</a></span></h4>
+<h4 class="header">6.44.  <span class="pipes2">&lt;string&gt;:hlleval() → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-hlleval">¶</a></span></h4>
 <div class="text"><p><strong>Evaluates compressed base64 HyperLogLog data.</strong></p><p>
   Useful to evaluate the final result from <a href="#aggregation-hllset"><code class="pipes2">hllset(&lt;number log2m&gt;, &lt;object...&gt;) → &lt;string&gt;</code></a> aggregations.
 </p>
@@ -4875,35 +4945,35 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="scalar-indexof" class="level-1">
-<h4 class="header">6.43.  <span class="pipes2">&lt;string&gt;:indexof(&lt;string s&gt;, [&lt;number fromIndex&gt;]) → &lt;boolean&gt;</span> <span class="permalink"><a href="#scalar-indexof">¶</a></span></h4>
+<h4 class="header">6.45.  <span class="pipes2">&lt;string&gt;:indexof(&lt;string s&gt;, [&lt;number fromIndex&gt;]) → &lt;boolean&gt;</span> <span class="permalink"><a href="#scalar-indexof">¶</a></span></h4>
 <div class="text"><p><strong>Returns the index of position of &lt;s&gt; inside the target string. Returns null otherwise.</strong></p></div>
 </div><hr/>
 <div id="scalar-jsonparse" class="level-1">
-<h4 class="header">6.44.  <span class="pipes2">&lt;string&gt;:jsonparse() → &lt;object&gt;</span> <span class="permalink"><a href="#scalar-jsonparse">¶</a></span></h4>
-<div class="text"><p><strong>Parses JSON string into objects.</strong></p><p>
+<h4 class="header">6.46.  <span class="pipes2">&lt;string&gt;:jsonparse() → &lt;object&gt;</span> <span class="permalink"><a href="#scalar-jsonparse">¶</a></span></h4>
+<div class="text"><p><strong>Parses JSON string into objects.</strong></p><p><em>Available since Pipes v0.13</em></p><p>
   It parses arrays as java.util.List, objects as java.util.Map, numbers as
   java.lang.Double and strings as java.lang.String.
 </p>
 </div>
 </div><hr/>
 <div id="scalar-lower" class="level-1">
-<h4 class="header">6.45.  <span class="pipes2">&lt;string&gt;:lower() → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-lower">¶</a></span></h4>
+<h4 class="header">6.47.  <span class="pipes2">&lt;string&gt;:lower() → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-lower">¶</a></span></h4>
 <div class="text"><p><strong>Converts string to lowercase.</strong></p></div>
 </div><hr/>
 <div id="scalar-ltrim" class="level-1">
-<h4 class="header">6.46.  <span class="pipes2">&lt;string&gt;:ltrim([&lt;string chars&gt;]) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-ltrim">¶</a></span></h4>
+<h4 class="header">6.48.  <span class="pipes2">&lt;string&gt;:ltrim([&lt;string chars&gt;]) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-ltrim">¶</a></span></h4>
 <div class="text"><p><strong>Trims leading characters from a string</strong></p></div>
 </div><hr/>
 <div id="scalar-ord" class="level-1">
-<h4 class="header">6.47.  <span class="pipes2">&lt;string&gt;:ord() → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-ord">¶</a></span></h4>
-<div class="text"><p><strong>Gets the unicode codepoint from the first char in the string.</strong></p></div>
+<h4 class="header">6.49.  <span class="pipes2">&lt;string&gt;:ord() → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-ord">¶</a></span></h4>
+<div class="text"><p><strong>Gets the unicode codepoint from the first char in the string.</strong></p><p><em>Available since Pipes v0.13</em></p></div>
 </div><hr/>
 <div id="scalar-parse" class="level-1">
-<h4 class="header">6.48.  <span class="pipes2">&lt;string&gt;:parse([&lt;string format&gt;], [&lt;string locale&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-parse">¶</a></span></h4>
+<h4 class="header">6.50.  <span class="pipes2">&lt;string&gt;:parse([&lt;string format&gt;], [&lt;string locale&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-parse">¶</a></span></h4>
 <div class="text"><p><strong>Parses a number according to format string and locale.</strong></p></div>
 </div><hr/>
 <div id="scalar-regex" class="level-1">
-<h4 class="header">6.49.  <span class="pipes2">&lt;string&gt;:regex(&lt;string regex&gt;) → &lt;row&gt;</span> <span class="permalink"><a href="#scalar-regex">¶</a></span></h4>
+<h4 class="header">6.51.  <span class="pipes2">&lt;string&gt;:regex(&lt;string regex&gt;) → &lt;row&gt;</span> <span class="permalink"><a href="#scalar-regex">¶</a></span></h4>
 <div class="text"><p><strong>Returns a strongly typed row composed by all named groups in &lt;regex&gt;.</strong></p><p>
   The result is a row value with as many fields as there are
   named groups in the specified regex.
@@ -4921,69 +4991,69 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="scalar-regexall" class="level-1">
-<h4 class="header">6.50.  <span class="pipes2">&lt;string&gt;:regexall(&lt;string regex&gt;) → &lt;seq(row)&gt;</span> <span class="permalink"><a href="#scalar-regexall">¶</a></span></h4>
-<div class="text"><p><strong>Returns a sequence of rows composed by all matches of all named groups in &lt;regex&gt;.</strong></p><p>
+<h4 class="header">6.52.  <span class="pipes2">&lt;string&gt;:regexall(&lt;string regex&gt;) → &lt;seq(row)&gt;</span> <span class="permalink"><a href="#scalar-regexall">¶</a></span></h4>
+<div class="text"><p><strong>Returns a sequence of rows composed by all matches of all named groups in &lt;regex&gt;.</strong></p><p><em>Available since Pipes v0.13</em></p><p>
   This method is similar to <a href="#scalar-regex"><code class="pipes2">&lt;string&gt;:regex(&lt;string regex&gt;) → &lt;row&gt;</code></a>, but returns all matches, not only the first.
 </p>
 </div>
 </div><hr/>
 <div id="scalar-regexfind" class="level-1">
-<h4 class="header">6.51.  <span class="pipes2">&lt;string&gt;:regexfind(&lt;string regex&gt;, [&lt;number|string group&gt;]) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-regexfind">¶</a></span></h4>
+<h4 class="header">6.53.  <span class="pipes2">&lt;string&gt;:regexfind(&lt;string regex&gt;, [&lt;number|string group&gt;]) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-regexfind">¶</a></span></h4>
 <div class="text"><p><strong>Returns the matched string by &lt;regex&gt; in target (or one specific group).</strong></p></div>
 </div><hr/>
 <div id="scalar-regexfindall" class="level-1">
-<h4 class="header">6.52.  <span class="pipes2">&lt;string&gt;:regexfindall(&lt;string regex&gt;, [&lt;number|string group&gt;]) → &lt;seq(string)&gt;</span> <span class="permalink"><a href="#scalar-regexfindall">¶</a></span></h4>
-<div class="text"><p><strong>Returns all the matched strings by &lt;regex&gt; in target (or one specific group).</strong></p></div>
+<h4 class="header">6.54.  <span class="pipes2">&lt;string&gt;:regexfindall(&lt;string regex&gt;, [&lt;number|string group&gt;]) → &lt;seq(string)&gt;</span> <span class="permalink"><a href="#scalar-regexfindall">¶</a></span></h4>
+<div class="text"><p><strong>Returns all the matched strings by &lt;regex&gt; in target (or one specific group).</strong></p><p><em>Available since Pipes v0.13</em></p></div>
 </div><hr/>
 <div id="scalar-regexmatch" class="level-1">
-<h4 class="header">6.53.  <span class="pipes2">&lt;string&gt;:regexmatch(&lt;string regex&gt;) → &lt;boolean&gt;</span> <span class="permalink"><a href="#scalar-regexmatch">¶</a></span></h4>
+<h4 class="header">6.55.  <span class="pipes2">&lt;string&gt;:regexmatch(&lt;string regex&gt;) → &lt;boolean&gt;</span> <span class="permalink"><a href="#scalar-regexmatch">¶</a></span></h4>
 <div class="text"><p><strong>Returns true if the target matches &lt;regex&gt;. False otherwise.</strong></p></div>
 </div><hr/>
 <div id="scalar-regexsplit" class="level-1">
-<h4 class="header">6.54.  <span class="pipes2">&lt;string&gt;:regexsplit(&lt;string regex&gt;, [&lt;number limit&gt;]) → &lt;seq(string)&gt;</span> <span class="permalink"><a href="#scalar-regexsplit">¶</a></span></h4>
-<div class="text"><p><strong>Splits string by regular expression &lt;regex&gt; in up to &lt;limit&gt; pieces.</strong></p></div>
+<h4 class="header">6.56.  <span class="pipes2">&lt;string&gt;:regexsplit(&lt;string regex&gt;, [&lt;number limit&gt;]) → &lt;seq(string)&gt;</span> <span class="permalink"><a href="#scalar-regexsplit">¶</a></span></h4>
+<div class="text"><p><strong>Splits string by regular expression &lt;regex&gt; in up to &lt;limit&gt; pieces.</strong></p><p><em>Available since Pipes v0.13</em></p></div>
 </div><hr/>
 <div id="scalar-regexsub" class="level-1">
-<h4 class="header">6.55.  <span class="pipes2">&lt;string&gt;:regexsub(&lt;string regex&gt;, &lt;string replacement&gt;) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-regexsub">¶</a></span></h4>
+<h4 class="header">6.57.  <span class="pipes2">&lt;string&gt;:regexsub(&lt;string regex&gt;, &lt;string replacement&gt;) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-regexsub">¶</a></span></h4>
 <div class="text"><p><strong>Replaces all matches of &lt;regex&gt; in target by &lt;replacement&gt;.</strong></p></div>
 </div><hr/>
 <div id="scalar-stringrepeat" class="level-1">
-<h4 class="header">6.56.  <span class="pipes2">&lt;string&gt;:repeat(&lt;number&gt;) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-stringrepeat">¶</a></span></h4>
-<div class="text"><p><strong>Repeats the string a number of times.</strong></p></div>
+<h4 class="header">6.58.  <span class="pipes2">&lt;string&gt;:repeat(&lt;number&gt;) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-stringrepeat">¶</a></span></h4>
+<div class="text"><p><strong>Repeats the string a number of times.</strong></p><p><em>Available since Pipes v0.13</em></p></div>
 </div><hr/>
 <div id="scalar-replace" class="level-1">
-<h4 class="header">6.57.  <span class="pipes2">&lt;string&gt;:replace(&lt;string from&gt;, &lt;string to&gt;) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-replace">¶</a></span></h4>
+<h4 class="header">6.59.  <span class="pipes2">&lt;string&gt;:replace(&lt;string from&gt;, &lt;string to&gt;) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-replace">¶</a></span></h4>
 <div class="text"><p><strong>Replaces all instances of &lt;from&gt; with the string &lt;to&gt;.</strong></p></div>
 </div><hr/>
 <div id="scalar-rtrim" class="level-1">
-<h4 class="header">6.58.  <span class="pipes2">&lt;string&gt;:rtrim([&lt;string chars&gt;]) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-rtrim">¶</a></span></h4>
+<h4 class="header">6.60.  <span class="pipes2">&lt;string&gt;:rtrim([&lt;string chars&gt;]) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-rtrim">¶</a></span></h4>
 <div class="text"><p><strong>Trims trailing characters from a string</strong></p></div>
 </div><hr/>
 <div id="scalar-split" class="level-1">
-<h4 class="header">6.59.  <span class="pipes2">&lt;string&gt;:split([&lt;string delim&gt;], [&lt;number limit&gt;]) → &lt;seq(string)&gt;</span> <span class="permalink"><a href="#scalar-split">¶</a></span></h4>
-<div class="text"><p><strong>Splits string by &lt;delim&gt; in up to &lt;limit&gt; pieces.</strong></p><p>
+<h4 class="header">6.61.  <span class="pipes2">&lt;string&gt;:split([&lt;string delim&gt;], [&lt;number limit&gt;]) → &lt;seq(string)&gt;</span> <span class="permalink"><a href="#scalar-split">¶</a></span></h4>
+<div class="text"><p><strong>Splits string by &lt;delim&gt; in up to &lt;limit&gt; pieces.</strong></p><p><em>Available since Pipes v0.13</em></p><p>
   If the delimiter is not set, the string is then split by individual chars.
 </p>
 </div>
 </div><hr/>
 <div id="scalar-sprintf" class="level-1">
-<h4 class="header">6.60.  <span class="pipes2">&lt;string&gt;:sprintf(&lt;object... args&gt;) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-sprintf">¶</a></span></h4>
+<h4 class="header">6.62.  <span class="pipes2">&lt;string&gt;:sprintf(&lt;object... args&gt;) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-sprintf">¶</a></span></h4>
 <div class="text"><p><strong>Uses the target string as format to arguments.</strong></p></div>
 </div><hr/>
 <div id="scalar-startswith" class="level-1">
-<h4 class="header">6.61.  <span class="pipes2">&lt;string&gt;:startswith(&lt;string&gt;) → &lt;boolean&gt;</span> <span class="permalink"><a href="#scalar-startswith">¶</a></span></h4>
+<h4 class="header">6.63.  <span class="pipes2">&lt;string&gt;:startswith(&lt;string&gt;) → &lt;boolean&gt;</span> <span class="permalink"><a href="#scalar-startswith">¶</a></span></h4>
 <div class="text"><p><strong>Returns whether the target string starts with the argument.</strong></p></div>
 </div><hr/>
 <div id="scalar-substring" class="level-1">
-<h4 class="header">6.62.  <span class="pipes2">&lt;string&gt;:substring(&lt;number from&gt;, [&lt;number to&gt;]) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-substring">¶</a></span></h4>
+<h4 class="header">6.64.  <span class="pipes2">&lt;string&gt;:substring(&lt;number from&gt;, [&lt;number to&gt;]) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-substring">¶</a></span></h4>
 <div class="text"><p><strong>Returns the substring between the indices &lt;from&gt; and &lt;to&gt;.</strong></p></div>
 </div><hr/>
 <div id="scalar-trim" class="level-1">
-<h4 class="header">6.63.  <span class="pipes2">&lt;string&gt;:trim([&lt;string chars&gt;]) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-trim">¶</a></span></h4>
+<h4 class="header">6.65.  <span class="pipes2">&lt;string&gt;:trim([&lt;string chars&gt;]) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-trim">¶</a></span></h4>
 <div class="text"><p><strong>Trims a string</strong></p></div>
 </div><hr/>
 <div id="scalar-truncate" class="level-1">
-<h4 class="header">6.64.  <span class="pipes2">&lt;string&gt;:truncate(&lt;number length&gt;, [&lt;string ellipsis&gt;]) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-truncate">¶</a></span></h4>
+<h4 class="header">6.66.  <span class="pipes2">&lt;string&gt;:truncate(&lt;number length&gt;, [&lt;string ellipsis&gt;]) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-truncate">¶</a></span></h4>
 <div class="text"><p><strong>Truncates the string to the specified length, optionally adding an ellipsis at the end.</strong></p><p>
   The ellipsis length <strong>does</strong> count to the maximum length.
 </p>
@@ -4997,15 +5067,19 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="scalar-upper" class="level-1">
-<h4 class="header">6.65.  <span class="pipes2">&lt;string&gt;:upper() → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-upper">¶</a></span></h4>
+<h4 class="header">6.67.  <span class="pipes2">&lt;string&gt;:upper() → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-upper">¶</a></span></h4>
 <div class="text"><p><strong>Converts string to uppercase.</strong></p></div>
 </div><hr/>
 <div id="scalar-compare" class="level-1">
-<h4 class="header">6.66.  <span class="pipes2">compare(&lt;comparable a&gt;, &lt;comparable b&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-compare">¶</a></span></h4>
+<h4 class="header">6.68.  <span class="pipes2">compare(&lt;comparable a&gt;, &lt;comparable b&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-compare">¶</a></span></h4>
 <div class="text"><p><strong>Returns a number &lt; 0 if a &lt; b, &gt; 0 if a &gt; b or 0 if a = b.</strong></p></div>
 </div><hr/>
+<div id="scalar-concat" class="level-1">
+<h4 class="header">6.69.  <span class="pipes2">concat(&lt;string...&gt;) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-concat">¶</a></span></h4>
+<div class="text"><p><strong>Concatenetes many strings together</strong></p></div>
+</div><hr/>
 <div id="scalar-cron" class="level-1">
-<h4 class="header">6.67.  <span class="pipes2">cron(&lt;string&gt;, [&lt;string tz&gt;]) → &lt;period&gt;</span> <span class="permalink"><a href="#scalar-cron">¶</a></span></h4>
+<h4 class="header">6.70.  <span class="pipes2">cron(&lt;string&gt;, [&lt;string tz&gt;]) → &lt;period&gt;</span> <span class="permalink"><a href="#scalar-cron">¶</a></span></h4>
 <div class="text"><p><strong>Constructs a period instance from a constant cron string</strong></p><p>
     <strong>Example:</strong>
 </p>
@@ -5017,7 +5091,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="scalar-happened" class="level-1">
-<h4 class="header">6.68.  <span class="pipes2">happened([&lt;number&gt;], [&lt;number tested&gt;], &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-happened">¶</a></span></h4>
+<h4 class="header">6.71.  <span class="pipes2">happened([&lt;number&gt;], [&lt;number tested&gt;], &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-happened">¶</a></span></h4>
 <div class="text"><p><strong>Returns true if the tested timestamp is inside the span, false otherwise.</strong></p><p>
     Please note that <code class="pipes">someprop:happened('today')</code> is equivalent to <code class="pipes">happened(timestamp(), someprop, 'today')</code>.
 </p>
@@ -5027,15 +5101,15 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="scalar-hllmerge" class="level-1">
-<h4 class="header">6.69.  <span class="pipes2">hllmerge(&lt;string... data&gt;) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-hllmerge">¶</a></span></h4>
+<h4 class="header">6.72.  <span class="pipes2">hllmerge(&lt;string... data&gt;) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-hllmerge">¶</a></span></h4>
 <div class="text"><p><strong>Merge many instances of compressed base64 HyperLogLog data.</strong></p><p>
   Useful to merge results from <a href="#aggregation-hllset"><code class="pipes2">hllset(&lt;number log2m&gt;, &lt;object...&gt;) → &lt;string&gt;</code></a> aggregations.
 </p>
 </div>
 </div><hr/>
 <div id="scalar-itermap" class="level-1">
-<h4 class="header">6.70.  <span class="pipes2">itermap(&lt;object&gt;, [&lt;string keyField&gt;], [&lt;string valueField&gt;]) → &lt;seq(row)&gt;</span> <span class="permalink"><a href="#scalar-itermap">¶</a></span></h4>
-<div class="text"><p><strong>Creates a seq that iterates through java.utilMap or row entries</strong></p><p>
+<h4 class="header">6.73.  <span class="pipes2">itermap(&lt;object&gt;, [&lt;string keyField&gt;], [&lt;string valueField&gt;]) → &lt;seq(row)&gt;</span> <span class="permalink"><a href="#scalar-itermap">¶</a></span></h4>
+<div class="text"><p><strong>Creates a seq that iterates through java.utilMap or row entries</strong></p><p><em>Available since Pipes v0.13</em></p><p>
   <strong>Example:</strong>
 </p>
 <pre class="pipes">* =&gt; @for itermap(some_map_property:object)</pre>
@@ -5046,27 +5120,27 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="scalar-max" class="level-1">
-<h4 class="header">6.71.  <span class="pipes2">max(&lt;comparable&gt;, &lt;comparable&gt;, &lt;comparable...&gt;) → &lt;comparable&gt;</span> <span class="permalink"><a href="#scalar-max">¶</a></span></h4>
+<h4 class="header">6.74.  <span class="pipes2">max(&lt;comparable&gt;, &lt;comparable&gt;, &lt;comparable...&gt;) → &lt;comparable&gt;</span> <span class="permalink"><a href="#scalar-max">¶</a></span></h4>
 <div class="text"><p><strong>Returns the greatest value of all supplied arguments.</strong></p></div>
 </div><hr/>
 <div id="scalar-metadata" class="level-1">
-<h4 class="header">6.72.  <span class="pipes2">metadata() → &lt;object&gt;</span> <span class="permalink"><a href="#scalar-metadata">¶</a></span></h4>
-<div class="text"><p><strong>Returns a representation of the previous pipe metadata.</strong></p></div>
+<h4 class="header">6.75.  <span class="pipes2">metadata() → &lt;object&gt;</span> <span class="permalink"><a href="#scalar-metadata">¶</a></span></h4>
+<div class="text"><p><strong>Returns a representation of the previous pipe metadata.</strong></p><p><em>Available since Pipes v0.13</em></p></div>
 </div><hr/>
 <div id="scalar-min" class="level-1">
-<h4 class="header">6.73.  <span class="pipes2">min(&lt;comparable&gt;, &lt;comparable&gt;, &lt;comparable...&gt;) → &lt;comparable&gt;</span> <span class="permalink"><a href="#scalar-min">¶</a></span></h4>
+<h4 class="header">6.76.  <span class="pipes2">min(&lt;comparable&gt;, &lt;comparable&gt;, &lt;comparable...&gt;) → &lt;comparable&gt;</span> <span class="permalink"><a href="#scalar-min">¶</a></span></h4>
 <div class="text"><p><strong>Returns the least value of all supplied arguments.</strong></p></div>
 </div><hr/>
 <div id="scalar-newlist" class="level-1">
-<h4 class="header">6.74.  <span class="pipes2">newlist(&lt;object...&gt;) → &lt;object&gt;</span> <span class="permalink"><a href="#scalar-newlist">¶</a></span></h4>
+<h4 class="header">6.77.  <span class="pipes2">newlist(&lt;object...&gt;) → &lt;object&gt;</span> <span class="permalink"><a href="#scalar-newlist">¶</a></span></h4>
 <div class="text"><p><strong>Creates a instance of java.util.List with the supplied objects.</strong></p></div>
 </div><hr/>
 <div id="scalar-newmap" class="level-1">
-<h4 class="header">6.75.  <span class="pipes2">newmap(&lt;object,object... pairs&gt;) → &lt;object&gt;</span> <span class="permalink"><a href="#scalar-newmap">¶</a></span></h4>
+<h4 class="header">6.78.  <span class="pipes2">newmap(&lt;object,object... pairs&gt;) → &lt;object&gt;</span> <span class="permalink"><a href="#scalar-newmap">¶</a></span></h4>
 <div class="text"><p><strong>Creates a instance of java.util.Map with the supplied keys and values.</strong></p></div>
 </div><hr/>
 <div id="scalar-period" class="level-1">
-<h4 class="header">6.76.  <span class="pipes2">period(&lt;number&gt;, &lt;string unit&gt;, [&lt;string tz&gt;]) → &lt;period&gt;</span> <span class="permalink"><a href="#scalar-period">¶</a></span></h4>
+<h4 class="header">6.79.  <span class="pipes2">period(&lt;number&gt;, &lt;string unit&gt;, [&lt;string tz&gt;]) → &lt;period&gt;</span> <span class="permalink"><a href="#scalar-period">¶</a></span></h4>
 <div class="text"><p><strong>Constructs a period instance from constant parameters</strong></p><p>
     <strong>Example:</strong>
 </p>
@@ -5075,20 +5149,20 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="scalar-pi" class="level-1">
-<h4 class="header">6.77.  <span class="pipes2">pi() → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-pi">¶</a></span></h4>
+<h4 class="header">6.80.  <span class="pipes2">pi() → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-pi">¶</a></span></h4>
 <div class="text"><p><strong>Returns the constant value of pi.</strong></p></div>
 </div><hr/>
 <div id="scalar-random2" class="level-1">
-<h4 class="header">6.78.  <span class="pipes2">random(&lt;number min&gt;, &lt;number max&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-random2">¶</a></span></h4>
+<h4 class="header">6.81.  <span class="pipes2">random(&lt;number min&gt;, &lt;number max&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-random2">¶</a></span></h4>
 <div class="text"><p><strong>Returns a random value between &lt;min&gt; and &lt;max&gt;.</strong></p></div>
 </div><hr/>
 <div id="scalar-random" class="level-1">
-<h4 class="header">6.79.  <span class="pipes2">random([&lt;number max&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-random">¶</a></span></h4>
+<h4 class="header">6.82.  <span class="pipes2">random([&lt;number max&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-random">¶</a></span></h4>
 <div class="text"><p><strong>Returns a random value of at most &lt;max&gt; (1 if not defined).</strong></p></div>
 </div><hr/>
 <div id="scalar-range" class="level-1">
-<h4 class="header">6.80.  <span class="pipes2">range([&lt;number start&gt;], &lt;number end&gt;, [&lt;number step&gt;]) → &lt;object&gt;</span> <span class="permalink"><a href="#scalar-range">¶</a></span></h4>
-<div class="text"><p><strong>Creates a seq that iterates through numbers</strong></p><p>
+<h4 class="header">6.83.  <span class="pipes2">range([&lt;number start&gt;], &lt;number end&gt;, [&lt;number step&gt;]) → &lt;object&gt;</span> <span class="permalink"><a href="#scalar-range">¶</a></span></h4>
+<div class="text"><p><strong>Creates a seq that iterates through numbers</strong></p><p><em>Available since Pipes v0.13</em></p><p>
   <strong>Example:</strong>
 </p>
 <pre class="pipes">* =&gt; @for range(10)</pre>
@@ -5102,8 +5176,8 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="scalar-span" class="level-1">
-<h4 class="header">6.81.  <span class="pipes2">span([&lt;number&gt;], &lt;string&gt;, [&lt;string tz&gt;]) → &lt;row&gt;</span> <span class="permalink"><a href="#scalar-span">¶</a></span></h4>
-<div class="text"><p><strong>Calculates start and end timestamps of span based on target.</strong></p><p>
+<h4 class="header">6.84.  <span class="pipes2">span([&lt;number&gt;], &lt;string&gt;, [&lt;string tz&gt;]) → &lt;row&gt;</span> <span class="permalink"><a href="#scalar-span">¶</a></span></h4>
+<div class="text"><p><strong>Calculates start and end timestamps of span based on target.</strong></p><p><em>Available since Pipes v0.13</em></p><p>
     The result is a row with three fields: <code class="pipes">timestamp</code>, <code class="pipes">start</code> and <code class="pipes">end</code>.
 </p>
 <p>
@@ -5114,21 +5188,21 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="scalar-spanend" class="level-1">
-<h4 class="header">6.82.  <span class="pipes2">spanend([&lt;number&gt;], &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-spanend">¶</a></span></h4>
+<h4 class="header">6.85.  <span class="pipes2">spanend([&lt;number&gt;], &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-spanend">¶</a></span></h4>
 <div class="text"><p><strong>Calculates end timestamp of span based on target.</strong></p><p>
     Please note that <code class="pipes">spanend('today')</code> is equivalent to <code class="pipes">spanend(timestamp(), 'today')</code>.
 </p>
 </div>
 </div><hr/>
 <div id="scalar-spanstart" class="level-1">
-<h4 class="header">6.83.  <span class="pipes2">spanstart([&lt;number&gt;], &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-spanstart">¶</a></span></h4>
+<h4 class="header">6.86.  <span class="pipes2">spanstart([&lt;number&gt;], &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-spanstart">¶</a></span></h4>
 <div class="text"><p><strong>Calculates start timestamp of span based on target.</strong></p><p>
     Please note that <code class="pipes">spanstart('today')</code> is equivalent to <code class="pipes">spanstart(timestamp(), 'today')</code>.
 </p>
 </div>
 </div><hr/>
 <div id="scalar-spantest" class="level-1">
-<h4 class="header">6.84.  <span class="pipes2">spantest([&lt;number&gt;], &lt;number tested&gt;, &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-spantest">¶</a></span></h4>
+<h4 class="header">6.87.  <span class="pipes2">spantest([&lt;number&gt;], &lt;number tested&gt;, &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-spantest">¶</a></span></h4>
 <div class="text"><p><strong>Returns -1 if the tested timestamp is before the span, 0 if it is inside and 1 if it is after.</strong></p><p>
     Please note that <code class="pipes">someprop:spantest('today')</code> is equivalent to <code class="pipes">spantest(timestamp(), someprop, 'today')</code>.
 </p>
@@ -5138,23 +5212,23 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="scalar-timestamp" class="level-1">
-<h4 class="header">6.85.  <span class="pipes2">timestamp() → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-timestamp">¶</a></span></h4>
+<h4 class="header">6.88.  <span class="pipes2">timestamp() → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-timestamp">¶</a></span></h4>
 <div class="text"><p><strong>Returns the most appropriate timestamp, whether in scalar or aggregation contexts.</strong></p></div>
 </div><hr/>
 <div id="scalar-uuid" class="level-1">
-<h4 class="header">6.86.  <span class="pipes2">uuid() → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-uuid">¶</a></span></h4>
+<h4 class="header">6.89.  <span class="pipes2">uuid() → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-uuid">¶</a></span></h4>
 <div class="text"><p><strong>Returns a random UUID string.</strong></p></div>
 </div><hr/>
 <div id="scalar-sys" class="level-1">
-<h4 class="header">6.87. System functions <span class="pipes2"></span> <span class="permalink"><a href="#scalar-sys">¶</a></span></h4>
+<h4 class="header">6.90. System functions <span class="pipes2"></span> <span class="permalink"><a href="#scalar-sys">¶</a></span></h4>
 <div class="text"><p><strong></strong></p><p>
     Functions that return information about the system where the query is running.
 </p>
 </div>
 </div><hr/>
 <div id="scalar-sys-cpu" class="level-2">
-<h5 class="header">6.87.1.  <span class="pipes2">sys.cpu() → &lt;row&gt;</span> <span class="permalink"><a href="#scalar-sys-cpu">¶</a></span></h5>
-<div class="text"><p><strong>Returns the system's CPU usage info.</strong></p><p>
+<h5 class="header">6.90.1.  <span class="pipes2">sys.cpu() → &lt;row&gt;</span> <span class="permalink"><a href="#scalar-sys-cpu">¶</a></span></h5>
+<div class="text"><p><strong>Returns the system's CPU usage info.</strong></p><p><em>Available since Pipes v0.13.1</em></p><p>
   The returned row has the following fields:
 </p>
 <table class="table table-striped">
@@ -5167,9 +5241,9 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="scalar-sys-disks" class="level-2">
-<h5 class="header">6.87.2.  <span class="pipes2">sys.disks() → &lt;seq(row)&gt;</span> <span class="permalink"><a href="#scalar-sys-disks">¶</a></span></h5>
-<div class="text"><p><strong>Returns info about all devices in the filesystem.</strong></p><p>
-  Each row  in the returned sequence has the following fields:
+<h5 class="header">6.90.2.  <span class="pipes2">sys.disks() → &lt;seq(row)&gt;</span> <span class="permalink"><a href="#scalar-sys-disks">¶</a></span></h5>
+<div class="text"><p><strong>Returns info about all devices in the filesystem.</strong></p><p><em>Available since Pipes v0.13.1</em></p><p>
+  Each row in the returned sequence has the following fields:
 </p>
 <table class="table table-striped">
     <tr><th>field</th><th>type</th><th>description</th></tr>
@@ -5179,12 +5253,25 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
     <tr><td>unallocated</td><td>number</td><td># of unallocated bytes in the device</td></tr>
     <tr><td>usable</td><td>number</td><td># of usable bytes (considering write permissions, etc.)</td></tr>
     <tr><td>total</td><td>number</td><td>Total bytes in the device</td></tr>
+
+</table>
+</div>
+</div><hr/>
+<div id="scalar-sys-fds" class="level-2">
+<h5 class="header">6.90.3.  <span class="pipes2">sys.fds() → &lt;row&gt;</span> <span class="permalink"><a href="#scalar-sys-fds">¶</a></span></h5>
+<div class="text"><p><strong>Returns info about process file descriptors.</strong></p><p><em>Available since Pipes v0.13.1</em></p><p>
+  Each row in the returned sequence has the following fields:
+</p>
+<table class="table table-striped">
+    <tr><th>field</th><th>type</th><th>description</th></tr>
+    <tr><td>open</td><td>number</td><td># of open file descriptors</td></tr>
+    <tr><td>max</td><td>number</td><td>Maximum file descriptors that can be open by this process</td></tr>
 </table>
 </div>
 </div><hr/>
 <div id="scalar-sys-heap" class="level-2">
-<h5 class="header">6.87.3.  <span class="pipes2">sys.heap() → &lt;row&gt;</span> <span class="permalink"><a href="#scalar-sys-heap">¶</a></span></h5>
-<div class="text"><p><strong>Returns the system's current JVM heap info.</strong></p><p>
+<h5 class="header">6.90.4.  <span class="pipes2">sys.heap() → &lt;row&gt;</span> <span class="permalink"><a href="#scalar-sys-heap">¶</a></span></h5>
+<div class="text"><p><strong>Returns the system's current JVM heap info.</strong></p><p><em>Available since Pipes v0.13.1</em></p><p>
   The returned row has the following fields (all values in bytes):
 </p>
 <table class="table table-striped">
@@ -5196,12 +5283,12 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="scalar-sys-hostname" class="level-2">
-<h5 class="header">6.87.4.  <span class="pipes2">sys.hostname() → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-sys-hostname">¶</a></span></h5>
-<div class="text"><p><strong>Returns the system's hostname.</strong></p></div>
+<h5 class="header">6.90.5.  <span class="pipes2">sys.hostname() → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-sys-hostname">¶</a></span></h5>
+<div class="text"><p><strong>Returns the system's hostname.</strong></p><p><em>Available since Pipes v0.13.1</em></p></div>
 </div><hr/>
 <div id="scalar-sys-memory" class="level-2">
-<h5 class="header">6.87.5.  <span class="pipes2">sys.memory() → &lt;row&gt;</span> <span class="permalink"><a href="#scalar-sys-memory">¶</a></span></h5>
-<div class="text"><p><strong>Returns the system's memory usage info.</strong></p><p>
+<h5 class="header">6.90.6.  <span class="pipes2">sys.memory() → &lt;row&gt;</span> <span class="permalink"><a href="#scalar-sys-memory">¶</a></span></h5>
+<div class="text"><p><strong>Returns the system's memory usage info.</strong></p><p><em>Available since Pipes v0.13.1</em></p><p>
   The returned row has the following fields (all values in bytes):
 </p>
 <table class="table table-striped">
@@ -5214,8 +5301,8 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="scalar-sys-threads" class="level-2">
-<h5 class="header">6.87.6.  <span class="pipes2">sys.threads() → &lt;row&gt;</span> <span class="permalink"><a href="#scalar-sys-threads">¶</a></span></h5>
-<div class="text"><p><strong>Returns info about running threads in current process.</strong></p><p>
+<h5 class="header">6.90.7.  <span class="pipes2">sys.threads() → &lt;row&gt;</span> <span class="permalink"><a href="#scalar-sys-threads">¶</a></span></h5>
+<div class="text"><p><strong>Returns info about running threads in current process.</strong></p><p><em>Available since Pipes v0.13.1</em></p><p>
   The returned row has the following fields:
 </p>
 <table class="table table-striped">
@@ -5229,8 +5316,22 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="scalar-sys-timestamp" class="level-2">
-<h5 class="header">6.87.7.  <span class="pipes2">sys.timestamp() → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-sys-timestamp">¶</a></span></h5>
-<div class="text"><p><strong>Returns the system's real timestamp (not the query timestamp).</strong></p></div>
+<h5 class="header">6.90.8.  <span class="pipes2">sys.timestamp() → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-sys-timestamp">¶</a></span></h5>
+<div class="text"><p><strong>Returns the system's real timestamp (not the query timestamp).</strong></p><p><em>Available since Pipes v0.13.1</em></p></div>
+</div><hr/>
+<div id="scalar-sys-version" class="level-2">
+<h5 class="header">6.90.9.  <span class="pipes2">sys.version() → &lt;row&gt;</span> <span class="permalink"><a href="#scalar-sys-version">¶</a></span></h5>
+<div class="text"><p><strong>Returns Pipes version info</strong></p><p><em>Available since Pipes v0.13.1</em></p><p>
+  Each row in the returned sequence has the following fields:
+</p>
+<table class="table table-striped">
+    <tr><th>field</th><th>type</th><th>description</th></tr>
+    <tr><td>major</td><td>number</td><td>Version's major component</td></tr>
+    <tr><td>minor</td><td>number</td><td>Version's minor component</td></tr>
+    <tr><td>patch</td><td>number</td><td>Version's current patch</td></tr>
+    <tr><td>released</td><td>number</td><td>Whether the version was officialy released or not (-SNAPSHOT)</td></tr>
+</table>
+</div>
 </div><hr/>
 <div id="chapter-aggregations" class="level-0">
 <h2 class="header">7. Aggregation Functions <span class="pipes2"></span> <span class="permalink"><a href="#chapter-aggregations">¶</a></span></h2>
@@ -5425,7 +5526,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div><hr/>
 <div id="aggregation-list" class="level-1">
 <h4 class="header">7.19.  <span class="pipes2">list(&lt;object&gt;) → &lt;seq&gt;</span> <span class="permalink"><a href="#aggregation-list">¶</a></span></h4>
-<div class="text"><p><strong>Creates a java.util.List from all events in a window.</strong></p></div>
+<div class="text"><p><strong>Creates a java.util.List from all events in a window.</strong></p><p><em>Available since Pipes v0.13</em></p></div>
 </div><hr/>
 <div id="aggregation-map" class="level-1">
 <h4 class="header">7.20.  <span class="pipes2">map(&lt;object key&gt;, &lt;object value&gt;) → &lt;object&gt;</span> <span class="permalink"><a href="#aggregation-map">¶</a></span></h4>
@@ -5863,7 +5964,7 @@ a day, an hour and 5 minutes</pre>
 </table>
 </div>
 </div><hr/>
-<p>Page generated at 07-Jul-2015 22:25:18</p>
+<p>Page generated at 19-Jul-2015 16:03:59</p>
 </div>
 
     <script>
