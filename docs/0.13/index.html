@@ -2476,105 +2476,119 @@ ready(function() {
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-set">7.26.  <span class="pipes2">set(&lt;object&gt;) → &lt;seq&gt;</span></a>
+                            <a href="#aggregation-regression">7.26.  <span class="pipes2">regression([&lt;number x&gt;], &lt;number y&gt;) → &lt;row&gt;</span></a>
+                        </td>
+                        <td class="description">Computes regression and correlation statistics for given variables.</td>
+                    </tr>
+
+                    <tr>
+                        <td class="level-1">
+                            <a href="#aggregation-set">7.27.  <span class="pipes2">set(&lt;object&gt;) → &lt;seq&gt;</span></a>
                         </td>
                         <td class="description">Creates a java.util.Set from all events in a window.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-smooth">7.27.  <span class="pipes2">smooth(&lt;aggregation number expr&gt;, [&lt;number alpha&gt;], [&lt;number beta&gt;]) → &lt;number&gt;</span></a>
+                            <a href="#aggregation-smooth">7.28.  <span class="pipes2">smooth(&lt;aggregation number expr&gt;, [&lt;number alpha&gt;], [&lt;number beta&gt;]) → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Smoothes the curve of another aggregation.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-stdev">7.28.  <span class="pipes2">stdev(&lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span></a>
+                            <a href="#aggregation-statistics">7.29.  <span class="pipes2">statistics(&lt;number&gt;) → &lt;row&gt;</span></a>
+                        </td>
+                        <td class="description">Aggregates sample statistics for some property.</td>
+                    </tr>
+
+                    <tr>
+                        <td class="level-1">
+                            <a href="#aggregation-stdev">7.30.  <span class="pipes2">stdev(&lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Calculates the (possibly weighted) standard deviation of some expression.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-sum">7.29.  <span class="pipes2">sum(&lt;number&gt;) → &lt;number&gt;</span></a>
+                            <a href="#aggregation-sum">7.31.  <span class="pipes2">sum(&lt;number&gt;) → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Sums all evaluations of some expression.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-summary">7.30.  <span class="pipes2">summary(&lt;string&gt;, [&lt;string separator&gt;], [&lt;string lastSeparator&gt;]) → &lt;string&gt;</span></a>
+                            <a href="#aggregation-summary">7.32.  <span class="pipes2">summary(&lt;string&gt;, [&lt;string separator&gt;], [&lt;string lastSeparator&gt;]) → &lt;string&gt;</span></a>
                         </td>
                         <td class="description">Join all the strings in a window.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-variance">7.31.  <span class="pipes2">variance(&lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span></a>
+                            <a href="#aggregation-variance">7.33.  <span class="pipes2">variance(&lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Calculates the (possibly weighted) variance of some expression.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-when">7.32.  <span class="pipes2">when(&lt;boolean expr&gt;) → &lt;number&gt;</span></a>
+                            <a href="#aggregation-when">7.34.  <span class="pipes2">when(&lt;boolean expr&gt;) → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Yields the latest timestamp inside window when some condition was true.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-whenfirst">7.33.  <span class="pipes2">whenfirst(&lt;boolean expr&gt;) → &lt;number&gt;</span></a>
+                            <a href="#aggregation-whenfirst">7.35.  <span class="pipes2">whenfirst(&lt;boolean expr&gt;) → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Yields the first timestamp inside window when some condition was true.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-window">7.34. Window Meta-aggregations</a>
+                            <a href="#aggregation-window">7.36. Window Meta-aggregations</a>
                         </td>
                         <td class="description"></td>
                     </tr>
 
                     <tr>
                         <td class="level-2">
-                            <a href="#aggregation-wcount">7.34.1.  <span class="pipes2">wcount() → &lt;number&gt;</span></a>
+                            <a href="#aggregation-wcount">7.36.1.  <span class="pipes2">wcount() → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Yields how many outputs are merged in the current window.</td>
                     </tr>
 
                     <tr>
                         <td class="level-2">
-                            <a href="#aggregation-wstart">7.34.2.  <span class="pipes2">wstart() → &lt;number&gt;</span></a>
+                            <a href="#aggregation-wstart">7.36.2.  <span class="pipes2">wstart() → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Returns the window's first allowed timestamp (or item index).</td>
                     </tr>
 
                     <tr>
                         <td class="level-2">
-                            <a href="#aggregation-wend">7.34.3.  <span class="pipes2">wend() → &lt;number&gt;</span></a>
+                            <a href="#aggregation-wend">7.36.3.  <span class="pipes2">wend() → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Returns the window's last allowed timestamp (or item index).</td>
                     </tr>
 
                     <tr>
                         <td class="level-2">
-                            <a href="#aggregation-ostart">7.34.4.  <span class="pipes2">ostart() → &lt;number&gt;</span></a>
+                            <a href="#aggregation-ostart">7.36.4.  <span class="pipes2">ostart() → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Returns the output's first allowed timestamp (or item index).</td>
                     </tr>
 
                     <tr>
                         <td class="level-2">
-                            <a href="#aggregation-oend">7.34.5.  <span class="pipes2">oend() → &lt;number&gt;</span></a>
+                            <a href="#aggregation-oend">7.36.5.  <span class="pipes2">oend() → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Returns the output's last allowed timestamp (or item index).</td>
                     </tr>
 
                     <tr>
                         <td class="level-2">
-                            <a href="#aggregation-otimestamp">7.34.6.  <span class="pipes2">otimestamp() → &lt;number&gt;</span></a>
+                            <a href="#aggregation-otimestamp">7.36.6.  <span class="pipes2">otimestamp() → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Returns the timestamp when the outputs were merged (equal to <code class="expr">oend()</code> on time pipes).</td>
                     </tr>
@@ -5578,40 +5592,94 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 <h4 class="header">7.25.  <span class="pipes2">quantile(&lt;number&gt;, &lt;number q&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-quantile">¶</a></span></h4>
 <div class="text"><p><strong>Estimates the q (0..1) quantile of the population using Count-Min Sketch.</strong></p></div>
 </div><hr/>
+<div id="aggregation-regression" class="level-1">
+<h4 class="header">7.26.  <span class="pipes2">regression([&lt;number x&gt;], &lt;number y&gt;) → &lt;row&gt;</span> <span class="permalink"><a href="#aggregation-regression">¶</a></span></h4>
+<div class="text"><p><strong>Computes regression and correlation statistics for given variables.</strong></p><p><em>Available since Pipes v0.13.3</em></p><p>
+  The argument <code class="pipes">x</code>, if not given, is assumed to be the event timestamp (if any).
+</p>
+<p>
+  The returned row has the following fields (all values in bytes):
+</p>
+<table class="table table-striped">
+    <tr><th>field</th><th>type</th><th>description</th></tr>
+    <tr><td>n</td><td>number</td><td>Sample size</td></tr>
+    <tr><td>slope</td><td>number</td><td>Slope of the regression line</td></tr>
+    <tr><td>intercept</td><td>number</td><td>Where in the x-axis the line intercepts</td></tr>
+    <tr><td>correlation</td><td>number</td><td>Correlation coefficient between <code class="pipes">x</code> and <code class="pipes">y</code></td></tr>
+    <tr><td>xmean</td><td>number</td><td>Mean value for variable <code class="pipes">x</code></td></tr>
+    <tr><td>xstdev</td><td>number</td><td>Standard deviation for <code class="pipes">x</code></td></tr>
+    <tr><td>ymean</td><td>number</td><td>Mean value for variable <code class="pipes">y</code></td></tr>
+    <tr><td>ystdev</td><td>number</td><td>Standard deviation for <code class="pipes">y</code></td></tr>
+</table>
+</div>
+</div><hr/>
 <div id="aggregation-set" class="level-1">
-<h4 class="header">7.26.  <span class="pipes2">set(&lt;object&gt;) → &lt;seq&gt;</span> <span class="permalink"><a href="#aggregation-set">¶</a></span></h4>
+<h4 class="header">7.27.  <span class="pipes2">set(&lt;object&gt;) → &lt;seq&gt;</span> <span class="permalink"><a href="#aggregation-set">¶</a></span></h4>
 <div class="text"><p><strong>Creates a java.util.Set from all events in a window.</strong></p></div>
 </div><hr/>
 <div id="aggregation-smooth" class="level-1">
-<h4 class="header">7.27.  <span class="pipes2">smooth(&lt;aggregation number expr&gt;, [&lt;number alpha&gt;], [&lt;number beta&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-smooth">¶</a></span></h4>
-<div class="text"><p><strong>Smoothes the curve of another aggregation.</strong></p></div>
+<h4 class="header">7.28.  <span class="pipes2">smooth(&lt;aggregation number expr&gt;, [&lt;number alpha&gt;], [&lt;number beta&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-smooth">¶</a></span></h4>
+<div class="text"><p><strong>Smoothes the curve of another aggregation.</strong></p><p>
+  The argument <code class="pipes">alpha</code> is a (0..1) value, meaning the weight of the previous points
+  in the final value.
+</p>
+
+<p>
+  The argument <code class="pipes">beta</code> is a (0..1) value, meaning the weight of previous trends into
+  the current trend value.
+</p>
+<p>
+  This aggregation cannot be used inside a window (because it depends on total order of the elements).
+</p>
+</div>
+</div><hr/>
+<div id="aggregation-statistics" class="level-1">
+<h4 class="header">7.29.  <span class="pipes2">statistics(&lt;number&gt;) → &lt;row&gt;</span> <span class="permalink"><a href="#aggregation-statistics">¶</a></span></h4>
+<div class="text"><p><strong>Aggregates sample statistics for some property.</strong></p><p><em>Available since Pipes v0.13.3</em></p><p>
+  Please note that all statistics here are based on the sample variance, not the population variance.
+  This behavior is distinct from the already known <a href="#aggregation-variance"><code class="pipes2">variance(&lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</code></a> and <a href="#aggregation-stdev"><code class="pipes2">stdev(&lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</code></a>
+  aggregations.
+</p>
+<p>
+  The returned row has the following fields (all values in bytes):
+</p>
+<table class="table table-striped">
+    <tr><th>field</th><th>type</th><th>description</th></tr>
+    <tr><td>n</td><td>number</td><td>Sample size</td></tr>
+    <tr><td>mean</td><td>number</td><td>Sample mean value</td></tr>
+    <tr><td>variance</td><td>number</td><td>Sample variance</td></tr>
+    <tr><td>stdev</td><td>number</td><td>Sample standard deviation</td></tr>
+    <tr><td>skewness</td><td>number</td><td>Sample skewness</td></tr>
+    <tr><td>kurtosis</td><td>number</td><td>Sample kurtosis</td></tr>
+</table>
+</div>
 </div><hr/>
 <div id="aggregation-stdev" class="level-1">
-<h4 class="header">7.28.  <span class="pipes2">stdev(&lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-stdev">¶</a></span></h4>
+<h4 class="header">7.30.  <span class="pipes2">stdev(&lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-stdev">¶</a></span></h4>
 <div class="text"><p><strong>Calculates the (possibly weighted) standard deviation of some expression.</strong></p></div>
 </div><hr/>
 <div id="aggregation-sum" class="level-1">
-<h4 class="header">7.29.  <span class="pipes2">sum(&lt;number&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-sum">¶</a></span></h4>
+<h4 class="header">7.31.  <span class="pipes2">sum(&lt;number&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-sum">¶</a></span></h4>
 <div class="text"><p><strong>Sums all evaluations of some expression.</strong></p></div>
 </div><hr/>
 <div id="aggregation-summary" class="level-1">
-<h4 class="header">7.30.  <span class="pipes2">summary(&lt;string&gt;, [&lt;string separator&gt;], [&lt;string lastSeparator&gt;]) → &lt;string&gt;</span> <span class="permalink"><a href="#aggregation-summary">¶</a></span></h4>
+<h4 class="header">7.32.  <span class="pipes2">summary(&lt;string&gt;, [&lt;string separator&gt;], [&lt;string lastSeparator&gt;]) → &lt;string&gt;</span> <span class="permalink"><a href="#aggregation-summary">¶</a></span></h4>
 <div class="text"><p><strong>Join all the strings in a window.</strong></p></div>
 </div><hr/>
 <div id="aggregation-variance" class="level-1">
-<h4 class="header">7.31.  <span class="pipes2">variance(&lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-variance">¶</a></span></h4>
+<h4 class="header">7.33.  <span class="pipes2">variance(&lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-variance">¶</a></span></h4>
 <div class="text"><p><strong>Calculates the (possibly weighted) variance of some expression.</strong></p></div>
 </div><hr/>
 <div id="aggregation-when" class="level-1">
-<h4 class="header">7.32.  <span class="pipes2">when(&lt;boolean expr&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-when">¶</a></span></h4>
+<h4 class="header">7.34.  <span class="pipes2">when(&lt;boolean expr&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-when">¶</a></span></h4>
 <div class="text"><p><strong>Yields the latest timestamp inside window when some condition was true.</strong></p></div>
 </div><hr/>
 <div id="aggregation-whenfirst" class="level-1">
-<h4 class="header">7.33.  <span class="pipes2">whenfirst(&lt;boolean expr&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-whenfirst">¶</a></span></h4>
+<h4 class="header">7.35.  <span class="pipes2">whenfirst(&lt;boolean expr&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-whenfirst">¶</a></span></h4>
 <div class="text"><p><strong>Yields the first timestamp inside window when some condition was true.</strong></p></div>
 </div><hr/>
 <div id="aggregation-window" class="level-1">
-<h4 class="header">7.34. Window Meta-aggregations <span class="pipes2"></span> <span class="permalink"><a href="#aggregation-window">¶</a></span></h4>
+<h4 class="header">7.36. Window Meta-aggregations <span class="pipes2"></span> <span class="permalink"><a href="#aggregation-window">¶</a></span></h4>
 <div class="text"><p><strong></strong></p><p>
     Meta-aggregations give information on how and when the results were merged.
 </p>
@@ -5624,27 +5692,27 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="aggregation-wcount" class="level-2">
-<h5 class="header">7.34.1.  <span class="pipes2">wcount() → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-wcount">¶</a></span></h5>
+<h5 class="header">7.36.1.  <span class="pipes2">wcount() → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-wcount">¶</a></span></h5>
 <div class="text"><p><strong>Yields how many outputs are merged in the current window.</strong></p></div>
 </div><hr/>
 <div id="aggregation-wstart" class="level-2">
-<h5 class="header">7.34.2.  <span class="pipes2">wstart() → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-wstart">¶</a></span></h5>
+<h5 class="header">7.36.2.  <span class="pipes2">wstart() → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-wstart">¶</a></span></h5>
 <div class="text"><p><strong>Returns the window's first allowed timestamp (or item index).</strong></p></div>
 </div><hr/>
 <div id="aggregation-wend" class="level-2">
-<h5 class="header">7.34.3.  <span class="pipes2">wend() → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-wend">¶</a></span></h5>
+<h5 class="header">7.36.3.  <span class="pipes2">wend() → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-wend">¶</a></span></h5>
 <div class="text"><p><strong>Returns the window's last allowed timestamp (or item index).</strong></p></div>
 </div><hr/>
 <div id="aggregation-ostart" class="level-2">
-<h5 class="header">7.34.4.  <span class="pipes2">ostart() → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-ostart">¶</a></span></h5>
+<h5 class="header">7.36.4.  <span class="pipes2">ostart() → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-ostart">¶</a></span></h5>
 <div class="text"><p><strong>Returns the output's first allowed timestamp (or item index).</strong></p></div>
 </div><hr/>
 <div id="aggregation-oend" class="level-2">
-<h5 class="header">7.34.5.  <span class="pipes2">oend() → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-oend">¶</a></span></h5>
+<h5 class="header">7.36.5.  <span class="pipes2">oend() → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-oend">¶</a></span></h5>
 <div class="text"><p><strong>Returns the output's last allowed timestamp (or item index).</strong></p></div>
 </div><hr/>
 <div id="aggregation-otimestamp" class="level-2">
-<h5 class="header">7.34.6.  <span class="pipes2">otimestamp() → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-otimestamp">¶</a></span></h5>
+<h5 class="header">7.36.6.  <span class="pipes2">otimestamp() → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-otimestamp">¶</a></span></h5>
 <div class="text"><p><strong>Returns the timestamp when the outputs were merged (equal to <code class="expr">oend()</code> on time pipes).</strong></p></div>
 </div><hr/>
 <div id="chapter-timespan" class="level-0">
@@ -5987,7 +6055,7 @@ a day, an hour and 5 minutes</pre>
 </table>
 </div>
 </div><hr/>
-<p>Page generated at 22-Jul-2015 22:39:50</p>
+<p>Page generated at 27-Jul-2015 11:34:24</p>
 </div>
 
     <script>
