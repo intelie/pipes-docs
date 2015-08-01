@@ -3043,8 +3043,9 @@ but only if it didn't already happen in the last 30 minutes.</p>
     <li><code class="pipes2">over all</code>: aggregates over all events, merges all outputs.</li>
 </ul>
 <p>
-    It is worth noticing that item-based windows can only be used with item-based outputs. And time-based windows can only be used with time-based outputs.
-    Also, obviosly <code class="pipes2">at the end</code> pipes does not support any window definition and there is only a single output at the end. Below, there is a
+    It is worth noticing that item-based windows can only be used with item-based outputs, but time-based windows can be used with all but
+    <code class="pipes2">at the end</code> outputs.
+    In fact, <code class="pipes2">at the end</code> pipes support no window definition as there is only a single output at the end. Below, there is a
     table with examples showing what is valid and what is not.
 </p>
 <table class="table table-striped">
@@ -3054,8 +3055,8 @@ but only if it didn't already happen in the last 30 minutes.</p>
       </td>
       <th><code class="expr">every 2 minutes</code></th><th><code class="expr">every 2 items</code></th><th><code class="expr">every 2 batches</code></th><th><code class="expr">at the end</code></th>
     </tr>
-    <tr><th><code class="expr">over last 10 minutes</code></th><td>&#x2714; valid</td><td>&#x2716; invalid</td><td>&#x2716; invalid</td><td>&#x2716; invalid</td></tr>
-    <tr><th><code class="expr">over current 10 minutes</code></th><td>&#x2714; valid</td><td>&#x2716; invalid</td><td>&#x2716; invalid</td><td>&#x2716; invalid</td></tr>
+    <tr><th><code class="expr">over last 10 minutes</code></th><td>&#x2714; valid</td><td>&#x2714; valid</td><td>&#x2714; valid</td><td>&#x2716; invalid</td></tr>
+    <tr><th><code class="expr">over current 10 minutes</code></th><td>&#x2714; valid</td><td>&#x2714; valid</td><td>&#x2714; valid</td><td>&#x2716; invalid</td></tr>
     <tr><th><code class="expr">over last 10 items</code></th><td>&#x2716; invalid</td><td>&#x2714; valid</td><td>&#x2716; invalid</td><td>&#x2716; invalid</td></tr>
     <tr><th><code class="expr">over current 10 items</code></th><td>&#x2716; invalid</td><td>&#x2714; valid</td><td>&#x2716; invalid</td><td>&#x2716; invalid</td></tr>
     <tr><th><code class="expr">over last 10 batches</code></th><td>&#x2716; invalid</td><td>&#x2716; invalid</td><td>&#x2714; valid</td><td>&#x2716; invalid</td></tr>
@@ -6055,7 +6056,7 @@ a day, an hour and 5 minutes</pre>
 </table>
 </div>
 </div><hr/>
-<p>Page generated at 27-Jul-2015 11:34:24</p>
+<p>Page generated at 01-Aug-2015 17:49:14</p>
 </div>
 
     <script>
