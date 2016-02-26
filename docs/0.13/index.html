@@ -957,7 +957,7 @@ ready(function() {
 <h1>Intelie Pipes</h1>
 <h3>Language Reference Documentation</h3>
 <p>version 0.13 <small>(for older versions, <a href="../versions">click here</a>)</small></p>
-<p>Copyright 2015 Intelie</p><hr/>
+<p>Copyright 2016 Intelie</p><hr/>
 <h2>Table of Contents</h2>
 <table class="summary">
 
@@ -2543,70 +2543,77 @@ ready(function() {
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-variance">7.33.  <span class="pipes2">variance(&lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span></a>
+                            <a href="#aggregation-top">7.33.  <span class="pipes2">top(&lt;number k&gt;, &lt;object&gt;, [&lt;sortfield...&gt;]) → &lt;seq&gt;</span></a>
+                        </td>
+                        <td class="description">Yields the k minimum occurrences of the target object.</td>
+                    </tr>
+
+                    <tr>
+                        <td class="level-1">
+                            <a href="#aggregation-variance">7.34.  <span class="pipes2">variance(&lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Calculates the (possibly weighted) variance of some expression.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-when">7.34.  <span class="pipes2">when(&lt;boolean expr&gt;) → &lt;number&gt;</span></a>
+                            <a href="#aggregation-when">7.35.  <span class="pipes2">when(&lt;boolean expr&gt;) → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Yields the latest timestamp inside window when some condition was true.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-whenfirst">7.35.  <span class="pipes2">whenfirst(&lt;boolean expr&gt;) → &lt;number&gt;</span></a>
+                            <a href="#aggregation-whenfirst">7.36.  <span class="pipes2">whenfirst(&lt;boolean expr&gt;) → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Yields the first timestamp inside window when some condition was true.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-window">7.36. Window Meta-aggregations</a>
+                            <a href="#aggregation-window">7.37. Window Meta-aggregations</a>
                         </td>
                         <td class="description"></td>
                     </tr>
 
                     <tr>
                         <td class="level-2">
-                            <a href="#aggregation-wcount">7.36.1.  <span class="pipes2">wcount() → &lt;number&gt;</span></a>
+                            <a href="#aggregation-wcount">7.37.1.  <span class="pipes2">wcount() → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Yields how many outputs are merged in the current window.</td>
                     </tr>
 
                     <tr>
                         <td class="level-2">
-                            <a href="#aggregation-wstart">7.36.2.  <span class="pipes2">wstart() → &lt;number&gt;</span></a>
+                            <a href="#aggregation-wstart">7.37.2.  <span class="pipes2">wstart() → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Returns the window's first allowed timestamp (or item index).</td>
                     </tr>
 
                     <tr>
                         <td class="level-2">
-                            <a href="#aggregation-wend">7.36.3.  <span class="pipes2">wend() → &lt;number&gt;</span></a>
+                            <a href="#aggregation-wend">7.37.3.  <span class="pipes2">wend() → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Returns the window's last allowed timestamp (or item index).</td>
                     </tr>
 
                     <tr>
                         <td class="level-2">
-                            <a href="#aggregation-ostart">7.36.4.  <span class="pipes2">ostart() → &lt;number&gt;</span></a>
+                            <a href="#aggregation-ostart">7.37.4.  <span class="pipes2">ostart() → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Returns the output's first allowed timestamp (or item index).</td>
                     </tr>
 
                     <tr>
                         <td class="level-2">
-                            <a href="#aggregation-oend">7.36.5.  <span class="pipes2">oend() → &lt;number&gt;</span></a>
+                            <a href="#aggregation-oend">7.37.5.  <span class="pipes2">oend() → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Returns the output's last allowed timestamp (or item index).</td>
                     </tr>
 
                     <tr>
                         <td class="level-2">
-                            <a href="#aggregation-otimestamp">7.36.6.  <span class="pipes2">otimestamp() → &lt;number&gt;</span></a>
+                            <a href="#aggregation-otimestamp">7.37.6.  <span class="pipes2">otimestamp() → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Returns the timestamp when the outputs were merged (equal to <code class="expr">oend()</code> on time pipes).</td>
                     </tr>
@@ -5695,20 +5702,24 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 <h4 class="header">7.32.  <span class="pipes2">summary(&lt;string&gt;, [&lt;string separator&gt;], [&lt;string lastSeparator&gt;]) → &lt;string&gt;</span> <span class="permalink"><a href="#aggregation-summary">¶</a></span></h4>
 <div class="text"><p><strong>Join all the strings in a window.</strong></p></div>
 </div><hr/>
+<div id="aggregation-top" class="level-1">
+<h4 class="header">7.33.  <span class="pipes2">top(&lt;number k&gt;, &lt;object&gt;, [&lt;sortfield...&gt;]) → &lt;seq&gt;</span> <span class="permalink"><a href="#aggregation-top">¶</a></span></h4>
+<div class="text"><p><strong>Yields the k minimum occurrences of the target object.</strong></p><p><em>Available since Pipes v0.13.18</em></p></div>
+</div><hr/>
 <div id="aggregation-variance" class="level-1">
-<h4 class="header">7.33.  <span class="pipes2">variance(&lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-variance">¶</a></span></h4>
+<h4 class="header">7.34.  <span class="pipes2">variance(&lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-variance">¶</a></span></h4>
 <div class="text"><p><strong>Calculates the (possibly weighted) variance of some expression.</strong></p></div>
 </div><hr/>
 <div id="aggregation-when" class="level-1">
-<h4 class="header">7.34.  <span class="pipes2">when(&lt;boolean expr&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-when">¶</a></span></h4>
+<h4 class="header">7.35.  <span class="pipes2">when(&lt;boolean expr&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-when">¶</a></span></h4>
 <div class="text"><p><strong>Yields the latest timestamp inside window when some condition was true.</strong></p></div>
 </div><hr/>
 <div id="aggregation-whenfirst" class="level-1">
-<h4 class="header">7.35.  <span class="pipes2">whenfirst(&lt;boolean expr&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-whenfirst">¶</a></span></h4>
+<h4 class="header">7.36.  <span class="pipes2">whenfirst(&lt;boolean expr&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-whenfirst">¶</a></span></h4>
 <div class="text"><p><strong>Yields the first timestamp inside window when some condition was true.</strong></p></div>
 </div><hr/>
 <div id="aggregation-window" class="level-1">
-<h4 class="header">7.36. Window Meta-aggregations <span class="pipes2"></span> <span class="permalink"><a href="#aggregation-window">¶</a></span></h4>
+<h4 class="header">7.37. Window Meta-aggregations <span class="pipes2"></span> <span class="permalink"><a href="#aggregation-window">¶</a></span></h4>
 <div class="text"><p><strong></strong></p><p>
     Meta-aggregations give information on how and when the results were merged.
 </p>
@@ -5721,27 +5732,27 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="aggregation-wcount" class="level-2">
-<h5 class="header">7.36.1.  <span class="pipes2">wcount() → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-wcount">¶</a></span></h5>
+<h5 class="header">7.37.1.  <span class="pipes2">wcount() → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-wcount">¶</a></span></h5>
 <div class="text"><p><strong>Yields how many outputs are merged in the current window.</strong></p></div>
 </div><hr/>
 <div id="aggregation-wstart" class="level-2">
-<h5 class="header">7.36.2.  <span class="pipes2">wstart() → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-wstart">¶</a></span></h5>
+<h5 class="header">7.37.2.  <span class="pipes2">wstart() → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-wstart">¶</a></span></h5>
 <div class="text"><p><strong>Returns the window's first allowed timestamp (or item index).</strong></p></div>
 </div><hr/>
 <div id="aggregation-wend" class="level-2">
-<h5 class="header">7.36.3.  <span class="pipes2">wend() → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-wend">¶</a></span></h5>
+<h5 class="header">7.37.3.  <span class="pipes2">wend() → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-wend">¶</a></span></h5>
 <div class="text"><p><strong>Returns the window's last allowed timestamp (or item index).</strong></p></div>
 </div><hr/>
 <div id="aggregation-ostart" class="level-2">
-<h5 class="header">7.36.4.  <span class="pipes2">ostart() → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-ostart">¶</a></span></h5>
+<h5 class="header">7.37.4.  <span class="pipes2">ostart() → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-ostart">¶</a></span></h5>
 <div class="text"><p><strong>Returns the output's first allowed timestamp (or item index).</strong></p></div>
 </div><hr/>
 <div id="aggregation-oend" class="level-2">
-<h5 class="header">7.36.5.  <span class="pipes2">oend() → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-oend">¶</a></span></h5>
+<h5 class="header">7.37.5.  <span class="pipes2">oend() → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-oend">¶</a></span></h5>
 <div class="text"><p><strong>Returns the output's last allowed timestamp (or item index).</strong></p></div>
 </div><hr/>
 <div id="aggregation-otimestamp" class="level-2">
-<h5 class="header">7.36.6.  <span class="pipes2">otimestamp() → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-otimestamp">¶</a></span></h5>
+<h5 class="header">7.37.6.  <span class="pipes2">otimestamp() → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-otimestamp">¶</a></span></h5>
 <div class="text"><p><strong>Returns the timestamp when the outputs were merged (equal to <code class="expr">oend()</code> on time pipes).</strong></p></div>
 </div><hr/>
 <div id="chapter-timespan" class="level-0">
@@ -6104,7 +6115,7 @@ a day, an hour and 5 minutes</pre>
 </table>
 </div>
 </div><hr/>
-<p>Page generated at 05-Nov-2015 23:03:07</p>
+<p>Page generated at 25-Feb-2016 21:49:35</p>
 </div>
 
     <script>
