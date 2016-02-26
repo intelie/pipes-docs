@@ -2396,9 +2396,9 @@ ready(function() {
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-greatest">7.12.  <span class="pipes2">greatest(&lt;object&gt;, &lt;comparable&gt;) → &lt;object&gt;</span></a>
+                            <a href="#aggregation-greatest">7.12.  <span class="pipes2">greatest(&lt;object&gt;, &lt;sortfield...&gt;) → &lt;object&gt;</span></a>
                         </td>
-                        <td class="description">Yields the greatest ocurrence in the window based on some comparable.</td>
+                        <td class="description">Yields the greatest ocurrence in the window based on the sort fields.</td>
                     </tr>
 
                     <tr>
@@ -2438,9 +2438,9 @@ ready(function() {
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-least">7.18.  <span class="pipes2">least(&lt;object&gt;, &lt;comparable&gt;) → &lt;object&gt;</span></a>
+                            <a href="#aggregation-least">7.18.  <span class="pipes2">least(&lt;object&gt;, &lt;sortfield...&gt;) → &lt;object&gt;</span></a>
                         </td>
-                        <td class="description">Yields the least ocurrence in the window based on some comparable.</td>
+                        <td class="description">Yields the least ocurrence in the window based on the sort fields.</td>
                     </tr>
 
                     <tr>
@@ -5483,8 +5483,8 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 <div class="text"><p><strong>Yields the ocurrence with least timestamp.</strong></p></div>
 </div><hr/>
 <div id="aggregation-greatest" class="level-1">
-<h4 class="header">7.12.  <span class="pipes2">greatest(&lt;object&gt;, &lt;comparable&gt;) → &lt;object&gt;</span> <span class="permalink"><a href="#aggregation-greatest">¶</a></span></h4>
-<div class="text"><p><strong>Yields the greatest ocurrence in the window based on some comparable.</strong></p></div>
+<h4 class="header">7.12.  <span class="pipes2">greatest(&lt;object&gt;, &lt;sortfield...&gt;) → &lt;object&gt;</span> <span class="permalink"><a href="#aggregation-greatest">¶</a></span></h4>
+<div class="text"><p><strong>Yields the greatest ocurrence in the window based on the sort fields.</strong></p></div>
 </div><hr/>
 <div id="aggregation-hll" class="level-1">
 <h4 class="header">7.13.  <span class="pipes2">hll(&lt;number log2m&gt;, &lt;object...&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-hll">¶</a></span></h4>
@@ -5594,8 +5594,8 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 <div class="text"><p><strong>Yields the ocurrence with greatest timestamp.</strong></p></div>
 </div><hr/>
 <div id="aggregation-least" class="level-1">
-<h4 class="header">7.18.  <span class="pipes2">least(&lt;object&gt;, &lt;comparable&gt;) → &lt;object&gt;</span> <span class="permalink"><a href="#aggregation-least">¶</a></span></h4>
-<div class="text"><p><strong>Yields the least ocurrence in the window based on some comparable.</strong></p></div>
+<h4 class="header">7.18.  <span class="pipes2">least(&lt;object&gt;, &lt;sortfield...&gt;) → &lt;object&gt;</span> <span class="permalink"><a href="#aggregation-least">¶</a></span></h4>
+<div class="text"><p><strong>Yields the least ocurrence in the window based on the sort fields.</strong></p></div>
 </div><hr/>
 <div id="aggregation-list" class="level-1">
 <h4 class="header">7.19.  <span class="pipes2">list(&lt;object&gt;) → &lt;seq&gt;</span> <span class="permalink"><a href="#aggregation-list">¶</a></span></h4>
@@ -6115,7 +6115,7 @@ a day, an hour and 5 minutes</pre>
 </table>
 </div>
 </div><hr/>
-<p>Page generated at 25-Feb-2016 21:49:35</p>
+<p>Page generated at 26-Feb-2016 11:09:45</p>
 </div>
 
     <script>
