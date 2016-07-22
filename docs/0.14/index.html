@@ -3104,8 +3104,8 @@ but only if it didn't already happen in the last 30 minutes.</p>
 <p>
     Each pipe in the chain can have one or more output rates. For example, a pipe can receive an input every time
     the filter matches some event in the public stream, but only output events in batches of one minute. There
-    are four different types of output: <strong>every time period</strong>, <strong>every item</strong>,
-    <strong>every batch</strong> and <strong>at the end</strong>. For more information, see <a href="#concepts-outputs">Section 2.3: Output rates and aggregation windows</a>.
+    are five different types of output: <strong>every time period</strong>, <strong>every item</strong>,
+    <strong>every batch</strong>, <strong>every condition</strong>, and <strong>at the end</strong>. For more information, see <a href="#concepts-outputs">Section 2.3: Output rates and aggregation windows</a>.
 </p>
 <p>
     Inside each pipe, you can interact with events using expressions that access, transforms or aggregates
@@ -3144,13 +3144,14 @@ but only if it didn't already happen in the last 30 minutes.</p>
     but the concept itself can be applied to any pipe type.
 </p>
 <p>
-    There are four types of output rates: <strong>every time period</strong>, <strong>every item</strong>, <strong>every batch</strong> and
-    <strong>at the end</strong>.
+    There are some types of output rates: <strong>every time period</strong>, <strong>every item</strong>,
+    <strong>every batch</strong>, <strong>every condition</strong>, and <strong>at the end</strong>.
 </p>
 <ul>
     <li><code class="pipes2">every &lt;period&gt;</code>: outputs every time the pipe's internal clock ticks a constant period. E.g. <code class="pipes">every 5 seconds</code></li>
     <li><code class="pipes2">every &lt;number&gt; items</code>: outputs every time the specified amount of items is processed by the engine. E.g. <code class="pipes">every 5 items</code></li>
     <li><code class="pipes2">every &lt;number&gt; batches</code>: outputs every time the specified amount item batches is processed by the engine. E.g. <code class="pipes">every 5 batches</code></li>
+    <li><code class="pipes2">every &lt;boolean&gt;</code>: outputs every time the specified condition becomes true. E.g. <code class="pipes">every (x&gt;x:prev)</code>, <code class="pipes">every \SomeEventType</code></li>
     <li><code class="pipes2">at the end</code>: outputs only at the end of execution. Useful for summary queries.</li>
 </ul>
 <p>
@@ -3224,16 +3225,16 @@ but only if it didn't already happen in the last 30 minutes.</p>
       <td>
         <em>window/output examples</em>
       </td>
-      <th><code class="expr">every 2 minutes</code></th><th><code class="expr">every 2 items</code></th><th><code class="expr">every 2 batches</code></th><th><code class="expr">at the end</code></th>
+      <th><code class="expr">every 2 minutes</code></th><th><code class="expr">every 2 items</code></th><th><code class="expr">every 2 batches</code></th><th><code class="expr">every (count()==2)</code></th><th><code class="expr">at the end</code></th>
     </tr>
-    <tr><th><code class="expr">over last 10 minutes</code></th><td>&#x2714; valid</td><td>&#x2714; valid</td><td>&#x2714; valid</td><td>&#x2716; invalid</td></tr>
-    <tr><th><code class="expr">over current 10 minutes</code></th><td>&#x2714; valid</td><td>&#x2714; valid</td><td>&#x2714; valid</td><td>&#x2716; invalid</td></tr>
-    <tr><th><code class="expr">over last 10 items</code></th><td>&#x2716; invalid</td><td>&#x2714; valid</td><td>&#x2716; invalid</td><td>&#x2716; invalid</td></tr>
-    <tr><th><code class="expr">over current 10 items</code></th><td>&#x2716; invalid</td><td>&#x2714; valid</td><td>&#x2716; invalid</td><td>&#x2716; invalid</td></tr>
-    <tr><th><code class="expr">over last 10 batches</code></th><td>&#x2716; invalid</td><td>&#x2716; invalid</td><td>&#x2714; valid</td><td>&#x2716; invalid</td></tr>
-    <tr><th><code class="expr">over current 10 batches</code></th><td>&#x2716; invalid</td><td>&#x2716; invalid</td><td>&#x2714; valid</td><td>&#x2716; invalid</td></tr>
-    <tr><th><code class="expr">over span 'last 10 minutes'</code></th><td>&#x2714; valid</td><td>&#x2714; valid</td><td>&#x2714; valid</td><td>&#x2716; invalid</td></tr>
-    <tr><th><code class="expr">over all</code></th><td>&#x2714; valid</td><td>&#x2714; valid</td><td>&#x2714; valid</td><td>&#x2716; invalid</td></tr>
+    <tr><th><code class="expr">over last 10 minutes</code></th><td>&#x2714; valid</td><td>&#x2714; valid</td><td>&#x2714; valid</td><td>&#x2714; valid</td><td>&#x2716; invalid</td></tr>
+    <tr><th><code class="expr">over current 10 minutes</code></th><td>&#x2714; valid</td><td>&#x2714; valid</td><td>&#x2714; valid</td><td>&#x2714; valid</td><td>&#x2716; invalid</td></tr>
+    <tr><th><code class="expr">over last 10 items</code></th><td>&#x2716; invalid</td><td>&#x2714; valid</td><td>&#x2716; invalid</td><td>&#x2714; valid</td><td>&#x2716; invalid</td></tr>
+    <tr><th><code class="expr">over current 10 items</code></th><td>&#x2716; invalid</td><td>&#x2714; valid</td><td>&#x2716; invalid</td><td>&#x2714; valid</td><td>&#x2716; invalid</td></tr>
+    <tr><th><code class="expr">over last 10 batches</code></th><td>&#x2716; invalid</td><td>&#x2716; invalid</td><td>&#x2714; valid</td><td>&#x2716; invalid</td><td>&#x2716; invalid</td></tr>
+    <tr><th><code class="expr">over current 10 batches</code></th><td>&#x2716; invalid</td><td>&#x2716; invalid</td><td>&#x2714; valid</td><td>&#x2716; invalid</td><td>&#x2716; invalid</td></tr>
+    <tr><th><code class="expr">over span 'last 10 minutes'</code></th><td>&#x2714; valid</td><td>&#x2714; valid</td><td>&#x2714; valid</td><td>&#x2714; valid</td><td>&#x2716; invalid</td></tr>
+    <tr><th><code class="expr">over all</code></th><td>&#x2714; valid</td><td>&#x2714; valid</td><td>&#x2714; valid</td><td>&#x2714; valid</td><td>&#x2716; invalid</td></tr>
 </table>
 </div>
 </div><hr/>
@@ -4170,6 +4171,10 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 <div class="text"><p><strong>Filters the results from previous pipe.</strong></p><p>
     Filter pipe does not change any pipe metadata, it just repeats previous pipe info.
 </p>
+<p>
+    Since Pipes v0.14.8, this pipe has a version that also accepts simple aggregations.
+</p>
+
 <p><strong>Examples:</strong></p>
 <pre class="pipes">*
 =&gt; count() by host
@@ -4284,7 +4289,10 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div><hr/>
 <div id="pipe-set" class="level-1">
 <h4 class="header">4.15.  <span class="pipes2">@set &lt;named...&gt;</span> <span class="permalink"><a href="#pipe-set">¶</a></span></h4>
-<div class="text"><p><strong>Sets fields in the original event (both typed and raw)</strong></p><p><strong>Examples:</strong></p>
+<div class="text"><p><strong>Sets fields in the original event (both typed and raw)</strong></p><p>
+    Since Pipes v0.14.8, this pipe has a version that also accepts simple aggregations.
+</p>
+<p><strong>Examples:</strong></p>
 <pre class="pipes">*
 =&gt; @set (date+time):dateparse('yyyyMMddHHmmss') as timestamp</pre>
 <p class="legend">
@@ -6523,7 +6531,7 @@ a day, an hour and 5 minutes</pre>
 </table>
 </div>
 </div><hr/>
-<p>Page generated at 30-Jun-2016 10:07:42</p>
+<p>Page generated at 22-Jul-2016 11:38:46</p>
 </div>
 
     <script>
