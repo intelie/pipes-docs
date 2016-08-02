@@ -3277,7 +3277,7 @@ but only if it didn't already happen in the last 30 minutes.</p>
 
 <p>
   But for pipes with <a href="#concepts-outputs">item outputs</a> and some other pipes, it may be impossible to predict
-  when a group has to expire. That's what the <code class="pipes">expiry</code> keyword is for. It defines the maximum period
+  when a group has to expire. That's what the <code class="expr">expiry</code> keyword is for. It defines the maximum period
   a group state can be kept before it is expired and purged from memory.
 </p>
 
@@ -3285,6 +3285,10 @@ but only if it didn't already happen in the last 30 minutes.</p>
 <pre class="pipes">* =&gt; @onchange state by host expiry 10 minutes</pre>
 <p class="legend">
   In both cases, if a host doesn't receive an event in 10 minutes, its state will be purged.
+</p>
+
+<p class="bg-warning">
+  The <code class="expr">expiry</code> keyword is available only since Pipes v0.14.9.
 </p>
 </div>
 </div><hr/>
@@ -6581,7 +6585,7 @@ a day, an hour and 5 minutes</pre>
 </table>
 </div>
 </div><hr/>
-<p>Page generated at 01-Aug-2016 22:11:09</p>
+<p>Page generated at 01-Aug-2016 22:15:50</p>
 </div>
 
     <script>
