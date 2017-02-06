@@ -976,7 +976,7 @@ ready(function() {
 <h1>Intelie Pipes</h1>
 <h3>Language Reference Documentation</h3>
 <p>version 0.15 <small>(for older versions, <a href="../versions">click here</a>)</small></p>
-<p>Copyright 2016 Intelie</p><hr/>
+<p>Copyright 2017 Intelie</p><hr/>
 <h2>Table of Contents</h2>
 <table class="summary">
 
@@ -1239,7 +1239,7 @@ ready(function() {
 
                     <tr>
                         <td class="level-1">
-                            <a href="#pipe-compile">4.5.  <span class="pipes2">@compile &lt;string&gt;</span></a>
+                            <a href="#pipe-compile">4.5.  <span class="pipes2">@compile &lt;string&gt;, &lt;obj... args&gt;</span></a>
                         </td>
                         <td class="description">Compiles a constant string into a pipe</td>
                     </tr>
@@ -1974,7 +1974,7 @@ ready(function() {
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-compile">6.50.  <span class="pipes2">&lt;string&gt;:compile() → &lt;number&gt;</span></a>
+                            <a href="#scalar-compile">6.50.  <span class="pipes2">&lt;string&gt;:compile(&lt;obj... args&gt;) → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Compiles a constant string into a pipes expression</td>
                     </tr>
@@ -2044,385 +2044,413 @@ ready(function() {
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-ord">6.60.  <span class="pipes2">&lt;string&gt;:ord() → &lt;number&gt;</span></a>
+                            <a href="#scalar-mapcompile">6.60.  <span class="pipes2">&lt;string&gt;:mapcompile(&lt;obj... args&gt;) → &lt;number&gt;</span></a>
+                        </td>
+                        <td class="description">Compiles a constant string with each argument into many pipes expressions</td>
+                    </tr>
+
+                    <tr>
+                        <td class="level-1">
+                            <a href="#scalar-ord">6.61.  <span class="pipes2">&lt;string&gt;:ord() → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Gets the unicode codepoint from the first char in the string.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-parse">6.61.  <span class="pipes2">&lt;string&gt;:parse([&lt;string format&gt;], [&lt;string locale&gt;]) → &lt;number&gt;</span></a>
+                            <a href="#scalar-parse">6.62.  <span class="pipes2">&lt;string&gt;:parse([&lt;string format&gt;], [&lt;string locale&gt;]) → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Parses a number according to format string and locale.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-regex">6.62.  <span class="pipes2">&lt;string&gt;:regex(&lt;string regex&gt;) → &lt;row&gt;</span></a>
+                            <a href="#scalar-regex">6.63.  <span class="pipes2">&lt;string&gt;:regex(&lt;string regex&gt;) → &lt;row&gt;</span></a>
                         </td>
                         <td class="description">Returns a strongly typed row composed by all named groups in &lt;regex&gt;.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-regexall">6.63.  <span class="pipes2">&lt;string&gt;:regexall(&lt;string regex&gt;) → &lt;seq(row)&gt;</span></a>
+                            <a href="#scalar-regexall">6.64.  <span class="pipes2">&lt;string&gt;:regexall(&lt;string regex&gt;) → &lt;seq(row)&gt;</span></a>
                         </td>
                         <td class="description">Returns a sequence of rows composed by all matches of all named groups in &lt;regex&gt;.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-regexfind">6.64.  <span class="pipes2">&lt;string&gt;:regexfind(&lt;string regex&gt;, [&lt;number|string group&gt;]) → &lt;string&gt;</span></a>
+                            <a href="#scalar-regexfind">6.65.  <span class="pipes2">&lt;string&gt;:regexfind(&lt;string regex&gt;, [&lt;number|string group&gt;]) → &lt;string&gt;</span></a>
                         </td>
                         <td class="description">Returns the matched string by &lt;regex&gt; in target (or one specific group).</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-regexfindall">6.65.  <span class="pipes2">&lt;string&gt;:regexfindall(&lt;string regex&gt;, [&lt;number|string group&gt;]) → &lt;seq(string)&gt;</span></a>
+                            <a href="#scalar-regexfindall">6.66.  <span class="pipes2">&lt;string&gt;:regexfindall(&lt;string regex&gt;, [&lt;number|string group&gt;]) → &lt;seq(string)&gt;</span></a>
                         </td>
                         <td class="description">Returns all the matched strings by &lt;regex&gt; in target (or one specific group).</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-regexmatch">6.66.  <span class="pipes2">&lt;string&gt;:regexmatch(&lt;string regex&gt;) → &lt;boolean&gt;</span></a>
+                            <a href="#scalar-regexmatch">6.67.  <span class="pipes2">&lt;string&gt;:regexmatch(&lt;string regex&gt;) → &lt;boolean&gt;</span></a>
                         </td>
                         <td class="description">Returns true if the target matches &lt;regex&gt;. False otherwise.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-regexsplit">6.67.  <span class="pipes2">&lt;string&gt;:regexsplit(&lt;string regex&gt;, [&lt;number limit&gt;]) → &lt;seq(string)&gt;</span></a>
+                            <a href="#scalar-regexsplit">6.68.  <span class="pipes2">&lt;string&gt;:regexsplit(&lt;string regex&gt;, [&lt;number limit&gt;]) → &lt;seq(string)&gt;</span></a>
                         </td>
                         <td class="description">Splits string by regular expression &lt;regex&gt; in up to &lt;limit&gt; pieces.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-regexsub">6.68.  <span class="pipes2">&lt;string&gt;:regexsub(&lt;string regex&gt;, &lt;string replacement&gt;) → &lt;string&gt;</span></a>
+                            <a href="#scalar-regexsub">6.69.  <span class="pipes2">&lt;string&gt;:regexsub(&lt;string regex&gt;, &lt;string replacement&gt;) → &lt;string&gt;</span></a>
                         </td>
                         <td class="description">Replaces all matches of &lt;regex&gt; in target by &lt;replacement&gt;.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-stringrepeat">6.69.  <span class="pipes2">&lt;string&gt;:repeat(&lt;number&gt;) → &lt;string&gt;</span></a>
+                            <a href="#scalar-stringrepeat">6.70.  <span class="pipes2">&lt;string&gt;:repeat(&lt;number&gt;) → &lt;string&gt;</span></a>
                         </td>
                         <td class="description">Repeats the string a number of times.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-replace">6.70.  <span class="pipes2">&lt;string&gt;:replace(&lt;string from&gt;, &lt;string to&gt;) → &lt;string&gt;</span></a>
+                            <a href="#scalar-replace">6.71.  <span class="pipes2">&lt;string&gt;:replace(&lt;string from&gt;, &lt;string to&gt;) → &lt;string&gt;</span></a>
                         </td>
                         <td class="description">Replaces all instances of &lt;from&gt; with the string &lt;to&gt;.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-rtrim">6.71.  <span class="pipes2">&lt;string&gt;:rtrim([&lt;string chars&gt;]) → &lt;string&gt;</span></a>
+                            <a href="#scalar-rtrim">6.72.  <span class="pipes2">&lt;string&gt;:rtrim([&lt;string chars&gt;]) → &lt;string&gt;</span></a>
                         </td>
                         <td class="description">Trims trailing characters from a string</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-rtruncate">6.72.  <span class="pipes2">&lt;string&gt;:rtruncate(&lt;number length&gt;, [&lt;string ellipsis&gt;]) → &lt;string&gt;</span></a>
+                            <a href="#scalar-rtruncate">6.73.  <span class="pipes2">&lt;string&gt;:rtruncate(&lt;number length&gt;, [&lt;string ellipsis&gt;]) → &lt;string&gt;</span></a>
                         </td>
                         <td class="description">Truncates the string to the specified length, keeping the end, optionally adding an ellipsis at the start.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-split">6.73.  <span class="pipes2">&lt;string&gt;:split([&lt;string delim&gt;], [&lt;number limit&gt;]) → &lt;seq(string)&gt;</span></a>
+                            <a href="#scalar-split">6.74.  <span class="pipes2">&lt;string&gt;:split([&lt;string delim&gt;], [&lt;number limit&gt;]) → &lt;seq(string)&gt;</span></a>
                         </td>
                         <td class="description">Splits string by &lt;delim&gt; in up to &lt;limit&gt; pieces.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-sprintf">6.74.  <span class="pipes2">&lt;string&gt;:sprintf(&lt;object... args&gt;) → &lt;string&gt;</span></a>
+                            <a href="#scalar-sprintf">6.75.  <span class="pipes2">&lt;string&gt;:sprintf(&lt;object... args&gt;) → &lt;string&gt;</span></a>
                         </td>
                         <td class="description">Uses the target string as format to arguments.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-startswith">6.75.  <span class="pipes2">&lt;string&gt;:startswith(&lt;string&gt;) → &lt;boolean&gt;</span></a>
+                            <a href="#scalar-startswith">6.76.  <span class="pipes2">&lt;string&gt;:startswith(&lt;string&gt;) → &lt;boolean&gt;</span></a>
                         </td>
                         <td class="description">Returns whether the target string starts with the argument.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-substring">6.76.  <span class="pipes2">&lt;string&gt;:substring(&lt;number from&gt;, [&lt;number to&gt;]) → &lt;string&gt;</span></a>
+                            <a href="#scalar-substring">6.77.  <span class="pipes2">&lt;string&gt;:substring(&lt;number from&gt;, [&lt;number to&gt;]) → &lt;string&gt;</span></a>
                         </td>
                         <td class="description">Returns the substring between the indices &lt;from&gt; and &lt;to&gt;.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-trim">6.77.  <span class="pipes2">&lt;string&gt;:trim([&lt;string chars&gt;]) → &lt;string&gt;</span></a>
+                            <a href="#scalar-trim">6.78.  <span class="pipes2">&lt;string&gt;:trim([&lt;string chars&gt;]) → &lt;string&gt;</span></a>
                         </td>
                         <td class="description">Trims a string</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-truncate">6.78.  <span class="pipes2">&lt;string&gt;:truncate(&lt;number length&gt;, [&lt;string ellipsis&gt;]) → &lt;string&gt;</span></a>
+                            <a href="#scalar-truncate">6.79.  <span class="pipes2">&lt;string&gt;:truncate(&lt;number length&gt;, [&lt;string ellipsis&gt;]) → &lt;string&gt;</span></a>
                         </td>
                         <td class="description">Truncates the string to the specified length, optionally adding an ellipsis at the end.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-upper">6.79.  <span class="pipes2">&lt;string&gt;:upper() → &lt;string&gt;</span></a>
+                            <a href="#scalar-upper">6.80.  <span class="pipes2">&lt;string&gt;:upper() → &lt;string&gt;</span></a>
                         </td>
                         <td class="description">Converts string to uppercase.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-urldecode">6.80.  <span class="pipes2">&lt;string&gt;:urldecode([&lt;string encoding&gt;]) → &lt;string&gt;</span></a>
+                            <a href="#scalar-urldecode">6.81.  <span class="pipes2">&lt;string&gt;:urldecode([&lt;string encoding&gt;]) → &lt;string&gt;</span></a>
                         </td>
                         <td class="description">Decodes an application/x-www-form-urlencoded unicode string.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-urlencode">6.81.  <span class="pipes2">&lt;string&gt;:urlencode([&lt;string encoding&gt;]) → &lt;string&gt;</span></a>
+                            <a href="#scalar-urlencode">6.82.  <span class="pipes2">&lt;string&gt;:urlencode([&lt;string encoding&gt;]) → &lt;string&gt;</span></a>
                         </td>
                         <td class="description">Encodes a string as application/x-www-form-urlencoded.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-compare">6.82.  <span class="pipes2">compare(&lt;comparable a&gt;, &lt;comparable b&gt;) → &lt;number&gt;</span></a>
+                            <a href="#scalar-compare">6.83.  <span class="pipes2">compare(&lt;comparable a&gt;, &lt;comparable b&gt;) → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Returns a number &lt; 0 if a &lt; b, &gt; 0 if a &gt; b or 0 if a = b.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-concat">6.83.  <span class="pipes2">concat(&lt;string...&gt;) → &lt;string&gt;</span></a>
+                            <a href="#scalar-concat">6.84.  <span class="pipes2">concat(&lt;string...&gt;) → &lt;string&gt;</span></a>
                         </td>
                         <td class="description">Concatenetes many strings together</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-cron">6.84.  <span class="pipes2">cron(&lt;string&gt;, [&lt;string tz&gt;]) → &lt;period&gt;</span></a>
+                            <a href="#scalar-cron">6.85.  <span class="pipes2">cron(&lt;string&gt;, [&lt;string tz&gt;]) → &lt;period&gt;</span></a>
                         </td>
                         <td class="description">Constructs a period instance from a constant cron string</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-exprange">6.85.  <span class="pipes2">exprange([&lt;number start&gt;], &lt;number end&gt;, &lt;number step&gt;) → &lt;object&gt;</span></a>
+                            <a href="#scalar-exprange">6.86.  <span class="pipes2">exprange([&lt;number start&gt;], &lt;number end&gt;, &lt;number step&gt;) → &lt;object&gt;</span></a>
                         </td>
                         <td class="description">Creates a seq that iterates through numbers exponentially</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-happened">6.86.  <span class="pipes2">happened([&lt;number&gt;], [&lt;number tested&gt;], &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span></a>
+                            <a href="#scalar-happened">6.87.  <span class="pipes2">happened([&lt;number&gt;], [&lt;number tested&gt;], &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Returns true if the tested timestamp is inside the span, false otherwise.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-hllmerge">6.87.  <span class="pipes2">hllmerge(&lt;string... data&gt;) → &lt;string&gt;</span></a>
+                            <a href="#scalar-hllmerge">6.88.  <span class="pipes2">hllmerge(&lt;string... data&gt;) → &lt;string&gt;</span></a>
                         </td>
                         <td class="description">Merge many instances of compressed base64 HyperLogLog data.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-itermap">6.88.  <span class="pipes2">itermap(&lt;object&gt;, [&lt;string keyField&gt;], [&lt;string valueField&gt;]) → &lt;seq(row)&gt;</span></a>
+                            <a href="#scalar-itermap">6.89.  <span class="pipes2">itermap(&lt;object&gt;, [&lt;string keyField&gt;], [&lt;string valueField&gt;]) → &lt;seq(row)&gt;</span></a>
                         </td>
-                        <td class="description">Creates a seq that iterates through java.utilMap or row entries</td>
+                        <td class="description">Creates a seq that iterates through java.util.Map, seq or row entries</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-max">6.89.  <span class="pipes2">max(&lt;comparable&gt;, &lt;comparable&gt;, &lt;comparable...&gt;) → &lt;comparable&gt;</span></a>
+                            <a href="#scalar-max">6.90.  <span class="pipes2">max(&lt;comparable&gt;, &lt;comparable&gt;, &lt;comparable...&gt;) → &lt;comparable&gt;</span></a>
                         </td>
                         <td class="description">Returns the greatest value of all supplied arguments.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-metadata">6.90.  <span class="pipes2">metadata() → &lt;object&gt;</span></a>
+                            <a href="#scalar-metadata">6.91.  <span class="pipes2">metadata() → &lt;object&gt;</span></a>
                         </td>
                         <td class="description">Returns a representation of the previous pipe metadata.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-min">6.91.  <span class="pipes2">min(&lt;comparable&gt;, &lt;comparable&gt;, &lt;comparable...&gt;) → &lt;comparable&gt;</span></a>
+                            <a href="#scalar-min">6.92.  <span class="pipes2">min(&lt;comparable&gt;, &lt;comparable&gt;, &lt;comparable...&gt;) → &lt;comparable&gt;</span></a>
                         </td>
                         <td class="description">Returns the least value of all supplied arguments.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-newmap">6.92.  <span class="pipes2">newmap(&lt;object,object... pairs&gt;) → &lt;object&gt;</span></a>
+                            <a href="#scalar-newmap">6.93.  <span class="pipes2">newmap(&lt;object,object... pairs&gt;) → &lt;object&gt;</span></a>
                         </td>
                         <td class="description">Creates a instance of java.util.Map with the supplied keys and values.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-period">6.93.  <span class="pipes2">period(&lt;number&gt;, &lt;string unit&gt;, [&lt;string tz&gt;]) → &lt;period&gt;</span></a>
+                            <a href="#scalar-normrandom">6.94.  <span class="pipes2">normrandom([&lt;number mean&gt;], [&lt;number stdev&gt;]) → &lt;number&gt;</span></a>
+                        </td>
+                        <td class="description">Returns a random value from a normal (Gaussian) distribution.</td>
+                    </tr>
+
+                    <tr>
+                        <td class="level-1">
+                            <a href="#scalar-period">6.95.  <span class="pipes2">period(&lt;number&gt;, &lt;string unit&gt;, [&lt;string tz&gt;]) → &lt;period&gt;</span></a>
                         </td>
                         <td class="description">Constructs a period instance from parameters</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-pi">6.94.  <span class="pipes2">pi() → &lt;number&gt;</span></a>
+                            <a href="#scalar-pi">6.96.  <span class="pipes2">pi() → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Returns the constant value of pi.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-random">6.95.  <span class="pipes2">random([&lt;number min&gt;], [&lt;number max&gt;]) → &lt;number&gt;</span></a>
+                            <a href="#scalar-random">6.97.  <span class="pipes2">random([&lt;number min&gt;], [&lt;number max&gt;]) → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Returns a random value between &lt;min&gt; and &lt;max&gt; (0 and 1 if not defined).</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-range">6.96.  <span class="pipes2">range([&lt;number start&gt;], &lt;number end&gt;, [&lt;number step&gt;]) → &lt;object&gt;</span></a>
+                            <a href="#scalar-range">6.98.  <span class="pipes2">range([&lt;number start&gt;], &lt;number end&gt;, [&lt;number step&gt;]) → &lt;object&gt;</span></a>
                         </td>
                         <td class="description">Creates a seq that iterates through numbers</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-span">6.97.  <span class="pipes2">span([&lt;number&gt;], &lt;string&gt;, [&lt;string tz&gt;]) → &lt;row&gt;</span></a>
+                            <a href="#scalar-span">6.99.  <span class="pipes2">span([&lt;number&gt;], &lt;string&gt;, [&lt;string tz&gt;]) → &lt;row&gt;</span></a>
                         </td>
                         <td class="description">Calculates start and end timestamps of span based on target.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-spanend">6.98.  <span class="pipes2">spanend([&lt;number&gt;], &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span></a>
+                            <a href="#scalar-spanend">6.100.  <span class="pipes2">spanend([&lt;number&gt;], &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Calculates end timestamp of span based on target.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-spanstart">6.99.  <span class="pipes2">spanstart([&lt;number&gt;], &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span></a>
+                            <a href="#scalar-spanstart">6.101.  <span class="pipes2">spanstart([&lt;number&gt;], &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Calculates start timestamp of span based on target.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-spantest">6.100.  <span class="pipes2">spantest([&lt;number&gt;], &lt;number tested&gt;, &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span></a>
+                            <a href="#scalar-spantest">6.102.  <span class="pipes2">spantest([&lt;number&gt;], &lt;number tested&gt;, &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Returns -1 if the tested timestamp is before the span, 0 if it is inside and 1 if it is after.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-timestamp">6.101.  <span class="pipes2">timestamp() → &lt;number&gt;</span></a>
+                            <a href="#scalar-timestamp">6.103.  <span class="pipes2">timestamp() → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Returns the most appropriate timestamp, whether in scalar or aggregation contexts.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-uuid">6.102.  <span class="pipes2">uuid() → &lt;string&gt;</span></a>
+                            <a href="#scalar-uuid">6.104.  <span class="pipes2">uuid() → &lt;string&gt;</span></a>
                         </td>
                         <td class="description">Returns a random UUID string.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#scalar-sys">6.103. System functions</a>
+                            <a href="#scalar-zip">6.105.  <span class="pipes2">zip(&lt;seq... args&gt;) → &lt;seq(row)&gt;</span></a>
+                        </td>
+                        <td class="description">Creates a seq such that each element is a row with the respective element from input seqs</td>
+                    </tr>
+
+                    <tr>
+                        <td class="level-1">
+                            <a href="#scalar-sys">6.106. System functions</a>
                         </td>
                         <td class="description"></td>
                     </tr>
 
                     <tr>
                         <td class="level-2">
-                            <a href="#scalar-sys-cpu">6.103.1.  <span class="pipes2">sys.cpu() → &lt;row&gt;</span></a>
+                            <a href="#scalar-sys-cpu">6.106.1.  <span class="pipes2">sys.cpu() → &lt;row&gt;</span></a>
                         </td>
                         <td class="description">Returns the system's CPU usage info.</td>
                     </tr>
 
                     <tr>
                         <td class="level-2">
-                            <a href="#scalar-sys-disks">6.103.2.  <span class="pipes2">sys.disks() → &lt;seq(row)&gt;</span></a>
+                            <a href="#scalar-sys-disks">6.106.2.  <span class="pipes2">sys.disks() → &lt;seq(row)&gt;</span></a>
                         </td>
                         <td class="description">Returns info about all devices in the filesystem.</td>
                     </tr>
 
                     <tr>
                         <td class="level-2">
-                            <a href="#scalar-sys-fds">6.103.3.  <span class="pipes2">sys.fds() → &lt;row&gt;</span></a>
+                            <a href="#scalar-sys-fds">6.106.3.  <span class="pipes2">sys.fds() → &lt;row&gt;</span></a>
                         </td>
                         <td class="description">Returns info about process file descriptors.</td>
                     </tr>
 
                     <tr>
                         <td class="level-2">
-                            <a href="#scalar-sys-heap">6.103.4.  <span class="pipes2">sys.heap() → &lt;row&gt;</span></a>
+                            <a href="#scalar-sys-heap">6.106.4.  <span class="pipes2">sys.heap() → &lt;row&gt;</span></a>
                         </td>
                         <td class="description">Returns the system's current JVM heap info.</td>
                     </tr>
 
                     <tr>
                         <td class="level-2">
-                            <a href="#scalar-sys-hostname">6.103.5.  <span class="pipes2">sys.hostname() → &lt;string&gt;</span></a>
+                            <a href="#scalar-sys-hostname">6.106.5.  <span class="pipes2">sys.hostname() → &lt;string&gt;</span></a>
                         </td>
                         <td class="description">Returns the system's hostname.</td>
                     </tr>
 
                     <tr>
                         <td class="level-2">
-                            <a href="#scalar-sys-memory">6.103.6.  <span class="pipes2">sys.memory() → &lt;row&gt;</span></a>
+                            <a href="#scalar-sys-memory">6.106.6.  <span class="pipes2">sys.memory() → &lt;row&gt;</span></a>
                         </td>
                         <td class="description">Returns the system's memory usage info.</td>
                     </tr>
 
                     <tr>
                         <td class="level-2">
-                            <a href="#scalar-sys-properties">6.103.7.  <span class="pipes2">sys.properties() → &lt;object&gt;</span></a>
+                            <a href="#scalar-sys-properties">6.106.7.  <span class="pipes2">sys.properties() → &lt;object&gt;</span></a>
                         </td>
                         <td class="description">Returns a list of defined system properties</td>
                     </tr>
 
                     <tr>
                         <td class="level-2">
-                            <a href="#scalar-sys-threadlist">6.103.8.  <span class="pipes2">sys.threadlist() → &lt;seq(row)&gt;</span></a>
+                            <a href="#scalar-sys-threadlist">6.106.8.  <span class="pipes2">sys.threadlist() → &lt;seq(row)&gt;</span></a>
                         </td>
                         <td class="description">Returns a list of threads in the JVM</td>
                     </tr>
 
                     <tr>
                         <td class="level-2">
-                            <a href="#scalar-sys-threads">6.103.9.  <span class="pipes2">sys.threads() → &lt;row&gt;</span></a>
+                            <a href="#scalar-sys-threads">6.106.9.  <span class="pipes2">sys.threads() → &lt;row&gt;</span></a>
                         </td>
                         <td class="description">Returns info about running threads in current process.</td>
                     </tr>
 
                     <tr>
                         <td class="level-2">
-                            <a href="#scalar-sys-timestamp">6.103.10.  <span class="pipes2">sys.timestamp() → &lt;number&gt;</span></a>
+                            <a href="#scalar-sys-timestamp">6.106.10.  <span class="pipes2">sys.timestamp() → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Returns the system's real timestamp (not the query timestamp).</td>
                     </tr>
 
                     <tr>
                         <td class="level-2">
-                            <a href="#scalar-sys-version">6.103.11.  <span class="pipes2">sys.version() → &lt;row&gt;</span></a>
+                            <a href="#scalar-sys-uptime">6.106.11.  <span class="pipes2">sys.uptime() → &lt;number&gt;</span></a>
+                        </td>
+                        <td class="description">Returns the number of milliseconds since the start of the JVM</td>
+                    </tr>
+
+                    <tr>
+                        <td class="level-2">
+                            <a href="#scalar-sys-version">6.106.12.  <span class="pipes2">sys.version() → &lt;row&gt;</span></a>
                         </td>
                         <td class="description">Returns Pipes version info</td>
                     </tr>
@@ -3865,7 +3893,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
     Every query in Pipes is required to start with a filter. The filter runtime is optimized to
     allow many queries running over the same stream, sharing as much processing as possible.
 </p> <p>
-    The filter syntax is different from the rest of the syntax. It is inspired 
+    The filter syntax is different from the rest of the syntax. It is inspired
     in the <a href="http://lucene.apache.org/core/2_9_4/queryparsersyntax.html">Lucene's query syntax</a>.
 </p>
 <p>
@@ -3917,7 +3945,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </p> <p>
     The range filter is inclusive in both ends. To make it exclusive, change "[" to "(" and/or "]" to ")".
 </p> <p>
-    The <code class="pipes">TO</code> keyword must be written in uppercase. It can also be replaced by a single 
+    The <code class="pipes">TO</code> keyword must be written in uppercase. It can also be replaced by a single
     comma with no change in meaning.
 </p> <p>
     Wildcards are <strong>not</strong> allowed in this filter. Except for the single <code class="pipes">*</code>.
@@ -4167,8 +4195,11 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="pipe-compile" class="level-1">
-<h4 class="header">4.5.  <span class="pipes2">@compile &lt;string&gt;</span> <span class="permalink"><a href="#pipe-compile">¶</a></span></h4>
-<div class="text"><p><strong>Compiles a constant string into a pipe</strong></p><p><em>Available since Pipes v0.14.7</em></p><p><strong>Example:</strong></p>
+<h4 class="header">4.5.  <span class="pipes2">@compile &lt;string&gt;, &lt;obj... args&gt;</span> <span class="permalink"><a href="#pipe-compile">¶</a></span></h4>
+<div class="text"><p><strong>Compiles a constant string into a pipe</strong></p><p><em>Available since Pipes v0.14.7</em></p><p>
+  The arguments are available as template macros starting from <code class="pipes">@@0</code>.
+</p>
+<p><strong>Example:</strong></p>
 <pre class="pipes">*
 =&gt; @compile '@zip (x#, y#)'</pre>
 <p class="legend">Compiles the string into the pipe <code class="expr">@zip (x#, y#)</code>.</p>
@@ -5177,7 +5208,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 <pre class="pipes">* =&gt; 123.456:format(".00") every second</pre>
 <p class="legend">Format with 2 digits after decimal point.</p>
 
-<pre class="pipes">=&gt; 12345.678:format("0,000.00", "pt-BR") as money every second</pre>
+<pre class="pipes">=&gt; 12345.678:format("#,##0.00", "pt-BR") as money every second</pre>
 <p class="legend">Format 12345.678 to  '12.345,68' using Brazilian locale.</p>
 </div>
 </div><hr/>
@@ -5356,8 +5387,11 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 <div class="text"><p><strong>Returns a new sequence that takes only the first &lt;n&gt; elements</strong></p><p><em>Available since Pipes v0.14</em></p></div>
 </div><hr/>
 <div id="scalar-compile" class="level-1">
-<h4 class="header">6.50.  <span class="pipes2">&lt;string&gt;:compile() → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-compile">¶</a></span></h4>
-<div class="text"><p><strong>Compiles a constant string into a pipes expression</strong></p><p><em>Available since Pipes v0.14.7</em></p></div>
+<h4 class="header">6.50.  <span class="pipes2">&lt;string&gt;:compile(&lt;obj... args&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-compile">¶</a></span></h4>
+<div class="text"><p><strong>Compiles a constant string into a pipes expression</strong></p><p><em>Available since Pipes v0.14.7</em></p><p>
+    The arguments are available as template macros starting from <code class="pipes">@@0</code>.
+</p>
+</div>
 </div><hr/>
 <div id="scalar-contains" class="level-1">
 <h4 class="header">6.51.  <span class="pipes2">&lt;string&gt;:contains(&lt;string&gt;) → &lt;boolean&gt;</span> <span class="permalink"><a href="#scalar-contains">¶</a></span></h4>
@@ -5412,16 +5446,23 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 <h4 class="header">6.59.  <span class="pipes2">&lt;string&gt;:ltrim([&lt;string chars&gt;]) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-ltrim">¶</a></span></h4>
 <div class="text"><p><strong>Trims leading characters from a string</strong></p></div>
 </div><hr/>
+<div id="scalar-mapcompile" class="level-1">
+<h4 class="header">6.60.  <span class="pipes2">&lt;string&gt;:mapcompile(&lt;obj... args&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-mapcompile">¶</a></span></h4>
+<div class="text"><p><strong>Compiles a constant string with each argument into many pipes expressions</strong></p><p><em>Available since Pipes v0.15.3</em></p><p>
+    The argument can be used in the expression as <code class="pipes">@@0</code>.
+</p>
+</div>
+</div><hr/>
 <div id="scalar-ord" class="level-1">
-<h4 class="header">6.60.  <span class="pipes2">&lt;string&gt;:ord() → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-ord">¶</a></span></h4>
+<h4 class="header">6.61.  <span class="pipes2">&lt;string&gt;:ord() → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-ord">¶</a></span></h4>
 <div class="text"><p><strong>Gets the unicode codepoint from the first char in the string.</strong></p><p><em>Available since Pipes v0.13</em></p></div>
 </div><hr/>
 <div id="scalar-parse" class="level-1">
-<h4 class="header">6.61.  <span class="pipes2">&lt;string&gt;:parse([&lt;string format&gt;], [&lt;string locale&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-parse">¶</a></span></h4>
+<h4 class="header">6.62.  <span class="pipes2">&lt;string&gt;:parse([&lt;string format&gt;], [&lt;string locale&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-parse">¶</a></span></h4>
 <div class="text"><p><strong>Parses a number according to format string and locale.</strong></p></div>
 </div><hr/>
 <div id="scalar-regex" class="level-1">
-<h4 class="header">6.62.  <span class="pipes2">&lt;string&gt;:regex(&lt;string regex&gt;) → &lt;row&gt;</span> <span class="permalink"><a href="#scalar-regex">¶</a></span></h4>
+<h4 class="header">6.63.  <span class="pipes2">&lt;string&gt;:regex(&lt;string regex&gt;) → &lt;row&gt;</span> <span class="permalink"><a href="#scalar-regex">¶</a></span></h4>
 <div class="text"><p><strong>Returns a strongly typed row composed by all named groups in &lt;regex&gt;.</strong></p><p>
   The result is a row value with as many fields as there are
   named groups in the specified regex.
@@ -5439,46 +5480,46 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="scalar-regexall" class="level-1">
-<h4 class="header">6.63.  <span class="pipes2">&lt;string&gt;:regexall(&lt;string regex&gt;) → &lt;seq(row)&gt;</span> <span class="permalink"><a href="#scalar-regexall">¶</a></span></h4>
+<h4 class="header">6.64.  <span class="pipes2">&lt;string&gt;:regexall(&lt;string regex&gt;) → &lt;seq(row)&gt;</span> <span class="permalink"><a href="#scalar-regexall">¶</a></span></h4>
 <div class="text"><p><strong>Returns a sequence of rows composed by all matches of all named groups in &lt;regex&gt;.</strong></p><p><em>Available since Pipes v0.13</em></p><p>
   This method is similar to <a href="#scalar-regex"><code class="pipes2">&lt;string&gt;:regex(&lt;string regex&gt;) → &lt;row&gt;</code></a>, but returns all matches, not only the first.
 </p>
 </div>
 </div><hr/>
 <div id="scalar-regexfind" class="level-1">
-<h4 class="header">6.64.  <span class="pipes2">&lt;string&gt;:regexfind(&lt;string regex&gt;, [&lt;number|string group&gt;]) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-regexfind">¶</a></span></h4>
+<h4 class="header">6.65.  <span class="pipes2">&lt;string&gt;:regexfind(&lt;string regex&gt;, [&lt;number|string group&gt;]) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-regexfind">¶</a></span></h4>
 <div class="text"><p><strong>Returns the matched string by &lt;regex&gt; in target (or one specific group).</strong></p></div>
 </div><hr/>
 <div id="scalar-regexfindall" class="level-1">
-<h4 class="header">6.65.  <span class="pipes2">&lt;string&gt;:regexfindall(&lt;string regex&gt;, [&lt;number|string group&gt;]) → &lt;seq(string)&gt;</span> <span class="permalink"><a href="#scalar-regexfindall">¶</a></span></h4>
+<h4 class="header">6.66.  <span class="pipes2">&lt;string&gt;:regexfindall(&lt;string regex&gt;, [&lt;number|string group&gt;]) → &lt;seq(string)&gt;</span> <span class="permalink"><a href="#scalar-regexfindall">¶</a></span></h4>
 <div class="text"><p><strong>Returns all the matched strings by &lt;regex&gt; in target (or one specific group).</strong></p><p><em>Available since Pipes v0.13</em></p></div>
 </div><hr/>
 <div id="scalar-regexmatch" class="level-1">
-<h4 class="header">6.66.  <span class="pipes2">&lt;string&gt;:regexmatch(&lt;string regex&gt;) → &lt;boolean&gt;</span> <span class="permalink"><a href="#scalar-regexmatch">¶</a></span></h4>
+<h4 class="header">6.67.  <span class="pipes2">&lt;string&gt;:regexmatch(&lt;string regex&gt;) → &lt;boolean&gt;</span> <span class="permalink"><a href="#scalar-regexmatch">¶</a></span></h4>
 <div class="text"><p><strong>Returns true if the target matches &lt;regex&gt;. False otherwise.</strong></p></div>
 </div><hr/>
 <div id="scalar-regexsplit" class="level-1">
-<h4 class="header">6.67.  <span class="pipes2">&lt;string&gt;:regexsplit(&lt;string regex&gt;, [&lt;number limit&gt;]) → &lt;seq(string)&gt;</span> <span class="permalink"><a href="#scalar-regexsplit">¶</a></span></h4>
+<h4 class="header">6.68.  <span class="pipes2">&lt;string&gt;:regexsplit(&lt;string regex&gt;, [&lt;number limit&gt;]) → &lt;seq(string)&gt;</span> <span class="permalink"><a href="#scalar-regexsplit">¶</a></span></h4>
 <div class="text"><p><strong>Splits string by regular expression &lt;regex&gt; in up to &lt;limit&gt; pieces.</strong></p><p><em>Available since Pipes v0.13</em></p></div>
 </div><hr/>
 <div id="scalar-regexsub" class="level-1">
-<h4 class="header">6.68.  <span class="pipes2">&lt;string&gt;:regexsub(&lt;string regex&gt;, &lt;string replacement&gt;) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-regexsub">¶</a></span></h4>
+<h4 class="header">6.69.  <span class="pipes2">&lt;string&gt;:regexsub(&lt;string regex&gt;, &lt;string replacement&gt;) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-regexsub">¶</a></span></h4>
 <div class="text"><p><strong>Replaces all matches of &lt;regex&gt; in target by &lt;replacement&gt;.</strong></p></div>
 </div><hr/>
 <div id="scalar-stringrepeat" class="level-1">
-<h4 class="header">6.69.  <span class="pipes2">&lt;string&gt;:repeat(&lt;number&gt;) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-stringrepeat">¶</a></span></h4>
+<h4 class="header">6.70.  <span class="pipes2">&lt;string&gt;:repeat(&lt;number&gt;) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-stringrepeat">¶</a></span></h4>
 <div class="text"><p><strong>Repeats the string a number of times.</strong></p><p><em>Available since Pipes v0.13</em></p></div>
 </div><hr/>
 <div id="scalar-replace" class="level-1">
-<h4 class="header">6.70.  <span class="pipes2">&lt;string&gt;:replace(&lt;string from&gt;, &lt;string to&gt;) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-replace">¶</a></span></h4>
+<h4 class="header">6.71.  <span class="pipes2">&lt;string&gt;:replace(&lt;string from&gt;, &lt;string to&gt;) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-replace">¶</a></span></h4>
 <div class="text"><p><strong>Replaces all instances of &lt;from&gt; with the string &lt;to&gt;.</strong></p></div>
 </div><hr/>
 <div id="scalar-rtrim" class="level-1">
-<h4 class="header">6.71.  <span class="pipes2">&lt;string&gt;:rtrim([&lt;string chars&gt;]) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-rtrim">¶</a></span></h4>
+<h4 class="header">6.72.  <span class="pipes2">&lt;string&gt;:rtrim([&lt;string chars&gt;]) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-rtrim">¶</a></span></h4>
 <div class="text"><p><strong>Trims trailing characters from a string</strong></p></div>
 </div><hr/>
 <div id="scalar-rtruncate" class="level-1">
-<h4 class="header">6.72.  <span class="pipes2">&lt;string&gt;:rtruncate(&lt;number length&gt;, [&lt;string ellipsis&gt;]) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-rtruncate">¶</a></span></h4>
+<h4 class="header">6.73.  <span class="pipes2">&lt;string&gt;:rtruncate(&lt;number length&gt;, [&lt;string ellipsis&gt;]) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-rtruncate">¶</a></span></h4>
 <div class="text"><p><strong>Truncates the string to the specified length, keeping the end, optionally adding an ellipsis at the start.</strong></p><p><em>Available since Pipes v0.13.3</em></p><p>
   The ellipsis length <strong>does</strong> count to the maximum length. If you can, use the char <code class="pipes">"\u2026"</code>
   as a single-char ellipsis.
@@ -5493,30 +5534,30 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="scalar-split" class="level-1">
-<h4 class="header">6.73.  <span class="pipes2">&lt;string&gt;:split([&lt;string delim&gt;], [&lt;number limit&gt;]) → &lt;seq(string)&gt;</span> <span class="permalink"><a href="#scalar-split">¶</a></span></h4>
+<h4 class="header">6.74.  <span class="pipes2">&lt;string&gt;:split([&lt;string delim&gt;], [&lt;number limit&gt;]) → &lt;seq(string)&gt;</span> <span class="permalink"><a href="#scalar-split">¶</a></span></h4>
 <div class="text"><p><strong>Splits string by &lt;delim&gt; in up to &lt;limit&gt; pieces.</strong></p><p><em>Available since Pipes v0.13</em></p><p>
   If the delimiter is not set, the string is then split by individual chars.
 </p>
 </div>
 </div><hr/>
 <div id="scalar-sprintf" class="level-1">
-<h4 class="header">6.74.  <span class="pipes2">&lt;string&gt;:sprintf(&lt;object... args&gt;) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-sprintf">¶</a></span></h4>
+<h4 class="header">6.75.  <span class="pipes2">&lt;string&gt;:sprintf(&lt;object... args&gt;) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-sprintf">¶</a></span></h4>
 <div class="text"><p><strong>Uses the target string as format to arguments.</strong></p></div>
 </div><hr/>
 <div id="scalar-startswith" class="level-1">
-<h4 class="header">6.75.  <span class="pipes2">&lt;string&gt;:startswith(&lt;string&gt;) → &lt;boolean&gt;</span> <span class="permalink"><a href="#scalar-startswith">¶</a></span></h4>
+<h4 class="header">6.76.  <span class="pipes2">&lt;string&gt;:startswith(&lt;string&gt;) → &lt;boolean&gt;</span> <span class="permalink"><a href="#scalar-startswith">¶</a></span></h4>
 <div class="text"><p><strong>Returns whether the target string starts with the argument.</strong></p></div>
 </div><hr/>
 <div id="scalar-substring" class="level-1">
-<h4 class="header">6.76.  <span class="pipes2">&lt;string&gt;:substring(&lt;number from&gt;, [&lt;number to&gt;]) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-substring">¶</a></span></h4>
+<h4 class="header">6.77.  <span class="pipes2">&lt;string&gt;:substring(&lt;number from&gt;, [&lt;number to&gt;]) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-substring">¶</a></span></h4>
 <div class="text"><p><strong>Returns the substring between the indices &lt;from&gt; and &lt;to&gt;.</strong></p></div>
 </div><hr/>
 <div id="scalar-trim" class="level-1">
-<h4 class="header">6.77.  <span class="pipes2">&lt;string&gt;:trim([&lt;string chars&gt;]) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-trim">¶</a></span></h4>
+<h4 class="header">6.78.  <span class="pipes2">&lt;string&gt;:trim([&lt;string chars&gt;]) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-trim">¶</a></span></h4>
 <div class="text"><p><strong>Trims a string</strong></p></div>
 </div><hr/>
 <div id="scalar-truncate" class="level-1">
-<h4 class="header">6.78.  <span class="pipes2">&lt;string&gt;:truncate(&lt;number length&gt;, [&lt;string ellipsis&gt;]) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-truncate">¶</a></span></h4>
+<h4 class="header">6.79.  <span class="pipes2">&lt;string&gt;:truncate(&lt;number length&gt;, [&lt;string ellipsis&gt;]) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-truncate">¶</a></span></h4>
 <div class="text"><p><strong>Truncates the string to the specified length, optionally adding an ellipsis at the end.</strong></p><p>
   The ellipsis length <strong>does</strong> count to the maximum length. If you can, use the char <code class="pipes">"\u2026"</code>
   as a single-char ellipsis.
@@ -5531,27 +5572,27 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="scalar-upper" class="level-1">
-<h4 class="header">6.79.  <span class="pipes2">&lt;string&gt;:upper() → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-upper">¶</a></span></h4>
+<h4 class="header">6.80.  <span class="pipes2">&lt;string&gt;:upper() → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-upper">¶</a></span></h4>
 <div class="text"><p><strong>Converts string to uppercase.</strong></p></div>
 </div><hr/>
 <div id="scalar-urldecode" class="level-1">
-<h4 class="header">6.80.  <span class="pipes2">&lt;string&gt;:urldecode([&lt;string encoding&gt;]) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-urldecode">¶</a></span></h4>
+<h4 class="header">6.81.  <span class="pipes2">&lt;string&gt;:urldecode([&lt;string encoding&gt;]) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-urldecode">¶</a></span></h4>
 <div class="text"><p><strong>Decodes an application/x-www-form-urlencoded unicode string.</strong></p><p><em>Available since Pipes v0.13.12</em></p></div>
 </div><hr/>
 <div id="scalar-urlencode" class="level-1">
-<h4 class="header">6.81.  <span class="pipes2">&lt;string&gt;:urlencode([&lt;string encoding&gt;]) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-urlencode">¶</a></span></h4>
+<h4 class="header">6.82.  <span class="pipes2">&lt;string&gt;:urlencode([&lt;string encoding&gt;]) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-urlencode">¶</a></span></h4>
 <div class="text"><p><strong>Encodes a string as application/x-www-form-urlencoded.</strong></p><p><em>Available since Pipes v0.13.12</em></p></div>
 </div><hr/>
 <div id="scalar-compare" class="level-1">
-<h4 class="header">6.82.  <span class="pipes2">compare(&lt;comparable a&gt;, &lt;comparable b&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-compare">¶</a></span></h4>
+<h4 class="header">6.83.  <span class="pipes2">compare(&lt;comparable a&gt;, &lt;comparable b&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-compare">¶</a></span></h4>
 <div class="text"><p><strong>Returns a number &lt; 0 if a &lt; b, &gt; 0 if a &gt; b or 0 if a = b.</strong></p></div>
 </div><hr/>
 <div id="scalar-concat" class="level-1">
-<h4 class="header">6.83.  <span class="pipes2">concat(&lt;string...&gt;) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-concat">¶</a></span></h4>
+<h4 class="header">6.84.  <span class="pipes2">concat(&lt;string...&gt;) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-concat">¶</a></span></h4>
 <div class="text"><p><strong>Concatenetes many strings together</strong></p></div>
 </div><hr/>
 <div id="scalar-cron" class="level-1">
-<h4 class="header">6.84.  <span class="pipes2">cron(&lt;string&gt;, [&lt;string tz&gt;]) → &lt;period&gt;</span> <span class="permalink"><a href="#scalar-cron">¶</a></span></h4>
+<h4 class="header">6.85.  <span class="pipes2">cron(&lt;string&gt;, [&lt;string tz&gt;]) → &lt;period&gt;</span> <span class="permalink"><a href="#scalar-cron">¶</a></span></h4>
 <div class="text"><p><strong>Constructs a period instance from a constant cron string</strong></p><p>
     <strong>Example:</strong>
 </p>
@@ -5563,7 +5604,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="scalar-exprange" class="level-1">
-<h4 class="header">6.85.  <span class="pipes2">exprange([&lt;number start&gt;], &lt;number end&gt;, &lt;number step&gt;) → &lt;object&gt;</span> <span class="permalink"><a href="#scalar-exprange">¶</a></span></h4>
+<h4 class="header">6.86.  <span class="pipes2">exprange([&lt;number start&gt;], &lt;number end&gt;, &lt;number step&gt;) → &lt;object&gt;</span> <span class="permalink"><a href="#scalar-exprange">¶</a></span></h4>
 <div class="text"><p><strong>Creates a seq that iterates through numbers exponentially</strong></p><p><em>Available since Pipes v0.14.7</em></p><p>
   <strong>Example:</strong>
 </p>
@@ -5575,7 +5616,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="scalar-happened" class="level-1">
-<h4 class="header">6.86.  <span class="pipes2">happened([&lt;number&gt;], [&lt;number tested&gt;], &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-happened">¶</a></span></h4>
+<h4 class="header">6.87.  <span class="pipes2">happened([&lt;number&gt;], [&lt;number tested&gt;], &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-happened">¶</a></span></h4>
 <div class="text"><p><strong>Returns true if the tested timestamp is inside the span, false otherwise.</strong></p><p>
     Please note that <code class="pipes">someprop:happened('today')</code> is equivalent to <code class="pipes">happened(timestamp(), someprop, 'today')</code>.
 </p>
@@ -5585,15 +5626,15 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="scalar-hllmerge" class="level-1">
-<h4 class="header">6.87.  <span class="pipes2">hllmerge(&lt;string... data&gt;) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-hllmerge">¶</a></span></h4>
+<h4 class="header">6.88.  <span class="pipes2">hllmerge(&lt;string... data&gt;) → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-hllmerge">¶</a></span></h4>
 <div class="text"><p><strong>Merge many instances of compressed base64 HyperLogLog data.</strong></p><p>
   Useful to merge results from <a href="#aggregation-hllset"><code class="pipes2">hllset(&lt;number log2m&gt;, &lt;object...&gt;) → &lt;string&gt;</code></a> aggregations.
 </p>
 </div>
 </div><hr/>
 <div id="scalar-itermap" class="level-1">
-<h4 class="header">6.88.  <span class="pipes2">itermap(&lt;object&gt;, [&lt;string keyField&gt;], [&lt;string valueField&gt;]) → &lt;seq(row)&gt;</span> <span class="permalink"><a href="#scalar-itermap">¶</a></span></h4>
-<div class="text"><p><strong>Creates a seq that iterates through java.utilMap or row entries</strong></p><p><em>Available since Pipes v0.13</em></p><p>
+<h4 class="header">6.89.  <span class="pipes2">itermap(&lt;object&gt;, [&lt;string keyField&gt;], [&lt;string valueField&gt;]) → &lt;seq(row)&gt;</span> <span class="permalink"><a href="#scalar-itermap">¶</a></span></h4>
+<div class="text"><p><strong>Creates a seq that iterates through java.util.Map, seq or row entries</strong></p><p><em>Available since Pipes v0.13</em></p><p>
   <strong>Example:</strong>
 </p>
 <pre class="pipes">* =&gt; @for itermap(some_map_property:object)</pre>
@@ -5604,23 +5645,27 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="scalar-max" class="level-1">
-<h4 class="header">6.89.  <span class="pipes2">max(&lt;comparable&gt;, &lt;comparable&gt;, &lt;comparable...&gt;) → &lt;comparable&gt;</span> <span class="permalink"><a href="#scalar-max">¶</a></span></h4>
+<h4 class="header">6.90.  <span class="pipes2">max(&lt;comparable&gt;, &lt;comparable&gt;, &lt;comparable...&gt;) → &lt;comparable&gt;</span> <span class="permalink"><a href="#scalar-max">¶</a></span></h4>
 <div class="text"><p><strong>Returns the greatest value of all supplied arguments.</strong></p></div>
 </div><hr/>
 <div id="scalar-metadata" class="level-1">
-<h4 class="header">6.90.  <span class="pipes2">metadata() → &lt;object&gt;</span> <span class="permalink"><a href="#scalar-metadata">¶</a></span></h4>
+<h4 class="header">6.91.  <span class="pipes2">metadata() → &lt;object&gt;</span> <span class="permalink"><a href="#scalar-metadata">¶</a></span></h4>
 <div class="text"><p><strong>Returns a representation of the previous pipe metadata.</strong></p><p><em>Available since Pipes v0.13</em></p></div>
 </div><hr/>
 <div id="scalar-min" class="level-1">
-<h4 class="header">6.91.  <span class="pipes2">min(&lt;comparable&gt;, &lt;comparable&gt;, &lt;comparable...&gt;) → &lt;comparable&gt;</span> <span class="permalink"><a href="#scalar-min">¶</a></span></h4>
+<h4 class="header">6.92.  <span class="pipes2">min(&lt;comparable&gt;, &lt;comparable&gt;, &lt;comparable...&gt;) → &lt;comparable&gt;</span> <span class="permalink"><a href="#scalar-min">¶</a></span></h4>
 <div class="text"><p><strong>Returns the least value of all supplied arguments.</strong></p></div>
 </div><hr/>
 <div id="scalar-newmap" class="level-1">
-<h4 class="header">6.92.  <span class="pipes2">newmap(&lt;object,object... pairs&gt;) → &lt;object&gt;</span> <span class="permalink"><a href="#scalar-newmap">¶</a></span></h4>
+<h4 class="header">6.93.  <span class="pipes2">newmap(&lt;object,object... pairs&gt;) → &lt;object&gt;</span> <span class="permalink"><a href="#scalar-newmap">¶</a></span></h4>
 <div class="text"><p><strong>Creates a instance of java.util.Map with the supplied keys and values.</strong></p></div>
 </div><hr/>
+<div id="scalar-normrandom" class="level-1">
+<h4 class="header">6.94.  <span class="pipes2">normrandom([&lt;number mean&gt;], [&lt;number stdev&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-normrandom">¶</a></span></h4>
+<div class="text"><p><strong>Returns a random value from a normal (Gaussian) distribution.</strong></p><p><em>Available since Pipes v0.15.6</em></p></div>
+</div><hr/>
 <div id="scalar-period" class="level-1">
-<h4 class="header">6.93.  <span class="pipes2">period(&lt;number&gt;, &lt;string unit&gt;, [&lt;string tz&gt;]) → &lt;period&gt;</span> <span class="permalink"><a href="#scalar-period">¶</a></span></h4>
+<h4 class="header">6.95.  <span class="pipes2">period(&lt;number&gt;, &lt;string unit&gt;, [&lt;string tz&gt;]) → &lt;period&gt;</span> <span class="permalink"><a href="#scalar-period">¶</a></span></h4>
 <div class="text"><p><strong>Constructs a period instance from parameters</strong></p><p>
     <strong>Example:</strong>
 </p>
@@ -5629,15 +5674,15 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="scalar-pi" class="level-1">
-<h4 class="header">6.94.  <span class="pipes2">pi() → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-pi">¶</a></span></h4>
+<h4 class="header">6.96.  <span class="pipes2">pi() → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-pi">¶</a></span></h4>
 <div class="text"><p><strong>Returns the constant value of pi.</strong></p></div>
 </div><hr/>
 <div id="scalar-random" class="level-1">
-<h4 class="header">6.95.  <span class="pipes2">random([&lt;number min&gt;], [&lt;number max&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-random">¶</a></span></h4>
+<h4 class="header">6.97.  <span class="pipes2">random([&lt;number min&gt;], [&lt;number max&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-random">¶</a></span></h4>
 <div class="text"><p><strong>Returns a random value between &lt;min&gt; and &lt;max&gt; (0 and 1 if not defined).</strong></p></div>
 </div><hr/>
 <div id="scalar-range" class="level-1">
-<h4 class="header">6.96.  <span class="pipes2">range([&lt;number start&gt;], &lt;number end&gt;, [&lt;number step&gt;]) → &lt;object&gt;</span> <span class="permalink"><a href="#scalar-range">¶</a></span></h4>
+<h4 class="header">6.98.  <span class="pipes2">range([&lt;number start&gt;], &lt;number end&gt;, [&lt;number step&gt;]) → &lt;object&gt;</span> <span class="permalink"><a href="#scalar-range">¶</a></span></h4>
 <div class="text"><p><strong>Creates a seq that iterates through numbers</strong></p><p><em>Available since Pipes v0.13</em></p><p>
   <strong>Example:</strong>
 </p>
@@ -5652,7 +5697,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="scalar-span" class="level-1">
-<h4 class="header">6.97.  <span class="pipes2">span([&lt;number&gt;], &lt;string&gt;, [&lt;string tz&gt;]) → &lt;row&gt;</span> <span class="permalink"><a href="#scalar-span">¶</a></span></h4>
+<h4 class="header">6.99.  <span class="pipes2">span([&lt;number&gt;], &lt;string&gt;, [&lt;string tz&gt;]) → &lt;row&gt;</span> <span class="permalink"><a href="#scalar-span">¶</a></span></h4>
 <div class="text"><p><strong>Calculates start and end timestamps of span based on target.</strong></p><p><em>Available since Pipes v0.13</em></p><p>
     The result is a row with three fields: <code class="pipes">timestamp</code>, <code class="pipes">start</code> and <code class="pipes">end</code>.
 </p>
@@ -5664,21 +5709,21 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="scalar-spanend" class="level-1">
-<h4 class="header">6.98.  <span class="pipes2">spanend([&lt;number&gt;], &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-spanend">¶</a></span></h4>
+<h4 class="header">6.100.  <span class="pipes2">spanend([&lt;number&gt;], &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-spanend">¶</a></span></h4>
 <div class="text"><p><strong>Calculates end timestamp of span based on target.</strong></p><p>
     Please note that <code class="pipes">spanend('today')</code> is equivalent to <code class="pipes">spanend(timestamp(), 'today')</code>.
 </p>
 </div>
 </div><hr/>
 <div id="scalar-spanstart" class="level-1">
-<h4 class="header">6.99.  <span class="pipes2">spanstart([&lt;number&gt;], &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-spanstart">¶</a></span></h4>
+<h4 class="header">6.101.  <span class="pipes2">spanstart([&lt;number&gt;], &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-spanstart">¶</a></span></h4>
 <div class="text"><p><strong>Calculates start timestamp of span based on target.</strong></p><p>
     Please note that <code class="pipes">spanstart('today')</code> is equivalent to <code class="pipes">spanstart(timestamp(), 'today')</code>.
 </p>
 </div>
 </div><hr/>
 <div id="scalar-spantest" class="level-1">
-<h4 class="header">6.100.  <span class="pipes2">spantest([&lt;number&gt;], &lt;number tested&gt;, &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-spantest">¶</a></span></h4>
+<h4 class="header">6.102.  <span class="pipes2">spantest([&lt;number&gt;], &lt;number tested&gt;, &lt;string&gt;, [&lt;string tz&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-spantest">¶</a></span></h4>
 <div class="text"><p><strong>Returns -1 if the tested timestamp is before the span, 0 if it is inside and 1 if it is after.</strong></p><p>
     Please note that <code class="pipes">someprop:spantest('today')</code> is equivalent to <code class="pipes">spantest(timestamp(), someprop, 'today')</code>.
 </p>
@@ -5688,22 +5733,31 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="scalar-timestamp" class="level-1">
-<h4 class="header">6.101.  <span class="pipes2">timestamp() → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-timestamp">¶</a></span></h4>
+<h4 class="header">6.103.  <span class="pipes2">timestamp() → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-timestamp">¶</a></span></h4>
 <div class="text"><p><strong>Returns the most appropriate timestamp, whether in scalar or aggregation contexts.</strong></p></div>
 </div><hr/>
 <div id="scalar-uuid" class="level-1">
-<h4 class="header">6.102.  <span class="pipes2">uuid() → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-uuid">¶</a></span></h4>
+<h4 class="header">6.104.  <span class="pipes2">uuid() → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-uuid">¶</a></span></h4>
 <div class="text"><p><strong>Returns a random UUID string.</strong></p></div>
 </div><hr/>
+<div id="scalar-zip" class="level-1">
+<h4 class="header">6.105.  <span class="pipes2">zip(&lt;seq... args&gt;) → &lt;seq(row)&gt;</span> <span class="permalink"><a href="#scalar-zip">¶</a></span></h4>
+<div class="text"><p><strong>Creates a seq such that each element is a row with the respective element from input seqs</strong></p><p><em>Available since Pipes v0.15.3</em></p><p>
+  <strong>Example:</strong>
+</p>
+<pre class="pipes2">seq((1, 2), ('a', 'b'))</pre>
+<p class="legend">Returns a seq equivalent to <code class="pipes">((1, 'a'), (2, 'b'))</code></p>
+</div>
+</div><hr/>
 <div id="scalar-sys" class="level-1">
-<h4 class="header">6.103. System functions <span class="pipes2"></span> <span class="permalink"><a href="#scalar-sys">¶</a></span></h4>
+<h4 class="header">6.106. System functions <span class="pipes2"></span> <span class="permalink"><a href="#scalar-sys">¶</a></span></h4>
 <div class="text"><p><strong></strong></p><p>
     Functions that return information about the system where the query is running.
 </p>
 </div>
 </div><hr/>
 <div id="scalar-sys-cpu" class="level-2">
-<h5 class="header">6.103.1.  <span class="pipes2">sys.cpu() → &lt;row&gt;</span> <span class="permalink"><a href="#scalar-sys-cpu">¶</a></span></h5>
+<h5 class="header">6.106.1.  <span class="pipes2">sys.cpu() → &lt;row&gt;</span> <span class="permalink"><a href="#scalar-sys-cpu">¶</a></span></h5>
 <div class="text"><p><strong>Returns the system's CPU usage info.</strong></p><p><em>Available since Pipes v0.13.1</em></p><p>
   The returned row has the following fields:
 </p>
@@ -5717,7 +5771,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="scalar-sys-disks" class="level-2">
-<h5 class="header">6.103.2.  <span class="pipes2">sys.disks() → &lt;seq(row)&gt;</span> <span class="permalink"><a href="#scalar-sys-disks">¶</a></span></h5>
+<h5 class="header">6.106.2.  <span class="pipes2">sys.disks() → &lt;seq(row)&gt;</span> <span class="permalink"><a href="#scalar-sys-disks">¶</a></span></h5>
 <div class="text"><p><strong>Returns info about all devices in the filesystem.</strong></p><p><em>Available since Pipes v0.13.1</em></p><p>
   Each row in the returned sequence has the following fields:
 </p>
@@ -5734,7 +5788,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="scalar-sys-fds" class="level-2">
-<h5 class="header">6.103.3.  <span class="pipes2">sys.fds() → &lt;row&gt;</span> <span class="permalink"><a href="#scalar-sys-fds">¶</a></span></h5>
+<h5 class="header">6.106.3.  <span class="pipes2">sys.fds() → &lt;row&gt;</span> <span class="permalink"><a href="#scalar-sys-fds">¶</a></span></h5>
 <div class="text"><p><strong>Returns info about process file descriptors.</strong></p><p><em>Available since Pipes v0.13.1</em></p><p>
   The returned row has the following fields:
 </p>
@@ -5746,7 +5800,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="scalar-sys-heap" class="level-2">
-<h5 class="header">6.103.4.  <span class="pipes2">sys.heap() → &lt;row&gt;</span> <span class="permalink"><a href="#scalar-sys-heap">¶</a></span></h5>
+<h5 class="header">6.106.4.  <span class="pipes2">sys.heap() → &lt;row&gt;</span> <span class="permalink"><a href="#scalar-sys-heap">¶</a></span></h5>
 <div class="text"><p><strong>Returns the system's current JVM heap info.</strong></p><p><em>Available since Pipes v0.13.1</em></p><p>
   The returned row has the following fields (all values in bytes):
 </p>
@@ -5759,11 +5813,11 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="scalar-sys-hostname" class="level-2">
-<h5 class="header">6.103.5.  <span class="pipes2">sys.hostname() → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-sys-hostname">¶</a></span></h5>
+<h5 class="header">6.106.5.  <span class="pipes2">sys.hostname() → &lt;string&gt;</span> <span class="permalink"><a href="#scalar-sys-hostname">¶</a></span></h5>
 <div class="text"><p><strong>Returns the system's hostname.</strong></p><p><em>Available since Pipes v0.13.1</em></p></div>
 </div><hr/>
 <div id="scalar-sys-memory" class="level-2">
-<h5 class="header">6.103.6.  <span class="pipes2">sys.memory() → &lt;row&gt;</span> <span class="permalink"><a href="#scalar-sys-memory">¶</a></span></h5>
+<h5 class="header">6.106.6.  <span class="pipes2">sys.memory() → &lt;row&gt;</span> <span class="permalink"><a href="#scalar-sys-memory">¶</a></span></h5>
 <div class="text"><p><strong>Returns the system's memory usage info.</strong></p><p><em>Available since Pipes v0.13.1</em></p><p>
   The returned row has the following fields (all values in bytes):
 </p>
@@ -5777,14 +5831,14 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="scalar-sys-properties" class="level-2">
-<h5 class="header">6.103.7.  <span class="pipes2">sys.properties() → &lt;object&gt;</span> <span class="permalink"><a href="#scalar-sys-properties">¶</a></span></h5>
+<h5 class="header">6.106.7.  <span class="pipes2">sys.properties() → &lt;object&gt;</span> <span class="permalink"><a href="#scalar-sys-properties">¶</a></span></h5>
 <div class="text"><p><strong>Returns a list of defined system properties</strong></p><p><em>Available since Pipes v0.14</em></p><p>
   The return is always an instance of a java Map.
 </p>
 </div>
 </div><hr/>
 <div id="scalar-sys-threadlist" class="level-2">
-<h5 class="header">6.103.8.  <span class="pipes2">sys.threadlist() → &lt;seq(row)&gt;</span> <span class="permalink"><a href="#scalar-sys-threadlist">¶</a></span></h5>
+<h5 class="header">6.106.8.  <span class="pipes2">sys.threadlist() → &lt;seq(row)&gt;</span> <span class="permalink"><a href="#scalar-sys-threadlist">¶</a></span></h5>
 <div class="text"><p><strong>Returns a list of threads in the JVM</strong></p><p><em>Available since Pipes v0.14</em></p><p>
   Each row in the returned sequence has the following fields:
 </p>
@@ -5809,7 +5863,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="scalar-sys-threads" class="level-2">
-<h5 class="header">6.103.9.  <span class="pipes2">sys.threads() → &lt;row&gt;</span> <span class="permalink"><a href="#scalar-sys-threads">¶</a></span></h5>
+<h5 class="header">6.106.9.  <span class="pipes2">sys.threads() → &lt;row&gt;</span> <span class="permalink"><a href="#scalar-sys-threads">¶</a></span></h5>
 <div class="text"><p><strong>Returns info about running threads in current process.</strong></p><p><em>Available since Pipes v0.13.1</em></p><p>
   The returned row has the following fields:
 </p>
@@ -5824,11 +5878,15 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="scalar-sys-timestamp" class="level-2">
-<h5 class="header">6.103.10.  <span class="pipes2">sys.timestamp() → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-sys-timestamp">¶</a></span></h5>
+<h5 class="header">6.106.10.  <span class="pipes2">sys.timestamp() → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-sys-timestamp">¶</a></span></h5>
 <div class="text"><p><strong>Returns the system's real timestamp (not the query timestamp).</strong></p><p><em>Available since Pipes v0.13.1</em></p></div>
 </div><hr/>
+<div id="scalar-sys-uptime" class="level-2">
+<h5 class="header">6.106.11.  <span class="pipes2">sys.uptime() → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-sys-uptime">¶</a></span></h5>
+<div class="text"><p><strong>Returns the number of milliseconds since the start of the JVM</strong></p><p><em>Available since Pipes v0.15.5</em></p></div>
+</div><hr/>
 <div id="scalar-sys-version" class="level-2">
-<h5 class="header">6.103.11.  <span class="pipes2">sys.version() → &lt;row&gt;</span> <span class="permalink"><a href="#scalar-sys-version">¶</a></span></h5>
+<h5 class="header">6.106.12.  <span class="pipes2">sys.version() → &lt;row&gt;</span> <span class="permalink"><a href="#scalar-sys-version">¶</a></span></h5>
 <div class="text"><p><strong>Returns Pipes version info</strong></p><p><em>Available since Pipes v0.13.1</em></p><p>
   The returned row has the following fields:
 </p>
@@ -6607,7 +6665,7 @@ a day, an hour and 5 minutes</pre>
 </table>
 </div>
 </div><hr/>
-<p>Page generated at 15-Aug-2016 15:16:53</p>
+<p>Page generated at 06-Feb-2017 16:25:12</p>
 </div>
 
     <script>
