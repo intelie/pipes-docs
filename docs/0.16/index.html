@@ -5652,7 +5652,13 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div><hr/>
 <div id="scalar-newmap" class="level-1">
 <h4 class="header">6.93.  <span class="pipes2">newmap(&lt;object,object... pairs&gt;) → &lt;object&gt;</span> <span class="permalink"><a href="#scalar-newmap">¶</a></span></h4>
-<div class="text"><p><strong>Creates a instance of java.util.Map with the supplied keys and values.</strong></p></div>
+<div class="text"><p><strong>Creates a instance of java.util.Map with the supplied keys and values.</strong></p><p>
+  <strong>Example:</strong>
+</p>
+<pre class="pipes">=&gt; newmap("company", "Intelie", "website", "http://intelie.com") as object at the end
+    =&gt; object-&gt;company, object-&gt;website</pre>
+<p class="legend">Returns a Map equivalent to <code class="pipes">{"company": "Intelie", "website": "http://intelie.com"</code>}</p>
+</div>
 </div><hr/>
 <div id="scalar-normrandom" class="level-1">
 <h4 class="header">6.94.  <span class="pipes2">normrandom([&lt;number mean&gt;], [&lt;number stdev&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#scalar-normrandom">¶</a></span></h4>
@@ -6670,7 +6676,7 @@ a day, an hour and 5 minutes</pre>
 </table>
 </div>
 </div><hr/>
-<p>Page generated at 10-May-2017 09:24:05</p>
+<p>Page generated at 30-May-2017 13:17:31</p>
 </div>
 
     <script>
