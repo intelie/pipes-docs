@@ -2790,294 +2790,301 @@ ready(function() {
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-fold">7.16.  <span class="pipes2">fold(&lt;object&gt;, [&lt;object initial&gt;], &lt;&amp;fn&gt;, [&lt;&amp;merger&gt;], [&lt;&amp;unmerger&gt;]) → &lt;object&gt;</span></a>
+                            <a href="#aggregation-fold">7.16.  <span class="pipes2">fold(&lt;object&gt;, [&lt;object initial&gt;], &lt;&amp;fn&gt;, [&lt;&amp;merger&gt;]) → &lt;object&gt;</span></a>
                         </td>
                         <td class="description">Reduces sequence of elements applying function successively</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-greatest">7.17.  <span class="pipes2">greatest(&lt;object&gt;, &lt;sortfield...&gt;) → &lt;object&gt;</span></a>
+                            <a href="#aggregation-foldv">7.17.  <span class="pipes2">foldv(&lt;object&gt;, [&lt;object initial&gt;], &lt;&amp;fn&gt;, [&lt;&amp;merger&gt;]) → &lt;object&gt;</span></a>
+                        </td>
+                        <td class="description">Reduces sequence of elements applying function successively (ignores nulls)</td>
+                    </tr>
+
+                    <tr>
+                        <td class="level-1">
+                            <a href="#aggregation-greatest">7.18.  <span class="pipes2">greatest(&lt;object&gt;, &lt;sortfield...&gt;) → &lt;object&gt;</span></a>
                         </td>
                         <td class="description">Yields the greatest ocurrence in the window based on the sort fields.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-hll">7.18.  <span class="pipes2">hll(&lt;number log2m&gt;, &lt;object...&gt;) → &lt;number&gt;</span></a>
+                            <a href="#aggregation-hll">7.19.  <span class="pipes2">hll(&lt;number log2m&gt;, &lt;object...&gt;) → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Estimates the field's cardinality (distinct count) using HyperLogLog.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-hll-init">7.19.  <span class="pipes2">hll.init(&lt;number log2m&gt;, &lt;object...&gt;) → &lt;string&gt;</span></a>
+                            <a href="#aggregation-hll-init">7.20.  <span class="pipes2">hll.init(&lt;number log2m&gt;, &lt;object...&gt;) → &lt;string&gt;</span></a>
                         </td>
                         <td class="description">Similar to hll, but it doesn't evaluate final cardinality, just return the sketch data.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-hll-merge">7.20.  <span class="pipes2">hll.merge(&lt;string&gt;) → &lt;string&gt;</span></a>
+                            <a href="#aggregation-hll-merge">7.21.  <span class="pipes2">hll.merge(&lt;string&gt;) → &lt;string&gt;</span></a>
                         </td>
                         <td class="description">Performs union of many HyperLogLog encoded data in a window.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-hll-mergeeval">7.21.  <span class="pipes2">hll.mergeeval(&lt;string&gt;) → &lt;number&gt;</span></a>
+                            <a href="#aggregation-hll-mergeeval">7.22.  <span class="pipes2">hll.mergeeval(&lt;string&gt;) → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Performs union of many HyperLogLog encoded data in a window and evaluates the result.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-last">7.22.  <span class="pipes2">last(&lt;object&gt;) → &lt;object&gt;</span></a>
+                            <a href="#aggregation-last">7.23.  <span class="pipes2">last(&lt;object&gt;) → &lt;object&gt;</span></a>
                         </td>
                         <td class="description">Yields the ocurrence with greatest timestamp.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-lastn">7.23.  <span class="pipes2">lastn(&lt;object&gt;, &lt;number n&gt;) → &lt;seq&gt;</span></a>
+                            <a href="#aggregation-lastn">7.24.  <span class="pipes2">lastn(&lt;object&gt;, &lt;number n&gt;) → &lt;seq&gt;</span></a>
                         </td>
                         <td class="description">Yields the &lt;n&gt; values with greatest timestamp.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-lastv">7.24.  <span class="pipes2">lastv(&lt;object&gt;) → &lt;object&gt;</span></a>
+                            <a href="#aggregation-lastv">7.25.  <span class="pipes2">lastv(&lt;object&gt;) → &lt;object&gt;</span></a>
                         </td>
                         <td class="description">Yields the non-null ocurrence with greatest timestamp.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-least">7.25.  <span class="pipes2">least(&lt;object&gt;, &lt;sortfield...&gt;) → &lt;object&gt;</span></a>
+                            <a href="#aggregation-least">7.26.  <span class="pipes2">least(&lt;object&gt;, &lt;sortfield...&gt;) → &lt;object&gt;</span></a>
                         </td>
                         <td class="description">Yields the least ocurrence in the window based on the sort fields.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-list">7.26.  <span class="pipes2">list(&lt;object&gt;) → &lt;seq&gt;</span></a>
+                            <a href="#aggregation-list">7.27.  <span class="pipes2">list(&lt;object&gt;) → &lt;seq&gt;</span></a>
                         </td>
                         <td class="description">Creates a java.util.List from all events in a window.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-map">7.27.  <span class="pipes2">map(&lt;object key&gt;, &lt;object value&gt;) → &lt;map&gt;</span></a>
+                            <a href="#aggregation-map">7.28.  <span class="pipes2">map(&lt;object key&gt;, &lt;object value&gt;) → &lt;map&gt;</span></a>
                         </td>
                         <td class="description">Creates a java.util.Map from all events in a window.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-max">7.28.  <span class="pipes2">max(&lt;comparable&gt;) → &lt;comparable&gt;</span></a>
+                            <a href="#aggregation-max">7.29.  <span class="pipes2">max(&lt;comparable&gt;) → &lt;comparable&gt;</span></a>
                         </td>
                         <td class="description">Yields the greatest ocurrence in the window.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-median">7.29.  <span class="pipes2">median(&lt;number&gt;) → &lt;number&gt;</span></a>
+                            <a href="#aggregation-median">7.30.  <span class="pipes2">median(&lt;number&gt;) → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Estimates the median value of the population using Count-Min Sketch.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-min">7.30.  <span class="pipes2">min(&lt;comparable&gt;) → &lt;comparable&gt;</span></a>
+                            <a href="#aggregation-min">7.31.  <span class="pipes2">min(&lt;comparable&gt;) → &lt;comparable&gt;</span></a>
                         </td>
                         <td class="description">Yields the least ocurrence in the window.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-minhash-init">7.31.  <span class="pipes2">minhash.init(&lt;number size&gt;, &lt;object...&gt;) → &lt;string&gt;</span></a>
+                            <a href="#aggregation-minhash-init">7.32.  <span class="pipes2">minhash.init(&lt;number size&gt;, &lt;object...&gt;) → &lt;string&gt;</span></a>
                         </td>
                         <td class="description">Returns MinHash set signature.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-minhash-merge">7.32.  <span class="pipes2">minhash.merge(&lt;string&gt;) → &lt;string&gt;</span></a>
+                            <a href="#aggregation-minhash-merge">7.33.  <span class="pipes2">minhash.merge(&lt;string&gt;) → &lt;string&gt;</span></a>
                         </td>
                         <td class="description">Merge many MinHash encoded data in a window.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-minhash-mergeeval">7.33.  <span class="pipes2">minhash.mergeeval(&lt;string...&gt;) → &lt;number&gt;</span></a>
+                            <a href="#aggregation-minhash-mergeeval">7.34.  <span class="pipes2">minhash.mergeeval(&lt;string...&gt;) → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Merge many MinHash encoded data in a window and evaluates the similarity between them.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-mregression">7.34.  <span class="pipes2">mregression([&lt;number... x&gt;], &lt;number y&gt;) → &lt;seq&gt;</span></a>
+                            <a href="#aggregation-mregression">7.35.  <span class="pipes2">mregression([&lt;number... x&gt;], &lt;number y&gt;) → &lt;seq&gt;</span></a>
                         </td>
                         <td class="description">Computes multivariate regression for given variables.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-mregression-full">7.35.  <span class="pipes2">mregression.full([&lt;number... x&gt;], &lt;number y&gt;) → &lt;row&gt;</span></a>
+                            <a href="#aggregation-mregression-full">7.36.  <span class="pipes2">mregression.full([&lt;number... x&gt;], &lt;number y&gt;) → &lt;row&gt;</span></a>
                         </td>
                         <td class="description">Computes multivariate regression statistics for given variables.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-pcount">7.36.  <span class="pipes2">pcount(&lt;boolean&gt;) → &lt;number&gt;</span></a>
+                            <a href="#aggregation-pcount">7.37.  <span class="pipes2">pcount(&lt;boolean&gt;) → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Aggregates the proportion of events that evaluate true to expression.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-pfold">7.37.  <span class="pipes2">pfold(&lt;object&gt;, [&lt;object initial&gt;], &lt;&amp;fn&gt;) → &lt;object&gt;</span></a>
+                            <a href="#aggregation-pfold">7.38.  <span class="pipes2">pfold(&lt;object&gt;, [&lt;object initial&gt;], &lt;&amp;fn&gt;) → &lt;object&gt;</span></a>
                         </td>
                         <td class="description">Same as fold, but with state persisted</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-quantile">7.38.  <span class="pipes2">quantile(&lt;number&gt;, &lt;number q&gt;) → &lt;number&gt;</span></a>
+                            <a href="#aggregation-quantile">7.39.  <span class="pipes2">quantile(&lt;number&gt;, &lt;number q&gt;) → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Estimates the q (0..1) quantile of the population using Count-Min Sketch.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-regression">7.39.  <span class="pipes2">regression([&lt;number x&gt;], &lt;number y&gt;) → &lt;row&gt;</span></a>
+                            <a href="#aggregation-regression">7.40.  <span class="pipes2">regression([&lt;number x&gt;], &lt;number y&gt;) → &lt;row&gt;</span></a>
                         </td>
                         <td class="description">Computes regression and correlation statistics for given variables.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-set">7.40.  <span class="pipes2">set(&lt;object&gt;) → &lt;seq&gt;</span></a>
+                            <a href="#aggregation-set">7.41.  <span class="pipes2">set(&lt;object&gt;) → &lt;seq&gt;</span></a>
                         </td>
                         <td class="description">Creates a java.util.Set from all events in a window.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-similarity">7.41.  <span class="pipes2">similarity(&lt;object...&gt;) → &lt;number&gt;</span></a>
+                            <a href="#aggregation-similarity">7.42.  <span class="pipes2">similarity(&lt;object...&gt;) → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Estimates the Jaccard similarity coefficient between many sets.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-smooth">7.42.  <span class="pipes2">smooth(&lt;aggregation number expr&gt;, [&lt;number alpha&gt;], [&lt;number beta&gt;]) → &lt;number&gt;</span></a>
+                            <a href="#aggregation-smooth">7.43.  <span class="pipes2">smooth(&lt;aggregation number expr&gt;, [&lt;number alpha&gt;], [&lt;number beta&gt;]) → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Smoothes the curve of another aggregation.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-statistics">7.43.  <span class="pipes2">statistics(&lt;number&gt;) → &lt;row&gt;</span></a>
+                            <a href="#aggregation-statistics">7.44.  <span class="pipes2">statistics(&lt;number&gt;) → &lt;row&gt;</span></a>
                         </td>
                         <td class="description">Aggregates sample statistics for some property.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-stdev">7.44.  <span class="pipes2">stdev(&lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span></a>
+                            <a href="#aggregation-stdev">7.45.  <span class="pipes2">stdev(&lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Calculates the (possibly weighted) standard deviation of some expression.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-sum">7.45.  <span class="pipes2">sum(&lt;number&gt;) → &lt;number&gt;</span></a>
+                            <a href="#aggregation-sum">7.46.  <span class="pipes2">sum(&lt;number&gt;) → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Sums all evaluations of some expression.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-summary">7.46.  <span class="pipes2">summary(&lt;string&gt;, [&lt;string separator&gt;], [&lt;string lastSeparator&gt;]) → &lt;string&gt;</span></a>
+                            <a href="#aggregation-summary">7.47.  <span class="pipes2">summary(&lt;string&gt;, [&lt;string separator&gt;], [&lt;string lastSeparator&gt;]) → &lt;string&gt;</span></a>
                         </td>
                         <td class="description">Join all the strings in a window.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-top">7.47.  <span class="pipes2">top(&lt;number k&gt;, &lt;object&gt;, [&lt;sortfield...&gt;]) → &lt;seq&gt;</span></a>
+                            <a href="#aggregation-top">7.48.  <span class="pipes2">top(&lt;number k&gt;, &lt;object&gt;, [&lt;sortfield...&gt;]) → &lt;seq&gt;</span></a>
                         </td>
                         <td class="description">Yields the k minimum occurrences of the target object.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-variance">7.48.  <span class="pipes2">variance(&lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span></a>
+                            <a href="#aggregation-variance">7.49.  <span class="pipes2">variance(&lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Calculates the (possibly weighted) variance of some expression.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-when">7.49.  <span class="pipes2">when(&lt;boolean expr&gt;) → &lt;number&gt;</span></a>
+                            <a href="#aggregation-when">7.50.  <span class="pipes2">when(&lt;boolean expr&gt;) → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Yields the latest timestamp inside window when some condition was true.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-whenfirst">7.50.  <span class="pipes2">whenfirst(&lt;boolean expr&gt;) → &lt;number&gt;</span></a>
+                            <a href="#aggregation-whenfirst">7.51.  <span class="pipes2">whenfirst(&lt;boolean expr&gt;) → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Yields the first timestamp inside window when some condition was true.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#aggregation-window">7.51. Window Meta-aggregations</a>
+                            <a href="#aggregation-window">7.52. Window Meta-aggregations</a>
                         </td>
                         <td class="description"></td>
                     </tr>
 
                     <tr>
                         <td class="level-2">
-                            <a href="#aggregation-wcount">7.51.1.  <span class="pipes2">wcount() → &lt;number&gt;</span></a>
+                            <a href="#aggregation-wcount">7.52.1.  <span class="pipes2">wcount() → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Yields how many outputs are merged in the current window.</td>
                     </tr>
 
                     <tr>
                         <td class="level-2">
-                            <a href="#aggregation-wstart">7.51.2.  <span class="pipes2">wstart() → &lt;number&gt;</span></a>
+                            <a href="#aggregation-wstart">7.52.2.  <span class="pipes2">wstart() → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Returns the window's first allowed timestamp (or item index).</td>
                     </tr>
 
                     <tr>
                         <td class="level-2">
-                            <a href="#aggregation-wend">7.51.3.  <span class="pipes2">wend() → &lt;number&gt;</span></a>
+                            <a href="#aggregation-wend">7.52.3.  <span class="pipes2">wend() → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Returns the window's last allowed timestamp (or item index).</td>
                     </tr>
 
                     <tr>
                         <td class="level-2">
-                            <a href="#aggregation-ostart">7.51.4.  <span class="pipes2">ostart() → &lt;number&gt;</span></a>
+                            <a href="#aggregation-ostart">7.52.4.  <span class="pipes2">ostart() → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Returns the output's first allowed timestamp (or item index).</td>
                     </tr>
 
                     <tr>
                         <td class="level-2">
-                            <a href="#aggregation-oend">7.51.5.  <span class="pipes2">oend() → &lt;number&gt;</span></a>
+                            <a href="#aggregation-oend">7.52.5.  <span class="pipes2">oend() → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Returns the output's last allowed timestamp (or item index).</td>
                     </tr>
 
                     <tr>
                         <td class="level-2">
-                            <a href="#aggregation-otimestamp">7.51.6.  <span class="pipes2">otimestamp() → &lt;number&gt;</span></a>
+                            <a href="#aggregation-otimestamp">7.52.6.  <span class="pipes2">otimestamp() → &lt;number&gt;</span></a>
                         </td>
                         <td class="description">Returns the timestamp when the outputs were merged (equal to <code class="expr">oend()</code> on time pipes).</td>
                     </tr>
@@ -6533,21 +6540,31 @@ WebAccess
 <div class="text"><p><strong>Yields the non-null ocurrence with least timestamp.</strong></p><p><em>Available since Pipes v0.14</em></p></div>
 </div><hr/>
 <div id="aggregation-fold" class="level-1">
-<h4 class="header">7.16.  <span class="pipes2">fold(&lt;object&gt;, [&lt;object initial&gt;], &lt;&amp;fn&gt;, [&lt;&amp;merger&gt;], [&lt;&amp;unmerger&gt;]) → &lt;object&gt;</span> <span class="permalink"><a href="#aggregation-fold">¶</a></span></h4>
+<h4 class="header">7.16.  <span class="pipes2">fold(&lt;object&gt;, [&lt;object initial&gt;], &lt;&amp;fn&gt;, [&lt;&amp;merger&gt;]) → &lt;object&gt;</span> <span class="permalink"><a href="#aggregation-fold">¶</a></span></h4>
 <div class="text"><p><strong>Reduces sequence of elements applying function successively</strong></p><p>
-  This aggregation can only be distributed if at least the merger function is specified.
-  And can only be used inside a window if an unmerger function is also specified.
+  This aggregation can only be distributed or used on windows if the merger function
+  is specified.
 </p>
 <pre class="pipes">* =&gt; value#fold(fun(a, x): a+x, fun(a,b): a+b) every 10 minutes</pre>
 <p class="legend">Almost equivalent to <a href="#aggregation-sum">sum</a> (except for null handling).</p>
 </div>
 </div><hr/>
+<div id="aggregation-foldv" class="level-1">
+<h4 class="header">7.17.  <span class="pipes2">foldv(&lt;object&gt;, [&lt;object initial&gt;], &lt;&amp;fn&gt;, [&lt;&amp;merger&gt;]) → &lt;object&gt;</span> <span class="permalink"><a href="#aggregation-foldv">¶</a></span></h4>
+<div class="text"><p><strong>Reduces sequence of elements applying function successively (ignores nulls)</strong></p><p><em>Available since Pipes v0.19</em></p><p>
+  This aggregation can only be distributed or used on windows if the merger function
+  is specified.
+</p>
+<pre class="pipes">* =&gt; value#foldv(fun(a, x): a+x) every 10 minutes</pre>
+<p class="legend">Equivalent to <a href="#aggregation-sum">sum</a>.</p>
+</div>
+</div><hr/>
 <div id="aggregation-greatest" class="level-1">
-<h4 class="header">7.17.  <span class="pipes2">greatest(&lt;object&gt;, &lt;sortfield...&gt;) → &lt;object&gt;</span> <span class="permalink"><a href="#aggregation-greatest">¶</a></span></h4>
+<h4 class="header">7.18.  <span class="pipes2">greatest(&lt;object&gt;, &lt;sortfield...&gt;) → &lt;object&gt;</span> <span class="permalink"><a href="#aggregation-greatest">¶</a></span></h4>
 <div class="text"><p><strong>Yields the greatest ocurrence in the window based on the sort fields.</strong></p></div>
 </div><hr/>
 <div id="aggregation-hll" class="level-1">
-<h4 class="header">7.18.  <span class="pipes2">hll(&lt;number log2m&gt;, &lt;object...&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-hll">¶</a></span></h4>
+<h4 class="header">7.19.  <span class="pipes2">hll(&lt;number log2m&gt;, &lt;object...&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-hll">¶</a></span></h4>
 <div class="text"><p><strong>Estimates the field's cardinality (distinct count) using HyperLogLog.</strong></p><p>
   The aggregation uses a probabilistic algorithm known as HyperLogLog.
 </p>
@@ -6586,7 +6603,7 @@ WebAccess
 </div>
 </div><hr/>
 <div id="aggregation-hll-init" class="level-1">
-<h4 class="header">7.19.  <span class="pipes2">hll.init(&lt;number log2m&gt;, &lt;object...&gt;) → &lt;string&gt;</span> <span class="permalink"><a href="#aggregation-hll-init">¶</a></span></h4>
+<h4 class="header">7.20.  <span class="pipes2">hll.init(&lt;number log2m&gt;, &lt;object...&gt;) → &lt;string&gt;</span> <span class="permalink"><a href="#aggregation-hll-init">¶</a></span></h4>
 <div class="text"><p><strong>Similar to hll, but it doesn't evaluate final cardinality, just return the sketch data.</strong></p><p>
   This aggregation is similar to <a href="#aggregation-hll"><code class="pipes2">hll(&lt;number log2m&gt;, &lt;object...&gt;) → &lt;number&gt;</code></a>, but instead of returning
   the final distinct count, it yields a representation of its internal data structure, for
@@ -6610,7 +6627,7 @@ WebAccess
 </div>
 </div><hr/>
 <div id="aggregation-hll-merge" class="level-1">
-<h4 class="header">7.20.  <span class="pipes2">hll.merge(&lt;string&gt;) → &lt;string&gt;</span> <span class="permalink"><a href="#aggregation-hll-merge">¶</a></span></h4>
+<h4 class="header">7.21.  <span class="pipes2">hll.merge(&lt;string&gt;) → &lt;string&gt;</span> <span class="permalink"><a href="#aggregation-hll-merge">¶</a></span></h4>
 <div class="text"><p><strong>Performs union of many HyperLogLog encoded data in a window.</strong></p><p>
   Useful to merge results from <a href="#aggregation-hll-init"><code class="pipes2">hll.init(&lt;number log2m&gt;, &lt;object...&gt;) → &lt;string&gt;</code></a> aggregations.
 </p>
@@ -6630,7 +6647,7 @@ WebAccess
 </div>
 </div><hr/>
 <div id="aggregation-hll-mergeeval" class="level-1">
-<h4 class="header">7.21.  <span class="pipes2">hll.mergeeval(&lt;string&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-hll-mergeeval">¶</a></span></h4>
+<h4 class="header">7.22.  <span class="pipes2">hll.mergeeval(&lt;string&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-hll-mergeeval">¶</a></span></h4>
 <div class="text"><p><strong>Performs union of many HyperLogLog encoded data in a window and evaluates the result.</strong></p><p>
   Useful to merge results from <a href="#aggregation-hll-init"><code class="pipes2">hll.init(&lt;number log2m&gt;, &lt;object...&gt;) → &lt;string&gt;</code></a> aggregations.
 </p>
@@ -6650,61 +6667,61 @@ WebAccess
 </div>
 </div><hr/>
 <div id="aggregation-last" class="level-1">
-<h4 class="header">7.22.  <span class="pipes2">last(&lt;object&gt;) → &lt;object&gt;</span> <span class="permalink"><a href="#aggregation-last">¶</a></span></h4>
+<h4 class="header">7.23.  <span class="pipes2">last(&lt;object&gt;) → &lt;object&gt;</span> <span class="permalink"><a href="#aggregation-last">¶</a></span></h4>
 <div class="text"><p><strong>Yields the ocurrence with greatest timestamp.</strong></p></div>
 </div><hr/>
 <div id="aggregation-lastn" class="level-1">
-<h4 class="header">7.23.  <span class="pipes2">lastn(&lt;object&gt;, &lt;number n&gt;) → &lt;seq&gt;</span> <span class="permalink"><a href="#aggregation-lastn">¶</a></span></h4>
+<h4 class="header">7.24.  <span class="pipes2">lastn(&lt;object&gt;, &lt;number n&gt;) → &lt;seq&gt;</span> <span class="permalink"><a href="#aggregation-lastn">¶</a></span></h4>
 <div class="text"><p><strong>Yields the &lt;n&gt; values with greatest timestamp.</strong></p><p><em>Available since Pipes v0.15</em></p></div>
 </div><hr/>
 <div id="aggregation-lastv" class="level-1">
-<h4 class="header">7.24.  <span class="pipes2">lastv(&lt;object&gt;) → &lt;object&gt;</span> <span class="permalink"><a href="#aggregation-lastv">¶</a></span></h4>
+<h4 class="header">7.25.  <span class="pipes2">lastv(&lt;object&gt;) → &lt;object&gt;</span> <span class="permalink"><a href="#aggregation-lastv">¶</a></span></h4>
 <div class="text"><p><strong>Yields the non-null ocurrence with greatest timestamp.</strong></p><p><em>Available since Pipes v0.14</em></p></div>
 </div><hr/>
 <div id="aggregation-least" class="level-1">
-<h4 class="header">7.25.  <span class="pipes2">least(&lt;object&gt;, &lt;sortfield...&gt;) → &lt;object&gt;</span> <span class="permalink"><a href="#aggregation-least">¶</a></span></h4>
+<h4 class="header">7.26.  <span class="pipes2">least(&lt;object&gt;, &lt;sortfield...&gt;) → &lt;object&gt;</span> <span class="permalink"><a href="#aggregation-least">¶</a></span></h4>
 <div class="text"><p><strong>Yields the least ocurrence in the window based on the sort fields.</strong></p></div>
 </div><hr/>
 <div id="aggregation-list" class="level-1">
-<h4 class="header">7.26.  <span class="pipes2">list(&lt;object&gt;) → &lt;seq&gt;</span> <span class="permalink"><a href="#aggregation-list">¶</a></span></h4>
+<h4 class="header">7.27.  <span class="pipes2">list(&lt;object&gt;) → &lt;seq&gt;</span> <span class="permalink"><a href="#aggregation-list">¶</a></span></h4>
 <div class="text"><p><strong>Creates a java.util.List from all events in a window.</strong></p><p><em>Available since Pipes v0.13</em></p></div>
 </div><hr/>
 <div id="aggregation-map" class="level-1">
-<h4 class="header">7.27.  <span class="pipes2">map(&lt;object key&gt;, &lt;object value&gt;) → &lt;map&gt;</span> <span class="permalink"><a href="#aggregation-map">¶</a></span></h4>
+<h4 class="header">7.28.  <span class="pipes2">map(&lt;object key&gt;, &lt;object value&gt;) → &lt;map&gt;</span> <span class="permalink"><a href="#aggregation-map">¶</a></span></h4>
 <div class="text"><p><strong>Creates a java.util.Map from all events in a window.</strong></p></div>
 </div><hr/>
 <div id="aggregation-max" class="level-1">
-<h4 class="header">7.28.  <span class="pipes2">max(&lt;comparable&gt;) → &lt;comparable&gt;</span> <span class="permalink"><a href="#aggregation-max">¶</a></span></h4>
+<h4 class="header">7.29.  <span class="pipes2">max(&lt;comparable&gt;) → &lt;comparable&gt;</span> <span class="permalink"><a href="#aggregation-max">¶</a></span></h4>
 <div class="text"><p><strong>Yields the greatest ocurrence in the window.</strong></p></div>
 </div><hr/>
 <div id="aggregation-median" class="level-1">
-<h4 class="header">7.29.  <span class="pipes2">median(&lt;number&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-median">¶</a></span></h4>
+<h4 class="header">7.30.  <span class="pipes2">median(&lt;number&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-median">¶</a></span></h4>
 <div class="text"><p><strong>Estimates the median value of the population using Count-Min Sketch.</strong></p><p>
   Equivalent to <a href="#aggregation-quantile"><code class="pipes2">quantile(&lt;number&gt;, 0.5)</code></a>.
 </p>
 </div>
 </div><hr/>
 <div id="aggregation-min" class="level-1">
-<h4 class="header">7.30.  <span class="pipes2">min(&lt;comparable&gt;) → &lt;comparable&gt;</span> <span class="permalink"><a href="#aggregation-min">¶</a></span></h4>
+<h4 class="header">7.31.  <span class="pipes2">min(&lt;comparable&gt;) → &lt;comparable&gt;</span> <span class="permalink"><a href="#aggregation-min">¶</a></span></h4>
 <div class="text"><p><strong>Yields the least ocurrence in the window.</strong></p></div>
 </div><hr/>
 <div id="aggregation-minhash-init" class="level-1">
-<h4 class="header">7.31.  <span class="pipes2">minhash.init(&lt;number size&gt;, &lt;object...&gt;) → &lt;string&gt;</span> <span class="permalink"><a href="#aggregation-minhash-init">¶</a></span></h4>
+<h4 class="header">7.32.  <span class="pipes2">minhash.init(&lt;number size&gt;, &lt;object...&gt;) → &lt;string&gt;</span> <span class="permalink"><a href="#aggregation-minhash-init">¶</a></span></h4>
 <div class="text"><p><strong>Returns MinHash set signature.</strong></p><p><em>Available since Pipes v0.18.8</em></p></div>
 </div><hr/>
 <div id="aggregation-minhash-merge" class="level-1">
-<h4 class="header">7.32.  <span class="pipes2">minhash.merge(&lt;string&gt;) → &lt;string&gt;</span> <span class="permalink"><a href="#aggregation-minhash-merge">¶</a></span></h4>
+<h4 class="header">7.33.  <span class="pipes2">minhash.merge(&lt;string&gt;) → &lt;string&gt;</span> <span class="permalink"><a href="#aggregation-minhash-merge">¶</a></span></h4>
 <div class="text"><p><strong>Merge many MinHash encoded data in a window.</strong></p><p><em>Available since Pipes v0.18.8</em></p><p>
   Useful to merge results from <a href="#aggregation-minhash-init"><code class="pipes2">minhash.init(&lt;number size&gt;, &lt;object...&gt;) → &lt;string&gt;</code></a> aggregations.
 </p>
 </div>
 </div><hr/>
 <div id="aggregation-minhash-mergeeval" class="level-1">
-<h4 class="header">7.33.  <span class="pipes2">minhash.mergeeval(&lt;string...&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-minhash-mergeeval">¶</a></span></h4>
+<h4 class="header">7.34.  <span class="pipes2">minhash.mergeeval(&lt;string...&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-minhash-mergeeval">¶</a></span></h4>
 <div class="text"><p><strong>Merge many MinHash encoded data in a window and evaluates the similarity between them.</strong></p><p><em>Available since Pipes v0.18.8</em></p></div>
 </div><hr/>
 <div id="aggregation-mregression" class="level-1">
-<h4 class="header">7.34.  <span class="pipes2">mregression([&lt;number... x&gt;], &lt;number y&gt;) → &lt;seq&gt;</span> <span class="permalink"><a href="#aggregation-mregression">¶</a></span></h4>
+<h4 class="header">7.35.  <span class="pipes2">mregression([&lt;number... x&gt;], &lt;number y&gt;) → &lt;seq&gt;</span> <span class="permalink"><a href="#aggregation-mregression">¶</a></span></h4>
 <div class="text"><p><strong>Computes multivariate regression for given variables.</strong></p><p><em>Available since Pipes v0.17.1</em></p><p>
   If no arguments <code class="pipes">x</code> are given, it is assumed to be the event timestamp (if any).
 </p>
@@ -6715,7 +6732,7 @@ WebAccess
 </div>
 </div><hr/>
 <div id="aggregation-mregression-full" class="level-1">
-<h4 class="header">7.35.  <span class="pipes2">mregression.full([&lt;number... x&gt;], &lt;number y&gt;) → &lt;row&gt;</span> <span class="permalink"><a href="#aggregation-mregression-full">¶</a></span></h4>
+<h4 class="header">7.36.  <span class="pipes2">mregression.full([&lt;number... x&gt;], &lt;number y&gt;) → &lt;row&gt;</span> <span class="permalink"><a href="#aggregation-mregression-full">¶</a></span></h4>
 <div class="text"><p><strong>Computes multivariate regression statistics for given variables.</strong></p><p><em>Available since Pipes v0.17.1</em></p><p>
   If no arguments <code class="pipes">x</code> are given, it is assumed to be the event timestamp (if any).
 </p>
@@ -6734,11 +6751,11 @@ WebAccess
 </div>
 </div><hr/>
 <div id="aggregation-pcount" class="level-1">
-<h4 class="header">7.36.  <span class="pipes2">pcount(&lt;boolean&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-pcount">¶</a></span></h4>
+<h4 class="header">7.37.  <span class="pipes2">pcount(&lt;boolean&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-pcount">¶</a></span></h4>
 <div class="text"><p><strong>Aggregates the proportion of events that evaluate true to expression.</strong></p></div>
 </div><hr/>
 <div id="aggregation-pfold" class="level-1">
-<h4 class="header">7.37.  <span class="pipes2">pfold(&lt;object&gt;, [&lt;object initial&gt;], &lt;&amp;fn&gt;) → &lt;object&gt;</span> <span class="permalink"><a href="#aggregation-pfold">¶</a></span></h4>
+<h4 class="header">7.38.  <span class="pipes2">pfold(&lt;object&gt;, [&lt;object initial&gt;], &lt;&amp;fn&gt;) → &lt;object&gt;</span> <span class="permalink"><a href="#aggregation-pfold">¶</a></span></h4>
 <div class="text"><p><strong>Same as fold, but with state persisted</strong></p><p><em>Available since Pipes v0.19</em></p><p>
   This aggregation cannot be distributed.
   And can only be used inside a window if an unmerger function is also specified.
@@ -6746,11 +6763,11 @@ WebAccess
 </div>
 </div><hr/>
 <div id="aggregation-quantile" class="level-1">
-<h4 class="header">7.38.  <span class="pipes2">quantile(&lt;number&gt;, &lt;number q&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-quantile">¶</a></span></h4>
+<h4 class="header">7.39.  <span class="pipes2">quantile(&lt;number&gt;, &lt;number q&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-quantile">¶</a></span></h4>
 <div class="text"><p><strong>Estimates the q (0..1) quantile of the population using Count-Min Sketch.</strong></p></div>
 </div><hr/>
 <div id="aggregation-regression" class="level-1">
-<h4 class="header">7.39.  <span class="pipes2">regression([&lt;number x&gt;], &lt;number y&gt;) → &lt;row&gt;</span> <span class="permalink"><a href="#aggregation-regression">¶</a></span></h4>
+<h4 class="header">7.40.  <span class="pipes2">regression([&lt;number x&gt;], &lt;number y&gt;) → &lt;row&gt;</span> <span class="permalink"><a href="#aggregation-regression">¶</a></span></h4>
 <div class="text"><p><strong>Computes regression and correlation statistics for given variables.</strong></p><p><em>Available since Pipes v0.13.3</em></p><p>
   The argument <code class="pipes">x</code>, if not given, is assumed to be the event timestamp (if any).
 </p>
@@ -6771,15 +6788,15 @@ WebAccess
 </div>
 </div><hr/>
 <div id="aggregation-set" class="level-1">
-<h4 class="header">7.40.  <span class="pipes2">set(&lt;object&gt;) → &lt;seq&gt;</span> <span class="permalink"><a href="#aggregation-set">¶</a></span></h4>
+<h4 class="header">7.41.  <span class="pipes2">set(&lt;object&gt;) → &lt;seq&gt;</span> <span class="permalink"><a href="#aggregation-set">¶</a></span></h4>
 <div class="text"><p><strong>Creates a java.util.Set from all events in a window.</strong></p></div>
 </div><hr/>
 <div id="aggregation-similarity" class="level-1">
-<h4 class="header">7.41.  <span class="pipes2">similarity(&lt;object...&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-similarity">¶</a></span></h4>
+<h4 class="header">7.42.  <span class="pipes2">similarity(&lt;object...&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-similarity">¶</a></span></h4>
 <div class="text"><p><strong>Estimates the Jaccard similarity coefficient between many sets.</strong></p><p><em>Available since Pipes v0.18.8</em></p></div>
 </div><hr/>
 <div id="aggregation-smooth" class="level-1">
-<h4 class="header">7.42.  <span class="pipes2">smooth(&lt;aggregation number expr&gt;, [&lt;number alpha&gt;], [&lt;number beta&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-smooth">¶</a></span></h4>
+<h4 class="header">7.43.  <span class="pipes2">smooth(&lt;aggregation number expr&gt;, [&lt;number alpha&gt;], [&lt;number beta&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-smooth">¶</a></span></h4>
 <div class="text"><p><strong>Smoothes the curve of another aggregation.</strong></p><p>
   The argument <code class="pipes">alpha</code> is a (0..1) value, meaning the weight of the previous points
   in the final value.
@@ -6795,7 +6812,7 @@ WebAccess
 </div>
 </div><hr/>
 <div id="aggregation-statistics" class="level-1">
-<h4 class="header">7.43.  <span class="pipes2">statistics(&lt;number&gt;) → &lt;row&gt;</span> <span class="permalink"><a href="#aggregation-statistics">¶</a></span></h4>
+<h4 class="header">7.44.  <span class="pipes2">statistics(&lt;number&gt;) → &lt;row&gt;</span> <span class="permalink"><a href="#aggregation-statistics">¶</a></span></h4>
 <div class="text"><p><strong>Aggregates sample statistics for some property.</strong></p><p><em>Available since Pipes v0.13.3</em></p><p>
   Please note that all statistics here are based on the sample variance, not the population variance.
   This behavior is distinct from the already known <a href="#aggregation-variance"><code class="pipes2">variance(&lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</code></a> and <a href="#aggregation-stdev"><code class="pipes2">stdev(&lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</code></a>
@@ -6816,35 +6833,35 @@ WebAccess
 </div>
 </div><hr/>
 <div id="aggregation-stdev" class="level-1">
-<h4 class="header">7.44.  <span class="pipes2">stdev(&lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-stdev">¶</a></span></h4>
+<h4 class="header">7.45.  <span class="pipes2">stdev(&lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-stdev">¶</a></span></h4>
 <div class="text"><p><strong>Calculates the (possibly weighted) standard deviation of some expression.</strong></p></div>
 </div><hr/>
 <div id="aggregation-sum" class="level-1">
-<h4 class="header">7.45.  <span class="pipes2">sum(&lt;number&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-sum">¶</a></span></h4>
+<h4 class="header">7.46.  <span class="pipes2">sum(&lt;number&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-sum">¶</a></span></h4>
 <div class="text"><p><strong>Sums all evaluations of some expression.</strong></p></div>
 </div><hr/>
 <div id="aggregation-summary" class="level-1">
-<h4 class="header">7.46.  <span class="pipes2">summary(&lt;string&gt;, [&lt;string separator&gt;], [&lt;string lastSeparator&gt;]) → &lt;string&gt;</span> <span class="permalink"><a href="#aggregation-summary">¶</a></span></h4>
+<h4 class="header">7.47.  <span class="pipes2">summary(&lt;string&gt;, [&lt;string separator&gt;], [&lt;string lastSeparator&gt;]) → &lt;string&gt;</span> <span class="permalink"><a href="#aggregation-summary">¶</a></span></h4>
 <div class="text"><p><strong>Join all the strings in a window.</strong></p></div>
 </div><hr/>
 <div id="aggregation-top" class="level-1">
-<h4 class="header">7.47.  <span class="pipes2">top(&lt;number k&gt;, &lt;object&gt;, [&lt;sortfield...&gt;]) → &lt;seq&gt;</span> <span class="permalink"><a href="#aggregation-top">¶</a></span></h4>
+<h4 class="header">7.48.  <span class="pipes2">top(&lt;number k&gt;, &lt;object&gt;, [&lt;sortfield...&gt;]) → &lt;seq&gt;</span> <span class="permalink"><a href="#aggregation-top">¶</a></span></h4>
 <div class="text"><p><strong>Yields the k minimum occurrences of the target object.</strong></p><p><em>Available since Pipes v0.13.18</em></p></div>
 </div><hr/>
 <div id="aggregation-variance" class="level-1">
-<h4 class="header">7.48.  <span class="pipes2">variance(&lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-variance">¶</a></span></h4>
+<h4 class="header">7.49.  <span class="pipes2">variance(&lt;number&gt;, [&lt;number weight&gt;]) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-variance">¶</a></span></h4>
 <div class="text"><p><strong>Calculates the (possibly weighted) variance of some expression.</strong></p></div>
 </div><hr/>
 <div id="aggregation-when" class="level-1">
-<h4 class="header">7.49.  <span class="pipes2">when(&lt;boolean expr&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-when">¶</a></span></h4>
+<h4 class="header">7.50.  <span class="pipes2">when(&lt;boolean expr&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-when">¶</a></span></h4>
 <div class="text"><p><strong>Yields the latest timestamp inside window when some condition was true.</strong></p></div>
 </div><hr/>
 <div id="aggregation-whenfirst" class="level-1">
-<h4 class="header">7.50.  <span class="pipes2">whenfirst(&lt;boolean expr&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-whenfirst">¶</a></span></h4>
+<h4 class="header">7.51.  <span class="pipes2">whenfirst(&lt;boolean expr&gt;) → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-whenfirst">¶</a></span></h4>
 <div class="text"><p><strong>Yields the first timestamp inside window when some condition was true.</strong></p></div>
 </div><hr/>
 <div id="aggregation-window" class="level-1">
-<h4 class="header">7.51. Window Meta-aggregations <span class="pipes2"></span> <span class="permalink"><a href="#aggregation-window">¶</a></span></h4>
+<h4 class="header">7.52. Window Meta-aggregations <span class="pipes2"></span> <span class="permalink"><a href="#aggregation-window">¶</a></span></h4>
 <div class="text"><p><strong></strong></p><p>
     Meta-aggregations give information on how and when the results were merged.
 </p>
@@ -6857,27 +6874,27 @@ WebAccess
 </div>
 </div><hr/>
 <div id="aggregation-wcount" class="level-2">
-<h5 class="header">7.51.1.  <span class="pipes2">wcount() → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-wcount">¶</a></span></h5>
+<h5 class="header">7.52.1.  <span class="pipes2">wcount() → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-wcount">¶</a></span></h5>
 <div class="text"><p><strong>Yields how many outputs are merged in the current window.</strong></p></div>
 </div><hr/>
 <div id="aggregation-wstart" class="level-2">
-<h5 class="header">7.51.2.  <span class="pipes2">wstart() → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-wstart">¶</a></span></h5>
+<h5 class="header">7.52.2.  <span class="pipes2">wstart() → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-wstart">¶</a></span></h5>
 <div class="text"><p><strong>Returns the window's first allowed timestamp (or item index).</strong></p></div>
 </div><hr/>
 <div id="aggregation-wend" class="level-2">
-<h5 class="header">7.51.3.  <span class="pipes2">wend() → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-wend">¶</a></span></h5>
+<h5 class="header">7.52.3.  <span class="pipes2">wend() → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-wend">¶</a></span></h5>
 <div class="text"><p><strong>Returns the window's last allowed timestamp (or item index).</strong></p></div>
 </div><hr/>
 <div id="aggregation-ostart" class="level-2">
-<h5 class="header">7.51.4.  <span class="pipes2">ostart() → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-ostart">¶</a></span></h5>
+<h5 class="header">7.52.4.  <span class="pipes2">ostart() → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-ostart">¶</a></span></h5>
 <div class="text"><p><strong>Returns the output's first allowed timestamp (or item index).</strong></p></div>
 </div><hr/>
 <div id="aggregation-oend" class="level-2">
-<h5 class="header">7.51.5.  <span class="pipes2">oend() → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-oend">¶</a></span></h5>
+<h5 class="header">7.52.5.  <span class="pipes2">oend() → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-oend">¶</a></span></h5>
 <div class="text"><p><strong>Returns the output's last allowed timestamp (or item index).</strong></p></div>
 </div><hr/>
 <div id="aggregation-otimestamp" class="level-2">
-<h5 class="header">7.51.6.  <span class="pipes2">otimestamp() → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-otimestamp">¶</a></span></h5>
+<h5 class="header">7.52.6.  <span class="pipes2">otimestamp() → &lt;number&gt;</span> <span class="permalink"><a href="#aggregation-otimestamp">¶</a></span></h5>
 <div class="text"><p><strong>Returns the timestamp when the outputs were merged (equal to <code class="expr">oend()</code> on time pipes).</strong></p></div>
 </div><hr/>
 <div id="chapter-timespan" class="level-0">
@@ -6933,7 +6950,7 @@ WebAccess
     <tr>
         <td>
             <code class="span2">yesterday</code><br/>
-            <code class="span2">yester|previous &lt;period&gt;</code><br/>
+            <code class="span2">previous|preceeding|past|yester &lt;period&gt;</code><br/>
         </td>
         <td>
             <code class="span">yesterday</code><br/>
@@ -6943,7 +6960,19 @@ WebAccess
             <code class="span">previous 5 years</code><br/>
         </td>
         <td>Previous specified period.</td>
-    </tr>            
+    </tr>
+    <tr>
+        <td>
+            <code class="span2">tomorrow</code><br/>
+            <code class="span2">coming|subsequent|future &lt;period&gt;</code><br/>
+        </td>
+        <td>
+            <code class="span">tomorrow</code><br/>
+            <code class="span">coming year</code><br/>
+            <code class="span">subsequent 5 years</code><br/>
+        </td>
+        <td>Subsequent specified period.</td>
+    </tr>
     <tr>
         <td>
             <code class="span2">last &lt;period...&gt;</code><br/>
@@ -6954,7 +6983,18 @@ WebAccess
             <code class="span">last 2 years and 5 months</code><br/>
         </td>
         <td>Period of the specified length ending now.</td>
-    </tr>            
+    </tr>
+    <tr>
+        <td>
+            <code class="span2">next &lt;period...&gt;</code><br/>
+        </td>
+        <td>
+            <code class="span">next day</code><br/>
+            <code class="span">next 40 weeks</code><br/>
+            <code class="span">next 2 years and 5 months</code><br/>
+        </td>
+        <td>Period of the specified length starting now.</td>
+    </tr>
     <tr>
         <td>
             <code class="span2">&lt;period...&gt; ago</code><br/>
@@ -7174,11 +7214,13 @@ WebAccess
     <tr>
         <td>
             <code class="span2">&lt;span A&gt; shifted to &lt;span B&gt;</code><br/>
+            <code class="span2">&lt;span A&gt; relative to &lt;span B&gt;</code><br/>
             <code class="span2">&lt;span A&gt; of &lt;span B&gt;</code><br/>
             <code class="span2">&lt;span B&gt; at &lt;span A&gt;</code><br/>
         </td>
         <td>
             <code class="span">sunday shifted to previous week</code><br/>
+            <code class="span">sunday relative to previous week</code><br/>
             <code class="span">sunday of previous week</code><br/>
             <code class="span">previous week at sunday</code><br/>
             <code class="span">sunday @8</code><br/>
@@ -7254,7 +7296,7 @@ a day, an hour and 5 minutes</pre>
 </table>
 </div>
 </div><hr/>
-<p>Page generated at 23-May-2018 15:27:35</p>
+<p>Page generated at 04-Jun-2018 11:25:23</p>
 </div>
 
     <script>
