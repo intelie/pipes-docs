@@ -1271,189 +1271,203 @@ ready(function() {
 
                     <tr>
                         <td class="level-1">
-                            <a href="#pipe-debounce">4.7.  <span class="pipes2">@debounce &lt;period&gt; [by &lt;object...&gt;]</span></a>
+                            <a href="#pipe-compress-uniform">4.7.  <span class="pipes2">@compress.uniform &lt;number k&gt;, [&lt;number k2&gt;,] &lt;number... y&gt; [by &lt;object...&gt;]</span></a>
+                        </td>
+                        <td class="description">Compresses the result from the previous pipe to at most k rows.</td>
+                    </tr>
+
+                    <tr>
+                        <td class="level-1">
+                            <a href="#pipe-debounce">4.8.  <span class="pipes2">@debounce &lt;period&gt; [by &lt;object...&gt;]</span></a>
                         </td>
                         <td class="description">Only outputs rows that follows &lt;period&gt; time without any output.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#pipe-filter">4.8.  <span class="pipes2">@filter &lt;boolean condition&gt; [by &lt;object...&gt;]</span></a>
+                            <a href="#pipe-empty">4.9.  <span class="pipes2">@empty [over &lt;window&gt;...]</span></a>
+                        </td>
+                        <td class="description">Creates an empty pipe (pass-through) with optional window metadata</td>
+                    </tr>
+
+                    <tr>
+                        <td class="level-1">
+                            <a href="#pipe-filter">4.10.  <span class="pipes2">@filter &lt;boolean condition&gt; [by &lt;object...&gt;]</span></a>
                         </td>
                         <td class="description">Filters the results from previous pipe.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#pipe-for">4.9.  <span class="pipes2">@for &lt;named(seq)&gt;, &lt;named... additional&gt;</span></a>
+                            <a href="#pipe-for">4.11.  <span class="pipes2">@for &lt;named(seq)&gt;, &lt;named... additional&gt;</span></a>
                         </td>
                         <td class="description">Unwinds events in the <code class="pipes">seq</code> instance</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#pipe-latest">4.10.  <span class="pipes2">@latest</span></a>
+                            <a href="#pipe-latest">4.12.  <span class="pipes2">@latest</span></a>
                         </td>
                         <td class="description">Keeps the latest batch of input events and output it at the end.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#pipe-makejoin">4.11.  <span class="pipes2">@makejoin &lt;string... props&gt;, &lt;pipe...&gt;</span></a>
+                            <a href="#pipe-makejoin">4.13.  <span class="pipes2">@makejoin &lt;string... props&gt;, &lt;pipe...&gt;</span></a>
                         </td>
                         <td class="description">Creates a join pipe containing all pipes passed as arguments</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#pipe-makeljoin">4.12.  <span class="pipes2">@makeljoin &lt;string... props&gt;, &lt;pipe...&gt;</span></a>
+                            <a href="#pipe-makeljoin">4.14.  <span class="pipes2">@makeljoin &lt;string... props&gt;, &lt;pipe...&gt;</span></a>
                         </td>
                         <td class="description">Creates a left join pipe containing all pipes passed as arguments</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#pipe-makelrjoin">4.13.  <span class="pipes2">@makelrjoin &lt;string... props&gt;, &lt;pipe...&gt;</span></a>
+                            <a href="#pipe-makelrjoin">4.15.  <span class="pipes2">@makelrjoin &lt;string... props&gt;, &lt;pipe...&gt;</span></a>
                         </td>
                         <td class="description">Creates a full join pipe containing all pipes passed as arguments</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#pipe-makerjoin">4.14.  <span class="pipes2">@makerjoin &lt;string... props&gt;, &lt;pipe...&gt;</span></a>
+                            <a href="#pipe-makerjoin">4.16.  <span class="pipes2">@makerjoin &lt;string... props&gt;, &lt;pipe...&gt;</span></a>
                         </td>
                         <td class="description">Creates a right join pipe containing all pipes passed as arguments</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#pipe-makeunion">4.15.  <span class="pipes2">@makeunion &lt;pipe...&gt;</span></a>
+                            <a href="#pipe-makeunion">4.17.  <span class="pipes2">@makeunion &lt;pipe...&gt;</span></a>
                         </td>
                         <td class="description">Creates a union pipe containing all pipes passed as arguments</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#pipe-onchange">4.16.  <span class="pipes2">@onchange [&lt;object...&gt;] [by &lt;object...&gt;]</span></a>
+                            <a href="#pipe-onchange">4.18.  <span class="pipes2">@onchange [&lt;object...&gt;] [by &lt;object...&gt;]</span></a>
                         </td>
                         <td class="description">Outputs only events that change the last value of any expression in the group</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#pipe-onfalse">4.17.  <span class="pipes2">@onfalse &lt;boolean condition&gt; [by &lt;object...&gt;]</span></a>
+                            <a href="#pipe-onfalse">4.19.  <span class="pipes2">@onfalse &lt;boolean condition&gt; [by &lt;object...&gt;]</span></a>
                         </td>
                         <td class="description">Outputs only events for which condition evaluates false and was not false in the previous event</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#pipe-ontrue">4.18.  <span class="pipes2">@ontrue &lt;boolean condition&gt; [by &lt;object...&gt;]</span></a>
+                            <a href="#pipe-ontrue">4.20.  <span class="pipes2">@ontrue &lt;boolean condition&gt; [by &lt;object...&gt;]</span></a>
                         </td>
                         <td class="description">Outputs only events for which condition evaluates true and was not true in the previous event</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#pipe-seq">4.19.  <span class="pipes2">@seq</span></a>
+                            <a href="#pipe-seq">4.21.  <span class="pipes2">@seq</span></a>
                         </td>
                         <td class="description">Changes the static type of any row to the highest corresponding seq.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#pipe-set">4.20.  <span class="pipes2">@set &lt;named...&gt; [by &lt;object...&gt;]</span></a>
+                            <a href="#pipe-set">4.22.  <span class="pipes2">@set &lt;named...&gt; [by &lt;object...&gt;]</span></a>
                         </td>
                         <td class="description">Sets fields in the original event (both typed and raw)</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#pipe-skip">4.21.  <span class="pipes2">@skip &lt;number&gt; [by &lt;object...&gt;]</span></a>
+                            <a href="#pipe-skip">4.23.  <span class="pipes2">@skip &lt;number&gt; [by &lt;object...&gt;]</span></a>
                         </td>
                         <td class="description">Skips some results from previous pipe.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#pipe-skipwhile">4.22.  <span class="pipes2">@skipwhile &lt;boolean&gt;</span></a>
+                            <a href="#pipe-skipwhile">4.24.  <span class="pipes2">@skipwhile &lt;boolean&gt;</span></a>
                         </td>
                         <td class="description">Skips rows from every batch while some condition is true.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#pipe-slice">4.23.  <span class="pipes2">@slice [&lt;number start&gt;], [&lt;number end&gt;], [&lt;number step&gt;] [by &lt;object...&gt;]</span></a>
+                            <a href="#pipe-slice">4.25.  <span class="pipes2">@slice [&lt;number start&gt;], [&lt;number end&gt;], [&lt;number step&gt;] [by &lt;object...&gt;]</span></a>
                         </td>
                         <td class="description">Gets some rows (based on index) from previous pipe.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#pipe-sort">4.24.  <span class="pipes2">@sort &lt;sortfield... expr&gt;</span></a>
+                            <a href="#pipe-sort">4.26.  <span class="pipes2">@sort &lt;sortfield... expr&gt;</span></a>
                         </td>
                         <td class="description">Sorts the results from previous pipe.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#pipe-take">4.25.  <span class="pipes2">@take &lt;number&gt; [by &lt;object...&gt;]</span></a>
+                            <a href="#pipe-take">4.27.  <span class="pipes2">@take &lt;number&gt; [by &lt;object...&gt;]</span></a>
                         </td>
                         <td class="description">Limits the results from previous pipe.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#pipe-takewhile">4.26.  <span class="pipes2">@takewhile &lt;boolean&gt;</span></a>
+                            <a href="#pipe-takewhile">4.28.  <span class="pipes2">@takewhile &lt;boolean&gt;</span></a>
                         </td>
                         <td class="description">Takes rows from every batch while some condition is true.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#pipe-throttle">4.27.  <span class="pipes2">@throttle [&lt;number k&gt;, ] &lt;period|seq&gt; [by &lt;object...&gt;]</span></a>
+                            <a href="#pipe-throttle">4.29.  <span class="pipes2">@throttle [&lt;number k&gt;, ] &lt;period|seq&gt; [by &lt;object...&gt;]</span></a>
                         </td>
                         <td class="description">Limits the output of the previous pipe to at most &lt;k&gt; rows per &lt;period&gt;.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#pipe-top">4.28.  <span class="pipes2">@top &lt;number k&gt;, &lt;sortfield... expr&gt; [by &lt;object...&gt;]</span></a>
+                            <a href="#pipe-top">4.30.  <span class="pipes2">@top &lt;number k&gt;, &lt;sortfield... expr&gt; [by &lt;object...&gt;]</span></a>
                         </td>
                         <td class="description">Sorts the results and gets the first k rows (possibly grouped) from previous pipe.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#pipe-unbatch">4.29.  <span class="pipes2">@unbatch</span></a>
+                            <a href="#pipe-unbatch">4.31.  <span class="pipes2">@unbatch</span></a>
                         </td>
                         <td class="description">Extracts a batch of events in many batches, one for each event.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#pipe-unsafe">4.30.  <span class="pipes2">@unsafe</span></a>
+                            <a href="#pipe-unsafe">4.32.  <span class="pipes2">@unsafe</span></a>
                         </td>
                         <td class="description">Marks that any pipe executed after this must run in a non-distributed environment.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#pipe-yield">4.31.  <span class="pipes2">@yield [&lt;object expr&gt;]</span></a>
+                            <a href="#pipe-yield">4.33.  <span class="pipes2">@yield [&lt;object expr&gt;]</span></a>
                         </td>
                         <td class="description">Extracts one field of the stream to be the output event.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#pipe-zip">4.32.  <span class="pipes2">@zip [&lt;seq expr&gt;]</span></a>
+                            <a href="#pipe-zip">4.34.  <span class="pipes2">@zip [&lt;seq expr&gt;]</span></a>
                         </td>
                         <td class="description">Takes elements from a batch of seqs, one by one and make a seq of seqs.</td>
                     </tr>
 
                     <tr>
                         <td class="level-1">
-                            <a href="#pipe-atomic">4.33.  <span class="pipes2">atomic &lt;pipe&gt;</span></a>
+                            <a href="#pipe-atomic">4.35.  <span class="pipes2">atomic &lt;pipe&gt;</span></a>
                         </td>
                         <td class="description">Modify a pipe to run entirely in the same node, ignoring any distribution invariants.</td>
                     </tr>
@@ -4622,8 +4636,36 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </p>
 </div>
 </div><hr/>
+<div id="pipe-compress-uniform" class="level-1">
+<h4 class="header">4.7.  <span class="pipes2">@compress.uniform &lt;number k&gt;, [&lt;number k2&gt;,] &lt;number... y&gt; [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-compress-uniform">¶</a></span></h4>
+<div class="text"><p><strong>Compresses the result from the previous pipe to at most k rows.</strong></p><p>
+    Compress pipe keeps most of the previous pipe metadata, except for the output. It
+    outputs only <code class="pipes">at the end</code>. It is also an <strong>unsafe</strong> pipe (see
+    <a href="#concepts-pipes-chaining">Section 2.2: Chained computation model</a>).
+</p>
+<p>
+    The pipe can optionally be grouped. In this case, it may be useful to define a global
+    maximum to avoid that a group explosion causes the number of points to grow too much.
+</p>
+<p><strong>Examples:</strong></p>
+<pre class="pipes">*
+=&gt; count() every minute
+=&gt; @compress 300, _</pre>
+<p class="legend">
+    Computes the event count every minute, but compress it to 300 points at end of the query.
+</p>
+<pre class="pipes">*
+=&gt; count() by host every minute
+=&gt; @compress 300, 1000, _ by host</pre>
+<p class="legend">
+    Computes the event count by host every minute, but compress it to each host's 300
+    points at end of the query. Also limits to output at most 1000 points globally (even if there are
+    4 hosts or more).
+</p>
+</div>
+</div><hr/>
 <div id="pipe-debounce" class="level-1">
-<h4 class="header">4.7.  <span class="pipes2">@debounce &lt;period&gt; [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-debounce">¶</a></span></h4>
+<h4 class="header">4.8.  <span class="pipes2">@debounce &lt;period&gt; [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-debounce">¶</a></span></h4>
 <div class="text"><p><strong>Only outputs rows that follows &lt;period&gt; time without any output.</strong></p><p>
     The exceeding rows are discarded. Due to its nature, this is an <strong>semi-safe</strong>
     pipe (see <a href="#concepts-pipes-chaining">Section 2.2: Chained computation model</a>). When running in distributed environment, this pipe
@@ -4653,8 +4695,13 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </p>
 </div>
 </div><hr/>
+<div id="pipe-empty" class="level-1">
+<h4 class="header">4.9.  <span class="pipes2">@empty [over &lt;window&gt;...]</span> <span class="permalink"><a href="#pipe-empty">¶</a></span></h4>
+<div class="text"><p><strong>Creates an empty pipe (pass-through) with optional window metadata</strong></p><p><em>Available since Pipes v0.19.4</em></p><p>It is useful to include additional windows to query metadata.</p>
+</div>
+</div><hr/>
 <div id="pipe-filter" class="level-1">
-<h4 class="header">4.8.  <span class="pipes2">@filter &lt;boolean condition&gt; [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-filter">¶</a></span></h4>
+<h4 class="header">4.10.  <span class="pipes2">@filter &lt;boolean condition&gt; [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-filter">¶</a></span></h4>
 <div class="text"><p><strong>Filters the results from previous pipe.</strong></p><p>
     Filter pipe does not change any pipe metadata, it just repeats previous pipe info.
 </p>
@@ -4672,7 +4719,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="pipe-for" class="level-1">
-<h4 class="header">4.9.  <span class="pipes2">@for &lt;named(seq)&gt;, &lt;named... additional&gt;</span> <span class="permalink"><a href="#pipe-for">¶</a></span></h4>
+<h4 class="header">4.11.  <span class="pipes2">@for &lt;named(seq)&gt;, &lt;named... additional&gt;</span> <span class="permalink"><a href="#pipe-for">¶</a></span></h4>
 <div class="text"><p><strong>Unwinds events in the <code class="pipes">seq</code> instance</strong></p><p><em>Available since Pipes v0.13</em></p><p>
     If the <code class="pipes">seq</code> has a type argument, the resulting field has the same type of that argument.
 </p>
@@ -4711,7 +4758,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="pipe-latest" class="level-1">
-<h4 class="header">4.10.  <span class="pipes2">@latest</span> <span class="permalink"><a href="#pipe-latest">¶</a></span></h4>
+<h4 class="header">4.12.  <span class="pipes2">@latest</span> <span class="permalink"><a href="#pipe-latest">¶</a></span></h4>
 <div class="text"><p><strong>Keeps the latest batch of input events and output it at the end.</strong></p><p>
     This pipe is a convenience to output only the latest batch of events with the output
     <code class="pipes">at the end</code>. This concept of item batch doesn't exist in the syntax, so it would
@@ -4730,7 +4777,7 @@ AvgAggregation: The parameter #1 &lt;first(someproperty#)&gt; must be a scalar i
 </div>
 </div><hr/>
 <div id="pipe-makejoin" class="level-1">
-<h4 class="header">4.11.  <span class="pipes2">@makejoin &lt;string... props&gt;, &lt;pipe...&gt;</span> <span class="permalink"><a href="#pipe-makejoin">¶</a></span></h4>
+<h4 class="header">4.13.  <span class="pipes2">@makejoin &lt;string... props&gt;, &lt;pipe...&gt;</span> <span class="permalink"><a href="#pipe-makejoin">¶</a></span></h4>
 <div class="text"><p><strong>Creates a join pipe containing all pipes passed as arguments</strong></p><p><em>Available since Pipes v0.19</em></p><p><strong>Example:</strong></p>
 <pre class="pipes">def* @example(&amp;fn):
     @filter product_id != null =&gt; fn by product_id over last hour every 2 hours;
@@ -4741,22 +4788,22 @@ WebAccess
 </div>
 </div><hr/>
 <div id="pipe-makeljoin" class="level-1">
-<h4 class="header">4.12.  <span class="pipes2">@makeljoin &lt;string... props&gt;, &lt;pipe...&gt;</span> <span class="permalink"><a href="#pipe-makeljoin">¶</a></span></h4>
+<h4 class="header">4.14.  <span class="pipes2">@makeljoin &lt;string... props&gt;, &lt;pipe...&gt;</span> <span class="permalink"><a href="#pipe-makeljoin">¶</a></span></h4>
 <div class="text"><p><strong>Creates a left join pipe containing all pipes passed as arguments</strong></p><p><em>Available since Pipes v0.19</em></p><p>See <a href="#pipe-makejoin"><code class="pipes2">@makejoin &lt;string... props&gt;, &lt;pipe...&gt;</code></a>.</p>
 </div>
 </div><hr/>
 <div id="pipe-makelrjoin" class="level-1">
-<h4 class="header">4.13.  <span class="pipes2">@makelrjoin &lt;string... props&gt;, &lt;pipe...&gt;</span> <span class="permalink"><a href="#pipe-makelrjoin">¶</a></span></h4>
+<h4 class="header">4.15.  <span class="pipes2">@makelrjoin &lt;string... props&gt;, &lt;pipe...&gt;</span> <span class="permalink"><a href="#pipe-makelrjoin">¶</a></span></h4>
 <div class="text"><p><strong>Creates a full join pipe containing all pipes passed as arguments</strong></p><p><em>Available since Pipes v0.19</em></p><p>See <a href="#pipe-makejoin"><code class="pipes2">@makejoin &lt;string... props&gt;, &lt;pipe...&gt;</code></a>.</p>
 </div>
 </div><hr/>
 <div id="pipe-makerjoin" class="level-1">
-<h4 class="header">4.14.  <span class="pipes2">@makerjoin &lt;string... props&gt;, &lt;pipe...&gt;</span> <span class="permalink"><a href="#pipe-makerjoin">¶</a></span></h4>
+<h4 class="header">4.16.  <span class="pipes2">@makerjoin &lt;string... props&gt;, &lt;pipe...&gt;</span> <span class="permalink"><a href="#pipe-makerjoin">¶</a></span></h4>
 <div class="text"><p><strong>Creates a right join pipe containing all pipes passed as arguments</strong></p><p><em>Available since Pipes v0.19</em></p><p>See <a href="#pipe-makejoin"><code class="pipes2">@makejoin &lt;string... props&gt;, &lt;pipe...&gt;</code></a>.</p>
 </div>
 </div><hr/>
 <div id="pipe-makeunion" class="level-1">
-<h4 class="header">4.15.  <span class="pipes2">@makeunion &lt;pipe...&gt;</span> <span class="permalink"><a href="#pipe-makeunion">¶</a></span></h4>
+<h4 class="header">4.17.  <span class="pipes2">@makeunion &lt;pipe...&gt;</span> <span class="permalink"><a href="#pipe-makeunion">¶</a></span></h4>
 <div class="text"><p><strong>Creates a union pipe containing all pipes passed as arguments</strong></p><p><em>Available since Pipes v0.19</em></p><p><strong>Example:</strong></p>
 <pre class="pipes">def* @example(prop):
     avg(prop#) as value by nameof(prop) as property over last hour every 2 hours;
@@ -4767,7 +4814,7 @@ WebAccess
 </div>
 </div><hr/>
 <div id="pipe-onchange" class="level-1">
-<h4 class="header">4.16.  <span class="pipes2">@onchange [&lt;object...&gt;] [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-onchange">¶</a></span></h4>
+<h4 class="header">4.18.  <span class="pipes2">@onchange [&lt;object...&gt;] [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-onchange">¶</a></span></h4>
 <div class="text"><p><strong>Outputs only events that change the last value of any expression in the group</strong></p><p>
     Please note that the first event is always outputed, even if the property value is null.
 </p>
@@ -4779,7 +4826,7 @@ WebAccess
 </div>
 </div><hr/>
 <div id="pipe-onfalse" class="level-1">
-<h4 class="header">4.17.  <span class="pipes2">@onfalse &lt;boolean condition&gt; [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-onfalse">¶</a></span></h4>
+<h4 class="header">4.19.  <span class="pipes2">@onfalse &lt;boolean condition&gt; [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-onfalse">¶</a></span></h4>
 <div class="text"><p><strong>Outputs only events for which condition evaluates false and was not false in the previous event</strong></p><p>
     Please note that the first event is always outputed.
 </p>
@@ -4791,7 +4838,7 @@ WebAccess
 </div>
 </div><hr/>
 <div id="pipe-ontrue" class="level-1">
-<h4 class="header">4.18.  <span class="pipes2">@ontrue &lt;boolean condition&gt; [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-ontrue">¶</a></span></h4>
+<h4 class="header">4.20.  <span class="pipes2">@ontrue &lt;boolean condition&gt; [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-ontrue">¶</a></span></h4>
 <div class="text"><p><strong>Outputs only events for which condition evaluates true and was not true in the previous event</strong></p><p>
     Please note that the first event is always outputed.
 </p>
@@ -4803,7 +4850,7 @@ WebAccess
 </div>
 </div><hr/>
 <div id="pipe-seq" class="level-1">
-<h4 class="header">4.19.  <span class="pipes2">@seq</span> <span class="permalink"><a href="#pipe-seq">¶</a></span></h4>
+<h4 class="header">4.21.  <span class="pipes2">@seq</span> <span class="permalink"><a href="#pipe-seq">¶</a></span></h4>
 <div class="text"><p><strong>Changes the static type of any row to the highest corresponding seq.</strong></p><p><em>Available since Pipes v0.13</em></p><p><strong>Examples:</strong></p>
 <pre class="pipes">*
 =&gt; x, y#
@@ -4812,7 +4859,7 @@ WebAccess
 </div>
 </div><hr/>
 <div id="pipe-set" class="level-1">
-<h4 class="header">4.20.  <span class="pipes2">@set &lt;named...&gt; [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-set">¶</a></span></h4>
+<h4 class="header">4.22.  <span class="pipes2">@set &lt;named...&gt; [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-set">¶</a></span></h4>
 <div class="text"><p><strong>Sets fields in the original event (both typed and raw)</strong></p><p>
     Since Pipes v0.14.8, this pipe has a version that also accepts simple aggregations.
 </p>
@@ -4835,7 +4882,7 @@ WebAccess
 </div>
 </div><hr/>
 <div id="pipe-skip" class="level-1">
-<h4 class="header">4.21.  <span class="pipes2">@skip &lt;number&gt; [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-skip">¶</a></span></h4>
+<h4 class="header">4.23.  <span class="pipes2">@skip &lt;number&gt; [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-skip">¶</a></span></h4>
 <div class="text"><p><strong>Skips some results from previous pipe.</strong></p><p>
     Skip pipe does not change any pipe metadata, it just repeats previous pipe info.
     It also doesn't make any aggregation, it just outputs as soon as it finishes processing
@@ -4852,7 +4899,7 @@ WebAccess
 </div>
 </div><hr/>
 <div id="pipe-skipwhile" class="level-1">
-<h4 class="header">4.22.  <span class="pipes2">@skipwhile &lt;boolean&gt;</span> <span class="permalink"><a href="#pipe-skipwhile">¶</a></span></h4>
+<h4 class="header">4.24.  <span class="pipes2">@skipwhile &lt;boolean&gt;</span> <span class="permalink"><a href="#pipe-skipwhile">¶</a></span></h4>
 <div class="text"><p><strong>Skips rows from every batch while some condition is true.</strong></p><p><em>Available since Pipes v0.13</em></p><p>
     This pipe also accepts aggregation as condition. In this case, it
     will behave like every row is a batch and with a <code class="expr">over all</code>
@@ -4869,7 +4916,7 @@ WebAccess
 </div>
 </div><hr/>
 <div id="pipe-slice" class="level-1">
-<h4 class="header">4.23.  <span class="pipes2">@slice [&lt;number start&gt;], [&lt;number end&gt;], [&lt;number step&gt;] [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-slice">¶</a></span></h4>
+<h4 class="header">4.25.  <span class="pipes2">@slice [&lt;number start&gt;], [&lt;number end&gt;], [&lt;number step&gt;] [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-slice">¶</a></span></h4>
 <div class="text"><p><strong>Gets some rows (based on index) from previous pipe.</strong></p><p><em>Available since Pipes v0.13</em></p><p>
     Slice pipe does not change any pipe metadata, it just repeats previous pipe info.
     It also doesn't make any aggregation, it just outputs as soon as it finishes processing
@@ -4886,7 +4933,7 @@ WebAccess
 </div>
 </div><hr/>
 <div id="pipe-sort" class="level-1">
-<h4 class="header">4.24.  <span class="pipes2">@sort &lt;sortfield... expr&gt;</span> <span class="permalink"><a href="#pipe-sort">¶</a></span></h4>
+<h4 class="header">4.26.  <span class="pipes2">@sort &lt;sortfield... expr&gt;</span> <span class="permalink"><a href="#pipe-sort">¶</a></span></h4>
 <div class="text"><p><strong>Sorts the results from previous pipe.</strong></p><p>
     Sort pipe does not change any pipe metadata, it just repeats previous pipe info.
     It also doesn't make any aggregation, it just outputs as soon as it finishes processing
@@ -4906,7 +4953,7 @@ WebAccess
 </div>
 </div><hr/>
 <div id="pipe-take" class="level-1">
-<h4 class="header">4.25.  <span class="pipes2">@take &lt;number&gt; [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-take">¶</a></span></h4>
+<h4 class="header">4.27.  <span class="pipes2">@take &lt;number&gt; [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-take">¶</a></span></h4>
 <div class="text"><p><strong>Limits the results from previous pipe.</strong></p><p>
     Take pipe does not change any pipe metadata, it just repeats previous pipe info.
     It also doesn't make any aggregation, it just outputs as soon as it finishes processing
@@ -4924,7 +4971,7 @@ WebAccess
 </div>
 </div><hr/>
 <div id="pipe-takewhile" class="level-1">
-<h4 class="header">4.26.  <span class="pipes2">@takewhile &lt;boolean&gt;</span> <span class="permalink"><a href="#pipe-takewhile">¶</a></span></h4>
+<h4 class="header">4.28.  <span class="pipes2">@takewhile &lt;boolean&gt;</span> <span class="permalink"><a href="#pipe-takewhile">¶</a></span></h4>
 <div class="text"><p><strong>Takes rows from every batch while some condition is true.</strong></p><p><em>Available since Pipes v0.13</em></p><p>
     This pipe also accepts aggregation as condition. In this case, it
     will behave like every row is a batch and with a <code class="expr">over all</code>
@@ -4941,7 +4988,7 @@ WebAccess
 </div>
 </div><hr/>
 <div id="pipe-throttle" class="level-1">
-<h4 class="header">4.27.  <span class="pipes2">@throttle [&lt;number k&gt;, ] &lt;period|seq&gt; [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-throttle">¶</a></span></h4>
+<h4 class="header">4.29.  <span class="pipes2">@throttle [&lt;number k&gt;, ] &lt;period|seq&gt; [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-throttle">¶</a></span></h4>
 <div class="text"><p><strong>Limits the output of the previous pipe to at most &lt;k&gt; rows per &lt;period&gt;.</strong></p><p>
     The exceeding rows are discarded. This is an <strong>unsafe</strong> pipe (see
     <a href="#concepts-pipes-chaining">Section 2.2: Chained computation model</a>).
@@ -4976,7 +5023,7 @@ WebAccess
 </div>
 </div><hr/>
 <div id="pipe-top" class="level-1">
-<h4 class="header">4.28.  <span class="pipes2">@top &lt;number k&gt;, &lt;sortfield... expr&gt; [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-top">¶</a></span></h4>
+<h4 class="header">4.30.  <span class="pipes2">@top &lt;number k&gt;, &lt;sortfield... expr&gt; [by &lt;object...&gt;]</span> <span class="permalink"><a href="#pipe-top">¶</a></span></h4>
 <div class="text"><p><strong>Sorts the results and gets the first k rows (possibly grouped) from previous pipe.</strong></p><p>
     Top pipe does not change any pipe metadata, it just repeats previous pipe info.
     It also doesn't make any aggregation, it just outputs as soon as it finishes processing
@@ -5002,14 +5049,14 @@ WebAccess
 </div>
 </div><hr/>
 <div id="pipe-unbatch" class="level-1">
-<h4 class="header">4.29.  <span class="pipes2">@unbatch</span> <span class="permalink"><a href="#pipe-unbatch">¶</a></span></h4>
+<h4 class="header">4.31.  <span class="pipes2">@unbatch</span> <span class="permalink"><a href="#pipe-unbatch">¶</a></span></h4>
 <div class="text"><p><strong>Extracts a batch of events in many batches, one for each event.</strong></p><p><em>Available since Pipes v0.13</em></p><p>
     Specially useful if used in conjunction with batch output type.
 </p>
 </div>
 </div><hr/>
 <div id="pipe-unsafe" class="level-1">
-<h4 class="header">4.30.  <span class="pipes2">@unsafe</span> <span class="permalink"><a href="#pipe-unsafe">¶</a></span></h4>
+<h4 class="header">4.32.  <span class="pipes2">@unsafe</span> <span class="permalink"><a href="#pipe-unsafe">¶</a></span></h4>
 <div class="text"><p><strong>Marks that any pipe executed after this must run in a non-distributed environment.</strong></p><p>
     The engine forces that each <strong>unsafe</strong> pipe must be preceeded with a <strong>safe</strong>
     or <strong>semi-safe</strong> pipe. It is recommended to avoid excessive communication between
@@ -5025,7 +5072,7 @@ WebAccess
 </div>
 </div><hr/>
 <div id="pipe-yield" class="level-1">
-<h4 class="header">4.31.  <span class="pipes2">@yield [&lt;object expr&gt;]</span> <span class="permalink"><a href="#pipe-yield">¶</a></span></h4>
+<h4 class="header">4.33.  <span class="pipes2">@yield [&lt;object expr&gt;]</span> <span class="permalink"><a href="#pipe-yield">¶</a></span></h4>
 <div class="text"><p><strong>Extracts one field of the stream to be the output event.</strong></p><p>
     If the expression is not defined, it is assumed to be <code class="pipes">_</code>.
 </p>
@@ -5049,7 +5096,7 @@ WebAccess
 </div>
 </div><hr/>
 <div id="pipe-zip" class="level-1">
-<h4 class="header">4.32.  <span class="pipes2">@zip [&lt;seq expr&gt;]</span> <span class="permalink"><a href="#pipe-zip">¶</a></span></h4>
+<h4 class="header">4.34.  <span class="pipes2">@zip [&lt;seq expr&gt;]</span> <span class="permalink"><a href="#pipe-zip">¶</a></span></h4>
 <div class="text"><p><strong>Takes elements from a batch of seqs, one by one and make a seq of seqs.</strong></p><p><em>Available since Pipes v0.13</em></p><p>
     If the expression is not defined, it is assumed to be <code class="pipes">_</code>.
 </p>
@@ -5064,7 +5111,7 @@ WebAccess
 </div>
 </div><hr/>
 <div id="pipe-atomic" class="level-1">
-<h4 class="header">4.33.  <span class="pipes2">atomic &lt;pipe&gt;</span> <span class="permalink"><a href="#pipe-atomic">¶</a></span></h4>
+<h4 class="header">4.35.  <span class="pipes2">atomic &lt;pipe&gt;</span> <span class="permalink"><a href="#pipe-atomic">¶</a></span></h4>
 <div class="text"><p><strong>Modify a pipe to run entirely in the same node, ignoring any distribution invariants.</strong></p><p>
     This modifier is useful when the data is known to be already partitioned. For example, if you are sure
     that each host will be consistently sent to the same node, you can avoid distribution costs by writing
@@ -7296,7 +7343,7 @@ a day, an hour and 5 minutes</pre>
 </table>
 </div>
 </div><hr/>
-<p>Page generated at 04-Jun-2018 11:25:23</p>
+<p>Page generated at 03-Aug-2018 12:00:27</p>
 </div>
 
     <script>
